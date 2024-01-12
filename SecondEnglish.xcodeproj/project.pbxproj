@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E085DDC02B5113DD00CF44A8 /* secondEnglish_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */; };
+		E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC12B51519800CF44A8 /* AppDelegate.swift */; };
+		E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */; };
 		E0C0D7B32B4FE93000A7C01B /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B22B4FE93000A7C01B /* CombineMoya */; };
 		E0C0D7B52B4FE93000A7C01B /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B42B4FE93000A7C01B /* Moya */; };
 		E0C0D7B72B4FE93000A7C01B /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B62B4FE93000A7C01B /* ReactiveMoya */; };
@@ -149,11 +152,6 @@
 		E0DBDE692B4FDEB1007615A8 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE652B4FDEB1007615A8 /* NotoSansKR-Regular.otf */; };
 		E0DBDE6A2B4FDEB1007615A8 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE662B4FDEB1007615A8 /* Roboto-Medium.ttf */; };
 		E0DBDE6D2B4FDFDF007615A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE6C2B4FDFDF007615A8 /* LaunchScreen.storyboard */; };
-		E0DBDE722B4FE0F3007615A8 /* 5. Json in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE6E2B4FE0F2007615A8 /* 5. Json */; };
-		E0DBDE732B4FE0F3007615A8 /* 2. iOS in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE6F2B4FE0F3007615A8 /* 2. iOS */; };
-		E0DBDE742B4FE0F3007615A8 /* 4. character in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE702B4FE0F3007615A8 /* 4. character */; };
-		E0DBDE752B4FE0F3007615A8 /* 3. badge in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE712B4FE0F3007615A8 /* 3. badge */; };
-		E0DBDE802B4FE12C007615A8 /* 6. banner in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE7F2B4FE12C007615A8 /* 6. banner */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -174,6 +172,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = secondEnglish_loading.png; sourceTree = "<group>"; };
+		E085DDC12B51519800CF44A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Alert.swift"; sourceTree = "<group>"; };
 		E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondEnglish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondEnglishApp.swift; sourceTree = "<group>"; };
 		E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -312,11 +313,6 @@
 		E0DBDE662B4FDEB1007615A8 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		E0DBDE6B2B4FDF14007615A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E0DBDE6C2B4FDFDF007615A8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		E0DBDE6E2B4FE0F2007615A8 /* 5. Json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "5. Json"; sourceTree = "<group>"; };
-		E0DBDE6F2B4FE0F3007615A8 /* 2. iOS */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "2. iOS"; sourceTree = "<group>"; };
-		E0DBDE702B4FE0F3007615A8 /* 4. character */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "4. character"; sourceTree = "<group>"; };
-		E0DBDE712B4FE0F3007615A8 /* 3. badge */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "3. badge"; sourceTree = "<group>"; };
-		E0DBDE7F2B4FE12C007615A8 /* 6. banner */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "6. banner"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -414,14 +410,10 @@
 		E0DBDD252B4FB714007615A8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */,
 				E0DBDE562B4FDCEC007615A8 /* AppStart */,
 				E0DBDE622B4FDE60007615A8 /* Fonts */,
 				E0DBDCFE2B4FB610007615A8 /* Assets.xcassets */,
-				E0DBDE6F2B4FE0F3007615A8 /* 2. iOS */,
-				E0DBDE712B4FE0F3007615A8 /* 3. badge */,
-				E0DBDE702B4FE0F3007615A8 /* 4. character */,
-				E0DBDE6E2B4FE0F2007615A8 /* 5. Json */,
-				E0DBDE7F2B4FE12C007615A8 /* 6. banner */,
 				E0DBDE6C2B4FDFDF007615A8 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -584,8 +576,10 @@
 		E0DBDD322B4FB7C0007615A8 /* 100. Root - 앱이 처음 시작하는 곳 */ = {
 			isa = PBXGroup;
 			children = (
+				E085DDC12B51519800CF44A8 /* AppDelegate.swift */,
 				E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */,
 				E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */,
+				E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */,
 			);
 			name = "100. Root - 앱이 처음 시작하는 곳";
 			path = "100. Root - 앱이 처음 시작하는 곳";
@@ -1056,15 +1050,11 @@
 			files = (
 				E0DBDD032B4FB610007615A8 /* Preview Assets.xcassets in Resources */,
 				E0DBDE6D2B4FDFDF007615A8 /* LaunchScreen.storyboard in Resources */,
-				E0DBDE802B4FE12C007615A8 /* 6. banner in Resources */,
 				E0DBDE5E2B4FDD8A007615A8 /* Localizable.strings in Resources */,
-				E0DBDE722B4FE0F3007615A8 /* 5. Json in Resources */,
-				E0DBDE752B4FE0F3007615A8 /* 3. badge in Resources */,
 				E0DBDE682B4FDEB1007615A8 /* NotoSansKR-Medium.otf in Resources */,
-				E0DBDE732B4FE0F3007615A8 /* 2. iOS in Resources */,
-				E0DBDE742B4FE0F3007615A8 /* 4. character in Resources */,
 				E0DBDE6A2B4FDEB1007615A8 /* Roboto-Medium.ttf in Resources */,
 				E0DBDE672B4FDEB1007615A8 /* NotoSansKR-Bold.otf in Resources */,
+				E085DDC02B5113DD00CF44A8 /* secondEnglish_loading.png in Resources */,
 				E0DBDE692B4FDEB1007615A8 /* NotoSansKR-Regular.otf in Resources */,
 				E0DBDCFF2B4FB610007615A8 /* Assets.xcassets in Resources */,
 			);
@@ -1103,6 +1093,7 @@
 				E0DBDDBE2B4FCDF2007615A8 /* UILabel+Extension.swift in Sources */,
 				E0DBDD962B4FCD05007615A8 /* UIWindow+Extension.swift in Sources */,
 				E0DBDDCA2B4FCE37007615A8 /* URL+Extension.swift in Sources */,
+				E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */,
 				E0DBDE222B4FD0C4007615A8 /* PopupManager.swift in Sources */,
 				E0DBDDB02B4FCDA4007615A8 /* Shape+Extension.swift in Sources */,
 				E0DBDDF82B4FCF88007615A8 /* LoadingViewContainer.swift in Sources */,
@@ -1141,6 +1132,7 @@
 				E0DBDDE22B4FCEEA007615A8 /* CustomKeyboardTextField.swift in Sources */,
 				E0DBDDC62B4FCE22007615A8 /* UIView+Extension.swift in Sources */,
 				E0DBDDA82B4FCD75007615A8 /* Font+Extension.swift in Sources */,
+				E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */,
 				E0DBDCFD2B4FB60F007615A8 /* ContentView.swift in Sources */,
 				E0DBDE482B4FD203007615A8 /* TabPetLifePage.swift in Sources */,
 				E0DBDE062B4FCFD9007615A8 /* TabBarAccessor.swift in Sources */,

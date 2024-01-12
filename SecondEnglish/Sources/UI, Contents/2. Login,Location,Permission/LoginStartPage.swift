@@ -17,18 +17,20 @@ extension LoginStartPage: View {
         NavigationStack {
             ZStack {
                 VStack(spacing: 0) {
-                    Image("dolbwa_loading")
+                    Image("secondEnglish_logo_512")
+                        .resizable()
+                        .frame(width: 200, height: 200)
                     
-                    Text("당신 근처의 dolbwa")
-                        .font(.title32028Medium)
-                        .padding(.top, 20)
+                    Text("말이 트이는 순간영어")
+                        .font(Font.system(size: 23))
+                        .fontWeight(.bold)
+                        .padding(.top, 5)
                     
-                    Text("동네라서 가능한 모든 것")
+                    Text("영문을 문형별로 만드는 연습을 통해\n어느새 말이 트인 자신을 발견할 수 있어요!")
                         .font(.body21420Regular)
                         .padding(.top, 10)
-                    
-                    Text("지금 내 동네를 선택하고 시작해보세요!")
-                        .font(.body21420Regular)
+                        .lineSpacing(5)
+                        .multilineTextAlignment(.center)
                 }
                 
                 VStack(spacing: 10) {

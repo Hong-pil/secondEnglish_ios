@@ -13,7 +13,7 @@ extension Color {
     static let white249 = Color(red: 249/255.0, green: 249/255.0, blue: 251/255.0, opacity: 1)
     static let primary100 = Color(red: 240/255.0, green: 240/255.0, blue: 254/255.0, opacity: 1)
     static let primary300 = Color(red: 153/255.0, green: 151/255.0, blue: 255/255.0, opacity: 1)
-    static let primaryDefault = Color(red: 255/255.0, green: 140/255.0, blue: 140/255.0, opacity: 1)
+    static let primaryDefault = Color(red: 49/255.0, green: 70/255.0, blue: 177/255.0, opacity: 1)
     //static let primaryDefault = Color(red: 134/255.0, green: 126/255.0, blue: 255/255.0, opacity: 1)
     //static let primary500 = Color(red: 109/255.0, green: 101/255.0, blue: 240/255.0, opacity: 1)
     static let primary500 = Color(red: 255/255.0, green: 170/255.0, blue: 170/255.0, opacity: 1)

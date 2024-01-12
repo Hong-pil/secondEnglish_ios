@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "email_send.json",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
