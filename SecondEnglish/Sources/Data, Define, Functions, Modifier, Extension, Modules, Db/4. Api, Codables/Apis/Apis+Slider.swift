@@ -26,7 +26,7 @@ extension ApisSlider: TargetType {
     var path: String {
         switch self {
         case .sliderCategory:
-            return "api/basic_sentence/category"
+            return "api/beginner_sentence/category"
         case .sliderList:
             return "api/read/csv"
         }

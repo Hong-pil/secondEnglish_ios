@@ -16,7 +16,9 @@ struct Main {
     @State private var isFirstLoaded: Bool = true
     
     private struct sizeInfo {
-        static let numberOfTabs: CGFloat = 5.0
+        static let numberOfTabs: CGFloat = 4.0
+        static let tabIconSize: CGFloat = 20.0
+        static let tabIconClickPaddingSize: CGFloat = 10.0 // 클릭 영역 확장
     }
 }
 
@@ -41,7 +43,7 @@ extension Main: View {
         .onAppear(perform: {
             if isFirstLoaded {
                 isFirstLoaded = false
-                tabStateHandler.selection = .home
+                tabStateHandler.selection = .my
             }
         })
     }
@@ -50,19 +52,16 @@ extension Main: View {
         TabView(selection: $tabStateHandler.selection) {
             Group {
                 TabHomePage()
-                    .tag(bTab.home)
+                    .tag(bTab.my)
                 
-                TabPetLifePage()
-                    .tag(bTab.pet_life)
+                TabSwipeCardPage()
+                    .tag(bTab.swipe_card)
                 
-                TabPetsPage()
-                    .tag(bTab.pets)
-                
-                TabChattingPage()
-                    .tag(bTab.chatting)
+                TabCalendarPage()
+                    .tag(bTab.calendar)
                 
                 TabProfilePage()
-                    .tag(bTab.profile)
+                    .tag(bTab.settings)
             }
             .setTabBarVisibility(isHidden: true)
         }
@@ -80,78 +79,47 @@ extension Main: View {
             HStack(spacing: 0) {
                 Group {
                     Button {
-                        tabStateHandler.selection = .home
+                        tabStateHandler.selection = .my
                     } label: {
-                        VStack(spacing: 3) {
-                            Image(systemName: "house.fill")
-                                .renderingMode(.template)
-                                .resizable()
-                                .foregroundColor(tabStateHandler.selection == .home ? .stateActivePrimaryDefault: .gray400)
-                                .frame(width: 17.0, height: 17.0)
-                            Text("tab_home".localized)
-                                .font(.caption11218Regular)
-                                .foregroundColor(tabStateHandler.selection == .home ? .stateActivePrimaryDefault: .gray400)
-                        }
+                        Image(systemName: "person")
+                            .renderingMode(.template)
+                            .resizable()
+                            .foregroundColor(tabStateHandler.selection == .my ? .stateActivePrimaryDefault: .gray400)
+                            .frame(width: sizeInfo.tabIconSize, height: sizeInfo.tabIconSize)
+                            .padding(sizeInfo.tabIconClickPaddingSize)
                     }
                     
                     Button {
-                        tabStateHandler.selection = .pet_life
+                        tabStateHandler.selection = .swipe_card
                     } label: {
-                        VStack(spacing: 3) {
-                            Image(systemName: "arrow.up.and.down.righttriangle.up.righttriangle.down.fill")
-                                .renderingMode(.template)
-                                .resizable()
-                                .foregroundColor(tabStateHandler.selection == .pet_life ? .stateActivePrimaryDefault: .gray400)
-                                .frame(width: 17.0, height: 17.0)
-                            Text("slider")
-                                .font(.caption11218Regular)
-                                .foregroundColor(tabStateHandler.selection == .pet_life ? .stateActivePrimaryDefault: .gray400)
-                        }
+                        Image(systemName: "arrow.left.and.right.righttriangle.left.righttriangle.right")
+                            .renderingMode(.template)
+                            .resizable()
+                            .foregroundColor(tabStateHandler.selection == .swipe_card ? .stateActivePrimaryDefault: .gray400)
+                            .frame(width: sizeInfo.tabIconSize, height: sizeInfo.tabIconSize)
+                            .padding(sizeInfo.tabIconClickPaddingSize)
                     }
                     
                     Button {
-                        tabStateHandler.selection = .pets
+                        tabStateHandler.selection = .calendar
                     } label: {
-                        VStack(spacing: 3) {
-                            Image(systemName: "arrow.left.and.right.righttriangle.left.righttriangle.right.fill")
-                                .renderingMode(.template)
-                                .resizable()
-                                .foregroundColor(tabStateHandler.selection == .pets ? .stateActivePrimaryDefault: .gray400)
-                                .frame(width: 17.0, height: 17.0)
-                            Text("swipe")
-                                .font(.caption11218Regular)
-                                .foregroundColor(tabStateHandler.selection == .pets ? .stateActivePrimaryDefault: .gray400)
-                        }
+                        Image(systemName: "calendar")
+                            .renderingMode(.template)
+                            .resizable()
+                            .foregroundColor(tabStateHandler.selection == .calendar ? .stateActivePrimaryDefault: .gray400)
+                            .frame(width: sizeInfo.tabIconSize, height: sizeInfo.tabIconSize)
+                            .padding(sizeInfo.tabIconClickPaddingSize)
                     }
                     
                     Button {
-                        tabStateHandler.selection = .chatting
+                        tabStateHandler.selection = .settings
                     } label: {
-                        VStack(spacing: 3) {
-                            Image(systemName: "calendar")
-                                .renderingMode(.template)
-                                .resizable()
-                                .foregroundColor(tabStateHandler.selection == .chatting ? .stateActivePrimaryDefault: .gray400)
-                                .frame(width: 17.0, height: 17.0)
-                            Text("tab_calendar".localized)
-                                .font(.caption11218Regular)
-                                .foregroundColor(tabStateHandler.selection == .chatting ? .stateActivePrimaryDefault: .gray400)
-                        }
-                    }
-                    
-                    Button {
-                        tabStateHandler.selection = .profile
-                    } label: {
-                        VStack(spacing: 3) {
-                            Image(systemName: "person.fill")
-                                .renderingMode(.template)
-                                .resizable()
-                                .foregroundColor(tabStateHandler.selection == .profile ? .stateActivePrimaryDefault: .gray400)
-                                .frame(width: 17.0, height: 17.0)
-                            Text("tab_my".localized)
-                                .font(.caption11218Regular)
-                                .foregroundColor(tabStateHandler.selection == .profile ? .stateActivePrimaryDefault: .gray400)
-                        }
+                        Image(systemName: "line.3.horizontal")
+                            .renderingMode(.template)
+                            .resizable()
+                            .foregroundColor(tabStateHandler.selection == .settings ? .stateActivePrimaryDefault: .gray400)
+                            .frame(width: sizeInfo.tabIconSize, height: sizeInfo.tabIconSize)
+                            .padding(sizeInfo.tabIconClickPaddingSize)
                     }
                     
                 }

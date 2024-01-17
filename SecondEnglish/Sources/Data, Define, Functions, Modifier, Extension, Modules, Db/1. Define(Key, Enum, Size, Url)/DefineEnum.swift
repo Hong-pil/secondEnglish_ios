@@ -9,11 +9,10 @@ import Foundation
 import Darwin
 
 enum bTab {
-    case home
-    case pet_life
-    case pets
-    case chatting
-    case profile
+    case my
+    case swipe_card
+    case calendar
+    case settings
 }
 
 enum LoadingStatus {

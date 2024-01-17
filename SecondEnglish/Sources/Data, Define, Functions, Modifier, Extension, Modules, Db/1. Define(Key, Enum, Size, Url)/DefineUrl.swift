@@ -10,7 +10,8 @@ import Foundation
 struct DefineUrl {
     
     struct Domain {
-        static let Api = "https://dolbwa.duckdns.org"
+        //static let Api = "https://dolbwa.duckdns.org"
+        static let Api = "https://second-english.duckdns.org"
         
         
         static let Login = "https://fauth.fantoo.co.kr"

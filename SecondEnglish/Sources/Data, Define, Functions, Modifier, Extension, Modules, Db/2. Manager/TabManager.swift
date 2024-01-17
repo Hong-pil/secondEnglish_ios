@@ -12,21 +12,18 @@ import SwiftUI
 class TabStateHandlerManager: ObservableObject {
     static let shared = TabStateHandlerManager()
     
-    @Published var selection: bTab = .home {
+    @Published var selection: bTab = .my {
         didSet {
-            if oldValue == selection && selection == .home {
+            if oldValue == selection && selection == .my {
                 moveFirstTabToTop.toggle()
             }
-            else if oldValue == selection && selection == .pet_life {
+            else if oldValue == selection && selection == .swipe_card {
                 moveFirstTabToTop.toggle()
             }
-            else if oldValue == selection && selection == .pets {
+            else if oldValue == selection && selection == .calendar {
                 moveFirstTabToTop.toggle()
             }
-            else if oldValue == selection && selection == .chatting {
-                moveFirstTabToTop.toggle()
-            }
-            else if oldValue == selection && selection == .profile {
+            else if oldValue == selection && selection == .settings {
                 moveFirstTabToTop.toggle()
             }
         }

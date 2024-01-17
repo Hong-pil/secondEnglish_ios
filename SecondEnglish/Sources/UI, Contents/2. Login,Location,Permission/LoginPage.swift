@@ -175,6 +175,7 @@ extension LoginPage: View {
                     Button(action: {
                         if isSendSMSCheckEnable {
                             //
+                            fLog("")
                         }
                     }, label: {
                         Text("인증번호 확인")

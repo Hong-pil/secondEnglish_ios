@@ -26,9 +26,9 @@ extension ApisSwipe: TargetType {
     var path: String {
         switch self {
         case .swipeCategory:
-            return "api/basic_sentence/category"
+            return "api/beginner_sentence/category"
         case .swipeList:
-            return "api/basic_sentence/all"
+            return "api/beginner_sentence/all"
         }
     }
     
