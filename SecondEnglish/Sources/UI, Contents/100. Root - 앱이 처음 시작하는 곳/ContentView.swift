@@ -12,15 +12,13 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            //LoginStartPage()
-            
             Main()
-//                .fullScreenCover(
-//                    isPresented: $userManager.showLoginView,
-//                    content: {
-//                        LoginPage()
-//                    }
-//                )
+                .fullScreenCover(
+                    isPresented: $userManager.showLoginView,
+                    content: {
+                        LoginPage()
+                    }
+                )
             
         }
         .modifier(ContentViewAlert())

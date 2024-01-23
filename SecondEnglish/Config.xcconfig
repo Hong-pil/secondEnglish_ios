@@ -1,0 +1,12 @@
+//
+//  Config.xcconfig
+//  SecondEnglish
+//
+//  Created by kimhongpil on 1/22/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// 환경변수 설정
+KAKAO_NATIVE_APP_KEY=fb99f03faefba19d5ebcdef31e276e83
