@@ -24,6 +24,12 @@
 		E002E1B92B5A47CD00F64CA4 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = E002E1B82B5A47CD00F64CA4 /* GoogleSignIn */; };
 		E002E1BB2B5A47CD00F64CA4 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E002E1BA2B5A47CD00F64CA4 /* GoogleSignInSwift */; };
 		E002E1BF2B5A49EB00F64CA4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E002E1BE2B5A49EB00F64CA4 /* GoogleService-Info.plist */; };
+		E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */; };
+		E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF12B5FDF660080761B /* CommonButton.swift */; };
+		E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */; };
+		E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF52B5FDFD20080761B /* View+Modifier.swift */; };
+		E00FDAFC2B5FE0440080761B /* JoinEmailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAFB2B5FE0440080761B /* JoinEmailPage.swift */; };
+		E00FDAFF2B5FE17C0080761B /* AttributedText in Frameworks */ = {isa = PBXBuildFile; productRef = E00FDAFE2B5FE17C0080761B /* AttributedText */; };
 		E085DDC02B5113DD00CF44A8 /* secondEnglish_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */; };
 		E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC12B51519800CF44A8 /* AppDelegate.swift */; };
 		E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */; };
@@ -205,6 +211,11 @@
 		E002E18C2B57BB0800F64CA4 /* LoginSnsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSnsView.swift; sourceTree = "<group>"; };
 		E002E1962B57C20400F64CA4 /* SnsLoginControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnsLoginControl.swift; sourceTree = "<group>"; };
 		E002E1BE2B5A49EB00F64CA4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginPage.swift; sourceTree = "<group>"; };
+		E00FDAF12B5FDF660080761B /* CommonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton.swift; sourceTree = "<group>"; };
+		E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Modifier.swift"; sourceTree = "<group>"; };
+		E00FDAF52B5FDFD20080761B /* View+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifier.swift"; sourceTree = "<group>"; };
+		E00FDAFB2B5FE0440080761B /* JoinEmailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinEmailPage.swift; sourceTree = "<group>"; };
 		E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = secondEnglish_loading.png; sourceTree = "<group>"; };
 		E085DDC12B51519800CF44A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Alert.swift"; sourceTree = "<group>"; };
@@ -370,6 +381,7 @@
 				E0C0D7B32B4FE93000A7C01B /* CombineMoya in Frameworks */,
 				E0C0D7B72B4FE93000A7C01B /* ReactiveMoya in Frameworks */,
 				E0C0D7C52B4FE9A600A7C01B /* Lottie in Frameworks */,
+				E00FDAFF2B5FE17C0080761B /* AttributedText in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +415,7 @@
 		E002E18F2B57BBFC00F64CA4 /* 2. EmailLoginPage - 이메일로 로그인하기 */ = {
 			isa = PBXGroup;
 			children = (
+				E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */,
 			);
 			name = "2. EmailLoginPage - 이메일로 로그인하기";
 			path = "2. EmailLoginPage - 이메일로 로그인하기";
@@ -428,6 +441,10 @@
 		E002E1922B57BC8E00F64CA4 /* 2. Join */ = {
 			isa = PBXGroup;
 			children = (
+				E00FDAFA2B5FE0340080761B /* 1. JoinEmail - 이메일로 회원가입 Step1 */,
+				E00FDAF92B5FE02D0080761B /* 2. CertificationEmail - 이메일 인증번호 입력 */,
+				E00FDAF82B5FE0240080761B /* 3. Password */,
+				E00FDAF72B5FE01D0080761B /* 4. Agree - 회원가입 마지막단계 */,
 			);
 			path = "2. Join";
 			sourceTree = "<group>";
@@ -446,6 +463,38 @@
 				E002E1962B57C20400F64CA4 /* SnsLoginControl.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		E00FDAF72B5FE01D0080761B /* 4. Agree - 회원가입 마지막단계 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "4. Agree - 회원가입 마지막단계";
+			path = "4. Agree - 회원가입 마지막단계";
+			sourceTree = "<group>";
+		};
+		E00FDAF82B5FE0240080761B /* 3. Password */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "3. Password";
+			sourceTree = "<group>";
+		};
+		E00FDAF92B5FE02D0080761B /* 2. CertificationEmail - 이메일 인증번호 입력 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "2. CertificationEmail - 이메일 인증번호 입력";
+			path = "2. CertificationEmail - 이메일 인증번호 입력";
+			sourceTree = "<group>";
+		};
+		E00FDAFA2B5FE0340080761B /* 1. JoinEmail - 이메일로 회원가입 Step1 */ = {
+			isa = PBXGroup;
+			children = (
+				E00FDAFB2B5FE0440080761B /* JoinEmailPage.swift */,
+			);
+			name = "1. JoinEmail - 이메일로 회원가입 Step1";
+			path = "1. JoinEmail - 이메일로 회원가입 Step1";
 			sourceTree = "<group>";
 		};
 		E0DBDCEE2B4FB60F007615A8 = {
@@ -574,6 +623,8 @@
 		E0DBDD2B2B4FB78B007615A8 /* 11. Modifier */ = {
 			isa = PBXGroup;
 			children = (
+				E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */,
+				E00FDAF52B5FDFD20080761B /* View+Modifier.swift */,
 			);
 			path = "11. Modifier";
 			sourceTree = "<group>";
@@ -848,6 +899,7 @@
 			isa = PBXGroup;
 			children = (
 				E0DBDDDB2B4FCEC4007615A8 /* PrimaryButton01.swift */,
+				E00FDAF12B5FDF660080761B /* CommonButton.swift */,
 			);
 			path = CustomButton;
 			sourceTree = "<group>";
@@ -1058,6 +1110,7 @@
 				E0BA02552B5EA05300AA11A5 /* KakaoSDKAuth */,
 				E0BA02572B5EA05300AA11A5 /* KakaoSDKCommon */,
 				E0BA02592B5EA05300AA11A5 /* KakaoSDKUser */,
+				E00FDAFE2B5FE17C0080761B /* AttributedText */,
 			);
 			productName = SecondEnglish;
 			productReference = E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */;
@@ -1144,6 +1197,7 @@
 				E002E1B72B5A47CC00F64CA4 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				E0BA024C2B5DD86200AA11A5 /* XCRemoteSwiftPackageReference "JWTDecode" */,
 				E0BA02522B5EA05300AA11A5 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				E00FDAFD2B5FE17C0080761B /* XCRemoteSwiftPackageReference "AttributedText" */,
 			);
 			productRefGroup = E0DBDCF82B4FB60F007615A8 /* Products */;
 			projectDirPath = "";
@@ -1240,6 +1294,7 @@
 				E0DBDD782B4FC980007615A8 /* ApiControl+Swipe.swift in Sources */,
 				E0DBDDC42B4FCE17007615A8 /* UITextField+Extension.swift in Sources */,
 				E0DBDDF42B4FCF72007615A8 /* BarView.swift in Sources */,
+				E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */,
 				E0DBDE282B4FD0E8007615A8 /* PopupBottomStackView.swift in Sources */,
 				E0DBDD592B4FC890007615A8 /* DefineSize.swift in Sources */,
 				E0DBDE4E2B4FD222007615A8 /* TabProfilePage.swift in Sources */,
@@ -1256,11 +1311,13 @@
 				E0DBDE062B4FCFD9007615A8 /* TabBarAccessor.swift in Sources */,
 				E002E18D2B57BB0800F64CA4 /* LoginSnsView.swift in Sources */,
 				E0DBDDD02B4FCE66007615A8 /* ErrorHandler.swift in Sources */,
+				E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */,
 				E0DBDDFC2B4FCF9D007615A8 /* LoadingViewModel.swift in Sources */,
 				E0DBDD7E2B4FC9A8007615A8 /* Apis+Slider.swift in Sources */,
 				E0DBDE432B4FD1BF007615A8 /* SamplePermissionAlert.swift in Sources */,
 				E0DBDE042B4FCFCA007615A8 /* RefreshableScrollView.swift in Sources */,
 				E002E1802B56E90400F64CA4 /* ProfileInfoView.swift in Sources */,
+				E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */,
 				E0DBDD612B4FC8D2007615A8 /* AlertManager.swift in Sources */,
 				E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */,
 				E0DBDE332B4FD14E007615A8 /* LocationPermission.swift in Sources */,
@@ -1291,8 +1348,10 @@
 				E0DBDDC22B4FCE0B007615A8 /* UIScreen+Extension.swift in Sources */,
 				E002E17E2B56E8F200F64CA4 /* SwipeView.swift in Sources */,
 				E0DBDCFB2B4FB60F007615A8 /* SecondEnglishApp.swift in Sources */,
+				E00FDAFC2B5FE0440080761B /* JoinEmailPage.swift in Sources */,
 				E0DBDDF62B4FCF7D007615A8 /* LoadingView.swift in Sources */,
 				E0DBDDA22B4FCD53007615A8 /* Color+Extension.swift in Sources */,
+				E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */,
 				E0DBDD7C2B4FC99B007615A8 /* Apis.swift in Sources */,
 				E0DBDD3F2B4FC643007615A8 /* DefineEnum.swift in Sources */,
 				E0DBDE0F2B4FD02C007615A8 /* CustomAlertView.swift in Sources */,
@@ -1724,6 +1783,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		E00FDAFD2B5FE17C0080761B /* XCRemoteSwiftPackageReference "AttributedText" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/AttributedText";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 		E0BA024C2B5DD86200AA11A5 /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
@@ -1818,6 +1885,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E002E1B72B5A47CC00F64CA4 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		E00FDAFE2B5FE17C0080761B /* AttributedText */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E00FDAFD2B5FE17C0080761B /* XCRemoteSwiftPackageReference "AttributedText" */;
+			productName = AttributedText;
 		};
 		E0BA024D2B5DD86200AA11A5 /* JWTDecode */ = {
 			isa = XCSwiftPackageProductDependency;

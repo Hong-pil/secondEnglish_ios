@@ -46,148 +46,148 @@ struct LoginPage : View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @StateObject var viewModel = SnsLoginControl()
+    @StateObject var snsLoginViewModel = SnsLoginControl()
     
     var body: some View {
         ZStack(alignment: .top, content: {
             
-            VStack {
-                Button(action: {
-                    viewModel.googleLogin()
-                }, label: {
-                    Text("Google Login")
-                        .foregroundColor(Color.white)
-                        .padding()
-                        .background(Color.green.opacity(0.3))
-                })
-                
-                Button(action: {
-                    viewModel.appleLogin()
-                }, label: {
-                    Text("Apple Login")
-                        .foregroundColor(Color.white)
-                        .padding()
-                        .background(Color.blue.opacity(0.3))
-                        .padding(.top, 30)
-                })
-                
-                Button(action: {
-                    viewModel.kakaoLogin()
-                }, label: {
-                    Text("Kakao Login")
-                        .foregroundColor(Color.white)
-                        .padding()
-                        .background(Color.yellow.opacity(0.3))
-                        .padding(.top, 30)
-                })
-            }
-            
-//            NavigationView {
-//                VStack(alignment: .center, spacing: 0) {
-//                    
-//                    Spacer().frame(height: sizeInfo.topPadding)
-//                    
-//                    Image("logo_login")
-//                        .resizable()
-//                        .frame(width: sizeInfo.logoSize.width, height: sizeInfo.logoSize.height)
-//                        .padding(.bottom, sizeInfo.logoBottomPadding)
-//                        
-//                    Image("character_login")
-//                        .resizable()
-//                        .frame(width: sizeInfo.characterSize.width, height: sizeInfo.characterSize.height)
-//                        .padding(.bottom, sizeInfo.characterBottomPadding)
-//                    
-//                    
-//                    //최근 로그인 계정 : 로그인한 이력이 없으면 감춘다.
-//                    if userManager.oldLoginType.count > 0 {
-//                        recentLoginAccountView
-//                        .padding(.bottom, sizeInfo.padding6)
-//                    }
-//                    
-//                    LoginSnsView(iconName: "btn_login_google", snsName: "Google") {
-//                        vm.loginWithGoogle()
-//                    }.padding(.bottom, sizeInfo.padding6)
-//                    
-//                    LoginSnsView(iconName: "btn_login_apple", snsName: "Apple") {
-//                        vm.loginWithApple()
-//                    }.padding(.bottom, sizeInfo.padding18)
-//                    
-//                    HStack(alignment: .center, spacing: 0) {
-//                        Button {
-//                            vm.loginWithFacebook()
-//                        } label: {
-//                            Image("btn_logo_facebook")
-//                                .resizable()
-//                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-//                                .padding(.trailing, sizeInfo.snsSpacing)
-//                        }
-//                        
-//                        Button {
-//                            vm.loginWithLine()
-//                        } label: {
-//                            Image("btn_logo_line")
-//                                .resizable()
-//                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-//                                .padding(.trailing, sizeInfo.snsSpacing)
-//                        }
-//                        
-//                        Button {
-//                            vm.loginWithKakao()
-//                        } label: {
-//                            Image("btn_logo_kakao")
-//                                .resizable()
-//                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-//                                .padding(.trailing, sizeInfo.snsSpacing)
-//                        }
-//                        
-//                        Button {
-//                            vm.loginWithTwitter()
-//                        } label: {
-//                            Image("btn_logo_twitter")
-//                                .resizable()
-//                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-//                        }
-//
-//                        
-//                    }
-//                    .padding(.bottom, sizeInfo.padding14)
-//                    
-//                    //signup with email
-//    //                NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {
-//    //                    LoginEmailView()
-//    //                }
-//                    
-//                    NavigationLink(destination: EmailLoginPage()) {
-//                        LoginEmailView()
-//                    }
-//                    
-//    //                NavigationLink(destination: JoinAgreePage(email: "hana_815@naver.com", snsId: "", loginType: LoginType.email.rawValue, password: "a123456!")) {
-//    //                    LoginEmailView()
-//    //                }
-//
-//                    
-//                    Spacer().frame(maxHeight: .infinity)
-//                    
-//                    Button {
-//                        userManager.isLogin = false
-//                        userManager.isLogout = false
-//                        userManager.isLookAround = true
-//                        self.presentationMode.wrappedValue.dismiss()
-//                    } label: {
-//                        Text("d_look_around".localized)
-//                            .font(Font.body21420Regular)
-//                            .foregroundColor(Color.gray870)
-//                            .frame(height: sizeInfo.dismissHeight, alignment: .center)
-//                            .padding(.horizontal, sizeInfo.padding10)
-//                            .padding(.bottom, sizeInfo.bottomPadding)
-//                    }
-//                }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-//                .background(Color.bgLightGray50)
-//                .edgesIgnoringSafeArea(.bottom)
-//                .navigationType(leftItems: [], rightItems: [.Trans], leftItemsForegroundColor: .black, rightItemsForegroundColor: .primary500, title: "", onPress: { buttonType in
-//                    showBottomSheetLanguageView = true
+//            VStack {
+//                Button(action: {
+//                    viewModel.googleLogin()
+//                }, label: {
+//                    Text("Google Login")
+//                        .foregroundColor(Color.white)
+//                        .padding()
+//                        .background(Color.green.opacity(0.3))
 //                })
+//                
+//                Button(action: {
+//                    viewModel.appleLogin()
+//                }, label: {
+//                    Text("Apple Login")
+//                        .foregroundColor(Color.white)
+//                        .padding()
+//                        .background(Color.blue.opacity(0.3))
+//                        .padding(.top, 30)
+//                })
+//                
+//                Button(action: {
+//                    viewModel.kakaoLogin()
+//                }, label: {
+//                    Text("Kakao Login")
+//                        .foregroundColor(Color.white)
+//                        .padding()
+//                        .background(Color.yellow.opacity(0.3))
+//                        .padding(.top, 30)
+//                })
+//            }
+            
+            NavigationView {
+                VStack(alignment: .center, spacing: 0) {
+                    
+                    Spacer().frame(height: sizeInfo.topPadding)
+                    
+                    Image("logo_login")
+                        .resizable()
+                        .frame(width: sizeInfo.logoSize.width, height: sizeInfo.logoSize.height)
+                        .padding(.bottom, sizeInfo.logoBottomPadding)
+                        
+                    Image("character_login")
+                        .resizable()
+                        .frame(width: sizeInfo.characterSize.width, height: sizeInfo.characterSize.height)
+                        .padding(.bottom, sizeInfo.characterBottomPadding)
+                    
+                    
+                    //최근 로그인 계정 : 로그인한 이력이 없으면 감춘다.
+                    if userManager.oldLoginType.count > 0 {
+                        recentLoginAccountView
+                        .padding(.bottom, sizeInfo.padding6)
+                    }
+                    
+                    LoginSnsView(iconName: "btn_login_google", snsName: "Google") {
+                        snsLoginViewModel.loginWithGoogle()
+                    }.padding(.bottom, sizeInfo.padding6)
+                    
+                    LoginSnsView(iconName: "btn_login_apple", snsName: "Apple") {
+                        snsLoginViewModel.loginWithApple()
+                    }.padding(.bottom, sizeInfo.padding18)
+                    
+                    HStack(alignment: .center, spacing: 0) {
+                        Button {
+                            //snsLoginViewModel.loginWithFacebook()
+                        } label: {
+                            Image("btn_logo_facebook")
+                                .resizable()
+                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
+                                .padding(.trailing, sizeInfo.snsSpacing)
+                        }
+                        
+                        Button {
+                            //vm.loginWithLine()
+                        } label: {
+                            Image("btn_logo_line")
+                                .resizable()
+                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
+                                .padding(.trailing, sizeInfo.snsSpacing)
+                        }
+                        
+                        Button {
+                            snsLoginViewModel.loginWithKakao()
+                        } label: {
+                            Image("btn_logo_kakao")
+                                .resizable()
+                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
+                                .padding(.trailing, sizeInfo.snsSpacing)
+                        }
+                        
+                        Button {
+                            //vm.loginWithTwitter()
+                        } label: {
+                            Image("btn_logo_twitter")
+                                .resizable()
+                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
+                        }
+
+                        
+                    }
+                    .padding(.bottom, sizeInfo.padding14)
+                    
+                    //signup with email
+    //                NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {
+    //                    LoginEmailView()
+    //                }
+                    
+                    NavigationLink(destination: EmailLoginPage()) {
+                        LoginEmailView()
+                    }
+                    
+    //                NavigationLink(destination: JoinAgreePage(email: "hana_815@naver.com", snsId: "", loginType: LoginType.email.rawValue, password: "a123456!")) {
+    //                    LoginEmailView()
+    //                }
+
+                    
+                    Spacer().frame(maxHeight: .infinity)
+                    
+                    Button {
+                        userManager.isLogin = false
+                        userManager.isLogout = false
+                        userManager.isLookAround = true
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("d_look_around".localized)
+                            .font(Font.body21420Regular)
+                            .foregroundColor(Color.gray870)
+                            .frame(height: sizeInfo.dismissHeight, alignment: .center)
+                            .padding(.horizontal, sizeInfo.padding10)
+                            .padding(.bottom, sizeInfo.bottomPadding)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .background(Color.bgLightGray50)
+                .edgesIgnoringSafeArea(.bottom)
+                .navigationType(leftItems: [], rightItems: [.Trans], leftItemsForegroundColor: .black, rightItemsForegroundColor: .primary500, title: "", onPress: { buttonType in
+                    showBottomSheetLanguageView = true
+                })
 //                .navigationBarBackground {
 //                    Color.bgLightGray50
 //                }
@@ -204,12 +204,12 @@ struct LoginPage : View {
 //                        languageManager.setLanguageCode(code: language)
 //                    })
 //                })
-//            }
-//            
-//            .showAlert(isPresented: $vm.showAlert, type: .Default, title: vm.alertTitle, message: vm.alertMessage, detailMessage: "", buttons: ["h_confirm".localized], onClick: { buttonIndex in
-//            })
-//            
-//            LoadingViewInPage(loadingStatus: $vm.loadingStatus)
+            }
+            
+            .showAlert(isPresented: $vm.showAlert, type: .Default, title: vm.alertTitle, message: vm.alertMessage, detailMessage: "", buttons: ["h_confirm".localized], onClick: { buttonIndex in
+            })
+            
+            LoadingViewInPage(loadingStatus: $vm.loadingStatus)
         })
         .onAppear() {
             fLog("로그인페이지 onAppear")
