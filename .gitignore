@@ -106,6 +106,9 @@ iOSInjectionProject/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 
+
+##### Custom Start :) #####
+
 ### Folder ###
 *.DS_Store
 
@@ -114,5 +117,7 @@ Config.xcconfig
 
 ### Google Login Info File ###
 GoogleService-Info.plist
+
+##### Custom End :> #####
 
 # End of https://www.toptal.com/developers/gitignore/api/xcode,cocoapods,swift
