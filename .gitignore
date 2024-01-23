@@ -89,11 +89,8 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-
-
-
-############### My Custom Start ###############
-
-### File ###
-# Info.plist
+### Config File ###
 Config.xcconfig
+
+### Google Login Info File ###
+GoogleService-Info.plist
