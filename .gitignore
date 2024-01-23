@@ -106,14 +106,6 @@ iOSInjectionProject/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 
-### Tuist derived files ###
-graph.dot
-Derived/
-
-### Projects ###
-*.xcodeproj
-*.xcworkspace
-
 ### Folder ###
 *.DS_Store
 
