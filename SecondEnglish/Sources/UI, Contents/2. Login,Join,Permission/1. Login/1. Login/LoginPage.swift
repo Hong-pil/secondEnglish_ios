@@ -41,58 +41,23 @@ struct LoginPage : View {
     @StateObject var languageManager = LanguageManager.shared
     @StateObject var userManager = UserManager.shared
     @StateObject var bottomSheetManager = BottomSheetManager.shared
-    @StateObject var vm = LoginViewModel()
+    @StateObject var viewModel = LoginViewModel()
     @State var lang: String = ""
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @StateObject var snsLoginViewModel = SnsLoginControl()
-    
     var body: some View {
         ZStack(alignment: .top, content: {
-            
-//            VStack {
-//                Button(action: {
-//                    viewModel.googleLogin()
-//                }, label: {
-//                    Text("Google Login")
-//                        .foregroundColor(Color.white)
-//                        .padding()
-//                        .background(Color.green.opacity(0.3))
-//                })
-//                
-//                Button(action: {
-//                    viewModel.appleLogin()
-//                }, label: {
-//                    Text("Apple Login")
-//                        .foregroundColor(Color.white)
-//                        .padding()
-//                        .background(Color.blue.opacity(0.3))
-//                        .padding(.top, 30)
-//                })
-//                
-//                Button(action: {
-//                    viewModel.kakaoLogin()
-//                }, label: {
-//                    Text("Kakao Login")
-//                        .foregroundColor(Color.white)
-//                        .padding()
-//                        .background(Color.yellow.opacity(0.3))
-//                        .padding(.top, 30)
-//                })
-//            }
-            
             NavigationView {
                 VStack(alignment: .center, spacing: 0) {
                     
                     Spacer().frame(height: sizeInfo.topPadding)
                     
-                    Image("logo_login")
-                        .resizable()
-                        .frame(width: sizeInfo.logoSize.width, height: sizeInfo.logoSize.height)
-                        .padding(.bottom, sizeInfo.logoBottomPadding)
-                        
-                    Image("character_login")
+                    Text("순간영어")
+                        .font(.title2)
+                        .foregroundColor(.primary)
+                    
+                    Image("secondEnglish_logo_512")
                         .resizable()
                         .frame(width: sizeInfo.characterSize.width, height: sizeInfo.characterSize.height)
                         .padding(.bottom, sizeInfo.characterBottomPadding)
@@ -105,49 +70,48 @@ struct LoginPage : View {
                     }
                     
                     LoginSnsView(iconName: "btn_login_google", snsName: "Google") {
-                        snsLoginViewModel.loginWithGoogle()
+                        viewModel.loginWithGoogle()
                     }.padding(.bottom, sizeInfo.padding6)
                     
                     LoginSnsView(iconName: "btn_login_apple", snsName: "Apple") {
-                        snsLoginViewModel.loginWithApple()
+                        viewModel.loginWithApple()
                     }.padding(.bottom, sizeInfo.padding18)
                     
                     HStack(alignment: .center, spacing: 0) {
                         Button {
-                            //snsLoginViewModel.loginWithFacebook()
+                            viewModel.loginWithGoogle()
                         } label: {
-                            Image("btn_logo_facebook")
+                            Image("btn_login_google")
                                 .resizable()
+                                .padding(10)
+                                .clipShape(Circle())
                                 .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
+                                .background(Circle().fill(Color.gray25))
                                 .padding(.trailing, sizeInfo.snsSpacing)
                         }
                         
                         Button {
-                            //vm.loginWithLine()
+                            viewModel.loginWithApple()
                         } label: {
-                            Image("btn_logo_line")
+                            Image("btn_login_apple")
                                 .resizable()
+                                .renderingMode(.template)
+                                .padding(11)
+                                .foregroundColor(.gray25)
+                                .clipShape(Circle())
                                 .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
+                                .background(Circle().fill(Color.black))
                                 .padding(.trailing, sizeInfo.snsSpacing)
                         }
                         
                         Button {
-                            snsLoginViewModel.loginWithKakao()
+                            viewModel.loginWithKakao()
                         } label: {
-                            Image("btn_logo_kakao")
+                            Image("btn_logo_kakaotalk")
                                 .resizable()
                                 .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
                                 .padding(.trailing, sizeInfo.snsSpacing)
                         }
-                        
-                        Button {
-                            //vm.loginWithTwitter()
-                        } label: {
-                            Image("btn_logo_twitter")
-                                .resizable()
-                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-                        }
-
                         
                     }
                     .padding(.bottom, sizeInfo.padding14)
@@ -185,7 +149,7 @@ struct LoginPage : View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .background(Color.bgLightGray50)
                 .edgesIgnoringSafeArea(.bottom)
-                .navigationType(leftItems: [], rightItems: [.Trans], leftItemsForegroundColor: .black, rightItemsForegroundColor: .primary500, title: "", onPress: { buttonType in
+                .navigationType(leftItems: [], rightItems: [.Cancel], leftItemsForegroundColor: .black, rightItemsForegroundColor: .primary500, title: "", onPress: { buttonType in
                     showBottomSheetLanguageView = true
                 })
 //                .navigationBarBackground {
@@ -206,10 +170,10 @@ struct LoginPage : View {
 //                })
             }
             
-            .showAlert(isPresented: $vm.showAlert, type: .Default, title: vm.alertTitle, message: vm.alertMessage, detailMessage: "", buttons: ["h_confirm".localized], onClick: { buttonIndex in
+            .showAlert(isPresented: $viewModel.showAlert, type: .Default, title: viewModel.alertTitle, message: viewModel.alertMessage, detailMessage: "", buttons: ["h_confirm".localized], onClick: { buttonIndex in
             })
             
-            LoadingViewInPage(loadingStatus: $vm.loadingStatus)
+            LoadingViewInPage(loadingStatus: $viewModel.loadingStatus)
         })
         .onAppear() {
             fLog("로그인페이지 onAppear")

@@ -17,10 +17,6 @@ class UserManager: ObservableObject {
     
     
     //MARK: - Variables : State
-    @Published var showAlertLocationPermission = false
-    /**
-     * 팬투에서 사용하던 변수들
-     */
     @Published var isLogin: Bool = false
     @Published var showSafari = false
     @Published var showLoginView = false
@@ -31,6 +27,7 @@ class UserManager: ObservableObject {
     @Published var deletePostAlert = false
     @Published var reportPostAlert = false
     @Published var certNumberAlert = false
+    @Published var withdrawAccountAlert = false
     @Published var delegateCancelCompleteAlert = false
     @Published var delegateCompleteAlert = false
     @Published var boardReportAlert = false
@@ -60,6 +57,8 @@ class UserManager: ObservableObject {
     @Published var goToClubTabHome = false
     @Published var goToCommunityTabHome = false
     @Published var showProvideFanitAlert = false
+    @Published var showUploadMinute: Bool = false
+    @Published var showPostReportStatue = false
     @Published var showNetworkError = false
     
     @Published var isCheckingToken = false
@@ -76,7 +75,15 @@ class UserManager: ObservableObject {
     
     // 커뮤니티 즐겨찾기 화면 - 추천순 또는 인기순 중 선택한 것 저장
     @Published var favoriteTxt: String = "p_order_by_user_recommend".localized
+//    // 커뮤니티 메인 화면 - 최신순 또는 인기순 중 선택한 것 저장
+//    @Published var communityMainSheetTxt: String = "c_newst".localized
     
+    @Published var selectedGlobalSEQ: Int = 1
+    @Published var selectedSEQ: Int = 1
+    
+    // Joseph
+    @Published var backgroundChatStatus: Bool = false    // Background -> forground check
+    @Published var backgroundStatus: Bool = false        // Background -> forground check
     
     //MARK: - Variables : Login
     @AppStorage(DefineKey.accessToken) var accessToken: String = ""
@@ -84,7 +91,8 @@ class UserManager: ObservableObject {
     @AppStorage(DefineKey.fcmToken) var fcmToken: String = ""
     @AppStorage(DefineKey.integUid) var integUid: String = ""
     @AppStorage(DefineKey.userNick) var userNick: String = ""
-    
+    @AppStorage(DefineKey.userEmail) var userEmail: String = ""
+
     @AppStorage(DefineKey.expiredTime) var expiredTime: Int = 0
     @AppStorage(DefineKey.lastLoginAt) var lastLoginAt: String = ""
     @AppStorage(DefineKey.regDate) var regDate: Date = Date()
@@ -93,6 +101,7 @@ class UserManager: ObservableObject {
     @AppStorage(DefineKey.password) var password: String = ""
     @AppStorage(DefineKey.loginType) var loginType: String = ""
     @AppStorage(DefineKey.countryCode) var countryCode: String = ""
+    @AppStorage(DefineKey.marketingToggleOn) var marketingToggleOn: Bool = false
 
     @AppStorage(DefineKey.oldLoginType) var oldLoginType: String = ""
     
@@ -112,31 +121,23 @@ class UserManager: ObservableObject {
     //MARK: - Method
     //앱 실행 시 로그인상태 및 로그인뷰 띄워야할지 체크한다.
     func start() {
-        
-        // for test
-        showLoginView = true
-        
-        
-        
-//        //첫 실행하는데 로그인이 되어 있지 않다.
-//        //permission이 끝나면 로그인페이지를 띄운다.
-//        if isFirstLaunching {
-//            isLogin = false
-//            showLoginView = false
-//        }
-//        else {
-//            if checkValidateSSO() {
-//                isLogin = true
-//                showLoginView = false
-//                checkNewAlim()
-//            }
-//            else {
-//                isLogin = false
-//                showLoginView = true
-//            }
-//        }
-        
-        
+        //첫 실행하는데 로그인이 되어 있지 않다.
+        //permission이 끝나면 로그인페이지를 띄운다.
+        if isFirstLaunching {
+            isLogin = false
+            showLoginView = false
+        }
+        else {
+            if checkValidateSSO() {
+                isLogin = true
+                showLoginView = false
+                checkNewAlim()
+            }
+            else {
+                isLogin = false
+                showLoginView = true
+            }
+        }
     }
     
     func checkNewAlim() {
@@ -182,7 +183,7 @@ class UserManager: ObservableObject {
         
         self.isLogin = self.checkValidateSSO()
         
-        if self.isLogin {
+        if self.isLogin && UserManager.shared.integUid != "" {
             NotificationCenter.default.post(name: Notification.Name(DefineNotification.changeLoginStatus), object: nil, userInfo: nil)
             RefreshManager.shared.homeRefreshSubject.send()
         }
@@ -198,6 +199,9 @@ class UserManager: ObservableObject {
         UIApplication.shared.applicationIconBadgeNumber = 0
         UserManager.shared.isNewAlim = false
         UserManager.shared.isNewChatting = false
+        
+        // 로그아웃 후 다른 계정으로 로그인했을 때, 이전 채팅방 리스트가 남아 있다는 버그가 있다고 해서 초기화 시킴
+        //ChatManager.shared.conversations = []
         
         NotificationCenter.default.post(name: Notification.Name(DefineNotification.changeLoginStatus), object: nil, userInfo: nil)
         
@@ -215,12 +219,13 @@ class UserManager: ObservableObject {
         self.password = ""
         self.loginType = ""
         setAccountForBadgeCount("")
-        //self.oldLoginType = ""        //이전 로그인 정보는 계속 써야되서 초기화 하지 않는다.ㅏ
+        //self.oldLoginType = ""        //이전 로그인 정보는 계속 써야되서 초기화 하지 않는다.
         
         self.accessToken = ""
         self.refreshToken = ""
         self.fcmToken = ""
         self.integUid = ""
+        self.userEmail = ""
         
         self.expiredTime = 0
         self.regDate = Date()
@@ -230,47 +235,47 @@ class UserManager: ObservableObject {
     
     
     //MARK: - Method : Check
-//    func refreshToken(result:@escaping((_ success:Bool) -> Void)) {
-//        UserManager.shared.isCheckingToken = true
-//
-//        ApiControl.refreshToken()
-//            .sink { error in
-//
-//                //finished error가 들어와서 막는다. 왜 여기만 들어오는지 의문임.
-//                guard case .failure(_) = error else { return }
-//
-//                //갱신 실패시 로그인알럿 띄우자
-//                result(false)
-//                StatusManager.shared.stopAllLoading()
-//                AlertManager().showAlertAuthError()
-//                self.isCheckingToken = false
-//            } receiveValue: { value in
-//                let access_token = value.access_token
-//                let expires_in = value.expires_in
-//
-//                //success
-//                if access_token.count > 0, expires_in > 0 {
-//
-//                    fLog("\n--- refresh token Result ---------------------------------\naccess_token : \(access_token)\nexpires_in : \(expires_in)\n")
-//
-//                    self.accessToken = access_token
-//                    self.expiredTime = expires_in
-//                    self.regDate = Date()
-//
-//                    self.isCheckingToken = false
-//
-//                    result(true)
-//                }
-//                else {
-//                    //갱신 실패시 로그인알럿 띄우자
-//                    result(false)
-//                    StatusManager.shared.stopAllLoading()
-//                    AlertManager().showAlertAuthError()
-//                    self.isCheckingToken = false
-//                }
-//            }
-//            .store(in: &canclelables)
-//    }
+    func refreshToken(result:@escaping((_ success:Bool) -> Void)) {
+        UserManager.shared.isCheckingToken = true
+        
+        ApiControl.refreshToken()
+            .sink { error in
+
+                //finished error가 들어와서 막는다. 왜 여기만 들어오는지 의문임.
+                guard case .failure(_) = error else { return }
+
+                //갱신 실패시 로그인알럿 띄우자
+                result(false)
+                StatusManager.shared.stopAllLoading()
+                AlertManager().showAlertAuthError()
+                self.isCheckingToken = false
+            } receiveValue: { value in
+                let access_token = value.access_token
+                let expires_in = value.expires_in
+
+                //success
+                if access_token.count > 0, expires_in > 0 {
+
+                    fLog("\n--- refresh token Result ---------------------------------\naccess_token : \(access_token)\nexpires_in : \(expires_in)\n")
+
+                    self.accessToken = access_token
+                    self.expiredTime = expires_in
+                    self.regDate = Date()
+                    
+                    self.isCheckingToken = false
+
+                    result(true)
+                }
+                else {
+                    //갱신 실패시 로그인알럿 띄우자
+                    result(false)
+                    StatusManager.shared.stopAllLoading()
+                    AlertManager().showAlertAuthError()
+                    self.isCheckingToken = false
+                }
+            }
+            .store(in: &canclelables)
+    }
     
 //    func checkTokenAndRenewal(isCheck:Bool, result:@escaping((_ success:Bool) -> Void)) {
 //        if !isCheck {
@@ -400,41 +405,6 @@ class UserManager: ObservableObject {
         let count = getBadgeCountForNormal() + getBadgeCountForChat()
         fLog("badgeCountSetting count : \(count)")
         UIApplication.shared.applicationIconBadgeNumber = count
-    }
-    
-    
-    //MARK: - for Minute
-    var minuteSortType:MinuteSortType {
-        get {
-            let value = UserDefaults.standard.integer(forKey: "minuteSortType")
-            return MinuteSortType(rawValue: value) ?? MinuteSortType.Latest
-        }
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: "minuteSortType")
-            UserDefaults.standard.synchronize()
-        }
-    }
-    
-    var userMinuteSortType:MinuteSortType {
-        get {
-            let value = UserDefaults.standard.integer(forKey: "userMinuteSortType")
-            return MinuteSortType(rawValue: value) ?? MinuteSortType.Latest
-        }
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: "userMinuteSortType")
-            UserDefaults.standard.synchronize()
-        }
-    }
-    
-    var myFavoriteMinuteSortType:MinuteSortType {
-        get {
-            let value = UserDefaults.standard.integer(forKey: "myFavoriteMinuteSortType")
-            return MinuteSortType(rawValue: value) ?? MinuteSortType.Latest
-        }
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: "myFavoriteMinuteSortType")
-            UserDefaults.standard.synchronize()
-        }
     }
     
     func setAccountForBadgeCount(_ value: String) {

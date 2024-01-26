@@ -30,6 +30,13 @@
 		E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF52B5FDFD20080761B /* View+Modifier.swift */; };
 		E00FDAFC2B5FE0440080761B /* JoinEmailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAFB2B5FE0440080761B /* JoinEmailPage.swift */; };
 		E00FDAFF2B5FE17C0080761B /* AttributedText in Frameworks */ = {isa = PBXBuildFile; productRef = E00FDAFE2B5FE17C0080761B /* AttributedText */; };
+		E016784C2B6257CD00943945 /* Apis+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = E016784B2B6257CD00943945 /* Apis+Login.swift */; };
+		E016784E2B6257E600943945 /* ApiControl+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = E016784D2B6257E600943945 /* ApiControl+Login.swift */; };
+		E01678502B62580500943945 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E016784F2B62580500943945 /* LoginModel.swift */; };
+		E01678522B62584B00943945 /* Check.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01678512B62584B00943945 /* Check.swift */; };
+		E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A05B2B6364F5009E5C9A /* PermissionPage.swift */; };
+		E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A0612B636544009E5C9A /* PermissionDetailView.swift */; };
+		E071A0642B63654C009E5C9A /* PermissionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A0632B63654C009E5C9A /* PermissionText.swift */; };
 		E085DDC02B5113DD00CF44A8 /* secondEnglish_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */; };
 		E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC12B51519800CF44A8 /* AppDelegate.swift */; };
 		E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */; };
@@ -216,6 +223,13 @@
 		E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Modifier.swift"; sourceTree = "<group>"; };
 		E00FDAF52B5FDFD20080761B /* View+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifier.swift"; sourceTree = "<group>"; };
 		E00FDAFB2B5FE0440080761B /* JoinEmailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinEmailPage.swift; sourceTree = "<group>"; };
+		E016784B2B6257CD00943945 /* Apis+Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Apis+Login.swift"; sourceTree = "<group>"; };
+		E016784D2B6257E600943945 /* ApiControl+Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+Login.swift"; sourceTree = "<group>"; };
+		E016784F2B62580500943945 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		E01678512B62584B00943945 /* Check.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Check.swift; sourceTree = "<group>"; };
+		E071A05B2B6364F5009E5C9A /* PermissionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionPage.swift; sourceTree = "<group>"; };
+		E071A0612B636544009E5C9A /* PermissionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDetailView.swift; sourceTree = "<group>"; };
+		E071A0632B63654C009E5C9A /* PermissionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionText.swift; sourceTree = "<group>"; };
 		E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = secondEnglish_loading.png; sourceTree = "<group>"; };
 		E085DDC12B51519800CF44A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Alert.swift"; sourceTree = "<group>"; };
@@ -452,6 +466,9 @@
 		E002E1932B57BC9600F64CA4 /* 3. Permission */ = {
 			isa = PBXGroup;
 			children = (
+				E071A05E2B636514009E5C9A /* View */,
+				E071A05D2B63650D009E5C9A /* ViewModel */,
+				E071A05B2B6364F5009E5C9A /* PermissionPage.swift */,
 			);
 			path = "3. Permission";
 			sourceTree = "<group>";
@@ -495,6 +512,22 @@
 			);
 			name = "1. JoinEmail - 이메일로 회원가입 Step1";
 			path = "1. JoinEmail - 이메일로 회원가입 Step1";
+			sourceTree = "<group>";
+		};
+		E071A05D2B63650D009E5C9A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		E071A05E2B636514009E5C9A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E071A0612B636544009E5C9A /* PermissionDetailView.swift */,
+				E071A0632B63654C009E5C9A /* PermissionText.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E0DBDCEE2B4FB60F007615A8 = {
@@ -688,6 +721,7 @@
 			isa = PBXGroup;
 			children = (
 				E0DBDD6E2B4FC93B007615A8 /* CommonFunction.swift */,
+				E01678512B62584B00943945 /* Check.swift */,
 			);
 			path = "3. Common(Function, Size)";
 			sourceTree = "<group>";
@@ -794,6 +828,7 @@
 				E0DBDD8B2B4FC9FB007615A8 /* SwipeModel.swift */,
 				E0DBDD8D2B4FCA05007615A8 /* RecordingModel.swift */,
 				E0DBDD8F2B4FCA10007615A8 /* LoginJoinModel.swift */,
+				E016784F2B62580500943945 /* LoginModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -805,6 +840,7 @@
 				E0DBDD7D2B4FC9A8007615A8 /* Apis+Slider.swift */,
 				E0DBDD7F2B4FC9B4007615A8 /* Apis+Swipe.swift */,
 				E0DBDD812B4FC9C1007615A8 /* Apis+LoginJoin.swift */,
+				E016784B2B6257CD00943945 /* Apis+Login.swift */,
 			);
 			path = Apis;
 			sourceTree = "<group>";
@@ -816,6 +852,7 @@
 				E0DBDD752B4FC972007615A8 /* ApiControl+Slider.swift */,
 				E0DBDD772B4FC980007615A8 /* ApiControl+Swipe.swift */,
 				E0DBDD792B4FC98C007615A8 /* ApiControl+LoginJoin.swift */,
+				E016784D2B6257E600943945 /* ApiControl+Login.swift */,
 			);
 			path = ApiControl;
 			sourceTree = "<group>";
@@ -1296,6 +1333,7 @@
 				E0DBDDF42B4FCF72007615A8 /* BarView.swift in Sources */,
 				E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */,
 				E0DBDE282B4FD0E8007615A8 /* PopupBottomStackView.swift in Sources */,
+				E016784C2B6257CD00943945 /* Apis+Login.swift in Sources */,
 				E0DBDD592B4FC890007615A8 /* DefineSize.swift in Sources */,
 				E0DBDE4E2B4FD222007615A8 /* TabProfilePage.swift in Sources */,
 				E0DBDDEA2B4FCF19007615A8 /* MultilineTextField.swift in Sources */,
@@ -1314,6 +1352,7 @@
 				E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */,
 				E0DBDDFC2B4FCF9D007615A8 /* LoadingViewModel.swift in Sources */,
 				E0DBDD7E2B4FC9A8007615A8 /* Apis+Slider.swift in Sources */,
+				E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */,
 				E0DBDE432B4FD1BF007615A8 /* SamplePermissionAlert.swift in Sources */,
 				E0DBDE042B4FCFCA007615A8 /* RefreshableScrollView.swift in Sources */,
 				E002E1802B56E90400F64CA4 /* ProfileInfoView.swift in Sources */,
@@ -1334,11 +1373,13 @@
 				E0DBDE352B4FD159007615A8 /* CameraPermission.swift in Sources */,
 				E002E1862B56E93600F64CA4 /* CircleProgressBarView.swift in Sources */,
 				E002E1882B56E94700F64CA4 /* StampView.swift in Sources */,
+				E01678502B62580500943945 /* LoginModel.swift in Sources */,
 				E0DBDE2E2B4FD10B007615A8 /* PopupView.swift in Sources */,
 				E0DBDE132B4FD04C007615A8 /* FollowAlertView.swift in Sources */,
 				E0DBDE3D2B4FD194007615A8 /* LoginPage.swift in Sources */,
 				E0DBDDAE2B4FCD9A007615A8 /* NSObject_Extension.swift in Sources */,
 				E0DBDE3B2B4FD17D007615A8 /* LoginViewModel.swift in Sources */,
+				E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */,
 				E0DBDD982B4FCD10007615A8 /* Array+Extension.swift in Sources */,
 				E0DBDE4C2B4FD218007615A8 /* TabCalendarPage.swift in Sources */,
 				E0DBDE242B4FD0D1007615A8 /* ConfigurableProtocol.swift in Sources */,
@@ -1352,6 +1393,7 @@
 				E0DBDDF62B4FCF7D007615A8 /* LoadingView.swift in Sources */,
 				E0DBDDA22B4FCD53007615A8 /* Color+Extension.swift in Sources */,
 				E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */,
+				E01678522B62584B00943945 /* Check.swift in Sources */,
 				E0DBDD7C2B4FC99B007615A8 /* Apis.swift in Sources */,
 				E0DBDD3F2B4FC643007615A8 /* DefineEnum.swift in Sources */,
 				E0DBDE0F2B4FD02C007615A8 /* CustomAlertView.swift in Sources */,
@@ -1377,7 +1419,9 @@
 				E0DBDD8C2B4FC9FB007615A8 /* SwipeModel.swift in Sources */,
 				E0DBDD632B4FC8DF007615A8 /* LandingManager.swift in Sources */,
 				E0DBDDFA2B4FCF93007615A8 /* LoadingViewInPage.swift in Sources */,
+				E071A0642B63654C009E5C9A /* PermissionText.swift in Sources */,
 				E0DBDD762B4FC972007615A8 /* ApiControl+Slider.swift in Sources */,
+				E016784E2B6257E600943945 /* ApiControl+Login.swift in Sources */,
 				E0DBDD5D2B4FC8B6007615A8 /* UserManager.swift in Sources */,
 				E0DBDDBC2B4FCDE7007615A8 /* UIImage+Extension.swift in Sources */,
 				E0DBDDCC2B4FCE41007615A8 /* View+Extension.swift in Sources */,

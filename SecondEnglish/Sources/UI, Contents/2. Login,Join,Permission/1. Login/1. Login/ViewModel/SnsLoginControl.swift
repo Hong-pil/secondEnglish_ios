@@ -89,10 +89,11 @@ class SnsLoginControl: NSObject, ObservableObject {
          return root
          */
     }
-    
-    
+}
+
+extension SnsLoginControl {
     //MARK: - Google Login
-    func loginWithGoogle() {
+    func googleLogin() {
         
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             if let data = loginItem {
@@ -159,7 +160,7 @@ class SnsLoginControl: NSObject, ObservableObject {
     }
     
     //MARK: - Apple Login
-    func loginWithApple() {
+    func appleLogin() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -171,7 +172,7 @@ class SnsLoginControl: NSObject, ObservableObject {
     }
     
     //MARK: - Kakao Login
-    func loginWithKakao() {
+    func kakaoLogin() {
         //카카오톡이 설치되어 있는지 확인하는 함수
         if UserApi.isKakaoTalkLoginAvailable() {
             UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in

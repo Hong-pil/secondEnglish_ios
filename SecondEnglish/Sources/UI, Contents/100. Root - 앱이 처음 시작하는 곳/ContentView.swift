@@ -19,9 +19,15 @@ struct ContentView: View {
                         LoginPage()
                     }
                 )
-            
+         
+            PermissionPage()
+                .opacity(userManager.isFirstLaunching ? 1.0 : 0.0)
+        }
+        .task {
+            fLog("idpilLog::: showLoginView : \(userManager.showLoginView)")
         }
         .modifier(ContentViewAlert())
+        
     }
 }
 

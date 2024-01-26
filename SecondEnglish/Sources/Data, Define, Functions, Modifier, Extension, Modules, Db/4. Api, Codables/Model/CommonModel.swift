@@ -37,3 +37,7 @@ struct DataObj: Codable {
     var time: String? = nil
     var message: String? = nil
 }
+
+struct ResultModel: Codable {
+    let success: Bool
+}

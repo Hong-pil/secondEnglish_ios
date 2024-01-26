@@ -60,25 +60,25 @@ struct ContentViewAlert: ViewModifier {
         
         // Service Alert
         // 위치 허용
-            .showCustomAlert(isPresented: $userManager.showAlertLocationPermission,
-                             type: .Default,
-                             title: "alert_location_title".localized,
-                             message: "alert_location_message".localized,
-                             detailMessage: "",
-                             buttons: ["alert_common_button_cancel".localized, "alert_common_button_setting".localized],
-                             onClick: { buttonIndex in
-                // 취소
-                if buttonIndex == 0 {
-                    //
-                }
-                // 설정
-                else if buttonIndex == 1 {
-                    // 앱 설정화면으로 이동
-                    DispatchQueue.main.async {
-                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                    }
-                }
-            })
+//            .showCustomAlert(isPresented: $userManager.showAlertLocationPermission,
+//                             type: .Default,
+//                             title: "alert_location_title".localized,
+//                             message: "alert_location_message".localized,
+//                             detailMessage: "",
+//                             buttons: ["alert_common_button_cancel".localized, "alert_common_button_setting".localized],
+//                             onClick: { buttonIndex in
+//                // 취소
+//                if buttonIndex == 0 {
+//                    //
+//                }
+//                // 설정
+//                else if buttonIndex == 1 {
+//                    // 앱 설정화면으로 이동
+//                    DispatchQueue.main.async {
+//                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+//                    }
+//                }
+//            })
         
         
         

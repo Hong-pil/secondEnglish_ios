@@ -111,7 +111,7 @@ extension LocationPage {
              * 권한 설정 거절한 경우 -> 다시 알럿 띄울 수 없고 설정앱으로 유도해서 권한 설정하도록 해야 됨
              */
             isLocationPermissionOK = false
-            UserManager.shared.showAlertLocationPermission = true
+            //UserManager.shared.showAlertLocationPermission = true
         case .authorizedAlways:
             fLog("")
         case .authorizedWhenInUse:
