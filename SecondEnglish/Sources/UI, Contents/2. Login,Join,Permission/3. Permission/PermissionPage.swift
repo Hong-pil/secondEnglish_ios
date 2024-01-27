@@ -19,7 +19,7 @@ struct PermissionPage: View {
         static let cornerRadius: CGFloat = 20.0
         
         static let spacerHeight: CGFloat = 20.0
-        static let iconSize: CGSize = CGSize(width: 124.0, height: 36.0)
+        static let iconSize: CGSize = CGSize(width: 124.0, height: 33.0)
     }
     
     let vm = PermissionViewModel()
@@ -29,7 +29,7 @@ struct PermissionPage: View {
             
             Spacer().frame(height: sizeInfo.topPadding)
             
-            Image("bi_fantoo2")
+            Image("bi_secondEnglish")
                 .renderingMode(.template)
                 .resizable()
                 .foregroundColor(Color.black)
@@ -50,7 +50,7 @@ struct PermissionPage: View {
             Button {
                 vm.requestPermission()
             } label: {
-                CommonButton(title: "d_next".localized, bgColor: Color.stateActivePrimaryDefault)
+                CommonButton(title: "d_next".localized, bgColor: Color.primaryDefault)
                     .padding(.bottom, sizeInfo.bottomPadding)
                     .frame(maxWidth: .infinity, alignment: .bottom)
             }
