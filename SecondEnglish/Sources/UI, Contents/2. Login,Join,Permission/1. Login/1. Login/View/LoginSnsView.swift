@@ -13,6 +13,7 @@ struct LoginSnsView : View {
     
     var iconName: String
     var snsName: String
+    var btnBackgroundColor: Color?
     
     let onPress: () -> Void
     
@@ -50,8 +51,11 @@ struct LoginSnsView : View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(width: sizeInfo.roundImageSize.width, height: sizeInfo.roundImageSize.height)
-            .background(Color.gray25.cornerRadius(sizeInfo.roundImageSize.height / 2 ))
-            .shadow(color: Color.gray100, radius: 2, x: 0, y: 2)
+            .background(
+                ((btnBackgroundColor != nil) ? btnBackgroundColor : Color.gray25)
+                    .cornerRadius(sizeInfo.roundImageSize.height / 2 )
+            )
+            .shadow(color: Color.gray100.opacity((btnBackgroundColor != nil) ? 0 : 1), radius: 2, x: 0, y: 2)
         }
     }
 }

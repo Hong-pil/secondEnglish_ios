@@ -31,5 +31,9 @@
 		<string>kakaolink</string>
 		<string>kakaoplus</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>프로필 사진 등록 시 사용</string>
+	<key>NSCameraUsageDescription</key>
+	<string>프로필 사진 촬영 시 사용</string>
 </dict>
 </plist>

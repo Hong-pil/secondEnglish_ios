@@ -24,7 +24,7 @@ struct LoginPage : View {
         static let bottomPadding: CGFloat = 56.0 + DefineSize.SafeArea.bottom
         
         static let logoSize: CGSize = CGSize(width: 174.0, height: 30.0)
-        static let characterSize: CGSize = CGSize(width: 128.0, height: 133.0)
+        static let characterSize: CGSize = CGSize(width: 128.0, height: 130.0)
         static let warningSize: CGSize = CGSize(width: 16.0, height: 16.0)
         static let snsSize: CGSize = CGSize(width: 48.0, height: 48.0)
         
@@ -53,11 +53,11 @@ struct LoginPage : View {
                     
                     Spacer().frame(height: sizeInfo.topPadding)
                     
-                    Text("순간영어")
+                    Text("순간 영어")
                         .font(.title2)
                         .foregroundColor(.primary)
                     
-                    Image("secondEnglish_logo_512")
+                    Image("secondEnglish_logo_opacity")
                         .resizable()
                         .frame(width: sizeInfo.characterSize.width, height: sizeInfo.characterSize.height)
                         .padding(.bottom, sizeInfo.characterBottomPadding)
@@ -75,51 +75,16 @@ struct LoginPage : View {
                     
                     LoginSnsView(iconName: "btn_login_apple", snsName: "Apple") {
                         viewModel.loginWithApple()
+                    }.padding(.bottom, sizeInfo.padding6)
+                    
+                    LoginSnsView(iconName: "btn_logo_login_kakaotalk", snsName: "카카오톡으", btnBackgroundColor: Color(red: 248/255.0, green: 218/255.0, blue: 51/255.0, opacity: 1)) {
+                        viewModel.loginWithKakao()
                     }.padding(.bottom, sizeInfo.padding18)
                     
-                    HStack(alignment: .center, spacing: 0) {
-                        Button {
-                            viewModel.loginWithGoogle()
-                        } label: {
-                            Image("btn_login_google")
-                                .resizable()
-                                .padding(10)
-                                .clipShape(Circle())
-                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-                                .background(Circle().fill(Color.gray25))
-                                .padding(.trailing, sizeInfo.snsSpacing)
-                        }
-                        
-                        Button {
-                            viewModel.loginWithApple()
-                        } label: {
-                            Image("btn_login_apple")
-                                .resizable()
-                                .renderingMode(.template)
-                                .padding(11)
-                                .foregroundColor(.gray25)
-                                .clipShape(Circle())
-                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-                                .background(Circle().fill(Color.black))
-                                .padding(.trailing, sizeInfo.snsSpacing)
-                        }
-                        
-                        Button {
-                            viewModel.loginWithKakao()
-                        } label: {
-                            Image("btn_logo_kakaotalk")
-                                .resizable()
-                                .frame(width: sizeInfo.snsSize.width, height: sizeInfo.snsSize.height)
-                                .padding(.trailing, sizeInfo.snsSpacing)
-                        }
-                        
-                    }
-                    .padding(.bottom, sizeInfo.padding14)
-                    
                     //signup with email
-    //                NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {
-    //                    LoginEmailView()
-    //                }
+                    NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {
+                        LoginEmailView()
+                    }
                     
                     NavigationLink(destination: EmailLoginPage()) {
                         LoginEmailView()

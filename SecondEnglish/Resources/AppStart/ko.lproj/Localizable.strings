@@ -520,8 +520,8 @@
 "p_profile_complete" = "프로필 완성";
 "p_edit_profile" = "프로필 수정";
 "p_setting_profile" = "프로필 설정";
-"p_write_profile_post" = "프로필 사진, 피드 작성";
-"p_write_profile_share" = "프로필 사진, 피드 작성";
+"p_write_profile_post" = "프로필 사진 촬영";
+"p_write_profile_share" = "프로필 사진 등록";
 "p_follow" = "팔로우";
 "p_following" = "팔로잉";
 "p_follower" = "팔로워";

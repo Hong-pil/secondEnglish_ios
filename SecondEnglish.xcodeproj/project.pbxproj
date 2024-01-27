@@ -34,6 +34,11 @@
 		E016784E2B6257E600943945 /* ApiControl+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = E016784D2B6257E600943945 /* ApiControl+Login.swift */; };
 		E01678502B62580500943945 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E016784F2B62580500943945 /* LoginModel.swift */; };
 		E01678522B62584B00943945 /* Check.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01678512B62584B00943945 /* Check.swift */; };
+		E045E9CF2B65A69C00E3BD60 /* JoinPasswordPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9CE2B65A69C00E3BD60 /* JoinPasswordPage.swift */; };
+		E045E9D12B65A71C00E3BD60 /* JoinAgreePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D02B65A71C00E3BD60 /* JoinAgreePage.swift */; };
+		E045E9D52B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D42B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift */; };
+		E045E9D72B65A75B00E3BD60 /* JoinAgreeCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */; };
+		E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */; };
 		E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A05B2B6364F5009E5C9A /* PermissionPage.swift */; };
 		E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A0612B636544009E5C9A /* PermissionDetailView.swift */; };
 		E071A0642B63654C009E5C9A /* PermissionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A0632B63654C009E5C9A /* PermissionText.swift */; };
@@ -227,6 +232,11 @@
 		E016784D2B6257E600943945 /* ApiControl+Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+Login.swift"; sourceTree = "<group>"; };
 		E016784F2B62580500943945 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		E01678512B62584B00943945 /* Check.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Check.swift; sourceTree = "<group>"; };
+		E045E9CE2B65A69C00E3BD60 /* JoinPasswordPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinPasswordPage.swift; sourceTree = "<group>"; };
+		E045E9D02B65A71C00E3BD60 /* JoinAgreePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreePage.swift; sourceTree = "<group>"; };
+		E045E9D42B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeCheckSubView.swift; sourceTree = "<group>"; };
+		E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeCheckView.swift; sourceTree = "<group>"; };
+		E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeViewModel.swift; sourceTree = "<group>"; };
 		E071A05B2B6364F5009E5C9A /* PermissionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionPage.swift; sourceTree = "<group>"; };
 		E071A0612B636544009E5C9A /* PermissionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDetailView.swift; sourceTree = "<group>"; };
 		E071A0632B63654C009E5C9A /* PermissionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionText.swift; sourceTree = "<group>"; };
@@ -485,6 +495,9 @@
 		E00FDAF72B5FE01D0080761B /* 4. Agree - 회원가입 마지막단계 */ = {
 			isa = PBXGroup;
 			children = (
+				E045E9D32B65A72D00E3BD60 /* View */,
+				E045E9D22B65A72300E3BD60 /* ViewModel */,
+				E045E9D02B65A71C00E3BD60 /* JoinAgreePage.swift */,
 			);
 			name = "4. Agree - 회원가입 마지막단계";
 			path = "4. Agree - 회원가입 마지막단계";
@@ -493,6 +506,7 @@
 		E00FDAF82B5FE0240080761B /* 3. Password */ = {
 			isa = PBXGroup;
 			children = (
+				E045E9CE2B65A69C00E3BD60 /* JoinPasswordPage.swift */,
 			);
 			path = "3. Password";
 			sourceTree = "<group>";
@@ -512,6 +526,23 @@
 			);
 			name = "1. JoinEmail - 이메일로 회원가입 Step1";
 			path = "1. JoinEmail - 이메일로 회원가입 Step1";
+			sourceTree = "<group>";
+		};
+		E045E9D22B65A72300E3BD60 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		E045E9D32B65A72D00E3BD60 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E045E9D42B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift */,
+				E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E071A05D2B63650D009E5C9A /* ViewModel */ = {
@@ -1312,6 +1343,7 @@
 				E0DBDD9E2B4FCD3A007615A8 /* Bool+Extension.swift in Sources */,
 				E0DBDE202B4FD0B7007615A8 /* TopPopupConfig.swift in Sources */,
 				E0DBDE522B4FD237007615A8 /* TextPage.swift in Sources */,
+				E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */,
 				E0DBDDD62B4FCEA2007615A8 /* CustomKeyPad.swift in Sources */,
 				E0DBDE002B4FCFB5007615A8 /* ActivityIndicator.swift in Sources */,
 				E0DBDDB22B4FCDAE007615A8 /* Spacer+Extension.swift in Sources */,
@@ -1365,6 +1397,7 @@
 				E0DBDE022B4FCFBF007615A8 /* PageableScrollView.swift in Sources */,
 				E0DBDD3D2B4FC636007615A8 /* DefineUrl.swift in Sources */,
 				E0DBDD6F2B4FC93B007615A8 /* CommonFunction.swift in Sources */,
+				E045E9D52B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift in Sources */,
 				E0DBDDB42B4FCDBB007615A8 /* UIApplication+Extension.swift in Sources */,
 				E0DBDDEE2B4FCF36007615A8 /* CustomNavigationButton.swift in Sources */,
 				E0DBDD802B4FC9B4007615A8 /* Apis+Swipe.swift in Sources */,
@@ -1381,6 +1414,7 @@
 				E0DBDE3B2B4FD17D007615A8 /* LoginViewModel.swift in Sources */,
 				E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */,
 				E0DBDD982B4FCD10007615A8 /* Array+Extension.swift in Sources */,
+				E045E9CF2B65A69C00E3BD60 /* JoinPasswordPage.swift in Sources */,
 				E0DBDE4C2B4FD218007615A8 /* TabCalendarPage.swift in Sources */,
 				E0DBDE242B4FD0D1007615A8 /* ConfigurableProtocol.swift in Sources */,
 				E0DBDD672B4FC906007615A8 /* RefreshManager.swift in Sources */,
@@ -1397,9 +1431,11 @@
 				E0DBDD7C2B4FC99B007615A8 /* Apis.swift in Sources */,
 				E0DBDD3F2B4FC643007615A8 /* DefineEnum.swift in Sources */,
 				E0DBDE0F2B4FD02C007615A8 /* CustomAlertView.swift in Sources */,
+				E045E9D12B65A71C00E3BD60 /* JoinAgreePage.swift in Sources */,
 				E0DBDE0B2B4FD00F007615A8 /* AlertView.swift in Sources */,
 				E0DBDE502B4FD22C007615A8 /* Main.swift in Sources */,
 				E0DBDDB62B4FCDC5007615A8 /* UIButton+Extension.swift in Sources */,
+				E045E9D72B65A75B00E3BD60 /* JoinAgreeCheckView.swift in Sources */,
 				E0DBDDEC2B4FCF28007615A8 /* CustomNavigationBar.swift in Sources */,
 				E0DBDE262B4FD0DC007615A8 /* PopupProtocol.swift in Sources */,
 				E0DBDD9A2B4FCD1C007615A8 /* AVPlayer+Extension.swift in Sources */,
@@ -1533,6 +1569,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "순간 영어";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1590,6 +1627,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "순간 영어";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

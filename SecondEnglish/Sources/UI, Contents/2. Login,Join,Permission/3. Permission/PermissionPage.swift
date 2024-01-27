@@ -19,7 +19,7 @@ struct PermissionPage: View {
         static let cornerRadius: CGFloat = 20.0
         
         static let spacerHeight: CGFloat = 20.0
-        static let iconSize: CGSize = CGSize(width: 124.0, height: 33.0)
+        static let iconSize: CGSize = CGSize(width: 124.0, height: 30.0)
     }
     
     let vm = PermissionViewModel()
@@ -32,7 +32,7 @@ struct PermissionPage: View {
             Image("bi_secondEnglish")
                 .renderingMode(.template)
                 .resizable()
-                .foregroundColor(Color.black)
+                .foregroundColor(Color.primaryDefault.opacity(0.9))
                 .frame(width: sizeInfo.iconSize.width, height: sizeInfo.iconSize.height)
                 .padding(.bottom, sizeInfo.spacerHeight)
             
