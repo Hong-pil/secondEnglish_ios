@@ -1,5 +1,5 @@
 //
-//  LoginSnsView.swift
+//  LoginButtonView.swift
 //  SecondEnglish
 //
 //  Created by kimhongpil on 1/17/24.
@@ -7,13 +7,20 @@
 
 import SwiftUI
 
-struct LoginSnsView : View {
+enum LoginButtonType: Int {
+    case google
+    case apple
+    case kakaotalk
+    case phone
+}
+
+struct LoginButtonView : View {
     
     @StateObject var languageManager = LanguageManager.shared
     
     var iconName: String
     var snsName: String
-    var btnBackgroundColor: Color?
+    let buttonType: LoginButtonType
     
     let onPress: () -> Void
     
@@ -21,9 +28,12 @@ struct LoginSnsView : View {
         static let horizontalPadding: CGFloat = 14.0
         static let padding: CGFloat = 30
         
-        
         static let roundImageSize: CGSize = CGSize(width: 276.0, height: 42.0)
         static let iconSize: CGSize = CGSize(width: 24.0, height: 24.0)
+    }
+    
+    private struct colorInfo {
+        static let kakaotalkColor: Color = Color(red: 248/255.0, green: 218/255.0, blue: 51/255.0, opacity: 1)
     }
     
     var body: some View {
@@ -52,16 +62,16 @@ struct LoginSnsView : View {
             }
             .frame(width: sizeInfo.roundImageSize.width, height: sizeInfo.roundImageSize.height)
             .background(
-                ((btnBackgroundColor != nil) ? btnBackgroundColor : Color.gray25)
+                ((buttonType == .kakaotalk) ? colorInfo.kakaotalkColor : Color.gray25)
                     .cornerRadius(sizeInfo.roundImageSize.height / 2 )
             )
-            .shadow(color: Color.gray100.opacity((btnBackgroundColor != nil) ? 0 : 1), radius: 2, x: 0, y: 2)
+            .shadow(color: Color.gray100.opacity((buttonType == .kakaotalk || buttonType == .phone) ? 0 : 1), radius: 2, x: 0, y: 2)
         }
     }
 }
 
 #Preview {
-    LoginSnsView(iconName: "btn_login_google", snsName: "google") {
+    LoginButtonView(iconName: "btn_login_google", snsName: "google", buttonType: .apple) {
         
     }
     .previewLayout(.sizeThatFits)

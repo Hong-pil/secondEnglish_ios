@@ -24,7 +24,7 @@ struct LoginPage : View {
         static let bottomPadding: CGFloat = 56.0 + DefineSize.SafeArea.bottom
         
         static let logoSize: CGSize = CGSize(width: 174.0, height: 30.0)
-        static let characterSize: CGSize = CGSize(width: 128.0, height: 130.0)
+        static let characterSize: CGSize = CGSize(width: 128.0, height: 128.0)
         static let warningSize: CGSize = CGSize(width: 16.0, height: 16.0)
         static let snsSize: CGSize = CGSize(width: 48.0, height: 48.0)
         
@@ -69,17 +69,24 @@ struct LoginPage : View {
                         .padding(.bottom, sizeInfo.padding6)
                     }
                     
-                    LoginSnsView(iconName: "btn_login_google", snsName: "Google") {
+                    LoginButtonView(iconName: "btn_login_google", snsName: "Google", buttonType: .google) {
                         viewModel.loginWithGoogle()
                     }.padding(.bottom, sizeInfo.padding6)
                     
-                    LoginSnsView(iconName: "btn_login_apple", snsName: "Apple") {
+                    LoginButtonView(iconName: "btn_login_apple", snsName: "Apple", buttonType: .apple) {
                         viewModel.loginWithApple()
                     }.padding(.bottom, sizeInfo.padding6)
                     
-                    LoginSnsView(iconName: "btn_logo_login_kakaotalk", snsName: "카카오톡으", btnBackgroundColor: Color(red: 248/255.0, green: 218/255.0, blue: 51/255.0, opacity: 1)) {
+                    LoginButtonView(iconName: "btn_logo_login_kakaotalk", snsName: "카카오톡으", buttonType: .kakaotalk) {
                         viewModel.loginWithKakao()
                     }.padding(.bottom, sizeInfo.padding18)
+                    
+                    NavigationLink(destination: PhoneNumberLoginPage()) {
+                        LoginButtonView(iconName: "btn_logo_login_kakaotalk", snsName: "휴대폰 번호", buttonType: .phone) {
+                            
+                            //
+                        }
+                    }
                     
                     //signup with email
                     NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {

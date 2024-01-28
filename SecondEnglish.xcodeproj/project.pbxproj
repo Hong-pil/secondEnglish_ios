@@ -17,7 +17,7 @@
 		E002E1862B56E93600F64CA4 /* CircleProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1852B56E93600F64CA4 /* CircleProgressBarView.swift */; };
 		E002E1882B56E94700F64CA4 /* StampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1872B56E94700F64CA4 /* StampView.swift */; };
 		E002E18B2B57BAFD00F64CA4 /* LoginEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E18A2B57BAFD00F64CA4 /* LoginEmailView.swift */; };
-		E002E18D2B57BB0800F64CA4 /* LoginSnsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E18C2B57BB0800F64CA4 /* LoginSnsView.swift */; };
+		E002E18D2B57BB0800F64CA4 /* LoginButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E18C2B57BB0800F64CA4 /* LoginButtonView.swift */; };
 		E002E1972B57C20400F64CA4 /* SnsLoginControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1962B57C20400F64CA4 /* SnsLoginControl.swift */; };
 		E002E1B42B59A0C900F64CA4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E002E1B32B59A0C900F64CA4 /* FirebaseAuth */; };
 		E002E1B62B59A0C900F64CA4 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = E002E1B52B59A0C900F64CA4 /* FirebaseAuthCombine-Community */; };
@@ -51,6 +51,8 @@
 		E0BA02562B5EA05300AA11A5 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02552B5EA05300AA11A5 /* KakaoSDKAuth */; };
 		E0BA02582B5EA05300AA11A5 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02572B5EA05300AA11A5 /* KakaoSDKCommon */; };
 		E0BA025A2B5EA05300AA11A5 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02592B5EA05300AA11A5 /* KakaoSDKUser */; };
+		E0BDD41E2B6615A4007D5742 /* PhoneNumberLoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */; };
+		E0BDD4212B661673007D5742 /* PhoneNumberTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */; };
 		E0C0D7B32B4FE93000A7C01B /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B22B4FE93000A7C01B /* CombineMoya */; };
 		E0C0D7B52B4FE93000A7C01B /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B42B4FE93000A7C01B /* Moya */; };
 		E0C0D7B72B4FE93000A7C01B /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B62B4FE93000A7C01B /* ReactiveMoya */; };
@@ -220,7 +222,7 @@
 		E002E1852B56E93600F64CA4 /* CircleProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleProgressBarView.swift; sourceTree = "<group>"; };
 		E002E1872B56E94700F64CA4 /* StampView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampView.swift; sourceTree = "<group>"; };
 		E002E18A2B57BAFD00F64CA4 /* LoginEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEmailView.swift; sourceTree = "<group>"; };
-		E002E18C2B57BB0800F64CA4 /* LoginSnsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSnsView.swift; sourceTree = "<group>"; };
+		E002E18C2B57BB0800F64CA4 /* LoginButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtonView.swift; sourceTree = "<group>"; };
 		E002E1962B57C20400F64CA4 /* SnsLoginControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnsLoginControl.swift; sourceTree = "<group>"; };
 		E002E1BE2B5A49EB00F64CA4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginPage.swift; sourceTree = "<group>"; };
@@ -244,6 +246,8 @@
 		E085DDC12B51519800CF44A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Alert.swift"; sourceTree = "<group>"; };
 		E0BA02502B5E875400AA11A5 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberLoginPage.swift; sourceTree = "<group>"; };
+		E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberTextFieldStyle.swift; sourceTree = "<group>"; };
 		E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondEnglish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondEnglishApp.swift; sourceTree = "<group>"; };
 		E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -430,26 +434,27 @@
 			isa = PBXGroup;
 			children = (
 				E002E1912B57BC7A00F64CA4 /* 1. Login */,
-				E002E18F2B57BBFC00F64CA4 /* 2. EmailLoginPage - 이메일로 로그인하기 */,
-				E002E1902B57BC2700F64CA4 /* 3. FindPassword */,
+				E0BDD41C2B66153E007D5742 /* 2. PhoneNumberLoginPage */,
+				E002E18F2B57BBFC00F64CA4 /* 3. EmailLoginPage - 이메일로 로그인하기 */,
+				E002E1902B57BC2700F64CA4 /* 4. FindPassword */,
 			);
 			path = "1. Login";
 			sourceTree = "<group>";
 		};
-		E002E18F2B57BBFC00F64CA4 /* 2. EmailLoginPage - 이메일로 로그인하기 */ = {
+		E002E18F2B57BBFC00F64CA4 /* 3. EmailLoginPage - 이메일로 로그인하기 */ = {
 			isa = PBXGroup;
 			children = (
 				E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */,
 			);
-			name = "2. EmailLoginPage - 이메일로 로그인하기";
+			name = "3. EmailLoginPage - 이메일로 로그인하기";
 			path = "2. EmailLoginPage - 이메일로 로그인하기";
 			sourceTree = "<group>";
 		};
-		E002E1902B57BC2700F64CA4 /* 3. FindPassword */ = {
+		E002E1902B57BC2700F64CA4 /* 4. FindPassword */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = "3. FindPassword";
+			path = "4. FindPassword";
 			sourceTree = "<group>";
 		};
 		E002E1912B57BC7A00F64CA4 /* 1. Login */ = {
@@ -557,6 +562,23 @@
 			children = (
 				E071A0612B636544009E5C9A /* PermissionDetailView.swift */,
 				E071A0632B63654C009E5C9A /* PermissionText.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E0BDD41C2B66153E007D5742 /* 2. PhoneNumberLoginPage */ = {
+			isa = PBXGroup;
+			children = (
+				E0BDD41F2B661667007D5742 /* View */,
+				E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */,
+			);
+			path = "2. PhoneNumberLoginPage";
+			sourceTree = "<group>";
+		};
+		E0BDD41F2B661667007D5742 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1079,7 +1101,7 @@
 			isa = PBXGroup;
 			children = (
 				E002E18A2B57BAFD00F64CA4 /* LoginEmailView.swift */,
-				E002E18C2B57BB0800F64CA4 /* LoginSnsView.swift */,
+				E002E18C2B57BB0800F64CA4 /* LoginButtonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1332,6 +1354,7 @@
 				E0DBDDBE2B4FCDF2007615A8 /* UILabel+Extension.swift in Sources */,
 				E0DBDD962B4FCD05007615A8 /* UIWindow+Extension.swift in Sources */,
 				E0DBDDCA2B4FCE37007615A8 /* URL+Extension.swift in Sources */,
+				E0BDD4212B661673007D5742 /* PhoneNumberTextFieldStyle.swift in Sources */,
 				E002E1972B57C20400F64CA4 /* SnsLoginControl.swift in Sources */,
 				E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */,
 				E002E1822B56E91400F64CA4 /* FlipView.swift in Sources */,
@@ -1379,7 +1402,7 @@
 				E0DBDCFD2B4FB60F007615A8 /* ContentView.swift in Sources */,
 				E0DBDE482B4FD203007615A8 /* TabSwipeCardPage.swift in Sources */,
 				E0DBDE062B4FCFD9007615A8 /* TabBarAccessor.swift in Sources */,
-				E002E18D2B57BB0800F64CA4 /* LoginSnsView.swift in Sources */,
+				E002E18D2B57BB0800F64CA4 /* LoginButtonView.swift in Sources */,
 				E0DBDDD02B4FCE66007615A8 /* ErrorHandler.swift in Sources */,
 				E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */,
 				E0DBDDFC2B4FCF9D007615A8 /* LoadingViewModel.swift in Sources */,
@@ -1390,6 +1413,7 @@
 				E002E1802B56E90400F64CA4 /* ProfileInfoView.swift in Sources */,
 				E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */,
 				E0DBDD612B4FC8D2007615A8 /* AlertManager.swift in Sources */,
+				E0BDD41E2B6615A4007D5742 /* PhoneNumberLoginPage.swift in Sources */,
 				E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */,
 				E0DBDE332B4FD14E007615A8 /* LocationPermission.swift in Sources */,
 				E0DBDD432B4FC661007615A8 /* DefineBottomSheet.swift in Sources */,

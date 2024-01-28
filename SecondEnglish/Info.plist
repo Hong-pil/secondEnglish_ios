@@ -35,5 +35,12 @@
 	<string>프로필 사진 등록 시 사용</string>
 	<key>NSCameraUsageDescription</key>
 	<string>프로필 사진 촬영 시 사용</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Roboto-Medium.ttf</string>
+		<string>NotoSansKR-Regular.otf</string>
+		<string>NotoSansKR-Medium.otf</string>
+		<string>NotoSansKR-Bold.otf</string>
+	</array>
 </dict>
 </plist>
