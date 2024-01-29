@@ -164,7 +164,7 @@ class LoginViewModel: NSObject ,ObservableObject {
                 if access_token.count > 0, refresh_token.count > 0, integUid.count > 0, token_type.count > 0, expires_in > 0 {
                     fLog("\n--- Email Login Result ---------------------------------\nauthCode : \(authCode)\nstate : \(state)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\nintegUid : \(integUid)\ntoken_type : \(token_type)\nexpires_in : \(expires_in)\n")
                     
-                    UserManager.shared.setLoginData(account: loginId, password: loginPw, loginType: loginType, accessToken: access_token, refreshToken: refresh_token, uid: integUid, expiredTime: expires_in)
+//                    UserManager.shared.setLoginData(account: loginId, password: loginPw, loginType: loginType, accessToken: access_token, refreshToken: refresh_token, uid: integUid, expiredTime: expires_in)
                     UserManager.shared.checkLogin()
                     UserManager.shared.showLoginView = false
                     
@@ -190,7 +190,7 @@ class LoginViewModel: NSObject ,ObservableObject {
     
     
     
-    // SNS 인증으로 로그인 (넣을지 말지 고민해보자.)
+    // SNS 인증번호 요청 (넣을지 말지 고민해보자.)
     func sendSMS(toPhoneNumber: String, accountSid: String, authToken: String, fromPhoneNumber: String) {
         
         ApiControl.sendSMS(
@@ -214,7 +214,97 @@ class LoginViewModel: NSObject ,ObservableObject {
         .store(in: &cancellable)
     }
     
+    // SMS 인증번호 검증 성공 (로그인 완료)
+    func verifySMSCode(toPhoneNumber: String, code: String) {
+        
+        ApiControl.verifySmsCode(
+            toPhoneNumber: toPhoneNumber,
+            code: code,
+            login_type: LoginUserType.Phone
+        )
+        .sink { error in
+            guard case let .failure(error) = error else { return }
+            fLog("sendSMS error : \(error)")
+            
+            AlertManager().showAlertMessage(message: error.message) {
+                self.showAlert = true
+            }
+        } receiveValue: { value in
+            //fLog("로그::: verifySMSCode successed :>")
+            //fLog("로그::: value : \(value)")
+            if value.code == 200 && value.success {
+                // 로그인 성공!
+                let uid = value.uid ?? ""
+                let access_token = value.access_token ?? ""
+                let refresh_token = value.refresh_token ?? ""
+                
+                
+                // Success
+                if uid.count > 0, access_token.count > 0, refresh_token.count > 0 {
+                  
+                    fLog("\n--- SMS Login Result ---------------------------------\nuid : \(uid)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\n")
+                    UserManager.shared.setLoginData(
+                        uid: uid,
+                        loginUserType: LoginUserType.Phone,
+                        accessToken: access_token,
+                        refreshToken: refresh_token
+                    )
+                    UserManager.shared.checkLogin()
+                    UserManager.shared.showLoginView = false
+                }
+                else {
+                    // Error
+                    self.alertTitle = ""
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    self.showAlert = true
+                }
+                
+            } else {
+                // Error
+                self.alertTitle = ""
+                self.alertMessage = ErrorHandler.getCommonMessage()
+                self.showAlert = true
+            }
+        }
+        .store(in: &cancellable)
+    }
     
     
+    func issueToken(authCode: String, state: String, loginId: String, loginPw: String, loginType:String) {
+        ApiControl.issueToken(authCode: authCode, state: state)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("login error : \(error)")
+                
+                self.alertTitle = ""
+                self.alertMessage = error.message
+                self.showAlert = true
+            } receiveValue: { value in
+                
+                let access_token = value.access_token
+                let refresh_token = value.refresh_token
+                let integUid = value.integUid
+                let token_type = value.token_type
+                let expires_in = value.expires_in
+                
+                //success
+                if access_token.count > 0, refresh_token.count > 0, integUid.count > 0, token_type.count > 0, expires_in > 0 {
+                  
+                    fLog("\n--- Email Login Result ---------------------------------\nauthCode : \(authCode)\nstate : \(state)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\nintegUid : \(integUid)\ntoken_type : \(token_type)\nexpires_in : \(expires_in)\n")
+                    
+//                    UserManager.shared.setLoginData(account: loginId, password: loginPw, loginType: loginType, accessToken: access_token, refreshToken: refresh_token, uid: integUid, expiredTime: expires_in)
+                    UserManager.shared.checkLogin()
+                    UserManager.shared.showLoginView = false
+                }
+                else {
+                    //성공이 아니면 에러
+                    self.alertTitle = ""
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    self.showAlert = true
+                }
+            }
+            .store(in: &cancellable)
+
+    }
     
 }

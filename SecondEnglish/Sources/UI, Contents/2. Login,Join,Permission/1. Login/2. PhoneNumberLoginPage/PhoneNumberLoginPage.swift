@@ -7,24 +7,6 @@
 
 import SwiftUI
 
-// 아래 String extension 정리하기
-extension String {
-    var lastString: String {
-        get {
-            if self.isEmpty { return self }
-            
-            let lastIndex = self.index(before: self.endIndex)
-            return String(self[lastIndex])
-        }
-    }
-}
-// 아래 String extension 정리하기
-extension String {
-    func removingWhitespaces() -> String {
-        return components(separatedBy: .whitespaces).joined()
-    }
-}
-
 struct PhoneNumberLoginPage {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -52,7 +34,7 @@ extension PhoneNumberLoginPage: View {
                         .foregroundColor(.gray900)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Text("휴대폰 번호는 안전하게 보관되며 이웃들에게 공개되지 않아요.")
+                    Text("휴대폰 번호는 안전하게 보관되며 공개되지 않아요.")
                         .font(.buttons1420Medium)
                         .foregroundColor(.gray800)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -109,19 +91,29 @@ extension PhoneNumberLoginPage: View {
                 
                 Button(action: {
                     if isSendSMSEnable {
-                        
-                        viewModel.sendSMS(
-                            toPhoneNumber: "01063504981",
-                            accountSid: "ACe34732274fbb32995d0612cbea60be0d",
-                            authToken: "8ade8567fdcda0e51cd281bd83293db9",
-                            fromPhoneNumber: "+1 240 349 7171"
-                        )
-                        
                         // 폰번호 입력 키보드 내리기
                         isPhoneNumberFocused = false
                         
-                        withAnimation {
-                            isSendSMS = true
+                        
+                        // Kakao 설정 (키 값을 번들에서 가져온다.)
+                        // AppDelegate에서 해도 되는데, 어차피 .onOpenURL로 카카오 설정을 해줘야 하기 때문에, 따로따로 구분짓기 싫어서 여기서 설정함
+                        if let twilioSmsAccountSid = Bundle.main.infoDictionary?["TWILIO_SMS_ACCOUNT_SID"] as? String,
+                           let twilioSmsAuthToken = Bundle.main.infoDictionary?["TWILIO_SMS_AUTH_TOKEN"] as? String,
+                           let twilioSmsSendPhoneNumber = Bundle.main.infoDictionary?["TWILIO_SMS_SEND_PHONE_NUMBER"] as? String {
+                            
+                            viewModel.sendSMS(
+                                toPhoneNumber: phoneNumber,
+                                accountSid: twilioSmsAccountSid,
+                                authToken: twilioSmsAuthToken,
+                                fromPhoneNumber: twilioSmsSendPhoneNumber
+                            )
+                            
+                            withAnimation {
+                                isSendSMS = true
+                            }
+                            
+                        } else {
+                            // 문자 전송 실패. Config 파일에서 해당 데이터 없음.
                         }
                         
                         isSendSMSEnable = false
@@ -191,7 +183,10 @@ extension PhoneNumberLoginPage: View {
                     
                     Button(action: {
                         if isSendSMSCheckEnable {
-                            //
+                            viewModel.verifySMSCode(
+                                toPhoneNumber: phoneNumber,
+                                code: otpNumber
+                            )
                         }
                     }, label: {
                         Text("인증번호 확인")

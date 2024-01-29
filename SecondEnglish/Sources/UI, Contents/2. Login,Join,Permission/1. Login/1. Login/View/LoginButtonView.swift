@@ -42,10 +42,20 @@ struct LoginButtonView : View {
         } label: {
             ZStack {
                 HStack(spacing: 0) {
-                    Image(iconName)
-                        .resizable()
-                        .frame(width: sizeInfo.iconSize.width, height: sizeInfo.iconSize.height)
-                        .padding(.leading, sizeInfo.horizontalPadding)
+                    Group {
+                        if buttonType == .phone {
+                            Image(systemName: "phone.fill")
+                                .resizable()
+                                .renderingMode(.template)
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.primaryDefault)
+                        } else {
+                            Image(iconName)
+                                .resizable()
+                                .frame(width: sizeInfo.iconSize.width, height: sizeInfo.iconSize.height)
+                        }
+                    }
+                    .padding(.leading, sizeInfo.horizontalPadding)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
@@ -61,11 +71,9 @@ struct LoginButtonView : View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(width: sizeInfo.roundImageSize.width, height: sizeInfo.roundImageSize.height)
-            .background(
-                ((buttonType == .kakaotalk) ? colorInfo.kakaotalkColor : Color.gray25)
-                    .cornerRadius(sizeInfo.roundImageSize.height / 2 )
+            .background(Color.gray25.cornerRadius(sizeInfo.roundImageSize.height / 2 )
             )
-            .shadow(color: Color.gray100.opacity((buttonType == .kakaotalk || buttonType == .phone) ? 0 : 1), radius: 2, x: 0, y: 2)
+            .shadow(color: Color.gray100, radius: 2, x: 0, y: 2)
         }
     }
 }

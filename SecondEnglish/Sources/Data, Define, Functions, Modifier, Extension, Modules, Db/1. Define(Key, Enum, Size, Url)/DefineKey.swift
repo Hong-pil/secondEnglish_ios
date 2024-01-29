@@ -122,6 +122,7 @@ struct DefineKey {
     static let loginPw = "loginPw"
     static let loginId = "loginId"
     static let loginType = "loginType"
+    static let loginUserType = "loginUserType"
     static let language = "language"
     static let langName = "langName"
     

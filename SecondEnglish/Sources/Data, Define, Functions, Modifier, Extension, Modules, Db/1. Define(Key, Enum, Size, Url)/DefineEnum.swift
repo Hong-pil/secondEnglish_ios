@@ -8,6 +8,24 @@
 import Foundation
 import Darwin
 
+enum LoginUserType {
+    case None
+    case Google
+    case Apple
+    case KakaoTalk
+    case Phone
+    
+    func getValue() -> Int {
+        switch self {
+        case .None: return 0
+        case .Google: return 1
+        case .Apple: return 2
+        case .KakaoTalk: return 3
+        case .Phone: return 4
+        }
+    }
+}
+
 enum bTab {
     case my
     case swipe_card

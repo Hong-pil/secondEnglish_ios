@@ -20,8 +20,8 @@ struct LoginPage : View {
         static let padding18: CGFloat = 18.0
         static let padding20: CGFloat = 20.0
         
-        static let topPadding: CGFloat = 50.0
-        static let bottomPadding: CGFloat = 56.0 + DefineSize.SafeArea.bottom
+        static let topPadding: CGFloat = 100.0
+        static let bottomPadding: CGFloat = 20.0 + DefineSize.SafeArea.bottom
         
         static let logoSize: CGSize = CGSize(width: 174.0, height: 30.0)
         static let characterSize: CGSize = CGSize(width: 128.0, height: 128.0)
@@ -37,6 +37,8 @@ struct LoginPage : View {
         static let horizontalPadding: CGFloat = 30.0
     }
     
+    @State private var showPhoneNumberLoginPage = false
+    
     @State var showBottomSheetLanguageView = false
     @StateObject var languageManager = LanguageManager.shared
     @StateObject var userManager = UserManager.shared
@@ -47,21 +49,14 @@ struct LoginPage : View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
-        ZStack(alignment: .top, content: {
-            NavigationView {
-                VStack(alignment: .center, spacing: 0) {
-                    
-                    Spacer().frame(height: sizeInfo.topPadding)
-                    
-                    Text("순간 영어")
-                        .font(.title2)
-                        .foregroundColor(.primary)
-                    
+        ZStack {
+            NavigationStack {
+                VStack(spacing: 0) {
                     Image("secondEnglish_logo_opacity")
                         .resizable()
                         .frame(width: sizeInfo.characterSize.width, height: sizeInfo.characterSize.height)
                         .padding(.bottom, sizeInfo.characterBottomPadding)
-                    
+                        .padding(.top, sizeInfo.topPadding)
                     
                     //최근 로그인 계정 : 로그인한 이력이 없으면 감춘다.
                     if userManager.oldLoginType.count > 0 {
@@ -71,38 +66,34 @@ struct LoginPage : View {
                     
                     LoginButtonView(iconName: "btn_login_google", snsName: "Google", buttonType: .google) {
                         viewModel.loginWithGoogle()
-                    }.padding(.bottom, sizeInfo.padding6)
+                    }.padding(.bottom, sizeInfo.padding10)
                     
                     LoginButtonView(iconName: "btn_login_apple", snsName: "Apple", buttonType: .apple) {
                         viewModel.loginWithApple()
-                    }.padding(.bottom, sizeInfo.padding6)
+                    }.padding(.bottom, sizeInfo.padding10)
                     
-                    LoginButtonView(iconName: "btn_logo_login_kakaotalk", snsName: "카카오톡으", buttonType: .kakaotalk) {
+                    LoginButtonView(iconName: "btn_logo_kakaotalk", snsName: "카카오톡으", buttonType: .kakaotalk) {
                         viewModel.loginWithKakao()
-                    }.padding(.bottom, sizeInfo.padding18)
+                    }.padding(.bottom, sizeInfo.padding10)
                     
-                    NavigationLink(destination: PhoneNumberLoginPage()) {
-                        LoginButtonView(iconName: "btn_logo_login_kakaotalk", snsName: "휴대폰 번호", buttonType: .phone) {
-                            
-                            //
-                        }
+                    LoginButtonView(iconName: "btn_logo_login_kakaotalk", snsName: "휴대폰 번호", buttonType: .phone) {
+                        showPhoneNumberLoginPage = true
                     }
                     
                     //signup with email
-                    NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {
-                        LoginEmailView()
-                    }
+//                    NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {
+//                        LoginEmailView()
+//                    }
+//                    
+//                    NavigationLink(destination: EmailLoginPage()) {
+//                        LoginEmailView()
+//                    }
+//                    
+//                    NavigationLink(destination: JoinAgreePage(email: "hana_815@naver.com", snsId: "", loginType: LoginType.email.rawValue, password: "a123456!")) {
+//                        LoginEmailView()
+//                    }
                     
-                    NavigationLink(destination: EmailLoginPage()) {
-                        LoginEmailView()
-                    }
-                    
-    //                NavigationLink(destination: JoinAgreePage(email: "hana_815@naver.com", snsId: "", loginType: LoginType.email.rawValue, password: "a123456!")) {
-    //                    LoginEmailView()
-    //                }
-
-                    
-                    Spacer().frame(maxHeight: .infinity)
+                    Spacer()
                     
                     Button {
                         userManager.isLogin = false
@@ -118,12 +109,11 @@ struct LoginPage : View {
                             .padding(.bottom, sizeInfo.bottomPadding)
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.bgLightGray50)
-                .edgesIgnoringSafeArea(.bottom)
-                .navigationType(leftItems: [], rightItems: [.Cancel], leftItemsForegroundColor: .black, rightItemsForegroundColor: .primary500, title: "", onPress: { buttonType in
-                    showBottomSheetLanguageView = true
-                })
+                .navigationDestination(isPresented: $showPhoneNumberLoginPage) {
+                    PhoneNumberLoginPage()
+                }
 //                .navigationBarBackground {
 //                    Color.bgLightGray50
 //                }
@@ -141,12 +131,11 @@ struct LoginPage : View {
 //                    })
 //                })
             }
-            
             .showAlert(isPresented: $viewModel.showAlert, type: .Default, title: viewModel.alertTitle, message: viewModel.alertMessage, detailMessage: "", buttons: ["h_confirm".localized], onClick: { buttonIndex in
             })
             
             LoadingViewInPage(loadingStatus: $viewModel.loadingStatus)
-        })
+        }
         .onAppear() {
             fLog("로그인페이지 onAppear")
             userManager.isLookAround = false
@@ -183,6 +172,7 @@ struct LoginPage : View {
         }
         .frame(height: sizeInfo.warningSize.height)
     }
+    
 }
 
 #Preview {

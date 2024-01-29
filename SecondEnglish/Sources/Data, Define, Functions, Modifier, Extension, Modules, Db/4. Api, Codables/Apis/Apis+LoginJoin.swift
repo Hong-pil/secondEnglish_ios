@@ -11,6 +11,7 @@ import Foundation
 
 enum ApisLoginJoin {
     case send_sms(toPhoneNumber: String, accountSid: String, authToken: String, fromPhoneNumber: String)
+    case verify_sms_code(toPhoneNumber: String, code: String, login_type: LoginUserType)
 }
 
 extension ApisLoginJoin: TargetType {
@@ -25,6 +26,8 @@ extension ApisLoginJoin: TargetType {
         switch self {
         case .send_sms:
             return "api/send-sms"
+        case .verify_sms_code:
+            return "api/check-sms"
         }
     }
     
@@ -32,6 +35,8 @@ extension ApisLoginJoin: TargetType {
     var method: Moya.Method {
         switch self {
         case .send_sms:
+            return .post
+        case .verify_sms_code:
             return .post
         }
     }
@@ -48,6 +53,15 @@ extension ApisLoginJoin: TargetType {
             params["accountSid"] = accountSid
             params["authToken"] = authToken
             params["fromPhoneNumber"] = fromPhoneNumber
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .verify_sms_code(let toPhoneNumber, let code, let login_type):
+            var params = defaultParams
+            params["login_id"] = toPhoneNumber
+            params["code"] = code
+            params["login_type"] = login_type.getValue()
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)

@@ -86,6 +86,15 @@ extension String {
         return self
     }
     
+    var lastString: String {
+        get {
+            if self.isEmpty { return self }
+            
+            let lastIndex = self.index(before: self.endIndex)
+            return String(self[lastIndex])
+        }
+    }
+    
     func currencyFormatting() -> String {
         if let value = Double(self) {
             let numberFormatter = NumberFormatter()
@@ -457,6 +466,10 @@ extension String {
         let start = index(startIndex, offsetBy: range.lowerBound)
         let end = index(start, offsetBy: range.upperBound - range.lowerBound)
         return String(self[start ..< end])
+    }
+    
+    func removingWhitespaces() -> String {
+        return components(separatedBy: .whitespaces).joined()
     }
 }
 

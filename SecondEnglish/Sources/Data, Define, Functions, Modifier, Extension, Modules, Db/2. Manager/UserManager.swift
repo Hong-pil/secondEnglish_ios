@@ -89,6 +89,7 @@ class UserManager: ObservableObject {
     @AppStorage(DefineKey.accessToken) var accessToken: String = ""
     @AppStorage(DefineKey.refreshToken) var refreshToken: String = ""
     @AppStorage(DefineKey.fcmToken) var fcmToken: String = ""
+    @AppStorage(DefineKey.uid) var uid: String = ""
     @AppStorage(DefineKey.integUid) var integUid: String = ""
     @AppStorage(DefineKey.userNick) var userNick: String = ""
     @AppStorage(DefineKey.userEmail) var userEmail: String = ""
@@ -99,6 +100,7 @@ class UserManager: ObservableObject {
     
     @AppStorage(DefineKey.account) var account: String = ""
     @AppStorage(DefineKey.password) var password: String = ""
+    @AppStorage(DefineKey.loginUserType) var loginUserType: Int = LoginUserType.None.getValue()
     @AppStorage(DefineKey.loginType) var loginType: String = ""
     @AppStorage(DefineKey.countryCode) var countryCode: String = ""
     @AppStorage(DefineKey.marketingToggleOn) var marketingToggleOn: Bool = false
@@ -153,27 +155,17 @@ class UserManager: ObservableObject {
         isLogin = checkValidateSSO()
     }
     
-    func setLoginData(account:String,
-                      password:String,
-                      loginType:String,
+    func setLoginData(uid:String,
+                      loginUserType:LoginUserType,
                       accessToken:String,
-                      refreshToken:String,
-                      uid:String,
-                      expiredTime:Int)
+                      refreshToken:String)
     {
-        self.account = account
-        self.password = password
-        self.loginType = loginType
-        self.oldLoginType = loginType
-        
+        self.uid = uid
+        self.loginUserType = loginUserType.getValue()
         self.accessToken = accessToken
         self.refreshToken = refreshToken
-        self.integUid = uid
-        
-        self.expiredTime = expiredTime
         self.regDate = Date()
-        
-        let _ = self.checkValidate()
+        //let _ = self.checkValidate()
     }
     
     func setLoginDataSSO(accessToken: String)
@@ -352,17 +344,20 @@ class UserManager: ObservableObject {
     }
     
     func checkValidate() -> Bool {
-        //fLog("\n--- checkValidate login ----------------------\naccessToken : \(accessToken)\nrefreshToken : \(refreshToken)\nuid : \(uid)\naccount : \(account)\npassword : \(password)\nloginType : \(loginType)\nexpiredTime : \(expiredTime)\n")
+        fLog("\n--- checkValidate login ----------------------\naccessToken : \(accessToken)\nrefreshToken : \(refreshToken)\nuid : \(uid)\nloginUserType : \(loginUserType)\n")
         
-        if loginType == LoginType.email.rawValue {
-            if accessToken.count > 0, refreshToken.count > 0, integUid.count > 0, account.count > 0, password.count > 0, loginType.count > 0, expiredTime > 0 {
-                return true
-            }
-        }
-        else {
-            if accessToken.count > 0, refreshToken.count > 0, integUid.count > 0, account.count > 0, loginType.count > 0, expiredTime > 0 {
-                return true
-            }
+//        if loginType == LoginType.email.rawValue {
+//            if accessToken.count > 0, refreshToken.count > 0, integUid.count > 0, account.count > 0, password.count > 0, loginType.count > 0, expiredTime > 0 {
+//                return true
+//            }
+//        }
+//        else {
+//            if accessToken.count > 0, refreshToken.count > 0, integUid.count > 0, account.count > 0, loginType.count > 0, expiredTime > 0 {
+//                return true
+//            }
+//        }
+        if accessToken.count > 0, refreshToken.count > 0, uid.count > 0, loginUserType > 0 {
+            return true
         }
         
         
