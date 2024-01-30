@@ -141,8 +141,8 @@ extension TabSwipeCardPage: View {
             }
         }
         .onChange(of: maxID, perform: { currentID in
-            //fLog("로그확인::: currentID : \(currentID)")
-            //fLog("로그확인::: 현재:\(viewModel.swipeList[currentID-1].KOREAN ?? "")")
+            fLog("idpil::: currentID : \(currentID)")
+            //fLog("idpil::: 현재:\(viewModel.swipeList[currentID-1].korean ?? "")")
             
             currentCardIndex = getCurrentIndexOfList(_maxID: currentID)
             
@@ -151,8 +151,8 @@ extension TabSwipeCardPage: View {
                 percentageVal: viewModel.countOfSwipeList
             )
             
-//            let _ = fLog("로그확인::: 백분율 : \(getCurrentIndexOfList(_maxID: currentID))")
-//            let _ = fLog("로그확인::: 퍼센트 : \(curPercent)")
+            let _ = fLog("idpil::: 백분율 : \(getCurrentIndexOfList(_maxID: currentID))")
+            let _ = fLog("idpil::: 퍼센트 : \(curPercent)")
         })
     }
 
@@ -232,19 +232,34 @@ extension TabSwipeCardPage: View {
     
     
     public func getCurrentIndexOfList(_maxID: Int) -> Int {
+        //fLog("idpil::: 111 : \(viewModel.fixedSwipeList.count)")
+        //fLog("idpil::: 1111 : \(viewModel.swipeList.count)")
+        
+        // 처음(fixedSwipeList.count == swipeList.count) 한 번만,
+        // 퍼센트 계산용 배열(cardPercentArr)에 초기화로 저장
+        // swipeList는 카드 넘기면서 하나씩 제거됨. 그래서 사용하면 안 됨.
+        if viewModel.fixedSwipeList.count == viewModel.swipeList.count {
+            viewModel.cardPercentArr = viewModel.swipeList
+        }
+        
         var copyArr = viewModel.fixedSwipeList
         copyArr = copyArr.reversed()
         
-        
-        let resultArr = viewModel.swipeList
-            .enumerated()
+        let resultArr = viewModel.cardPercentArr
+            .enumerated() // 배열의 인덱스 가져오기 위해 사용
             .map { (index, element) -> Bool in
-                //fLog("로그확인::: \(index), \(element)")
-                return element.korean == copyArr[_maxID-1].korean
+                //fLog("idpil::: 여기\(index), \(element)")
+                fLog("음음음::: copyArr.count : \(copyArr.count)")
+                fLog("음음음::: _maxID : \(_maxID)")
+                if _maxID > 0 {
+                    return element.korean == copyArr[_maxID-1].korean
+                } else {
+                    return false // 이걸 true로 해야되나 false로 해야되나???
+                }
             }
-        //fLog("로그확인::: resultArr : \(resultArr)")
+        //fLog("idpil::: resultArr : \(resultArr)")
         
-        //fLog("로그확인::: 현재 인덱스:\(resultArr.firstIndex(of: true) ?? -1)")
+        //fLog("idpil::: 현재 인덱스:\(resultArr.firstIndex(of: true) ?? -1)")
         return resultArr.firstIndex(of: true) ?? -1
     }
 }

@@ -71,7 +71,7 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
-    static func verifySmsCode(toPhoneNumber: String, code: String, login_type: LoginUserType) -> AnyPublisher<LoginSuccessResponse, ErrorModel> {
+    static func verifySmsCode(toPhoneNumber: String, code: String, login_type: String) -> AnyPublisher<LoginSuccessResponse, ErrorModel> {
         Future<LoginSuccessResponse, ErrorModel> { promise in
             
             let apis: ApisLoginJoin = .verify_sms_code(

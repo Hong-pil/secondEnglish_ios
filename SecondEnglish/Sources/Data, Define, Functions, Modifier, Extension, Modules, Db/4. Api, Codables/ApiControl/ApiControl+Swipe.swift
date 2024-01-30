@@ -68,7 +68,7 @@ extension ApiControl {
             provider.requestPublisher(apis)
                 .sink(receiveCompletion: { completion in
                     guard case let .failure(error) = completion else { return }
-                    fLog("idpil::: error : \(error)")
+                    //fLog("error : \(error)")
                     promise(.failure(ErrorModel(code: "error")))
                     
                     switch ErrorHandler.checkToken(
@@ -82,14 +82,15 @@ extension ApiControl {
                         // 원래는 로그아웃 하면 안 되고, accesstoken 다시 발급받고, 이 api 호출 다시 해야됨.
                         PopupManager.dismissAll()
                         UserManager.shared.logout()
+                        
+                        
+                        
                     case .ExpiredRefreshToken:
                         fLog("idpil::: RefreshToken 만료된 경우")
                     }
                     
                     isExpiredAccessToken()
                 }, receiveValue: { response in
-                    fLog("idpil::: 2")
-                    fLog("idpil::: response : \(response)")
                     jsonLog(data: response.data, systemCode: response.statusCode, isLogOn: apis.isResponseLog())
                     
                     //error check start --------------------------------------------------------------------------------

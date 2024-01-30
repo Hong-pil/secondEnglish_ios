@@ -103,7 +103,7 @@ struct ProfileInfoView: View {
             }
         }
         .onDisappear {
-            fLog("onDisappear 호출 !!!!!!!!!!!!!!!!")
+            //fLog("onDisappear 호출 !!!!!!!!!!!!!!!!")
             // 아래 코드 적용 안 됨
             //speechSynthesizer.stopSpeaking(at: .immediate)
         }

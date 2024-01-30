@@ -26,6 +26,7 @@ class SwipeCardViewModel: ObservableObject {
     @Published var swipeList: [SwipeDataList] = []
     @Published var countOfSwipeList: Double = 0
     @Published var topTabBarList: [String] = []
+    @Published var cardPercentArr: [SwipeDataList] = [] // 카드 퍼센트 계산용
     
     init() {
         self.requestCategory()

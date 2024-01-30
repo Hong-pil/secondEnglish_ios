@@ -66,15 +66,18 @@ struct LoginPage : View {
                     
                     LoginButtonView(iconName: "btn_login_google", snsName: "Google", buttonType: .google) {
                         viewModel.loginWithGoogle()
-                    }.padding(.bottom, sizeInfo.padding10)
+                    }
+                    .padding(.bottom, sizeInfo.padding10)
                     
                     LoginButtonView(iconName: "btn_login_apple", snsName: "Apple", buttonType: .apple) {
                         viewModel.loginWithApple()
-                    }.padding(.bottom, sizeInfo.padding10)
+                    }
+                    .padding(.bottom, sizeInfo.padding10)
                     
                     LoginButtonView(iconName: "btn_logo_kakaotalk", snsName: "카카오톡으", buttonType: .kakaotalk) {
                         viewModel.loginWithKakao()
-                    }.padding(.bottom, sizeInfo.padding10)
+                    }
+                    .padding(.bottom, sizeInfo.padding10)
                     
                     LoginButtonView(iconName: "btn_logo_login_kakaotalk", snsName: "휴대폰 번호", buttonType: .phone) {
                         showPhoneNumberLoginPage = true

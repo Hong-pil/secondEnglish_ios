@@ -12,12 +12,12 @@ import CombineMoya
 
 extension ApiControl {
     
-    static func addSnsUser(login_id: String, login_type: LoginUserType) -> AnyPublisher<LoginSuccessResponse, ErrorModel> {
+    static func addSnsUser(loginId: String, loginType: String) -> AnyPublisher<LoginSuccessResponse, ErrorModel> {
         Future<LoginSuccessResponse, ErrorModel> { promise in
             
             let apis: ApisLoginSNS = .addSnsUser(
-                login_id: login_id,
-                login_type: login_type
+                login_id: loginId,
+                login_type: loginType
             )
             
             // call

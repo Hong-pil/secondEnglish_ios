@@ -100,7 +100,7 @@ class UserManager: ObservableObject {
     
     @AppStorage(DefineKey.account) var account: String = ""
     @AppStorage(DefineKey.password) var password: String = ""
-    @AppStorage(DefineKey.loginUserType) var loginUserType: Int = LoginUserType.None.getValue()
+    @AppStorage(DefineKey.loginUserType) var loginUserType: String = ""
     @AppStorage(DefineKey.loginType) var loginType: String = ""
     @AppStorage(DefineKey.countryCode) var countryCode: String = ""
     @AppStorage(DefineKey.marketingToggleOn) var marketingToggleOn: Bool = false
@@ -156,12 +156,12 @@ class UserManager: ObservableObject {
     }
     
     func setLoginData(uid:String,
-                      loginUserType:LoginUserType,
+                      loginUserType:String,
                       accessToken:String,
                       refreshToken:String)
     {
         self.uid = uid
-        self.loginUserType = loginUserType.getValue()
+        self.loginUserType = loginUserType
         self.accessToken = accessToken
         self.refreshToken = refreshToken
         self.regDate = Date()
@@ -198,6 +198,11 @@ class UserManager: ObservableObject {
         NotificationCenter.default.post(name: Notification.Name(DefineNotification.changeLoginStatus), object: nil, userInfo: nil)
         
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        
+        
+        withAnimation {
+            UserManager.shared.showLoginView = true
+        }
     }
     
     func reset() {
@@ -356,7 +361,7 @@ class UserManager: ObservableObject {
 //                return true
 //            }
 //        }
-        if accessToken.count > 0, refreshToken.count > 0, uid.count > 0, loginUserType > 0 {
+        if accessToken.count > 0, refreshToken.count > 0, uid.count > 0, loginUserType.count > 0 {
             return true
         }
         
