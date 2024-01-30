@@ -26,6 +26,12 @@ enum LoginUserType {
     }
 }
 
+enum TokenResponseType: Int {
+    case WrongRequestToken
+    case ExpiredAccessToken
+    case ExpiredRefreshToken
+}
+
 enum bTab {
     case my
     case swipe_card

@@ -107,6 +107,51 @@ struct ErrorHandler {
 
         return false
     }
+    
+    
+    static func checkToken(statusCode: Int?, data: Data?) -> TokenResponseType {
+        if let NOstatusCode = statusCode,
+            let NOdata = data {
+            do {
+                if
+                    let jsonData = try JSONSerialization.jsonObject(with: (NOdata), options: .mutableContainers) as? [String: Any],
+                    let code = jsonData["code"] as? Int,
+                    let message = jsonData["message"] as? String
+                {
+                    
+                    // AccessToken 만료된 경우
+                    if NOstatusCode==400 && code==408 {
+                        return .ExpiredAccessToken
+                    }
+                    // RefreshToken 만료된 경우
+                    else if NOstatusCode==400 && code==409 {
+                        return .ExpiredRefreshToken
+                    }
+                    // 잘못된 토큰인 경우 (NOstatusCode==400 && code==407)
+                    else {
+                        return .WrongRequestToken
+                    }
+                    
+//                                guard let defaults = UserDefaults(suiteName: "group.rndeep.fantoo") else {
+//                                    fLog("UserDefaults none")
+//                                    return
+//                                }
+//                                if let codeData = try? JSONSerialization.data(withJSONObject: code) {
+//                                    defaults.set(codeData, forKey: "MessageCode")
+//                                    defaults.synchronize()
+//                                }
+                } else {
+                    fLog("tokenMessage error")
+                    return .WrongRequestToken
+                }
+            } catch {
+                fLog(error)
+                return .WrongRequestToken
+            }
+        } else {
+            return .WrongRequestToken
+        }
+    }
 
     static func checkAuthErrorSSO(_ response: Response) -> AuthErrorType? {
         if response.statusCode == 201 {

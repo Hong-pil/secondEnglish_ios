@@ -14,6 +14,7 @@ struct DefineKey {
     static let accessToken = "accessToken"
     static let access_token = "access_token"
     static let authCode = "authCode"
+    static let authorization = "authorization"
     static let authorization_code = "authorization_code"
     static let authorizedAlbum = "authorizedAlbum"
     static let app = "app"

@@ -39,6 +39,8 @@
 		E045E9D52B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D42B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift */; };
 		E045E9D72B65A75B00E3BD60 /* JoinAgreeCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */; };
 		E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */; };
+		E068E9702B68E49A00500585 /* Apis+LoginSNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */; };
+		E068E9722B68E4BE00500585 /* ApiControl+LoginSNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */; };
 		E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A05B2B6364F5009E5C9A /* PermissionPage.swift */; };
 		E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A0612B636544009E5C9A /* PermissionDetailView.swift */; };
 		E071A0642B63654C009E5C9A /* PermissionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A0632B63654C009E5C9A /* PermissionText.swift */; };
@@ -239,6 +241,8 @@
 		E045E9D42B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeCheckSubView.swift; sourceTree = "<group>"; };
 		E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeCheckView.swift; sourceTree = "<group>"; };
 		E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeViewModel.swift; sourceTree = "<group>"; };
+		E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Apis+LoginSNS.swift"; sourceTree = "<group>"; };
+		E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+LoginSNS.swift"; sourceTree = "<group>"; };
 		E071A05B2B6364F5009E5C9A /* PermissionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionPage.swift; sourceTree = "<group>"; };
 		E071A0612B636544009E5C9A /* PermissionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionDetailView.swift; sourceTree = "<group>"; };
 		E071A0632B63654C009E5C9A /* PermissionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionText.swift; sourceTree = "<group>"; };
@@ -894,6 +898,7 @@
 				E0DBDD7F2B4FC9B4007615A8 /* Apis+Swipe.swift */,
 				E0DBDD812B4FC9C1007615A8 /* Apis+LoginJoin.swift */,
 				E016784B2B6257CD00943945 /* Apis+Login.swift */,
+				E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */,
 			);
 			path = Apis;
 			sourceTree = "<group>";
@@ -906,6 +911,7 @@
 				E0DBDD772B4FC980007615A8 /* ApiControl+Swipe.swift */,
 				E0DBDD792B4FC98C007615A8 /* ApiControl+LoginJoin.swift */,
 				E016784D2B6257E600943945 /* ApiControl+Login.swift */,
+				E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */,
 			);
 			path = ApiControl;
 			sourceTree = "<group>";
@@ -1399,6 +1405,7 @@
 				E0DBDDC62B4FCE22007615A8 /* UIView+Extension.swift in Sources */,
 				E0DBDDA82B4FCD75007615A8 /* Font+Extension.swift in Sources */,
 				E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */,
+				E068E9702B68E49A00500585 /* Apis+LoginSNS.swift in Sources */,
 				E0DBDCFD2B4FB60F007615A8 /* ContentView.swift in Sources */,
 				E0DBDE482B4FD203007615A8 /* TabSwipeCardPage.swift in Sources */,
 				E0DBDE062B4FCFD9007615A8 /* TabBarAccessor.swift in Sources */,
@@ -1474,6 +1481,7 @@
 				E0DBDD412B4FC652007615A8 /* Define.swift in Sources */,
 				E0DBDE2A2B4FD0F3007615A8 /* PopupCentreStackView.swift in Sources */,
 				E002E18B2B57BAFD00F64CA4 /* LoginEmailView.swift in Sources */,
+				E068E9722B68E4BE00500585 /* ApiControl+LoginSNS.swift in Sources */,
 				E0DBDDE82B4FCF0D007615A8 /* ExpandingTextView.swift in Sources */,
 				E0DBDDE02B4FCEDD007615A8 /* CustomFocusTextField.swift in Sources */,
 				E0DBDD8C2B4FC9FB007615A8 /* SwipeModel.swift in Sources */,

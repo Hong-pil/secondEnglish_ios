@@ -26,18 +26,19 @@ struct CommonFunction {
     
     static func defaultHeader(acceptLanguage: String = "") -> [String:String] {
         var header: [String:String] = [:]
-        header[DefineKey.referer] = "http://fantoo.co.kr"
-        header[DefineKey.user_agent] = "fantoo-ios"
-        
-        if acceptLanguage == "" {
-            header[DefineKey.accept_language] = LanguageManager.shared.getLanguageApiCode()
-        } else {
-            header[DefineKey.accept_language] = acceptLanguage
-        }
+//        header[DefineKey.referer] = "http://fantoo.co.kr"
+//        header[DefineKey.user_agent] = "fantoo-ios"
+//        
+//        if acceptLanguage == "" {
+//            header[DefineKey.accept_language] = LanguageManager.shared.getLanguageApiCode()
+//        } else {
+//            header[DefineKey.accept_language] = acceptLanguage
+//        }
         
         if UserManager.shared.isLogin && !UserManager.shared.accessToken.isEmpty {
 //            fLog("token ---: \(UserManager.shared.accessToken)")
-            header[DefineKey.access_token] = UserManager.shared.accessToken
+            //header[DefineKey.access_token] = UserManager.shared.accessToken
+            header[DefineKey.authorization] = "bearer " + UserManager.shared.accessToken
         }
         
         return header

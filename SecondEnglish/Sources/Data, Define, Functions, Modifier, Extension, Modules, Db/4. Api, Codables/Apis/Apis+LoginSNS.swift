@@ -1,21 +1,19 @@
 //
-//  Apis+LoginJoin.swift
+//  Apis+LoginSNS.swift
 //  SecondEnglish
 //
-//  Created by kimhongpil on 1/11/24.
+//  Created by kimhongpil on 1/30/24.
 //
 
 import Moya
 import Alamofire
 import Foundation
 
-enum ApisLoginJoin {
-    case send_sms(toPhoneNumber: String, accountSid: String, authToken: String, fromPhoneNumber: String)
-    case verify_sms_code(toPhoneNumber: String, code: String, login_type: LoginUserType)
-    //case issueAccessToken(loginID: String, refreshToken: String)
+enum ApisLoginSNS {
+    case addSnsUser(login_id: String, login_type: LoginUserType)
 }
 
-extension ApisLoginJoin: TargetType {
+extension ApisLoginSNS: TargetType {
     var baseURL: URL {
         switch self {
         default:
@@ -25,19 +23,15 @@ extension ApisLoginJoin: TargetType {
     
     var path: String {
         switch self {
-        case .send_sms:
-            return "api/send-sms"
-        case .verify_sms_code:
-            return "api/check-sms"
+        case .addSnsUser:
+            return "api/users/sns/register"
         }
     }
     
     // moya의 장점 : 각 메소드가 get인지 post인지 설정가능
     var method: Moya.Method {
         switch self {
-        case .send_sms:
-            return .post
-        case .verify_sms_code:
+        case .addSnsUser:
             return .post
         }
     }
@@ -48,20 +42,9 @@ extension ApisLoginJoin: TargetType {
     
     var task: Task {
         switch self {
-        case .send_sms(let toPhoneNumber, let accountSid, let authToken, let fromPhoneNumber):
+        case .addSnsUser(let login_id, let login_type):
             var params = defaultParams
-            params["toPhoneNumber"] = toPhoneNumber
-            params["accountSid"] = accountSid
-            params["authToken"] = authToken
-            params["fromPhoneNumber"] = fromPhoneNumber
-            
-            log(params: params)
-            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
-            
-        case .verify_sms_code(let toPhoneNumber, let code, let login_type):
-            var params = defaultParams
-            params["login_id"] = toPhoneNumber
-            params["code"] = code
+            params["login_id"] = login_id
             params["login_type"] = login_type.getValue()
             
             log(params: params)
@@ -100,7 +83,7 @@ extension ApisLoginJoin: TargetType {
 }
 
 //MARK: - Log On/Off
-extension ApisLoginJoin {
+extension ApisLoginSNS {
     func isAllLogOn() -> Bool {
         return true
     }
@@ -127,7 +110,7 @@ extension ApisLoginJoin {
 }
 
 //MARK: - Check Token or not
-extension ApisLoginJoin {
+extension ApisLoginSNS {
     func isCheckToken() -> Bool {
         switch self {
         default: return true
@@ -136,7 +119,7 @@ extension ApisLoginJoin {
 }
 
 //MARK: - Caching Time : Seconds
-extension ApisLoginJoin {
+extension ApisLoginSNS {
     func dataCachingTime() -> Int {
         switch self {
         default: return DataCachingTime.None.rawValue
