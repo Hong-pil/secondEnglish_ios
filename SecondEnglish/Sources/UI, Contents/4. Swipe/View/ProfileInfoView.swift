@@ -11,6 +11,7 @@ import NaturalLanguage
 
 struct ProfileInfoView: View {
     let card: SwipeDataList
+    let isTapLikeBtn: (Int, Bool) -> Void
     
     // TTS
     @State var ttsText: String = ""
@@ -51,12 +52,13 @@ struct ProfileInfoView: View {
                 Spacer()
                 
                 HStack(spacing: 20) {
-                    Image(systemName: "pencil")
+                    Image(systemName: (card.isLike ?? false) ? "bookmark.fill" : "bookmark")
+                        .renderingMode(.template)
                         .foregroundColor(.gray850)
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장
                         .onTapGesture {
-                            //
+                            isTapLikeBtn(card.idx ?? 0, (card.isLike ?? false) ? false : true)
                         }
                     
                     Image(systemName: "figure.highintensity.intervaltraining")

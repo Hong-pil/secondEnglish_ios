@@ -11,6 +11,7 @@ struct SwipeView: View {
     //let profile: Profile
     let card: SwipeDataList
     let onRemove: (LikeType) -> Void
+    let isTapLikeBtn: (Int, Bool) -> Void
     @State private var offset = CGSize.zero
     
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
@@ -19,11 +20,12 @@ struct SwipeView: View {
     @State var isFlipped: Bool = false
     @State var isDisabled: Bool = false
     
+    
     var body: some View {
         ZStack(alignment: .center) {
             
             FlipView(
-                ProfileInfoView(card: card),
+                ProfileInfoView(card: card, isTapLikeBtn: isTapLikeBtn),
                 ProfileInfoView_backView(card: card),
                 tap: {
                     let _ = print("탭 쳣음 !!!!!!!!")
@@ -67,12 +69,28 @@ struct SwipeView: View {
                 }
                 .onEnded { gesture in
                     if offset.width > 100 {
+                        fLog("idpil::: 오른쪽")
                         onRemove(.like)
                     } else if offset.width < -100 {
+                        fLog("idpil::: 왼쪽")
                         onRemove(.dislike)
                     } else if offset.height < -100 {
-                        onRemove(.superlike)
-                    } else {
+                        fLog("idpil::: 위쪽")
+                        //onRemove(.superlike)
+                        withAnimation(.spring()) {
+                            offset = .zero
+                            
+                            isTapLikeBtn(card.idx ?? 0, true)
+                        }
+                    } else if offset.height > 100 {
+                        fLog("idpil::: 아래쪽")
+                        withAnimation(.spring()) {
+                            offset = .zero
+                            
+                            isTapLikeBtn(card.idx ?? 0, false)
+                        }
+                    }
+                    else {
                         withAnimation(.spring()) {
                             offset = .zero
                         }

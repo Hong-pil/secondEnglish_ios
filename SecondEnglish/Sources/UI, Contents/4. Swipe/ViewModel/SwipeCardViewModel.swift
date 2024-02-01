@@ -85,11 +85,11 @@ class SwipeCardViewModel: ObservableObject {
                     
                     
                     var dummyArr = arr
-                    
+//                    
                     var dumArr: [String] = []
-                    dumArr.append("초급부터")
-                    dumArr.append("고급부터")
-                    dumArr.append("무작위")
+//                    dumArr.append("초급부터")
+//                    dumArr.append("고급부터")
+//                    dumArr.append("무작위")
                     for element in arr {
                         dumArr.append(element.type3 ?? "")
                     }
@@ -118,6 +118,25 @@ class SwipeCardViewModel: ObservableObject {
                     self.fixedSwipeList_0 = dummyArr // 처음 한 번만 저장
                     self.countOfSwipeList = Double(dummyArr.count)
                     
+                    
+                    
+                    
+                    
+                    // 처음 Step부터 시작하기
+                    self.resetSwipeList(selectedTitle: self.topTabBarList[0])
+                    
+                    
+                    
+                    
+                    
+                    
+                    // 내 좋아요 내역 조회
+                    self.requestMyLikeCardList(uid: UserManager.shared.uid) { isSuccess in
+                        //
+                    }
+                    
+                    
+                    
                     isSuccess(true)
                 }
                 else {
@@ -130,10 +149,89 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func likeCard(uid: String, cardIdx: Int, isLike: Int, clickIndex: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.likeCard(uid: uid, cardIdx: cardIdx, isLike: isLike)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    
+                    fLog("idpil::: 성공 :)")
+                    
+                    fLog("idpil::: 업데이트카드 : \(self.swipeList[clickIndex].korean)")
+                    fLog("idpil::: 변경전 isLike : \(self.swipeList[clickIndex].isLike)")
+                    // 좋아요 상태 업데이트
+                    self.swipeList[clickIndex].isLike = true
+                    fLog("idpil::: 변경후 isLike : \(self.swipeList[clickIndex].isLike)")
+                    
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func requestMyLikeCardList(uid: String, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getMyLikeCardList(uid: uid)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    //self.swipeList = value.data ?? []
+                    
+                    guard let liked_card_arr = value.data else { return }
+                    
+//                    var dummyArr = arr
+//
+//                    for (index, _) in arr.enumerated() {
+//                        dummyArr[index].id = index + 1
+//                    }
+//                    //fLog("로그확인::: dummyArr : \(dummyArr)")
+//                    self.swipeList = dummyArr
+                    fLog("idpil::: 내 좋아요 내역 : \(liked_card_arr)")
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    
     func setIsFirstLoadFalse() {
         self.isFirstLoad = false
     }
-    
     
     func resetSwipeList(selectedTitle: String) {
         var dummyArr: [SwipeDataList] = []

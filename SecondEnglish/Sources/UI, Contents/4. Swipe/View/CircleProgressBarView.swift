@@ -42,14 +42,12 @@ struct CircleProgressBarView: View {
             //이동하게 하기 위해 시계 방향 90도 이동후 x축을 기준으로 뒤집어 준다.
                 .rotationEffect(Angle(degrees: 90))
                 .rotation3DEffect(Angle(degrees: 180), axis: (x: 1, y: 0, z: 0))
-                .shadow(color: color2, radius: 14 * multiplier, x: 0.0, y: 14 * multiplier)
+                //.shadow(color: color2, radius: 14 * multiplier, x: 0.0, y: 14 * multiplier) // 그림자 효과는 필요 없음.
             
             //진행상황 표시용 레이블
-            if percent > 0 {
-                Text("\(Int(percent))%")
-                    .font(.system(size : 14 * multiplier))
-                    .fontWeight(.bold)
-            }
+            Text("\(Int(percent))%")
+                .font(.system(size : 10 * multiplier))
+                .fontWeight(.bold)
         }
     }
 }

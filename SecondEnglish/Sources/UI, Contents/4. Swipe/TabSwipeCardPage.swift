@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-struct User: Hashable, CustomStringConvertible {
-    var id: Int
-    
-    let firstName: String
-    let lastName: String
-    let age: Int
-    let mutualFriends: Int
-    let imageName: String
-    let occupation: String
-    
-    var description: String {
-        return "\(firstName), id: \(id)"
-    }
-}
+//struct User: Hashable, CustomStringConvertible {
+//    var id: Int
+//    
+//    let firstName: String
+//    let lastName: String
+//    let age: Int
+//    let mutualFriends: Int
+//    let imageName: String
+//    let occupation: String
+//    
+//    var description: String {
+//        return "\(firstName), id: \(id)"
+//    }
+//}
 
 struct TabSwipeCardPage {
     @StateObject var viewModel = SwipeCardViewModel()
@@ -32,36 +32,12 @@ struct TabSwipeCardPage {
     
     // Top TabBar
     @State private var clickedSubTabIndex: Int = 0
+    @State private var showNextStep: Bool = false
+    
+    @State var isTapLikeBtn: Bool = false
 }
 
 extension TabSwipeCardPage: View {
-    //MARK: 뷰 레이아웃 효과
-    /// Return the CardViews width for the given offset in the array
-    /// - Parameters:
-    ///   - geometry: The geometry proxy of the parent
-    ///   - id: The ID of the current user
-    private func getCardWidth(_ geometry: GeometryProxy, id: Int) -> CGFloat {
-        let offset: CGFloat = CGFloat(viewModel.swipeList.count - 1 - id) * 10
-        return geometry.size.width - offset
-    }
-    
-    /// Return the CardViews frame offset for the given offset in the array
-    /// - Parameters:
-    ///   - geometry: The geometry proxy of the parent
-    ///   - id: The ID of the current user
-    private func getCardOffset(_ geometry: GeometryProxy, id: Int) -> CGFloat {
-        return  CGFloat(viewModel.swipeList.count - 1 - id) * 10
-    }
-    
-    private var maxID: Int {
-        //return viewModel.swipeList.map { $0.id }.max() ?? 0
-        return viewModel.swipeList.map { ($0.customId ?? 0) }.max() ?? 0
-    }
-    
-    private var minID: Int {
-        return viewModel.swipeList.map { ($0.customId ?? 0) }.min() ?? 0
-    }
-    
     var body: some View {
         VStack(spacing: 0) {
             tabBarView
@@ -98,11 +74,29 @@ extension TabSwipeCardPage: View {
     //                                let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
                                     
                                     
-                                    
-                                    SwipeView(card: card) { likeType in
-                                        withAnimation { removeProfile(card) }
-                                        onLike(card, type: likeType)
-                                    }
+                                    SwipeView(
+                                        card: card,
+                                        onRemove: { likeType in
+                                            withAnimation { removeProfile(card)
+                                            }
+                                            
+                                            onLike(card, type: likeType)
+                                        },
+                                        isTapLikeBtn: { cardIdx, isLike in
+                                            
+                                            fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                            
+                                            fLog("idpil::: uid : \(UserManager.shared.uid)")
+                                            
+                                            viewModel.likeCard(uid: UserManager.shared.uid, cardIdx: cardIdx, isLike: isLike ? 1 : 0, clickIndex: index, isSuccess: { isSuccess in
+                                                if isSuccess {
+                                                    fLog("idpil::: 좋아요 성공!!!")
+                                                } else {
+                                                    fLog("idpil::: 좋아요 실패!!!")
+                                                }
+                                                
+                                            })
+                                        })
                                     //MARK: 책 쌓아놓은 것 같은 효과
                                     //.animation(.spring())
                                     .frame(width: self.getCardWidth(geometry, id: (card.customId ?? 0)), height: geometry.size.height * 0.7)
@@ -126,7 +120,7 @@ extension TabSwipeCardPage: View {
                     width: 50,
                     height: 50,
                     color1: Color.blue,
-                    color2: Color.green,
+                    color2: Color.blue.opacity(0.3),
                     percent: $curPercent
                 )
             }
@@ -139,29 +133,35 @@ extension TabSwipeCardPage: View {
                     //getCurrentIndexOfList()
                 }
             }
+            
+            
         }
-        .onChange(of: maxID, perform: { currentID in
-            fLog("idpil::: currentID : \(currentID)")
+        .onChange(of: maxID) {
+            //fLog("idpil::: currentID : \(currentID)")
             //fLog("idpil::: 현재:\(viewModel.swipeList[currentID-1].korean ?? "")")
             
-            currentCardIndex = getCurrentIndexOfList(_maxID: currentID)
-            
-            curPercent = calculatePercentage(
-                value: Double(currentCardIndex),
-                percentageVal: viewModel.countOfSwipeList
-            )
-            
-            let _ = fLog("idpil::: 백분율 : \(getCurrentIndexOfList(_maxID: currentID))")
-            let _ = fLog("idpil::: 퍼센트 : \(curPercent)")
-        })
+            // currentID == 0 -> 카드를 모두 넘긴 경우.
+            if maxID == 0 {
+                curPercent = 100.0
+                
+                // 다음 스탭으로 넘어감
+                showNextStep = true
+            }
+            // currentID > 0 -> 카드를 넘기고 있는 경우
+            else {
+                currentCardIndex = getCurrentIndexOfList(_maxID: maxID)
+                
+                curPercent = calculatePercentage(
+                    value: Double(currentCardIndex),
+                    percentageVal: viewModel.countOfSwipeList
+                )
+                
+                //let _ = fLog("idpil::: 백분율 : \(getCurrentIndexOfList(_maxID: currentID))")
+                //let _ = fLog("idpil::: 퍼센트 : \(curPercent)")
+            }
+        }
     }
 
-    func removeProfile(_ card: SwipeDataList) {
-        guard let index = viewModel.swipeList.firstIndex(of: card) else { return }
-
-        viewModel.swipeList.remove(at: index)
-    }
-    
     var tabBarView: some View {
         ScrollViewReader { scrollviewReader in
             ScrollView(.horizontal, showsIndicators: false) {
@@ -188,6 +188,7 @@ extension TabSwipeCardPage: View {
                                     .shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
                                     // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
                                     .onTapGesture {
+                                        
                                         clickedSubTabIndex = index
                                         withAnimation {
                                             scrollviewReader.scrollTo(index, anchor: .top)
@@ -196,6 +197,23 @@ extension TabSwipeCardPage: View {
         //                                    moveToTopIndicator.toggle()
         //                                    callRemoteData()
                                         viewModel.resetSwipeList(selectedTitle: element)
+                                        
+                                    }
+                                    .onChange(of: showNextStep) {
+                                        if showNextStep {
+                                            
+                                            clickedSubTabIndex += 1
+                                            withAnimation {
+                                                scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
+                                            }
+                                            
+                                            viewModel.resetSwipeList(selectedTitle: viewModel.topTabBarList[clickedSubTabIndex])
+                                            
+                                            
+                                            
+                                            showNextStep = false // 초기화
+                                        }
+                                        
                                         
                                     }
                                     .id(index)
@@ -211,7 +229,36 @@ extension TabSwipeCardPage: View {
         }
     }
     
+}
 
+extension TabSwipeCardPage {
+    //MARK: 뷰 레이아웃 효과
+    /// Return the CardViews width for the given offset in the array
+    /// - Parameters:
+    ///   - geometry: The geometry proxy of the parent
+    ///   - id: The ID of the current user
+    private func getCardWidth(_ geometry: GeometryProxy, id: Int) -> CGFloat {
+        let offset: CGFloat = CGFloat(viewModel.swipeList.count - 1 - id) * 10
+        return geometry.size.width - offset
+    }
+    
+    /// Return the CardViews frame offset for the given offset in the array
+    /// - Parameters:
+    ///   - geometry: The geometry proxy of the parent
+    ///   - id: The ID of the current user
+    private func getCardOffset(_ geometry: GeometryProxy, id: Int) -> CGFloat {
+        return  CGFloat(viewModel.swipeList.count - 1 - id) * 10
+    }
+    
+    private var maxID: Int {
+        //return viewModel.swipeList.map { $0.id }.max() ?? 0
+        return viewModel.swipeList.map { ($0.customId ?? 0) }.max() ?? 0
+    }
+    
+    private var minID: Int {
+        return viewModel.swipeList.map { ($0.customId ?? 0) }.min() ?? 0
+    }
+    
     func onLike(_ card: SwipeDataList, type likeType: LikeType) {
         switch likeType {
         case .like:
@@ -229,7 +276,6 @@ extension TabSwipeCardPage: View {
         let val = 100.0 * value
         return val / percentageVal
     }
-    
     
     public func getCurrentIndexOfList(_maxID: Int) -> Int {
         //fLog("idpil::: 111 : \(viewModel.fixedSwipeList.count)")
@@ -249,19 +295,20 @@ extension TabSwipeCardPage: View {
             .enumerated() // 배열의 인덱스 가져오기 위해 사용
             .map { (index, element) -> Bool in
                 //fLog("idpil::: 여기\(index), \(element)")
-                fLog("음음음::: copyArr.count : \(copyArr.count)")
-                fLog("음음음::: _maxID : \(_maxID)")
-                if _maxID > 0 {
-                    return element.korean == copyArr[_maxID-1].korean
-                } else {
-                    return false // 이걸 true로 해야되나 false로 해야되나???
-                }
+                // 참고) _maxID > 0 이여야 됨.
+                return element.korean == copyArr[_maxID-1].korean
             }
         //fLog("idpil::: resultArr : \(resultArr)")
-        
         //fLog("idpil::: 현재 인덱스:\(resultArr.firstIndex(of: true) ?? -1)")
         return resultArr.firstIndex(of: true) ?? -1
     }
+    
+    func removeProfile(_ card: SwipeDataList) {
+        guard let index = viewModel.swipeList.firstIndex(of: card) else { return }
+
+        viewModel.swipeList.remove(at: index)
+    }
+    
 }
 
 private struct DoneView: View {
