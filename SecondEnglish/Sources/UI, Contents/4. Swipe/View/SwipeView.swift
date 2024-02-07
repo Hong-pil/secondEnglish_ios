@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct SwipeView: View {
     //let profile: Profile
     let card: SwipeDataList
+    var speechSynthesizer: AVSpeechSynthesizer // TTS
     let onRemove: (LikeType) -> Void
     let isTapLikeBtn: (Int, Bool) -> Void
     @State private var offset = CGSize.zero
@@ -17,14 +19,13 @@ struct SwipeView: View {
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
     let cardOpacityRange: Double = 100
     
-    
-    
     var body: some View {
         ZStack(alignment: .center) {
             
             FlipView(
                 item: card,
-                isTapLikeBtn: isTapLikeBtn
+                isTapLikeBtn: isTapLikeBtn,
+                speechSynthesizer: speechSynthesizer
             )
             
             // Stamps for like/dislike/superlike that fade in as you swipe

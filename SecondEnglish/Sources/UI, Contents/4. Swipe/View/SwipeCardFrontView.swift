@@ -12,13 +12,13 @@ import NaturalLanguage
 struct SwipeCardFrontView: View {
     let card: SwipeDataList
     let isTapLikeBtn: (Int, Bool) -> Void
+    @State var isShowHint: Bool = false
     
     // TTS
-    @State var ttsText: String = ""
-    @State var isTtsBtnClick: Bool = false
-    @State var isShowHint: Bool = false
-    let languageRecognizer = NLLanguageRecognizer() // 언어 감지 (아웃풋 : en, ko, ..)
-    let speechSynthesizer = AVSpeechSynthesizer() // TTS
+    //@State var ttsText: String = ""
+    //@State var isTtsBtnClick: Bool = false
+    //let languageRecognizer = NLLanguageRecognizer() // 언어 감지 (아웃풋 : en, ko, ..)
+    //let speechSynthesizer = AVSpeechSynthesizer() // TTS
 
     var body: some View {
         GeometryReader { geometry in
@@ -69,14 +69,14 @@ struct SwipeCardFrontView: View {
                             isShowHint.toggle()
                         }
                     
-                    Image(systemName: "speaker.wave.2")
-                        .foregroundColor(.gray850)
-                        .padding(10) // 클릭 범위 확장
-                        .background(Color.gray25) // 클릭 범위 확장
-                        .onTapGesture {
-                            isTtsBtnClick.toggle()
-                            ttsText = card.korean ?? ""
-                        }
+//                    Image(systemName: "speaker.wave.2")
+//                        .foregroundColor(.gray850)
+//                        .padding(10) // 클릭 범위 확장
+//                        .background(Color.gray25) // 클릭 범위 확장
+//                        .onTapGesture {
+//                            isTtsBtnClick.toggle()
+//                            ttsText = card.korean ?? ""
+//                        }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                     
@@ -87,23 +87,23 @@ struct SwipeCardFrontView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.green))
         }
-        .onChange(of: isTtsBtnClick) {
-            languageRecognizer.processString(ttsText)
-            
-            if let dominantLanguage = languageRecognizer.dominantLanguage {
-                fLog("로그::: 감지된 언어 : \(dominantLanguage.rawValue)")
-                
-                
-                let utterance = AVSpeechUtterance(string: ttsText)
-                utterance.pitchMultiplier = 1.0 // 목소리의 높낮이
-                utterance.rate = 0.5 // 읽는 속도
-                //utterance.volume = 1.0 // 음성 볼륨
-                //utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                utterance.voice = AVSpeechSynthesisVoice(language: dominantLanguage.rawValue)
-                 
-                speechSynthesizer.speak(utterance)
-            }
-        }
+//        .onChange(of: isTtsBtnClick) {
+//            languageRecognizer.processString(ttsText)
+//            
+//            if let dominantLanguage = languageRecognizer.dominantLanguage {
+//                fLog("로그::: 감지된 언어 : \(dominantLanguage.rawValue)")
+//                
+//                
+//                let utterance = AVSpeechUtterance(string: ttsText)
+//                utterance.pitchMultiplier = 1.0 // 목소리의 높낮이
+//                utterance.rate = 0.5 // 읽는 속도
+//                //utterance.volume = 1.0 // 음성 볼륨
+//                //utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+//                utterance.voice = AVSpeechSynthesisVoice(language: dominantLanguage.rawValue)
+//                 
+//                speechSynthesizer.speak(utterance)
+//            }
+//        }
         .onDisappear {
             //fLog("onDisappear 호출 !!!!!!!!!!!!!!!!")
             // 아래 코드 적용 안 됨

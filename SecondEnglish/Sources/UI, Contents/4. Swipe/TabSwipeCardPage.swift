@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 //struct User: Hashable, CustomStringConvertible {
 //    var id: Int
@@ -23,24 +24,32 @@ import SwiftUI
 //}
 
 struct TabSwipeCardPage {
-    @StateObject var viewModel = SwipeCardViewModel()
+    @StateObject var viewModel = SwipeCardViewModel.shared
     
     @State var currentCardIndex: Int = 0
     @State var curPercent: Double = 0.0
     /// List of users
     //@State var users: [User] = []
     
-    // Top TabBar
-    @State private var clickedSubTabIndex: Int = 0
-    @State private var showNextStep: Bool = false
+    // Category TabBar
+    @State private var showNextCategoryStep: Bool = false
     
+    // Sentence Card
     @State var isTapLikeBtn: Bool = false
+    
+    /**
+     * [주의사항]
+     * 자식뷰에서 변수 선언하면 기능 작동은 하는데, 로딩시간이 엄청 길어지는 문제가 있음.
+     * 그리고 'Unable to list voice folder'라는 경고 문구가 뜸.
+     * 그래서 전역변수 하나만 생성해서, 자식뷰로 넘겨주는 방식으로 해결했음.
+     */
+    let speechSynthesizer = AVSpeechSynthesizer() // TTS
 }
 
 extension TabSwipeCardPage: View {
     var body: some View {
         VStack(spacing: 0) {
-            tabBarView
+            categoryTabView
             
             ZStack {
                 GeometryReader { geometry in
@@ -76,6 +85,7 @@ extension TabSwipeCardPage: View {
                                     
                                     SwipeView(
                                         card: card,
+                                        speechSynthesizer: speechSynthesizer,
                                         onRemove: { likeType in
                                             withAnimation { removeProfile(card)
                                             }
@@ -128,17 +138,16 @@ extension TabSwipeCardPage: View {
         }
         .padding(30)
         .onAppear {
-            viewModel.requestSwipeList(sortType: .Latest) { success in
-                if success {
-                    
-                    // 내 좋아요 내역 조회
-                    viewModel.requestMyLikeCardList(uid: UserManager.shared.uid, isSuccess: { success in
-                        //
-                        
-                    })
-                }
-            }
-            
+//            viewModel.requestSwipeList(sortType: .Latest) { success in
+//                if success {
+//                    
+//                    // 내 좋아요 내역 조회
+//                    viewModel.requestMyLikeCardList(uid: UserManager.shared.uid, isSuccess: { success in
+//                        //
+//                        
+//                    })
+//                }
+//            }
             
         }
         .onChange(of: maxID) {
@@ -150,7 +159,7 @@ extension TabSwipeCardPage: View {
                 curPercent = 100.0
                 
                 // 다음 스탭으로 넘어감
-                showNextStep = true
+                showNextCategoryStep = true
             }
             // currentID > 0 -> 카드를 넘기고 있는 경우
             else {
@@ -167,18 +176,18 @@ extension TabSwipeCardPage: View {
         }
     }
 
-    var tabBarView: some View {
+    var categoryTabView: some View {
         ScrollViewReader { scrollviewReader in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
-                    if viewModel.topTabBarList.count > 0 {
-                        ForEach(Array(viewModel.topTabBarList.enumerated()), id: \.offset) { index, element in
-                            let isSelected = clickedSubTabIndex == index
+                    if viewModel.categoryList.count > 0 {
+                        ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                            let isSelected = viewModel.categoryTabIndex == index
                             
                             VStack(spacing: 0) {
                                 Text(element)
-                                    .font(clickedSubTabIndex==index ? .buttons1420Medium : .body21420Regular)
-                                    .foregroundColor(clickedSubTabIndex==index ? Color.gray25 : Color.gray850)
+                                    .font(viewModel.categoryTabIndex==index ? .buttons1420Medium : .body21420Regular)
+                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.gray25 : Color.gray850)
                                     .frame(minWidth: 70)
                                     .frame(height: 40)
                                     .padding(.horizontal, 15)
@@ -194,29 +203,37 @@ extension TabSwipeCardPage: View {
                                     // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
                                     .onTapGesture {
                                         
-                                        clickedSubTabIndex = index
+                                        viewModel.categoryTabIndex = index
                                         withAnimation {
                                             scrollviewReader.scrollTo(index, anchor: .top)
                                         }
         //                                    scrollToTopAimated.toggle()
         //                                    moveToTopIndicator.toggle()
         //                                    callRemoteData()
-                                        viewModel.resetSwipeList(selectedTitle: element)
+                                        viewModel.resetSwipeList(category: element)
                                         
                                     }
-                                    .onChange(of: showNextStep) {
-                                        if showNextStep {
+                                    .onChange(of: showNextCategoryStep) {
+                                        if showNextCategoryStep {
                                             
-                                            clickedSubTabIndex += 1
+                                            viewModel.categoryTabIndex += 1
                                             withAnimation {
-                                                scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
+                                                scrollviewReader.scrollTo(viewModel.categoryTabIndex, anchor: .top)
                                             }
                                             
-                                            viewModel.resetSwipeList(selectedTitle: viewModel.topTabBarList[clickedSubTabIndex])
+                                            //viewModel.resetSwipeList(category: viewModel.topTabBarList[clickedSubTabIndex])
+                                            
+                                            
+                                            viewModel.requestSwipeListByCategory(
+                                                category: viewModel.categoryList[viewModel.categoryTabIndex],
+                                                sortType: .Latest,
+                                                isSuccess: { success in
+                                                }
+                                            )
                                             
                                             
                                             
-                                            showNextStep = false // 초기화
+                                            showNextCategoryStep = false // 초기화
                                         }
                                         
                                         
@@ -224,7 +241,7 @@ extension TabSwipeCardPage: View {
                                     .id(index)
                             }
                             .padding(.leading, index==0 ? 20 : 10)
-                            .padding(.trailing, (index==viewModel.topTabBarList.count-1) ? 20 : 0)
+                            .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
                             
                         }
                         
@@ -289,11 +306,11 @@ extension TabSwipeCardPage {
         // 처음(fixedSwipeList.count == swipeList.count) 한 번만,
         // 퍼센트 계산용 배열(cardPercentArr)에 초기화로 저장
         // swipeList는 카드 넘기면서 하나씩 제거됨. 그래서 사용하면 안 됨.
-        if viewModel.fixedSwipeList.count == viewModel.swipeList.count {
+        if viewModel.percentCountSwipeList.count == viewModel.swipeList.count {
             viewModel.cardPercentArr = viewModel.swipeList
         }
         
-        var copyArr = viewModel.fixedSwipeList
+        var copyArr = viewModel.percentCountSwipeList
         copyArr = copyArr.reversed()
         
         let resultArr = viewModel.cardPercentArr

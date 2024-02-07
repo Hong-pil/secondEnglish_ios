@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct FlipView {
     let item: SwipeDataList
     @State var isFlipped: Bool = false
     let isTapLikeBtn: (Int, Bool) -> Void
+    var speechSynthesizer: AVSpeechSynthesizer // TTS
 }
 
 extension FlipView: View {
@@ -19,7 +21,7 @@ extension FlipView: View {
             // Decide which view to show based on the flip state
             if isFlipped {
                 // Back View Content
-                SwipeCardBackView(card: item)
+                SwipeCardBackView(card: item, speechSynthesizer: speechSynthesizer)
                 // Correct the orientation of the content
                 .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
             } else {

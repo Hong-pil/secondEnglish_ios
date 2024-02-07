@@ -9,6 +9,8 @@ import Foundation
 
 class DefineNotification: NSObject {
     
+    static let moveToSwipeTab = "moveToSwipeTab"
+    
     //change minute
     static let changeMinuteDetail = "changeMinuteDetail"        //좋아요, 싫어요, 북마크가 변경되었을 때.
     static let changeMinuteFavorite = "changeMinuteFavorite"        //북마크가 변경되었을때, remove, insert

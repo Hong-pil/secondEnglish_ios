@@ -13,6 +13,7 @@ import Foundation
 enum ApisSwipe {
     case swipeCategory
     case swipeList
+    case swipeListByCategory(category: String)
     case likeCard(uid: String, cardIdx: Int, isLike: Int)
     case myLikeCardList(uid: String)
     case myCardList(uid: String)
@@ -32,6 +33,8 @@ extension ApisSwipe: TargetType {
             return "api/beginner_sentence/category"
         case .swipeList:
             return "api/beginner_sentence/all"
+        case .swipeListByCategory:
+            return "api/beginner_sentence/all/category"
         case .likeCard:
             return "api/card/like"
         case .myLikeCardList:
@@ -47,6 +50,8 @@ extension ApisSwipe: TargetType {
         case .swipeCategory:
             return .get
         case .swipeList:
+            return .get
+        case .swipeListByCategory:
             return .get
         case .likeCard:
             return .post
@@ -77,6 +82,14 @@ extension ApisSwipe: TargetType {
 //            params["nextCheck"] = nextCheck ? "true" : "false"
 //            params["searchText"] = searchText
             
+            log(params: params)
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .swipeListByCategory(let catetory):
+            var params = defaultParams
+            
+            params["category"] = catetory
+
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
             

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TabHomePage {
     @StateObject var viewModel = TabHomeViewModel()
-    @StateObject var basicSentenceViewModel = SwipeCardViewModel()
+    @StateObject var swipeTabViewModel = SwipeCardViewModel.shared
     
     @State var spacing: CGFloat = 10
     @State var headspace: CGFloat = 10
@@ -100,7 +100,7 @@ extension TabHomePage: View {
                         
                     }
                     
-                    ForEach(basicSentenceViewModel.sliderCategoryList, id: \.self) { item in
+                    ForEach(Array(swipeTabViewModel.typeList.enumerated()), id: \.offset) { index, item in
                         
                         Text(item.type3 ?? "")
                             .frame(maxWidth: .infinity)
@@ -112,20 +112,30 @@ extension TabHomePage: View {
                                 fLog("idpil::: 버튼 클릭 했음")
                                 
                                 
+                                
+                                
+                                
+                                /**
+                                 * 함수로 따로 뺄 것
+                                 */
                                 LandingManager.shared.showMinute = true
+//                                NotificationCenter.default.post(name: Notification.Name("workCompleted"), object: nil)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
+                                                                    object: nil,
+                                                                    userInfo: [DefineKey.swipeViewCategoryIdx : index] as [String : Any])
+                                }
                                 
-                                NotificationCenter.default.post(name: Notification.Name("workCompleted"), object: nil)
                                 
                                 
-//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-//                                    NotificationCenter.default.post(name: Notification.Name(DefineNotification.minuteFromNewest),
-//                                                                    object: nil,
-//                                                                    userInfo: [DefineKey.minuteIdx : 999] as [String : Any])
-//                                }
+                                
+                                
+                                
+                                
                                 
                                 
                             }
-                            
+                        
                     }
                 }
                 .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
@@ -155,13 +165,9 @@ extension TabHomePage: View {
         }
         .background(Color.bgLightGray50)
         .task {
-            basicSentenceViewModel.requestSwipeList(sortType: .Latest) { success in
-                if success {
-                    viewModel.requestMyCardList(uid: UserManager.shared.uid, isSuccess: { success in
-                        //
-                    })
-                }
-            }
+            viewModel.requestMyCardList(uid: UserManager.shared.uid, isSuccess: { success in
+                //
+            })
         }
     }
     

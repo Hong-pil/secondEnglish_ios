@@ -16,7 +16,7 @@ struct SwipeCardBackView: View {
     @State var ttsText: String = ""
     @State var isTtsBtnClick: Bool = false
     let languageRecognizer = NLLanguageRecognizer() // 언어 감지 (아웃풋 : en, ko, ..)
-    let speechSynthesizer = AVSpeechSynthesizer() // TTS
+    var speechSynthesizer: AVSpeechSynthesizer // TTS
     
 
     var body: some View {
@@ -56,7 +56,7 @@ struct SwipeCardBackView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.blue))
         }
-        .onChange(of: isTtsBtnClick) { _ in
+        .onChange(of: isTtsBtnClick) {
             languageRecognizer.processString(ttsText)
             
             if let dominantLanguage = languageRecognizer.dominantLanguage {
