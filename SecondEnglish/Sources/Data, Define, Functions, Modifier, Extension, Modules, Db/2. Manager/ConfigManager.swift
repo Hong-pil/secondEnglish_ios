@@ -225,4 +225,18 @@ class ConfigManager: ObservableObject {
                 }
         }
     }
+    
+    
+    /**
+     # getDeviceUUID
+     - Note: 디바이스 고유 넘버 반환
+     */
+    static func getDeviceUUID() -> String {
+        guard let deviceUUID = UIDevice.current.identifierForVendor?.uuidString else {
+            fLog("deviceUUID is nil")
+            return ""
+        }
+        
+        return deviceUUID
+    }
 }

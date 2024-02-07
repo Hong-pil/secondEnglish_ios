@@ -355,7 +355,17 @@ struct CustomAlertModifier: ViewModifier {
             }
             .transaction({ transaction in
                 //transaction.disablesAnimations = false    // Alert 뷰 아래에서 나타남
-                transaction.disablesAnimations = true   // Alert 뷰 아래에서 나타나지 않음
+                
+                
+                /**
+                 * 원래 아래 코드 적용되어 있었는데 왜 이런거임? ㅡㅡ;;
+                 * 전체 코드에 영향을 미치기 때문에,
+                 * 홈탭에서 카드 배너 넘겨질 때 애니메이션 효과 없어짐 ㅡㅡ;;
+                 */
+                //transaction.disablesAnimations = true   // Alert 뷰 아래에서 나타나지 않음
+                
+                
+                
                 //transaction.animation = .linear(duration: 0.5)
             })
             .onChange(of: isPresented) {

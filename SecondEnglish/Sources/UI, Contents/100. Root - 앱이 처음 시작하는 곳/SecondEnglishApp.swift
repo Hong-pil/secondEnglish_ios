@@ -18,6 +18,7 @@ struct SecondEnglishApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     init() {
+        
         UserManager.shared.start()
         
         // Kakao 설정 (키 값을 번들에서 가져온다.)
@@ -25,7 +26,13 @@ struct SecondEnglishApp: App {
         if let nativeAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] as? String {
             KakaoSDK.initSDK(appKey: nativeAppKey)
         }
+        
+        
+        
     }
+    
+    
+    
     
     var body: some Scene {
         WindowGroup {

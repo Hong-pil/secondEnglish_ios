@@ -1,5 +1,5 @@
 //
-//  ProfileInfoView.swift
+//  SwipeCardFrontView.swift
 //  SecondEnglish
 //
 //  Created by kimhongpil on 1/17/24.
@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 import NaturalLanguage
 
-struct ProfileInfoView: View {
+struct SwipeCardFrontView: View {
     let card: SwipeDataList
     let isTapLikeBtn: (Int, Bool) -> Void
     
@@ -87,7 +87,7 @@ struct ProfileInfoView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.green))
         }
-        .onChange(of: isTtsBtnClick) { _ in
+        .onChange(of: isTtsBtnClick) {
             languageRecognizer.processString(ttsText)
             
             if let dominantLanguage = languageRecognizer.dominantLanguage {

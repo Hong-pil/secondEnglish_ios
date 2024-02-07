@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class SwipeCardViewModel: ObservableObject {
-    var cancellables = Set<AnyCancellable>()
+    var cancellable = Set<AnyCancellable>()
     
     //alert
     @Published var showAlert: Bool = false
@@ -28,10 +28,25 @@ class SwipeCardViewModel: ObservableObject {
     @Published var topTabBarList: [String] = []
     @Published var cardPercentArr: [SwipeDataList] = [] // 카드 퍼센트 계산용
     
+    // Card Like
+    @Published var myLikeCardIdxList: [Int] = []
+    
+    
     init() {
         self.requestCategory()
+        
+        NotificationCenter.default.addObserver(forName: Notification.Name("workCompleted"), object: nil, queue: nil) { _ in
+          // Handler ...
+            fLog("idpil::: Work Completed!")
+        }
+        
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(adjustNewestData(_:)),
+//                                               name: NSNotification.Name(rawValue: DefineNotification.minuteFromNewest),
+//                                               object: nil)
     }
     
+    //MARK: - 카테고리 조회
     func requestCategory() {
         ApiControl.getSwipeCategory()
             .sink { error in
@@ -54,9 +69,10 @@ class SwipeCardViewModel: ObservableObject {
                     }
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &cancellable)
     }
     
+    //MARK: - 영어카드 리스트 조회 (-> 카테고리별 조회로 변경해야 됨. 처음 불러오는 시간 긴 문제 있음)
     func requestSwipeList(sortType: SwipeCardSortType, isSuccess: @escaping(Bool) -> Void) {
         ApiControl.getSwipeList()
             .sink { error in
@@ -125,18 +141,6 @@ class SwipeCardViewModel: ObservableObject {
                     // 처음 Step부터 시작하기
                     self.resetSwipeList(selectedTitle: self.topTabBarList[0])
                     
-                    
-                    
-                    
-                    
-                    
-                    // 내 좋아요 내역 조회
-                    self.requestMyLikeCardList(uid: UserManager.shared.uid) { isSuccess in
-                        //
-                    }
-                    
-                    
-                    
                     isSuccess(true)
                 }
                 else {
@@ -146,9 +150,10 @@ class SwipeCardViewModel: ObservableObject {
                     }
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &cancellable)
     }
     
+    //MARK: - 영어카드 좋아요 적용
     func likeCard(uid: String, cardIdx: Int, isLike: Int, clickIndex: Int, isSuccess: @escaping(Bool) -> Void) {
         ApiControl.likeCard(uid: uid, cardIdx: cardIdx, isLike: isLike)
             .sink { error in
@@ -163,14 +168,8 @@ class SwipeCardViewModel: ObservableObject {
             } receiveValue: { value in
                 if value.code == 200 {
                     
-                    fLog("idpil::: 성공 :)")
-                    
-                    fLog("idpil::: 업데이트카드 : \(self.swipeList[clickIndex].korean)")
-                    fLog("idpil::: 변경전 isLike : \(self.swipeList[clickIndex].isLike)")
                     // 좋아요 상태 업데이트
                     self.swipeList[clickIndex].isLike = true
-                    fLog("idpil::: 변경후 isLike : \(self.swipeList[clickIndex].isLike)")
-                    
                     
                     isSuccess(true)
                 }
@@ -181,9 +180,10 @@ class SwipeCardViewModel: ObservableObject {
                     }
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &cancellable)
     }
     
+    //MARK: - 불러온 영어카드 리스트에서 좋아요 적용
     func requestMyLikeCardList(uid: String, isSuccess: @escaping(Bool) -> Void) {
         ApiControl.getMyLikeCardList(uid: uid)
             .sink { error in
@@ -199,7 +199,9 @@ class SwipeCardViewModel: ObservableObject {
                 if value.code == 200 {
                     //self.swipeList = value.data ?? []
                     
-                    guard let liked_card_arr = value.data else { return }
+//                    guard let liked_card_arr = value.data else { return }
+//                    fLog("idpil::: 내 좋아요 내역 : \(liked_card_arr)")
+                    self.myLikeCardIdxList = value.data?.liked_card_arr ?? []
                     
 //                    var dummyArr = arr
 //
@@ -208,9 +210,15 @@ class SwipeCardViewModel: ObservableObject {
 //                    }
 //                    //fLog("로그확인::: dummyArr : \(dummyArr)")
 //                    self.swipeList = dummyArr
-                    fLog("idpil::: 내 좋아요 내역 : \(liked_card_arr)")
                     
                     
+                    
+                    // 좋아요 상태 업데이트
+                    for (index, element) in self.swipeList.enumerated() {
+                        if self.myLikeCardIdxList.contains(element.idx ?? 0) {
+                            self.swipeList[index].isLike = true
+                        }
+                    }
                     
                     
                     
@@ -225,8 +233,47 @@ class SwipeCardViewModel: ObservableObject {
                     }
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &cancellable)
     }
+    
+    //MARK: - 내가 좋아요한 카드 리스트 조회
+    func requestMyCardList(uid: String, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getMyCardList(uid: uid)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    
+                    fLog("idpil::: 내가 좋아요한 카드 리스트 조회")
+                    fLog("idpil::: value : \(value)")
+                    
+                    
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    
+    
+    
+    
+    
+    
     
     
     func setIsFirstLoadFalse() {

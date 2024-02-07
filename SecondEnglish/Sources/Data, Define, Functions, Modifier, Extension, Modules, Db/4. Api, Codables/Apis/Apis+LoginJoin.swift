@@ -11,7 +11,7 @@ import Foundation
 
 enum ApisLoginJoin {
     case send_sms(toPhoneNumber: String, accountSid: String, authToken: String, fromPhoneNumber: String)
-    case verify_sms_code(toPhoneNumber: String, code: String, login_type: String)
+    case verify_sms_code(toPhoneNumber: String, code: String, login_type: String, deviceUUID: String)
     //case issueAccessToken(loginID: String, refreshToken: String)
 }
 
@@ -58,11 +58,12 @@ extension ApisLoginJoin: TargetType {
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
             
-        case .verify_sms_code(let toPhoneNumber, let code, let login_type):
+        case .verify_sms_code(let toPhoneNumber, let code, let login_type, let deviceUUID):
             var params = defaultParams
             params["login_id"] = toPhoneNumber
             params["code"] = code
             params["login_type"] = login_type
+            params["uid"] = deviceUUID
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)

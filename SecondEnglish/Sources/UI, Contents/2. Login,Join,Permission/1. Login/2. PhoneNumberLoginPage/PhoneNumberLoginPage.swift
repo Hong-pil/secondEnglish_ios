@@ -185,7 +185,8 @@ extension PhoneNumberLoginPage: View {
                         if isSendSMSCheckEnable {
                             viewModel.verifySMSCode(
                                 toPhoneNumber: phoneNumber,
-                                code: otpNumber
+                                code: otpNumber,
+                                deviceUUID: ConfigManager.getDeviceUUID()
                             )
                         }
                     }, label: {

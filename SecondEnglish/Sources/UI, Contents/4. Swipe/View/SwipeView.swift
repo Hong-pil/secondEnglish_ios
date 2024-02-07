@@ -17,21 +17,14 @@ struct SwipeView: View {
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
     let cardOpacityRange: Double = 100
     
-    @State var isFlipped: Bool = false
-    @State var isDisabled: Bool = false
     
     
     var body: some View {
         ZStack(alignment: .center) {
             
             FlipView(
-                ProfileInfoView(card: card, isTapLikeBtn: isTapLikeBtn),
-                ProfileInfoView_backView(card: card),
-                tap: {
-                    let _ = print("탭 쳣음 !!!!!!!!")
-                },
-                flipped: $isFlipped,
-                disabled: $isDisabled
+                item: card,
+                isTapLikeBtn: isTapLikeBtn
             )
             
             // Stamps for like/dislike/superlike that fade in as you swipe
@@ -55,10 +48,6 @@ struct SwipeView: View {
                     .opacity(abs(min(Double(offset.height / 100), 0)))
             }
         }
-//        .background(
-//          LinearGradient(colors: [.gray, .mint], startPoint: .top, endPoint: .bottom)
-//        )
-//        .cornerRadius(8)
         .rotationEffect(.degrees(Double(offset.width / 5)))
         .offset(x: offset.width * 2, y: offset.height)
         .opacity(2 - Double(abs(offset.width / cardOpacityRange)))
@@ -98,4 +87,5 @@ struct SwipeView: View {
                 }
         )
     }
+    
 }

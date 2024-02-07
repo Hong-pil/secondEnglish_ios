@@ -67,7 +67,7 @@ class LoginViewModel: NSObject ,ObservableObject {
         loadingStatus = .Close
         
         if success {
-            //requestCheckJoin(idx: idx, type: type)
+            // 다른 방식으로 로그인해도 DB에 저장되는 uid는 동일해야 하니까, deviceUUID를 구해서 전송함.
             requestAddSnsUser(loginId: idx, loginType: type)
         }
         else {
@@ -271,12 +271,13 @@ class LoginViewModel: NSObject ,ObservableObject {
     }
     
     // SMS 인증번호 검증 성공 (로그인 완료)
-    func verifySMSCode(toPhoneNumber: String, code: String) {
+    func verifySMSCode(toPhoneNumber: String, code: String, deviceUUID: String) {
         
         ApiControl.verifySmsCode(
             toPhoneNumber: toPhoneNumber,
             code: code,
-            login_type: LoginUserType.Phone.rawValue
+            login_type: LoginUserType.Phone.rawValue,
+            deviceUUID: deviceUUID
         )
         .sink { error in
             guard case let .failure(error) = error else { return }

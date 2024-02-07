@@ -1,5 +1,5 @@
 //
-//  ProfileInfoView_backView.swift
+//  SwipeCardBackView.swift
 //  SecondEnglish
 //
 //  Created by kimhongpil on 1/17/24.
@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 import NaturalLanguage
 
-struct ProfileInfoView_backView: View {
+struct SwipeCardBackView: View {
     let card: SwipeDataList
     
     // TTS

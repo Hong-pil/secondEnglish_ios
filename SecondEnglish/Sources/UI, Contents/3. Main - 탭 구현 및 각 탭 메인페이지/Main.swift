@@ -31,6 +31,15 @@ extension Main: View {
                 LoadingView()
             }
         }
+        .onChange(
+            of: landingManager.showMinute,
+            perform: { value in
+                if value {
+                    tabStateHandler.selection = .swipe_card   // 미닛 탭으로 이동
+                    landingManager.showMinute = false
+                }
+            }
+        )
     }
     
     var mainTabView: some View {
@@ -39,7 +48,7 @@ extension Main: View {
             
             customBottomTabs
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        //.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .onAppear(perform: {
             if isFirstLoaded {
                 isFirstLoaded = false
@@ -81,7 +90,7 @@ extension Main: View {
                     Button {
                         tabStateHandler.selection = .my
                     } label: {
-                        Image(systemName: "person")
+                        Image(systemName: "bookmark.square")
                             .renderingMode(.template)
                             .resizable()
                             .foregroundColor(tabStateHandler.selection == .my ? .stateActivePrimaryDefault: .gray400)

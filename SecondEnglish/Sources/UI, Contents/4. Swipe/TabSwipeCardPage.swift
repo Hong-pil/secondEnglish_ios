@@ -130,7 +130,12 @@ extension TabSwipeCardPage: View {
         .onAppear {
             viewModel.requestSwipeList(sortType: .Latest) { success in
                 if success {
-                    //getCurrentIndexOfList()
+                    
+                    // 내 좋아요 내역 조회
+                    viewModel.requestMyLikeCardList(uid: UserManager.shared.uid, isSuccess: { success in
+                        //
+                        
+                    })
                 }
             }
             

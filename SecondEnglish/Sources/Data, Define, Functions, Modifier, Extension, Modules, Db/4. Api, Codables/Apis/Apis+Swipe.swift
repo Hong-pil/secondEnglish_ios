@@ -15,6 +15,7 @@ enum ApisSwipe {
     case swipeList
     case likeCard(uid: String, cardIdx: Int, isLike: Int)
     case myLikeCardList(uid: String)
+    case myCardList(uid: String)
 }
 
 extension ApisSwipe: TargetType {
@@ -35,6 +36,8 @@ extension ApisSwipe: TargetType {
             return "api/card/like"
         case .myLikeCardList:
             return "api/card/my"
+        case .myCardList:
+            return "api/card/my/list"
         }
     }
     
@@ -48,6 +51,8 @@ extension ApisSwipe: TargetType {
         case .likeCard:
             return .post
         case .myLikeCardList:
+            return .get
+        case .myCardList:
             return .get
         }
     }
@@ -85,6 +90,13 @@ extension ApisSwipe: TargetType {
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
             
         case .myLikeCardList(let uid):
+            var params = defaultParams
+            params["uid"] = uid
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .myCardList(let uid):
             var params = defaultParams
             params["uid"] = uid
             

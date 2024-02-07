@@ -21,8 +21,9 @@ struct SwipeDataList: Codable, Hashable {
     var type3: String? = ""
     var korean: String? = ""
     var english: String? = ""
-    var isTimerplay: Bool? = false
     var isLike: Bool? = false
+    var isStartPointCategory: Bool? = false // 각 카테고리 시작점 유무 (홈탭에서 카드배너 넘겨질 때 카테고리 버튼 이동하는데 사용함)
+    var isEndPointCategory: Bool? = false // 각 카테고리 마지막점 유무 (홈탭에서 카드배너 넘겨질 때 카테고리 버튼 이동하는데 사용함)
 }
 
 struct SwipeCategory: Codable {
@@ -49,4 +50,14 @@ struct MyLikeCardResponse: Codable {
 }
 struct MyLikeCardList: Codable {
     var liked_card_arr: [Int]? = []
+}
+
+struct MyCardResponse: Codable {
+    var code: Int = 0
+    var data: MyCardData? = nil
+    var message: String? = ""
+}
+struct MyCardData: Codable {
+    var sentence_list: [SwipeDataList] = []
+    var category_list: [String] = []
 }

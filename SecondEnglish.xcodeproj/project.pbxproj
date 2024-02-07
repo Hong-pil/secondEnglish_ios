@@ -11,9 +11,9 @@
 		E002E17A2B56E8D600F64CA4 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1792B56E8D600F64CA4 /* Profile.swift */; };
 		E002E17C2B56E8E400F64CA4 /* LikeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E17B2B56E8E400F64CA4 /* LikeType.swift */; };
 		E002E17E2B56E8F200F64CA4 /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E17D2B56E8F200F64CA4 /* SwipeView.swift */; };
-		E002E1802B56E90400F64CA4 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E17F2B56E90400F64CA4 /* ProfileInfoView.swift */; };
+		E002E1802B56E90400F64CA4 /* SwipeCardFrontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E17F2B56E90400F64CA4 /* SwipeCardFrontView.swift */; };
 		E002E1822B56E91400F64CA4 /* FlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1812B56E91400F64CA4 /* FlipView.swift */; };
-		E002E1842B56E92600F64CA4 /* ProfileInfoView_backView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1832B56E92600F64CA4 /* ProfileInfoView_backView.swift */; };
+		E002E1842B56E92600F64CA4 /* SwipeCardBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1832B56E92600F64CA4 /* SwipeCardBackView.swift */; };
 		E002E1862B56E93600F64CA4 /* CircleProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1852B56E93600F64CA4 /* CircleProgressBarView.swift */; };
 		E002E1882B56E94700F64CA4 /* StampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1872B56E94700F64CA4 /* StampView.swift */; };
 		E002E18B2B57BAFD00F64CA4 /* LoginEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E18A2B57BAFD00F64CA4 /* LoginEmailView.swift */; };
@@ -39,6 +39,7 @@
 		E045E9D52B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D42B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift */; };
 		E045E9D72B65A75B00E3BD60 /* JoinAgreeCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */; };
 		E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */; };
+		E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */; };
 		E068E9702B68E49A00500585 /* Apis+LoginSNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */; };
 		E068E9722B68E4BE00500585 /* ApiControl+LoginSNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */; };
 		E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A05B2B6364F5009E5C9A /* PermissionPage.swift */; };
@@ -47,6 +48,9 @@
 		E085DDC02B5113DD00CF44A8 /* secondEnglish_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */; };
 		E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC12B51519800CF44A8 /* AppDelegate.swift */; };
 		E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */; };
+		E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E098DE992B70760A000059B3 /* CustomScrollView.swift */; };
+		E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */; };
+		E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */; };
 		E0BA024E2B5DD86200AA11A5 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA024D2B5DD86200AA11A5 /* JWTDecode */; };
 		E0BA02512B5E875400AA11A5 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E0BA02502B5E875400AA11A5 /* Config.xcconfig */; };
 		E0BA02542B5EA05300AA11A5 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02532B5EA05300AA11A5 /* KakaoSDK */; };
@@ -187,7 +191,6 @@
 		E0DBDE4C2B4FD218007615A8 /* TabCalendarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE4B2B4FD218007615A8 /* TabCalendarPage.swift */; };
 		E0DBDE4E2B4FD222007615A8 /* TabProfilePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE4D2B4FD222007615A8 /* TabProfilePage.swift */; };
 		E0DBDE502B4FD22C007615A8 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE4F2B4FD22C007615A8 /* Main.swift */; };
-		E0DBDE522B4FD237007615A8 /* TextPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE512B4FD237007615A8 /* TextPage.swift */; };
 		E0DBDE5E2B4FDD8A007615A8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE602B4FDD8A007615A8 /* Localizable.strings */; };
 		E0DBDE672B4FDEB1007615A8 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE632B4FDEB1007615A8 /* NotoSansKR-Bold.otf */; };
 		E0DBDE682B4FDEB1007615A8 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE642B4FDEB1007615A8 /* NotoSansKR-Medium.otf */; };
@@ -218,9 +221,9 @@
 		E002E1792B56E8D600F64CA4 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		E002E17B2B56E8E400F64CA4 /* LikeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeType.swift; sourceTree = "<group>"; };
 		E002E17D2B56E8F200F64CA4 /* SwipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeView.swift; sourceTree = "<group>"; };
-		E002E17F2B56E90400F64CA4 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
+		E002E17F2B56E90400F64CA4 /* SwipeCardFrontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCardFrontView.swift; sourceTree = "<group>"; };
 		E002E1812B56E91400F64CA4 /* FlipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipView.swift; sourceTree = "<group>"; };
-		E002E1832B56E92600F64CA4 /* ProfileInfoView_backView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView_backView.swift; sourceTree = "<group>"; };
+		E002E1832B56E92600F64CA4 /* SwipeCardBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCardBackView.swift; sourceTree = "<group>"; };
 		E002E1852B56E93600F64CA4 /* CircleProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleProgressBarView.swift; sourceTree = "<group>"; };
 		E002E1872B56E94700F64CA4 /* StampView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampView.swift; sourceTree = "<group>"; };
 		E002E18A2B57BAFD00F64CA4 /* LoginEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginEmailView.swift; sourceTree = "<group>"; };
@@ -241,6 +244,7 @@
 		E045E9D42B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeCheckSubView.swift; sourceTree = "<group>"; };
 		E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeCheckView.swift; sourceTree = "<group>"; };
 		E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeViewModel.swift; sourceTree = "<group>"; };
+		E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeViewModel.swift; sourceTree = "<group>"; };
 		E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Apis+LoginSNS.swift"; sourceTree = "<group>"; };
 		E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+LoginSNS.swift"; sourceTree = "<group>"; };
 		E071A05B2B6364F5009E5C9A /* PermissionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionPage.swift; sourceTree = "<group>"; };
@@ -249,6 +253,9 @@
 		E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = secondEnglish_loading.png; sourceTree = "<group>"; };
 		E085DDC12B51519800CF44A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Alert.swift"; sourceTree = "<group>"; };
+		E098DE992B70760A000059B3 /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
+		E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeControlPanel.swift; sourceTree = "<group>"; };
+		E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeCardView.swift; sourceTree = "<group>"; };
 		E0BA02502B5E875400AA11A5 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberLoginPage.swift; sourceTree = "<group>"; };
 		E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberTextFieldStyle.swift; sourceTree = "<group>"; };
@@ -378,7 +385,6 @@
 		E0DBDE4B2B4FD218007615A8 /* TabCalendarPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCalendarPage.swift; sourceTree = "<group>"; };
 		E0DBDE4D2B4FD222007615A8 /* TabProfilePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabProfilePage.swift; sourceTree = "<group>"; };
 		E0DBDE4F2B4FD22C007615A8 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
-		E0DBDE512B4FD237007615A8 /* TextPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPage.swift; sourceTree = "<group>"; };
 		E0DBDE5F2B4FDD8A007615A8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; usesTabs = 0; };
 		E0DBDE612B4FDDDA007615A8 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E0DBDE632B4FDEB1007615A8 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
@@ -554,6 +560,33 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		E05A341D2B6E4B0B00EC07CA /* 5. Home */ = {
+			isa = PBXGroup;
+			children = (
+				E05A34232B6EB25500EC07CA /* View */,
+				E05A34202B6E4B4C00EC07CA /* ViewModel */,
+				E0DBDE452B4FD1F5007615A8 /* TabHomePage.swift */,
+			);
+			path = "5. Home";
+			sourceTree = "<group>";
+		};
+		E05A34202B6E4B4C00EC07CA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		E05A34232B6EB25500EC07CA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */,
+				E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		E071A05D2B63650D009E5C9A /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -568,6 +601,14 @@
 				E071A0632B63654C009E5C9A /* PermissionText.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		E098DE982B7075F7000059B3 /* CustomScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				E098DE992B70760A000059B3 /* CustomScrollView.swift */,
+			);
+			path = CustomScrollView;
 			sourceTree = "<group>";
 		};
 		E0BDD41C2B66153E007D5742 /* 2. PhoneNumberLoginPage */ = {
@@ -674,6 +715,7 @@
 				E0DBDD362B4FB7DB007615A8 /* 2. Login,Join,Permission */,
 				E0DBDD352B4FB7D4007615A8 /* 3. Main - 탭 구현 및 각 탭 메인페이지 */,
 				E0DBDD332B4FB7C7007615A8 /* 4. Swipe */,
+				E05A341D2B6E4B0B00EC07CA /* 5. Home */,
 				E0DBDD322B4FB7C0007615A8 /* 100. Root - 앱이 처음 시작하는 곳 */,
 			);
 			path = "UI, Contents";
@@ -840,11 +882,9 @@
 		E0DBDD352B4FB7D4007615A8 /* 3. Main - 탭 구현 및 각 탭 메인페이지 */ = {
 			isa = PBXGroup;
 			children = (
-				E0DBDE452B4FD1F5007615A8 /* TabHomePage.swift */,
 				E0DBDE4B2B4FD218007615A8 /* TabCalendarPage.swift */,
 				E0DBDE4D2B4FD222007615A8 /* TabProfilePage.swift */,
 				E0DBDE4F2B4FD22C007615A8 /* Main.swift */,
-				E0DBDE512B4FD237007615A8 /* TextPage.swift */,
 			);
 			name = "3. Main - 탭 구현 및 각 탭 메인페이지";
 			path = "3. Main - 탭 구현 및 각 탭 메인페이지";
@@ -952,6 +992,7 @@
 		E0DBDDD42B4FCE8F007615A8 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				E098DE982B7075F7000059B3 /* CustomScrollView */,
 				E0DBDDDA2B4FCEBC007615A8 /* CustomButton */,
 				E0DBDDD92B4FCEB5007615A8 /* LottieView */,
 				E0DBDDD82B4FCEAF007615A8 /* CustomTextField */,
@@ -1133,9 +1174,9 @@
 			isa = PBXGroup;
 			children = (
 				E002E17D2B56E8F200F64CA4 /* SwipeView.swift */,
-				E002E17F2B56E90400F64CA4 /* ProfileInfoView.swift */,
 				E002E1812B56E91400F64CA4 /* FlipView.swift */,
-				E002E1832B56E92600F64CA4 /* ProfileInfoView_backView.swift */,
+				E002E17F2B56E90400F64CA4 /* SwipeCardFrontView.swift */,
+				E002E1832B56E92600F64CA4 /* SwipeCardBackView.swift */,
 				E002E1852B56E93600F64CA4 /* CircleProgressBarView.swift */,
 				E002E1872B56E94700F64CA4 /* StampView.swift */,
 			);
@@ -1363,6 +1404,7 @@
 				E0BDD4212B661673007D5742 /* PhoneNumberTextFieldStyle.swift in Sources */,
 				E002E1972B57C20400F64CA4 /* SnsLoginControl.swift in Sources */,
 				E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */,
+				E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */,
 				E002E1822B56E91400F64CA4 /* FlipView.swift in Sources */,
 				E0DBDE222B4FD0C4007615A8 /* PopupManager.swift in Sources */,
 				E0DBDDB02B4FCDA4007615A8 /* Shape+Extension.swift in Sources */,
@@ -1371,7 +1413,6 @@
 				E0DBDD822B4FC9C1007615A8 /* Apis+LoginJoin.swift in Sources */,
 				E0DBDD9E2B4FCD3A007615A8 /* Bool+Extension.swift in Sources */,
 				E0DBDE202B4FD0B7007615A8 /* TopPopupConfig.swift in Sources */,
-				E0DBDE522B4FD237007615A8 /* TextPage.swift in Sources */,
 				E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */,
 				E0DBDDD62B4FCEA2007615A8 /* CustomKeyPad.swift in Sources */,
 				E0DBDE002B4FCFB5007615A8 /* ActivityIndicator.swift in Sources */,
@@ -1381,6 +1422,7 @@
 				E0DBDD902B4FCA10007615A8 /* LoginJoinModel.swift in Sources */,
 				E0DBDDBA2B4FCDDB007615A8 /* UIFont+Extension.swift in Sources */,
 				E0DBDDB82B4FCDD0007615A8 /* UIColor+Extension.swift in Sources */,
+				E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */,
 				E0DBDE2C2B4FD0FF007615A8 /* PopupTopStackView.swift in Sources */,
 				E0DBDE112B4FD03F007615A8 /* CustomBottomView.swift in Sources */,
 				E0DBDE412B4FD1B1007615A8 /* LocationPage.swift in Sources */,
@@ -1414,10 +1456,11 @@
 				E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */,
 				E0DBDDFC2B4FCF9D007615A8 /* LoadingViewModel.swift in Sources */,
 				E0DBDD7E2B4FC9A8007615A8 /* Apis+Slider.swift in Sources */,
+				E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */,
 				E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */,
 				E0DBDE432B4FD1BF007615A8 /* SamplePermissionAlert.swift in Sources */,
 				E0DBDE042B4FCFCA007615A8 /* RefreshableScrollView.swift in Sources */,
-				E002E1802B56E90400F64CA4 /* ProfileInfoView.swift in Sources */,
+				E002E1802B56E90400F64CA4 /* SwipeCardFrontView.swift in Sources */,
 				E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */,
 				E0DBDD612B4FC8D2007615A8 /* AlertManager.swift in Sources */,
 				E0BDD41E2B6615A4007D5742 /* PhoneNumberLoginPage.swift in Sources */,
@@ -1498,7 +1541,8 @@
 				E0DBDE392B4FD172007615A8 /* PermissionViewModel.swift in Sources */,
 				E0DBDDDC2B4FCEC4007615A8 /* PrimaryButton01.swift in Sources */,
 				E0DBDD5B2B4FC8A9007615A8 /* LanguageManager.swift in Sources */,
-				E002E1842B56E92600F64CA4 /* ProfileInfoView_backView.swift in Sources */,
+				E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */,
+				E002E1842B56E92600F64CA4 /* SwipeCardBackView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
