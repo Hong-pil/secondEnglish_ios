@@ -20,8 +20,11 @@ class SwipeCardViewModel: ObservableObject {
     
     @Published var isFirstLoad = false
     
-    // View Data
+    // Category TabBar
     @Published var categoryTabIndex: Int = 0
+    @Published var moveCategoryTab: Bool = false
+    
+    // View Data
     @Published var typeList: [SwipeCategoryList] = []
     @Published var fixedSwipeList_0: [SwipeDataList] = [] // 처음 한 번만 저장
     @Published var percentCountSwipeList: [SwipeDataList] = [] // 계산용
@@ -53,12 +56,12 @@ class SwipeCardViewModel: ObservableObject {
 //                                               object: nil)
     }
     
-    
     @objc func adjustMovedCategoryData(_ notification: Notification) {
         if let categoryIdx:Int = notification.userInfo![DefineKey.swipeViewCategoryIdx] as? Int {
             
             
             self.categoryTabIndex = categoryIdx
+            self.moveCategoryTab = true
             
             self.requestSwipeListByCategory(
                 category: self.categoryList[self.categoryTabIndex], // 첫 카테고리로 시작

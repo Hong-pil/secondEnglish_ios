@@ -31,8 +31,7 @@ struct TabSwipeCardPage {
     /// List of users
     //@State var users: [User] = []
     
-    // Category TabBar
-    @State private var showNextCategoryStep: Bool = false
+    
     
     // Sentence Card
     @State var isTapLikeBtn: Bool = false
@@ -159,7 +158,8 @@ extension TabSwipeCardPage: View {
                 curPercent = 100.0
                 
                 // 다음 스탭으로 넘어감
-                showNextCategoryStep = true
+                viewModel.categoryTabIndex += 1
+                viewModel.moveCategoryTab = true
             }
             // currentID > 0 -> 카드를 넘기고 있는 경우
             else {
@@ -177,7 +177,7 @@ extension TabSwipeCardPage: View {
     }
 
     var categoryTabView: some View {
-        ScrollViewReader { scrollviewReader in
+        ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
                     if viewModel.categoryList.count > 0 {
@@ -203,23 +203,46 @@ extension TabSwipeCardPage: View {
                                     // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
                                     .onTapGesture {
                                         
+                                        /**
+                                         * 카테고리 버튼 클릭했을 때,
+                                         * 왜 -1 을 해줘야 제대로 동작하는거지?????
+                                         *
+                                         */
                                         viewModel.categoryTabIndex = index
-                                        withAnimation {
-                                            scrollviewReader.scrollTo(index, anchor: .top)
-                                        }
+                                        
+                                        scrollToElement(with: proxy)
+//                                        withAnimation {
+//                                            proxy.scrollTo(index, anchor: .top)
+//                                        }
+                                        
+                                        
+                                            viewModel.requestSwipeListByCategory(
+                                            category: element,
+                                            sortType: .Latest,
+                                            isSuccess: { success in
+                                                //
+                                            }
+                                        )
+                                        
+                                        
+                                        
         //                                    scrollToTopAimated.toggle()
         //                                    moveToTopIndicator.toggle()
         //                                    callRemoteData()
-                                        viewModel.resetSwipeList(category: element)
+                                        
+                                        
+                                        
+                                        //viewModel.resetSwipeList(category: element)
                                         
                                     }
-                                    .onChange(of: showNextCategoryStep) {
-                                        if showNextCategoryStep {
+                                    .onChange(of: viewModel.moveCategoryTab) {
+                                        if viewModel.moveCategoryTab {
                                             
-                                            viewModel.categoryTabIndex += 1
-                                            withAnimation {
-                                                scrollviewReader.scrollTo(viewModel.categoryTabIndex, anchor: .top)
-                                            }
+                                            scrollToElement(with: proxy)
+                                            
+//                                            withAnimation {
+//                                                proxy.scrollTo(viewModel.categoryTabIndex, anchor: .top)
+//                                            }
                                             
                                             //viewModel.resetSwipeList(category: viewModel.topTabBarList[clickedSubTabIndex])
                                             
@@ -233,7 +256,7 @@ extension TabSwipeCardPage: View {
                                             
                                             
                                             
-                                            showNextCategoryStep = false // 초기화
+                                            viewModel.moveCategoryTab = false // 초기화
                                         }
                                         
                                         
@@ -248,6 +271,18 @@ extension TabSwipeCardPage: View {
                     }
                 }
             }
+        }
+    }
+    
+    /**
+     * ScrollViewReader proxy 값을 받아서, ScrollView 특정 위치로 이동하는 함수
+     * ViewModel에서도 사용하기 때문에 함수로 묶었다.
+     * 구현한 방법은 ChatGPT 한테 물어봤음. 짱임.
+     * "Tell me how to accept a scrollviewreader as a parameter value for a function in swiftui."
+     */
+    func scrollToElement(with proxy: ScrollViewProxy) {
+        withAnimation {
+            proxy.scrollTo(viewModel.categoryTabIndex, anchor: .top)
         }
     }
     
