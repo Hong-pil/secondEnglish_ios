@@ -21,8 +21,8 @@ enum TokenResponseType: Int {
 enum bTab {
     case my
     case swipe_card
-    case calendar
-    case settings
+//    case calendar
+//    case settings
 }
 
 enum LoadingStatus {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E0002F3E2B7DF4EA0018D9CD /* EditorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0002F3D2B7DF4EA0018D9CD /* EditorPage.swift */; };
+		E0002F412B7DFBA70018D9CD /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0002F402B7DFBA70018D9CD /* EditorViewModel.swift */; };
 		E002E1782B56E83500F64CA4 /* SwipeCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1772B56E83500F64CA4 /* SwipeCardViewModel.swift */; };
 		E002E17A2B56E8D600F64CA4 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E1792B56E8D600F64CA4 /* Profile.swift */; };
 		E002E17C2B56E8E400F64CA4 /* LikeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002E17B2B56E8E400F64CA4 /* LikeType.swift */; };
@@ -189,8 +191,6 @@
 		E0DBDE432B4FD1BF007615A8 /* SamplePermissionAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE422B4FD1BF007615A8 /* SamplePermissionAlert.swift */; };
 		E0DBDE462B4FD1F5007615A8 /* TabHomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE452B4FD1F5007615A8 /* TabHomePage.swift */; };
 		E0DBDE482B4FD203007615A8 /* TabSwipeCardPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE472B4FD203007615A8 /* TabSwipeCardPage.swift */; };
-		E0DBDE4C2B4FD218007615A8 /* TabCalendarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE4B2B4FD218007615A8 /* TabCalendarPage.swift */; };
-		E0DBDE4E2B4FD222007615A8 /* TabProfilePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE4D2B4FD222007615A8 /* TabProfilePage.swift */; };
 		E0DBDE502B4FD22C007615A8 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE4F2B4FD22C007615A8 /* Main.swift */; };
 		E0DBDE5E2B4FDD8A007615A8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE602B4FDD8A007615A8 /* Localizable.strings */; };
 		E0DBDE672B4FDEB1007615A8 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE632B4FDEB1007615A8 /* NotoSansKR-Bold.otf */; };
@@ -218,6 +218,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E0002F3D2B7DF4EA0018D9CD /* EditorPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorPage.swift; sourceTree = "<group>"; };
+		E0002F402B7DFBA70018D9CD /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
 		E002E1772B56E83500F64CA4 /* SwipeCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCardViewModel.swift; sourceTree = "<group>"; };
 		E002E1792B56E8D600F64CA4 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		E002E17B2B56E8E400F64CA4 /* LikeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeType.swift; sourceTree = "<group>"; };
@@ -384,8 +386,6 @@
 		E0DBDE422B4FD1BF007615A8 /* SamplePermissionAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePermissionAlert.swift; sourceTree = "<group>"; };
 		E0DBDE452B4FD1F5007615A8 /* TabHomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomePage.swift; sourceTree = "<group>"; };
 		E0DBDE472B4FD203007615A8 /* TabSwipeCardPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSwipeCardPage.swift; sourceTree = "<group>"; };
-		E0DBDE4B2B4FD218007615A8 /* TabCalendarPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCalendarPage.swift; sourceTree = "<group>"; };
-		E0DBDE4D2B4FD222007615A8 /* TabProfilePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabProfilePage.swift; sourceTree = "<group>"; };
 		E0DBDE4F2B4FD22C007615A8 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		E0DBDE5F2B4FDD8A007615A8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; usesTabs = 0; };
 		E0DBDE612B4FDDDA007615A8 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -442,6 +442,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E0002F3C2B7DF4A50018D9CD /* 6. EditorPage */ = {
+			isa = PBXGroup;
+			children = (
+				E0002F3F2B7DFB980018D9CD /* ViewModel */,
+				E0002F3D2B7DF4EA0018D9CD /* EditorPage.swift */,
+			);
+			path = "6. EditorPage";
+			sourceTree = "<group>";
+		};
+		E0002F3F2B7DFB980018D9CD /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				E0002F402B7DFBA70018D9CD /* EditorViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		E002E18E2B57BBF500F64CA4 /* 1. Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -719,6 +736,7 @@
 				E0DBDD352B4FB7D4007615A8 /* 3. Main - 탭 구현 및 각 탭 메인페이지 */,
 				E0DBDD332B4FB7C7007615A8 /* 4. Swipe */,
 				E05A341D2B6E4B0B00EC07CA /* 5. Home */,
+				E0002F3C2B7DF4A50018D9CD /* 6. EditorPage */,
 				E0DBDD322B4FB7C0007615A8 /* 100. Root - 앱이 처음 시작하는 곳 */,
 			);
 			path = "UI, Contents";
@@ -885,8 +903,6 @@
 		E0DBDD352B4FB7D4007615A8 /* 3. Main - 탭 구현 및 각 탭 메인페이지 */ = {
 			isa = PBXGroup;
 			children = (
-				E0DBDE4B2B4FD218007615A8 /* TabCalendarPage.swift */,
-				E0DBDE4D2B4FD222007615A8 /* TabProfilePage.swift */,
 				E0DBDE4F2B4FD22C007615A8 /* Main.swift */,
 			);
 			name = "3. Main - 탭 구현 및 각 탭 메인페이지";
@@ -1441,7 +1457,6 @@
 				E0DBDE282B4FD0E8007615A8 /* PopupBottomStackView.swift in Sources */,
 				E016784C2B6257CD00943945 /* Apis+Login.swift in Sources */,
 				E0DBDD592B4FC890007615A8 /* DefineSize.swift in Sources */,
-				E0DBDE4E2B4FD222007615A8 /* TabProfilePage.swift in Sources */,
 				E0DBDDEA2B4FCF19007615A8 /* MultilineTextField.swift in Sources */,
 				E0DBDE162B4FD069007615A8 /* CommonAlertView.swift in Sources */,
 				E0DBDD3B2B4FC628007615A8 /* DefineNotification.swift in Sources */,
@@ -1459,6 +1474,7 @@
 				E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */,
 				E0DBDDFC2B4FCF9D007615A8 /* LoadingViewModel.swift in Sources */,
 				E0DBDD7E2B4FC9A8007615A8 /* Apis+Slider.swift in Sources */,
+				E0002F412B7DFBA70018D9CD /* EditorViewModel.swift in Sources */,
 				E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */,
 				E0B3B1FA2B7B62B40004C69E /* TabHomeMyLearningView.swift in Sources */,
 				E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */,
@@ -1493,7 +1509,6 @@
 				E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */,
 				E0DBDD982B4FCD10007615A8 /* Array+Extension.swift in Sources */,
 				E045E9CF2B65A69C00E3BD60 /* JoinPasswordPage.swift in Sources */,
-				E0DBDE4C2B4FD218007615A8 /* TabCalendarPage.swift in Sources */,
 				E0DBDE242B4FD0D1007615A8 /* ConfigurableProtocol.swift in Sources */,
 				E0DBDD672B4FC906007615A8 /* RefreshManager.swift in Sources */,
 				E0DBDD842B4FC9CE007615A8 /* ConfigModel.swift in Sources */,
@@ -1535,6 +1550,7 @@
 				E0DBDD632B4FC8DF007615A8 /* LandingManager.swift in Sources */,
 				E0DBDDFA2B4FCF93007615A8 /* LoadingViewInPage.swift in Sources */,
 				E071A0642B63654C009E5C9A /* PermissionText.swift in Sources */,
+				E0002F3E2B7DF4EA0018D9CD /* EditorPage.swift in Sources */,
 				E0DBDD762B4FC972007615A8 /* ApiControl+Slider.swift in Sources */,
 				E016784E2B6257E600943945 /* ApiControl+Login.swift in Sources */,
 				E0DBDD5D2B4FC8B6007615A8 /* UserManager.swift in Sources */,

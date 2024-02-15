@@ -64,7 +64,16 @@ extension TabHomePage: View {
                         .gesture(
                             DragGesture()
                                 .onEnded({ value in
+                                    
+                                    /**
+                                     * [민감도 기준]
+                                     * threshold 값을 낮출 수록 민감도 기준이 낮아지기 때문에 잘 넘어감.
+                                     */
                                     let threshold: CGFloat = 50
+                                    
+                                    //fLog("idpil::: value.translation.width: \(value.translation.width)")
+                                    
+                                    // 손가락으로 좌-우 Swipe한 길이
                                     if value.translation.width > threshold {
                                         withAnimation {
                                             cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)

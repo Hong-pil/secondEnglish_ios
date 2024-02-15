@@ -20,12 +20,12 @@ class TabStateHandlerManager: ObservableObject {
             else if oldValue == selection && selection == .swipe_card {
                 moveFirstTabToTop.toggle()
             }
-            else if oldValue == selection && selection == .calendar {
-                moveFirstTabToTop.toggle()
-            }
-            else if oldValue == selection && selection == .settings {
-                moveFirstTabToTop.toggle()
-            }
+//            else if oldValue == selection && selection == .calendar {
+//                moveFirstTabToTop.toggle()
+//            }
+//            else if oldValue == selection && selection == .settings {
+//                moveFirstTabToTop.toggle()
+//            }
         }
     }
     
