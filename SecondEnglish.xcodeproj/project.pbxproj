@@ -51,6 +51,7 @@
 		E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E098DE992B70760A000059B3 /* CustomScrollView.swift */; };
 		E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */; };
 		E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */; };
+		E0B3B1FA2B7B62B40004C69E /* TabHomeMyLearningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B3B1F92B7B62B40004C69E /* TabHomeMyLearningView.swift */; };
 		E0BA024E2B5DD86200AA11A5 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA024D2B5DD86200AA11A5 /* JWTDecode */; };
 		E0BA02512B5E875400AA11A5 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E0BA02502B5E875400AA11A5 /* Config.xcconfig */; };
 		E0BA02542B5EA05300AA11A5 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02532B5EA05300AA11A5 /* KakaoSDK */; };
@@ -256,6 +257,7 @@
 		E098DE992B70760A000059B3 /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
 		E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeControlPanel.swift; sourceTree = "<group>"; };
 		E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeCardView.swift; sourceTree = "<group>"; };
+		E0B3B1F92B7B62B40004C69E /* TabHomeMyLearningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeMyLearningView.swift; sourceTree = "<group>"; };
 		E0BA02502B5E875400AA11A5 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberLoginPage.swift; sourceTree = "<group>"; };
 		E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberTextFieldStyle.swift; sourceTree = "<group>"; };
@@ -583,6 +585,7 @@
 			children = (
 				E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */,
 				E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */,
+				E0B3B1F92B7B62B40004C69E /* TabHomeMyLearningView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1457,6 +1460,7 @@
 				E0DBDDFC2B4FCF9D007615A8 /* LoadingViewModel.swift in Sources */,
 				E0DBDD7E2B4FC9A8007615A8 /* Apis+Slider.swift in Sources */,
 				E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */,
+				E0B3B1FA2B7B62B40004C69E /* TabHomeMyLearningView.swift in Sources */,
 				E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */,
 				E0DBDE432B4FD1BF007615A8 /* SamplePermissionAlert.swift in Sources */,
 				E0DBDE042B4FCFCA007615A8 /* RefreshableScrollView.swift in Sources */,

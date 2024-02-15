@@ -17,6 +17,7 @@ class TabHomeViewModel: ObservableObject {
     
     @Published var sentenceList: [SwipeDataList] = []
     @Published var categoryList: [String] = []
+    @Published var myLearningProgressList: [MyLearningProgressData] = []
     
     
     //MARK: - 내가 좋아요한 카드 리스트 조회
@@ -33,7 +34,6 @@ class TabHomeViewModel: ObservableObject {
                 isSuccess(false)
             } receiveValue: { value in
                 if value.code == 200 {
-                    
                     self.sentenceList = value.data?.sentence_list ?? []
                     self.categoryList = value.data?.category_list ?? []
                     
@@ -73,5 +73,32 @@ class TabHomeViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    //MARK: - 카테고리별 진도확인 리스트 조회
+    func requestMyCategoryProgress() {
+        ApiControl.getMyCategoryProgress(uid: UserManager.shared.uid)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if let myProgressList = value.data {
+                        self.myLearningProgressList = myProgressList
+                    }
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
     
 }

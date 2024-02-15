@@ -270,7 +270,7 @@ class SwipeCardViewModel: ObservableObject {
                     for (index, _) in arr.enumerated() {
                         arr[index].customId = index + 1
                     }
-                    //fLog("로그확인::: dummyArr : \(dummyArr)")
+                    //fLog("로그확인::: arr : \(arr)")
                     self.swipeList = arr
                     self.percentCountSwipeList = arr
                     //self.fixedSwipeList_0 = arr // 처음 한 번만 저장
@@ -296,8 +296,8 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     //MARK: - 영어카드 좋아요 적용
-    func likeCard(uid: String, cardIdx: Int, isLike: Int, clickIndex: Int, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.likeCard(uid: uid, cardIdx: cardIdx, isLike: isLike)
+    func likeCard(cardIdx: Int, isLike: Int, clickIndex: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.likeCard(cardIdx: cardIdx, isLike: isLike)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
@@ -309,9 +309,15 @@ class SwipeCardViewModel: ObservableObject {
                 isSuccess(false)
             } receiveValue: { value in
                 if value.code == 200 {
-                    
-                    // 좋아요 상태 업데이트
-                    self.swipeList[clickIndex].isLike = true
+                    // [좋아요 상태 업데이트]
+                    // 좋아요 요청 -> 1
+                    if isLike == 1 {
+                        self.swipeList[clickIndex].isLike = true
+                    }
+                    // 좋아요 취소 요청 -> 0
+                    else if isLike == 0 {
+                        self.swipeList[clickIndex].isLike = false
+                    }
                     
                     isSuccess(true)
                 }

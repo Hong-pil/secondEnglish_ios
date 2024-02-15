@@ -44,6 +44,8 @@ extension TabHomePage: View {
             ScrollViewReader { scrollviewReader in
                 ScrollView {
                     
+                    //MARK: - 좋아요한 배너 리스트 (검색어 : Carousel Slider)
+                    // [Ref] https://www.youtube.com/watch?v=DgTPWYM5Hm4
                     if viewModel.sentenceList.count > 0 {
                         ZStack {
                             ForEach(Array(viewModel.sentenceList.enumerated()), id: \.offset) { index, item in
@@ -58,6 +60,7 @@ extension TabHomePage: View {
                                     )
                             }
                         }
+                        .frame(maxWidth: .infinity)
                         .gesture(
                             DragGesture()
                                 .onEnded({ value in
@@ -97,45 +100,25 @@ extension TabHomePage: View {
                             })
                         }
                         .padding(.vertical, 30)
-                        
                     }
                     
-                    ForEach(Array(swipeTabViewModel.typeList.enumerated()), id: \.offset) { index, item in
+                    
+                    
+                    
+                    //MARK: - 내 학습 진도
+                    ForEach(Array(viewModel.myLearningProgressList.enumerated()), id: \.offset) { index, item in
                         
-                        Text(item.type3 ?? "")
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 30)
-                            .background(Color.blue.opacity(0.5))
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 20)
-                            .onTapGesture {
-                                fLog("idpil::: 버튼 클릭 했음")
-                                
-                                
-                                
-                                
-                                
-                                /**
-                                 * 함수로 따로 뺄 것
-                                 */
-                                LandingManager.shared.showMinute = true
-//                                NotificationCenter.default.post(name: Notification.Name("workCompleted"), object: nil)
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
-                                                                    object: nil,
-                                                                    userInfo: [DefineKey.swipeViewCategoryIdx : index] as [String : Any])
-                                }
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                            }
-                        
+                        /**
+                         * 카테고리 글자에서 잘바꿈 하려고 중간에 개행문자(\n)를 입력해 놨다.
+                         * 문제는 값을 가져오면 \\n로 내려온다. 그래서 아래와 같이 변경해준다.
+                         * 원인) DB에서는 \n 을 \\n 으로 저장한다고 함.
+                         */
+                        TabHomeMyLearningView(
+                            category: (item.category ?? "").replacingOccurrences(of: "\\n", with: "\n"),
+                            categorySetenceCount: item.category_setence_count ?? 0,
+                            likeNumber: item.like_number ?? 0,
+                            itemIndex: index
+                        )
                     }
                 }
                 .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
@@ -158,16 +141,21 @@ extension TabHomePage: View {
                     }
                 }
             }
-//            .onAppear(perform: {
-//                //UIScrollView.appearance().backgroundColor = UIColor(Color.blue)
-//                UIScrollView.appearance().bounces = false
-//            })
+            .onAppear(perform: {
+                //UIScrollView.appearance().backgroundColor = UIColor(Color.blue)
+                /**
+                 * ScrollView bounce 비활성하는 이유 : 스크롤뷰 bounce되면 좋아요한 배너 리스트 넘길 때, 잘 안 넘겨짐.
+                 */
+                UIScrollView.appearance().bounces = false
+            })
         }
         .background(Color.bgLightGray50)
         .task {
             viewModel.requestMyCardList(uid: UserManager.shared.uid, isSuccess: { success in
                 //
             })
+            
+            viewModel.requestMyCategoryProgress()
         }
     }
     

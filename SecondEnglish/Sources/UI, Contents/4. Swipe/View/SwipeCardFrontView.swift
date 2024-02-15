@@ -58,6 +58,8 @@ struct SwipeCardFrontView: View {
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장
                         .onTapGesture {
+                            // 좋아요 취소 요청 -> false
+                            // 좋아요 요청 -> true
                             isTapLikeBtn(card.idx ?? 0, (card.isLike ?? false) ? false : true)
                         }
                     

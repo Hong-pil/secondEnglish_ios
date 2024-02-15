@@ -92,19 +92,22 @@ extension TabSwipeCardPage: View {
                                             onLike(card, type: likeType)
                                         },
                                         isTapLikeBtn: { cardIdx, isLike in
+                                            //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
                                             
-                                            fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
-                                            
-                                            fLog("idpil::: uid : \(UserManager.shared.uid)")
-                                            
-                                            viewModel.likeCard(uid: UserManager.shared.uid, cardIdx: cardIdx, isLike: isLike ? 1 : 0, clickIndex: index, isSuccess: { isSuccess in
-                                                if isSuccess {
-                                                    fLog("idpil::: 좋아요 성공!!!")
-                                                } else {
-                                                    fLog("idpil::: 좋아요 실패!!!")
-                                                }
-                                                
-                                            })
+                                            // 좋아요 취소 요청 -> false -> 0
+                                            // 좋아요 요청 -> true -> 1
+                                            viewModel.likeCard(
+                                                cardIdx: cardIdx,
+                                                isLike: isLike ? 1 : 0,
+                                                clickIndex: index,
+                                                isSuccess: { isSuccess in
+                                                    if isSuccess {
+                                                        //fLog("idpil::: 좋아요 성공!!!")
+                                                    } else {
+                                                        //fLog("idpil::: 좋아요 실패!!!")
+                                                    }
+                                                    
+                                                })
                                         })
                                     //MARK: 책 쌓아놓은 것 같은 효과
                                     //.animation(.spring())
