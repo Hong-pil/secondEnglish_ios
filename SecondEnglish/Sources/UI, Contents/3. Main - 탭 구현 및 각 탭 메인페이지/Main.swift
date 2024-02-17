@@ -19,9 +19,9 @@ struct Main {
     private struct sizeInfo {
         static let numberOfTabs: CGFloat = 3.0
         static let tabIconSize: CGFloat = 20.0
-        static let tabPlusIconSize: CGFloat = 35.0
+        static let tabPlusIconSize: CGFloat = 40.0
         static let tabPointIconSize: CGFloat = 5.0
-        static let tabIconClickPaddingSize: CGFloat = 20.0 // 클릭 영역 확장
+        static let tabIconClickPaddingSize: CGFloat = 10.0 // 클릭 영역 확장
     }
 }
 
@@ -33,6 +33,7 @@ extension Main: View {
                 
                 LoadingView()
             }
+            .ignoresSafeArea(edges: .bottom) // bottom SafeArea 없는게 계산하기 편함
         }
         .onChange(of: landingManager.showMinute) {
             if landingManager.showMinute {
@@ -91,7 +92,7 @@ extension Main: View {
                     Button {
                         tabStateHandler.selection = .my
                     } label: {
-                        VStack(spacing: 7) {
+                        VStack(spacing: 8) {
                             Image(systemName: "bookmark.square")
                                 .renderingMode(.template)
                                 .resizable()
@@ -106,8 +107,10 @@ extension Main: View {
                                     .frame(width: sizeInfo.tabPointIconSize, height: sizeInfo.tabPointIconSize)
                             }
                         }
-                        .padding(.horizontal, sizeInfo.tabIconClickPaddingSize)
+                        .padding(sizeInfo.tabIconClickPaddingSize)
+                        .background(Color.gray25) // 배경색 있어야 클릭 됨
                     }
+                    .buttonStyle(PlainButtonStyle()) // 버튼 깜빡임 방지
                     
                     Button {
                         isShowEditorView = true
@@ -125,7 +128,7 @@ extension Main: View {
                     Button {
                         tabStateHandler.selection = .swipe_card
                     } label: {
-                        VStack(spacing: 7) {
+                        VStack(spacing: 8) {
                             Image(systemName: "arrow.left.and.right.righttriangle.left.righttriangle.right")
                                 .renderingMode(.template)
                                 .resizable()
@@ -140,8 +143,10 @@ extension Main: View {
                                     .frame(width: sizeInfo.tabPointIconSize, height: sizeInfo.tabPointIconSize)
                             }
                         }
-                        .padding(.horizontal, sizeInfo.tabIconClickPaddingSize)
+                        .padding(sizeInfo.tabIconClickPaddingSize)
+                        .background(Color.gray25) // 배경색 있어야 클릭 됨
                     }
+                    .buttonStyle(PlainButtonStyle()) // 버튼 깜빡임 방지
                     
 //                    Button {
 //                        tabStateHandler.selection = .settings
@@ -155,12 +160,13 @@ extension Main: View {
 //                    }
                     
                 }
-                .buttonStyle(PlainButtonStyle())    // 버튼 깜빡임 방지
-                .frame(maxWidth: UIScreen.width/sizeInfo.numberOfTabs, maxHeight: .infinity)
-                .background(Color.gray25)   // 배경색 있어야 클릭 잘 됨 (영역을 차지하나봄)
+                .frame(maxWidth: UIScreen.width/sizeInfo.numberOfTabs)
             }
+            .background(Color.gray25) // 배경색 있어야 클릭 잘 됨 (영역을 차지하나봄)
+            .padding(.horizontal, 30) // TabView 아이템 갯수가 2개 밖에 없어, 거리를 줄이는게 좀 더 버튼 누르기 편한 것 같음.
         }
-        .frame(height: DefineSize.MainTabHeight)
+        //.frame(minHeight: DefineSize.MainTabHeight)
+        .padding(.bottom, 20)
     }
 }
 

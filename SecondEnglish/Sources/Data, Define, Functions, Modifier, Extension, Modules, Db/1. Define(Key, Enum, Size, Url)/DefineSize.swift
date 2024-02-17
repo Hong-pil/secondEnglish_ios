@@ -27,7 +27,7 @@ struct DefineSize {
     
     static let LineHeight: CGFloat = 1.0
     static let ShowTopMinY: CGFloat = -200
-    static let MainTabHeight: CGFloat = 50.0            // 메인탭 높이
+    static let MainTabHeight: CGFloat = 70.0            // 메인탭 높이
     
     //corner radius
     struct CornerRadius {

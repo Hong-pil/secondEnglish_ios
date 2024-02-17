@@ -21,16 +21,16 @@ struct ExpandingTextView: View {
     @State private var heightSettingComplete = false
     
     // 클럽 멤버 아니면 키보드 올리지 않기
-    @Binding var showNeedJoinToast: Bool
-    var isClubMember: Bool
+    @Binding var showKeyboardDisableToast: Bool
+    var isKeyboardDisable: Bool
 
     var body: some View {
         WrappedTextView(text: $text,
                         font: font,
                         textColor: textColor,
                         textDidChange: self.textDidChange,
-                        showNeedJoinToast: $showNeedJoinToast,
-                        isClubMember: isClubMember
+                        showKeyboardDisableToast: $showKeyboardDisableToast,
+                        isKeyboardDisable: isKeyboardDisable
         )
         .frame(height: maxHeight > minHeight ? min((height ?? minHeight), maxHeight) : (height ?? minHeight))
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
@@ -66,9 +66,10 @@ struct WrappedTextView: UIViewRepresentable {
     var font: UIFont? = nil
     var textColor: UIColor? = nil
     let textDidChange: (UITextView) -> Void
-    // 클럽 멤버 아니면 키보드 올리지 않기
-    @Binding var showNeedJoinToast: Bool
-    var isClubMember: Bool
+    
+    // 키보드 올릴지 아닐지 결정
+    @Binding var showKeyboardDisableToast: Bool
+    var isKeyboardDisable: Bool
 
     func makeUIView(context: Context) -> UITextView {
         let view = UITextView()
@@ -95,8 +96,8 @@ struct WrappedTextView: UIViewRepresentable {
         return Coordinator(
             text: $text,
             textDidChange: textDidChange,
-            showNeedJoinToast: $showNeedJoinToast,
-            isClubMember: isClubMember
+            showNeedJoinToast: $showKeyboardDisableToast,
+            isClubMember: isKeyboardDisable
         )
     }
 
@@ -104,7 +105,7 @@ struct WrappedTextView: UIViewRepresentable {
         @Binding var text: String
         let textDidChange: (UITextView) -> Void
         // 클럽 멤버 아니면 키보드 올리지 않기
-        @Binding var showNeedJoinToast: Bool
+        @Binding var showKeyboardDisableToast: Bool
         var isClubMember: Bool
 
         init(
@@ -115,7 +116,7 @@ struct WrappedTextView: UIViewRepresentable {
         ) {
             self._text = text
             self.textDidChange = textDidChange
-            self._showNeedJoinToast = showNeedJoinToast
+            self._showKeyboardDisableToast = showNeedJoinToast
             self.isClubMember = isClubMember
         }
 
@@ -128,7 +129,7 @@ struct WrappedTextView: UIViewRepresentable {
         // 리턴값이 false -> 키보드 올리지 않음
         func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
             if !isClubMember {
-                showNeedJoinToast = true
+                showKeyboardDisableToast = true
                 return false
             } else {
                 return true
@@ -136,5 +137,3 @@ struct WrappedTextView: UIViewRepresentable {
         }
     }
 }
-
-

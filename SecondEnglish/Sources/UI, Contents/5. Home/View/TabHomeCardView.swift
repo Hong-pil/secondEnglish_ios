@@ -66,8 +66,8 @@ struct TabHomeCardViewRow: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(.blue)
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.primaryDefault, lineWidth: 0.5)
                 
             VStack(spacing: 30) {
                 Text(category)

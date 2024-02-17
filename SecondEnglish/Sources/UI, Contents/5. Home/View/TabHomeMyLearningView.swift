@@ -16,18 +16,17 @@ struct TabHomeMyLearningView: View {
     var body: some View {
         HStack(spacing: 0) {
             Text(category)
-                //.frame(maxWidth: .infinity)
-                .padding(.vertical, 30)
-                .background(Color.blue.opacity(0.5))
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                
+            
+            Spacer()
+            
             Text(String(categorySetenceCount))
-            
             Text(" / ")
-            
             Text(String(likeNumber))
         }
+        .padding(EdgeInsets(top: 15, leading: 20, bottom: 15, trailing: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 7))
+        .overlay(RoundedRectangle(cornerRadius: 7).stroke(Color.primaryDefault, lineWidth: 0.5))
+        .background(RoundedRectangle(cornerRadius: 7).fill(Color.gray25))
         .onTapGesture {
             fLog("idpil::: 버튼 클릭 했음")
             /**

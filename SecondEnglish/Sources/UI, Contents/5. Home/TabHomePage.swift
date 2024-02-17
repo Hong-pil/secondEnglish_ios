@@ -63,23 +63,23 @@ extension TabHomePage: View {
                         .frame(maxWidth: .infinity)
                         .gesture(
                             DragGesture()
-                                .onEnded({ value in
+                                .onEnded({ gesture in
                                     
                                     /**
                                      * [민감도 기준]
                                      * threshold 값을 낮출 수록 민감도 기준이 낮아지기 때문에 잘 넘어감.
                                      */
-                                    let threshold: CGFloat = 50
+                                    let threshold: CGFloat = 30
                                     
-                                    //fLog("idpil::: value.translation.width: \(value.translation.width)")
+                                    fLog("idpil::: gesture.translation.width: \(gesture.translation.width)")
                                     
                                     // 손가락으로 좌-우 Swipe한 길이
-                                    if value.translation.width > threshold {
+                                    if gesture.translation.width > threshold {
                                         withAnimation {
                                             cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
                                         }
                                     }
-                                    else if value.translation.width < -threshold {
+                                    else if gesture.translation.width < -threshold {
                                         withAnimation {
                                             cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
                                             )
@@ -128,6 +128,7 @@ extension TabHomePage: View {
                             likeNumber: item.like_number ?? 0,
                             itemIndex: index
                         )
+                        .padding(.horizontal, 20)
                     }
                 }
                 .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in

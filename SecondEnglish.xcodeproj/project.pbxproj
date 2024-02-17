@@ -198,6 +198,10 @@
 		E0DBDE692B4FDEB1007615A8 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE652B4FDEB1007615A8 /* NotoSansKR-Regular.otf */; };
 		E0DBDE6A2B4FDEB1007615A8 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE662B4FDEB1007615A8 /* Roboto-Medium.ttf */; };
 		E0DBDE6D2B4FDFDF007615A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE6C2B4FDFDF007615A8 /* LaunchScreen.storyboard */; };
+		E0F11E9A2B7EF9CD0014F503 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F11E992B7EF9CD0014F503 /* ToastView.swift */; };
+		E0F11E9E2B7F3C5D0014F503 /* EditorCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F11E9D2B7F3C5D0014F503 /* EditorCategoryView.swift */; };
+		E0F11EA02B7F43F60014F503 /* EditorCategoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F11E9F2B7F43F60014F503 /* EditorCategoryRowView.swift */; };
+		E0F11EA32B80495B0014F503 /* EditorInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F11EA22B80495B0014F503 /* EditorInputView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -395,6 +399,10 @@
 		E0DBDE662B4FDEB1007615A8 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		E0DBDE6B2B4FDF14007615A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E0DBDE6C2B4FDFDF007615A8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E0F11E992B7EF9CD0014F503 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E0F11E9D2B7F3C5D0014F503 /* EditorCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCategoryView.swift; sourceTree = "<group>"; };
+		E0F11E9F2B7F43F60014F503 /* EditorCategoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCategoryRowView.swift; sourceTree = "<group>"; };
+		E0F11EA22B80495B0014F503 /* EditorInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorInputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -445,6 +453,7 @@
 		E0002F3C2B7DF4A50018D9CD /* 6. EditorPage */ = {
 			isa = PBXGroup;
 			children = (
+				E0F11EA12B8049400014F503 /* View */,
 				E0002F3F2B7DFB980018D9CD /* ViewModel */,
 				E0002F3D2B7DF4EA0018D9CD /* EditorPage.swift */,
 			);
@@ -926,6 +935,7 @@
 		E0DBDD372B4FB7E2007615A8 /* 1. Common */ = {
 			isa = PBXGroup;
 			children = (
+				E0F11E9B2B7F3C450014F503 /* BottomSheet */,
 				E0DBDDD42B4FCE8F007615A8 /* Custom */,
 				E0DBDDD32B4FCE88007615A8 /* View */,
 				E0DBDDD22B4FCE81007615A8 /* Popup(byPopupView) */,
@@ -1000,6 +1010,7 @@
 		E0DBDDD32B4FCE88007615A8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E0F11E982B7EF9C00014F503 /* Toast */,
 				E0DBDDF22B4FCF69007615A8 /* VoiceRecordingView */,
 				E0DBDDF12B4FCF63007615A8 /* LoadingView */,
 				E0DBDDF02B4FCF5D007615A8 /* PullToRefresh */,
@@ -1230,6 +1241,40 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		E0F11E982B7EF9C00014F503 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				E0F11E992B7EF9CD0014F503 /* ToastView.swift */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
+		E0F11E9B2B7F3C450014F503 /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				E0F11E9C2B7F3C4F0014F503 /* EditorView */,
+			);
+			path = BottomSheet;
+			sourceTree = "<group>";
+		};
+		E0F11E9C2B7F3C4F0014F503 /* EditorView */ = {
+			isa = PBXGroup;
+			children = (
+				E0F11E9D2B7F3C5D0014F503 /* EditorCategoryView.swift */,
+				E0F11E9F2B7F43F60014F503 /* EditorCategoryRowView.swift */,
+			);
+			path = EditorView;
+			sourceTree = "<group>";
+		};
+		E0F11EA12B8049400014F503 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E0F11EA22B80495B0014F503 /* EditorInputView.swift */,
+			);
+			name = View;
+			path = "퍋ㅈ";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1436,6 +1481,7 @@
 				E0DBDDD62B4FCEA2007615A8 /* CustomKeyPad.swift in Sources */,
 				E0DBDE002B4FCFB5007615A8 /* ActivityIndicator.swift in Sources */,
 				E0DBDDB22B4FCDAE007615A8 /* Spacer+Extension.swift in Sources */,
+				E0F11EA32B80495B0014F503 /* EditorInputView.swift in Sources */,
 				E0DBDDAC2B4FCD8E007615A8 /* Int+Extension.swift in Sources */,
 				E0DBDE1E2B4FD0A9007615A8 /* CentrePopupConfig.swift in Sources */,
 				E0DBDD902B4FCA10007615A8 /* LoginJoinModel.swift in Sources */,
@@ -1484,8 +1530,10 @@
 				E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */,
 				E0DBDD612B4FC8D2007615A8 /* AlertManager.swift in Sources */,
 				E0BDD41E2B6615A4007D5742 /* PhoneNumberLoginPage.swift in Sources */,
+				E0F11EA02B7F43F60014F503 /* EditorCategoryRowView.swift in Sources */,
 				E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */,
 				E0DBDE332B4FD14E007615A8 /* LocationPermission.swift in Sources */,
+				E0F11E9A2B7EF9CD0014F503 /* ToastView.swift in Sources */,
 				E0DBDD432B4FC661007615A8 /* DefineBottomSheet.swift in Sources */,
 				E0DBDE1C2B4FD094007615A8 /* BottomPopupConfig.swift in Sources */,
 				E0DBDE022B4FCFBF007615A8 /* PageableScrollView.swift in Sources */,
@@ -1519,6 +1567,7 @@
 				E00FDAFC2B5FE0440080761B /* JoinEmailPage.swift in Sources */,
 				E0DBDDF62B4FCF7D007615A8 /* LoadingView.swift in Sources */,
 				E0DBDDA22B4FCD53007615A8 /* Color+Extension.swift in Sources */,
+				E0F11E9E2B7F3C5D0014F503 /* EditorCategoryView.swift in Sources */,
 				E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */,
 				E01678522B62584B00943945 /* Check.swift in Sources */,
 				E0DBDD7C2B4FC99B007615A8 /* Apis.swift in Sources */,
