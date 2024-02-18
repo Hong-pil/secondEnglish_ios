@@ -166,7 +166,7 @@ extension Main: View {
             .padding(.horizontal, 30) // TabView 아이템 갯수가 2개 밖에 없어, 거리를 줄이는게 좀 더 버튼 누르기 편한 것 같음.
         }
         //.frame(minHeight: DefineSize.MainTabHeight)
-        .padding(.bottom, 20)
+        .padding(.bottom, 30)
     }
 }
 
