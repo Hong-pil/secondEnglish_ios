@@ -44,54 +44,74 @@ extension EditorInputView: View {
     var body: some View {
         
         HStack(spacing: 20) {
-            VStack(spacing: 0) {
-                EditorInputRowView(
-                    currentTxt: $currentKoreanTxt,
-                    
-                    
-                    isSameCard: (cardIndex==activeCardIndex) ? true : false,
-                    
-                    arrayItemTxt: arrayItemKoreanTxt,
-                    placeholder: korean_placeholder,
-                    maxlength: korean_maxlength,
-                    isShowToast: { isShow in
-                        if isShow {
-                            isShowTxtLengthToast(true)
-                        }
-                    },
-                    isKeyboardFocused: { isFocused in
-                        if isFocused {
-                            isKeyboardFocused(isFocused)
-                        }
-                    },
-                    forceKeyboardUpIndex: forceKeyboardUpIndex,
-                    cardIndex: cardIndex,
-                    isKorean: true
-                )
-             
-                Divider()
+            VStack(alignment: .leading, spacing: 0) {
                 
-                EditorInputRowView(
-                    currentTxt: $currentEnglishTxt,
+                // 한글 문장
+                Group {
+                    EditorInputRowView(
+                        currentTxt: $currentKoreanTxt,
+                        
+                        isSameCard: (cardIndex==activeCardIndex) ? true : false,
+                        
+                        arrayItemTxt: arrayItemKoreanTxt,
+                        placeholder: korean_placeholder,
+                        maxlength: korean_maxlength,
+                        isShowToast: { isShow in
+                            if isShow {
+                                isShowTxtLengthToast(true)
+                            }
+                        },
+                        isKeyboardFocused: { isFocused in
+                            if isFocused {
+                                isKeyboardFocused(isFocused)
+                            }
+                        },
+                        forceKeyboardUpIndex: forceKeyboardUpIndex,
+                        cardIndex: cardIndex,
+                        isKorean: true
+                    )
+                
+                    Rectangle()
+                        .fill(Color.gray400)
+                        .frame(height: (cardIndex==activeCardIndex) ? 2 : 1)
                     
-                    isSameCard: (cardIndex==activeCardIndex) ? true : false,
+                    Text("한글")
+                        .font(.caption21116Regular)
+                        .foregroundColor(.gray400)
+                }
+                
+                // 영어 문장
+                Group {
+                    EditorInputRowView(
+                        currentTxt: $currentEnglishTxt,
+                        
+                        isSameCard: (cardIndex==activeCardIndex) ? true : false,
+                        
+                        arrayItemTxt: arrayItemEnglishTxt,
+                        placeholder: english_placeholder,
+                        maxlength: english_maxlength,
+                        isShowToast: { isShow in
+                            if isShow {
+                                isShowTxtLengthToast(true)
+                            }
+                        },
+                        isKeyboardFocused: { isFocused in
+                            if isFocused {
+                                isKeyboardFocused(isFocused)
+                            }
+                        },
+                        forceKeyboardUpIndex: forceKeyboardUpIndex,
+                        cardIndex: cardIndex
+                    )
                     
-                    arrayItemTxt: arrayItemEnglishTxt,
-                    placeholder: english_placeholder,
-                    maxlength: english_maxlength,
-                    isShowToast: { isShow in
-                        if isShow {
-                            isShowTxtLengthToast(true)
-                        }
-                    },
-                    isKeyboardFocused: { isFocused in
-                        if isFocused {
-                            isKeyboardFocused(isFocused)
-                        }
-                    },
-                    forceKeyboardUpIndex: forceKeyboardUpIndex,
-                    cardIndex: cardIndex
-                )
+                    Rectangle()
+                        .fill(Color.gray400)
+                        .frame(height: (cardIndex==activeCardIndex) ? 3 : 1)
+                    
+                    Text("영어")
+                        .font(.caption21116Regular)
+                        .foregroundColor(.gray400)
+                }
                 
             }
             .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위해 사이즈 설정
@@ -188,14 +208,15 @@ struct EditorInputRowView: View {
     var body: some View {
         ZStack {
             
+            // 아이템마다 힌트 보여주니까 좀 조잡스런 느낌이라 주석처리함
             //MARK: - 힌트 TextField, 입력 안 됨
-            if currentTxt.isEmpty && arrayItemTxt.isEmpty {
-                TextField(placeholder, text: .constant(""))
-                    .font(.body11622Regular)
-                    .foregroundColor(.gray400)
-                    .padding(.vertical, 11)
-                    .disabled(true) // 보기용 (동작 안 함)
-            }
+//            if currentTxt.isEmpty && arrayItemTxt.isEmpty {
+//                TextField(placeholder, text: .constant(""))
+//                    .font(.body11622Regular)
+//                    .foregroundColor(.gray400)
+//                    .padding(.vertical, 11)
+//                    .disabled(true) // 보기용 (동작 안 함)
+//            }
             
             
             

@@ -326,6 +326,12 @@ extension EditorPage: View {
                 .frame(height: 1)
          
             ZStack {
+                Text("\(currentCardIndex+1) / \(sentenceList.count)")
+                    .font(.caption21116Regular)
+                    .foregroundColor(.gray700)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 20)
+                
                 Button {
                     
                     isPressPlusButton = true
