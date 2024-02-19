@@ -183,6 +183,8 @@ struct EditorInputRowView: View {
     var isKorean: Bool?
     
     
+    @State private var keyboardHeight: CGFloat = 0 // 키보드 높이 (사용 안 함)
+    
     var body: some View {
         ZStack {
             
@@ -227,7 +229,7 @@ struct EditorInputRowView: View {
             }
             .focused($isTextFieldIsFocused)
             .onChange(of: isTextFieldIsFocused) {
-                isKeyboardFocused(isTextFieldIsFocused)
+                //isKeyboardFocused(isTextFieldIsFocused)
             }
             .onAppear {
                 // "문장 추가하기 버튼" 클릭시,마지막 카드의 한국어 textfield 키보드 올림
@@ -240,6 +242,33 @@ struct EditorInputRowView: View {
                     }
                 }
             }
+            
+            //MARK: - 키보드 상태 감지 (ChatGTP에게 'swiftui에서 textfield 사용할 때, 키보드가 다 올라왔는지 확인하는 방법을 알려줘.' 물어보면 됨)
+            //.padding(.bottom, keyboardHeight) // 키보드 높이만큼 하단에 여백 추가
+            .onAppear {
+                // 키보드가 화면에 완전히 올라왔는지 간접적으로 확인하는 방법
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: .main) { notification in
+                    if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                        //keyboardHeight = keyboardSize.height
+                        
+                        // [중요 포인트]
+                        // 키보드가 완전히 다 올라온 것을 확인하는 이유 :
+                        // 키보드 바로 위에 View가 붙어 있기 때문에, 문장 리스트 아래쪽은 가려진다.
+                        // 그래서 '키보드가 완전히 올라온 이후'에 일정 크기만큼 리스트를 올려줘야 하기 때문이다.
+                        isKeyboardFocused(isTextFieldIsFocused)
+                    }
+                }
+                
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                    keyboardHeight = 0
+                }
+            }
+            .onDisappear {
+                NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
+                NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+            }
+            
+            
             
         }
     }
