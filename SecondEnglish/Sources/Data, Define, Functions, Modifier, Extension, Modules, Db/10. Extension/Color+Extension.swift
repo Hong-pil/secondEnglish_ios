@@ -27,7 +27,7 @@ extension Color {
     static let stateEnableGray200 = Color(red: 208/255.0, green: 209/255.0, blue: 217/255.0, opacity: 1)
     static let stateEnableGray25 = Color(red: 255/255.0, green: 255/255.0, blue: 255/255.0, opacity: 1)
     //static let stateEnablePrimaryDefault = Color(red: 134/255.0, green: 126/255.0, blue: 255/255.0, opacity: 1)
-    static let stateEnablePrimaryDefault = Color(red: 255/255.0, green: 130/255.0, blue: 130/255.0, opacity: 1)
+    static let stateEnablePrimaryDefault = Color(red: 67/255.0, green: 98/255.0, blue: 255/255.0, opacity: 1)
     static let stateEnablePrimary100 = Color(red: 240/255.0, green: 240/255.0, blue: 254/255.0, opacity: 1)
     static let stateEnableSecondaryDefault = Color(red: 254/255.0, green: 158/255.0, blue: 158/255.0, opacity: 1)
     static let stateEnableSecondaryLight = Color(red: 255/255.0, green: 208/255.0, blue: 213/255.0, opacity: 1)

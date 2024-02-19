@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-public extension View {
-    func implementPopupView() -> some View {
-        overlay(PopupView())
-    }
-}
-
 // MARK: -Alignments
 extension View {
     func alignToBottom(_ value: CGFloat = 0) -> some View {

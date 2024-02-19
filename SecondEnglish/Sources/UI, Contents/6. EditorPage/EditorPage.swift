@@ -14,7 +14,9 @@ struct EditorPage {
     // 호출하는 곳에서 받아야 함
     var completion: ((Bool, String) -> Void)
     
-    @State var showWriteCancel = false
+    // ToolbarItem 버튼 클릭 유무
+    @State var showWriteCancelView = false
+    @State var isClickSaveBtn = false
     
     @State var selectedMainCategoryName: String = "" {
         didSet(oldValue) {
@@ -58,150 +60,134 @@ struct EditorPage {
 
 extension EditorPage: View {
     var body: some View {
-        // View 탭시, Keyboard dismiss 하기
-        BackgroundTapGesture {
-            NavigationView {
-                LoadingViewContainer {
-                    // footerView 키보드 바로 위에 붙을 수 있도록 해줌
-                    ZStack(alignment: .bottom) {
-                        ScrollViewReader { proxyReader in
-                            ScrollView(showsIndicators: false) {
-                                VStack(alignment: .leading, spacing: 0) {
+        NavigationView {
+            LoadingViewContainer {
+                // footerView 키보드 바로 위에 붙을 수 있도록 해줌
+                ZStack(alignment: .bottom) {
+                    ScrollViewReader { proxyReader in
+                        ScrollView(showsIndicators: false) {
+                            VStack(alignment: .leading, spacing: 0) {
+                                
+                                categorySelectView
+                                
+                                ForEach(Array(sentenceList.enumerated()), id: \.offset) { index, item in
                                     
-                                    categorySelectView
-                                    
-                                    ForEach(Array(sentenceList.enumerated()), id: \.offset) { index, item in
-                                        
-                                        EditorInputView(
-                                            currentKoreanTxt: $currentKoreanTxt,
-                                            currentEnglishTxt: $currentEnglishTxt,
-                                            cardIndex: index,
-                                            activeCardIndex: currentCardIndex,
-                                            arrayItemKoreanTxt: item[sizeInfo.koreanKey] ?? "",
-                                            arrayItemEnglishTxt: item[sizeInfo.englishKey] ?? "",
-                                            korean_maxlength: 50,
-                                            english_maxlength: 50,
-                                            isShowTxtLengthToast: { isShow in
-                                                if isShow {
-                                                    toastMessage = "se_j_title_length_limit".localized
-                                                    
-                                                    showToast()
-                                                }
-                                            },
-                                            // 키보드 올라왔음
-                                            isKeyboardFocused: { isFocused in
-                                                if isFocused {
-                                                    /**
-                                                     * [키보드가 올라오는 경우의 수는 두 가지가 있음. 이 두가지를 구분하기 위한 기능]
-                                                     * 첫 번째, '카드 추가 버튼' 클릭했을 때 추가된 마지막 카드의 한글 TextField 에서 키보드 활성됨
-                                                     * 두 번째, 추가된 카드 중에서 TextField 클릭한 경우, 해당 TextField에서 키보드 활성됨
-                                                     *
-                                                     * 아래는 "두 번째" 경우에만 실행될 수 있도록 구현한 기능
-                                                     */
-                                                    var isOnlyEditMode = false
-                                                    if isPressPlusButton {
-                                                       isOnlyEditMode = false
-                                                        isPressPlusButton = false
-                                                    } else {
-                                                        isOnlyEditMode = true
-                                                    }
-                                                    
-                                                    // 작성했던 이전 카드 중에서 특정 카드를 수정하려고 선택한 경우
-                                                    if isOnlyEditMode {
-                                                        sentenceListUpdate(activedIndex: index)
-                                                    }
-                                                    // 추가하기 버튼 클릭해서 키보드 올라온 경우
-                                                    else {
-                                                        /**
-                                                         * [중요한 포인트]
-                                                         * 키보드 올라오기 전에 아래와 같이 초기화 설정하면, 이전 카드의 TextField가 한 번 깜빡이는 문제가 있음.
-                                                         * 그래서 키보드 올라오고 나서 초기화 해주는게 맞음.
-                                                         */
-                                                        currentKoreanTxt = ""
-                                                        currentEnglishTxt = ""
-                                                    }
-                                                    
-                                                    currentCardIndex = index
-                                                }
-                                            },
-                                            forceKeyboardUpIndex: forceKeyboardUpIndex,
-                                            isItemDelete: { isSuccess, itemIndex in
-                                                if isSuccess && sentenceList.count>0 {
-                                                    
-                                                    self.sentenceListDelete(deleteRequestIndex: itemIndex)
-                                                }
+                                    EditorInputView(
+                                        currentKoreanTxt: $currentKoreanTxt,
+                                        currentEnglishTxt: $currentEnglishTxt,
+                                        cardIndex: index,
+                                        activeCardIndex: currentCardIndex,
+                                        arrayItemKoreanTxt: item[sizeInfo.koreanKey] ?? "",
+                                        arrayItemEnglishTxt: item[sizeInfo.englishKey] ?? "",
+                                        korean_maxlength: 50,
+                                        english_maxlength: 50,
+                                        isShowTxtLengthToast: { isShow in
+                                            if isShow {
+                                                toastMessage = "se_j_title_length_limit".localized
+                                                
+                                                showToast()
                                             }
-                                        )
-                                        .padding(.top, index==0 ? 20 : 10)
-                                        .padding(.bottom, index==(sentenceList.count-1) ? 20 : 0)
-                                    }
-                                }
-                                .padding(.horizontal, 20)
-                            }
-                        }
-                        
-                        footerView
-                        
-                        if isShowToast {
-                            ToastView(text: toastMessage)
-                                .shadow(radius: 2)
-                                .padding(.bottom, 60)
-                        }
-                    }
-                }
-                .toolbar {
-                    
-                    // 취소버튼
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                            if checkMinimalData() {
-                                CommonAlertView(title: {
-                                    Text("se_b_post_write_back".localized)
-                                        .foregroundColor(Color.gray870)
-                                        .font(.buttons1420Medium)
-                                        .multilineTextAlignment(.center)
-                                },buttons: ["a_no".localized,"a_yes".localized]) { buttonIndex in
-                                    if buttonIndex == 1 {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                            presentationMode.wrappedValue.dismiss()
+                                        },
+                                        // 키보드 올라왔음
+                                        isKeyboardFocused: { isFocused in
+                                            if isFocused {
+                                                /**
+                                                 * [키보드가 올라오는 경우의 수는 두 가지가 있음. 이 두가지를 구분하기 위한 기능]
+                                                 * 첫 번째, '카드 추가 버튼' 클릭했을 때 추가된 마지막 카드의 한글 TextField 에서 키보드 활성됨
+                                                 * 두 번째, 추가된 카드 중에서 TextField 클릭한 경우, 해당 TextField에서 키보드 활성됨
+                                                 *
+                                                 * 아래는 "두 번째" 경우에만 실행될 수 있도록 구현한 기능
+                                                 */
+                                                var isOnlyEditMode = false
+                                                if isPressPlusButton {
+                                                   isOnlyEditMode = false
+                                                    isPressPlusButton = false
+                                                } else {
+                                                    isOnlyEditMode = true
+                                                }
+                                                
+                                                // 작성했던 이전 카드 중에서 특정 카드를 수정하려고 선택한 경우
+                                                if isOnlyEditMode {
+                                                    sentenceListUpdate(activedIndex: index)
+                                                }
+                                                // 추가하기 버튼 클릭해서 키보드 올라온 경우
+                                                else {
+                                                    /**
+                                                     * [중요한 포인트]
+                                                     * 키보드 올라오기 전에 아래와 같이 초기화 설정하면, 이전 카드의 TextField가 한 번 깜빡이는 문제가 있음.
+                                                     * 그래서 키보드 올라오고 나서 초기화 해주는게 맞음.
+                                                     */
+                                                    currentKoreanTxt = ""
+                                                    currentEnglishTxt = ""
+                                                }
+                                                
+                                                currentCardIndex = index
+                                            }
+                                        },
+                                        forceKeyboardUpIndex: forceKeyboardUpIndex,
+                                        isItemDelete: { isSuccess, itemIndex in
+                                            if isSuccess && sentenceList.count>0 {
+                                                
+                                                self.sentenceListDelete(deleteRequestIndex: itemIndex)
+                                            }
                                         }
-                                    }
-                                }
-                                .present {
-                                    showWriteCancel.toggle()
+                                    )
+                                    .padding(.top, index==0 ? 20 : 10)
+                                    .padding(.bottom, index==(sentenceList.count-1) ? 20 : 0)
                                 }
                             }
-                            else {
-                                presentationMode.wrappedValue.dismiss()
-                            }
-                        }, label: {
-                            Image("icon_outline_cancel")
-                                .resizable()
-                                .frame(width: sizeInfo.toolBarCancelButtonSize, height: sizeInfo.toolBarCancelButtonSize)
-                        })
+                            .padding(.horizontal, 20)
+                        }
                     }
                     
-                    // 등록버튼
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            
-                        }, label: {
-                            Text(type == .Write ? "d_registration".localized : "s_modifying".localized)
-                                .foregroundColor(checkPostData() ? Color.stateActivePrimaryDefault : Color.stateEnableGray400)
-                                .font(.body21420Regular)
-                        })
+                    footerView
+                    
+                    if isShowToast {
+                        ToastView(text: toastMessage)
+                            .shadow(radius: 2)
+                            .padding(.bottom, 60)
                     }
                 }
             }
-            .task {
-                sentenceList.insert(
-                    [
-                        sizeInfo.koreanKey: "",
-                        sizeInfo.englishKey: ""
-                    ]
-                    , at: currentCardIndex
-                )
+            .toolbar {
+                // 취소버튼
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        if checkMinimalData() {
+                            showWriteCancelView = true
+                        }
+                        else {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }, label: {
+                        Image("icon_outline_cancel")
+                            .resizable()
+                            .frame(width: sizeInfo.toolBarCancelButtonSize, height: sizeInfo.toolBarCancelButtonSize)
+                    })
+                }
+                
+                // 등록버튼
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        if checkPostData() {
+                            isClickSaveBtn = true
+                        }
+                    }, label: {
+                        Text(type == .Write ? "d_registration".localized : "s_modifying".localized)
+                            .foregroundColor(checkPostData() ? Color.primaryDefault : Color.stateEnableGray400)
+                            .font(.body21420Regular)
+                    })
+                }
             }
+        }
+        .task {
+            sentenceList.insert(
+                [
+                    sizeInfo.koreanKey: "",
+                    sizeInfo.englishKey: ""
+                ]
+                , at: currentCardIndex
+            )
         }
         // Main Category List BottomSheet
         .bottomSheet(
@@ -237,6 +223,20 @@ extension EditorPage: View {
                 }
             }
         )
+        
+        //MARK: - 팝업 (bottomsheet 로 올린 팝업 위에서 또다른 팝업을 보여주기 때문에 여기서 따로 설정함)
+        // (.popup 클릭 -> PopupParameters 클릭)하면 설정할 수 있는 옵션 값들 있음
+        .popup(isPresented: $showWriteCancelView) {
+            alertWriteCancel
+        } customize: {
+            $0
+                //.type(.floater())
+                .position(.center)
+                .animation(Animation.easeOut(duration: 0.15))
+                //.closeOnTapOutside(true)
+                .backgroundColor(.black.opacity(0.5))
+        }
+        
     }
     
     var categorySelectView: some View {
@@ -283,46 +283,94 @@ extension EditorPage: View {
     }
     
     var footerView: some View {
-        Button {
-            
-            isPressPlusButton = true
-            
-            // 데이터 가공, 목표 형태
-            // [
-            //  {"korean_txt": "", "english_txt": ""},
-            //  {"korean_txt": "", "english_txt": ""},
-            //  ...
-            // ]
-            
-            sentenceList.insert(
-                [
-                    sizeInfo.koreanKey: currentKoreanTxt,
-                    sizeInfo.englishKey: currentEnglishTxt
-                ],
-                at: currentCardIndex
-            )
-            
+        ZStack {
+            Button {
+                
+                isPressPlusButton = true
+                
+                // 데이터 가공, 목표 형태
+                // [
+                //  {"korean_txt": "", "english_txt": ""},
+                //  {"korean_txt": "", "english_txt": ""},
+                //  ...
+                // ]
+                
+                sentenceList.insert(
+                    [
+                        sizeInfo.koreanKey: currentKoreanTxt,
+                        sizeInfo.englishKey: currentEnglishTxt
+                    ],
+                    at: currentCardIndex
+                )
+                
 
-            fLog("idpil::: sentenceList : \(sentenceList)")
+                fLog("idpil::: sentenceList : \(sentenceList)")
+                
+                // "문장 추가하기 버튼" 클릭시,마지막 카드의 한국어 textfield 키보드 올림
+                forceKeyboardUpIndex = sentenceList.count-1
+                
+    //            currentKoreanTxt = ""
+    //            currentEnglishTxt = ""
+                
+            } label: {
+                Image(systemName: "plus")
+                    .renderingMode(.template)
+                    .resizable()
+                    .foregroundColor(.gray25)
+                    .padding(10)
+                    .background(Circle().fill(Color.primaryDefault))
+                    .frame(width: 40, height: 40)
+                    .padding(10) // 클릭 영역 확장
+            }
             
-            // "문장 추가하기 버튼" 클릭시,마지막 카드의 한국어 textfield 키보드 올림
-            forceKeyboardUpIndex = sentenceList.count-1
-            
-//            currentKoreanTxt = ""
-//            currentEnglishTxt = ""
-            
-        } label: {
-            Image(systemName: "plus")
-                .renderingMode(.template)
-                .resizable()
-                .foregroundColor(.gray25)
-                .padding(10)
-                .background(Circle().fill(Color.primaryDefault))
-                .frame(width: 40, height: 40)
-                .padding(10) // 클릭 영역 확장
+            Button(action: {
+                // View 탭시, Keyboard dismiss 하기
+                UIApplication.shared.endEditing()
+            }, label: {
+                Image(systemName: "keyboard.chevron.compact.down")
+                    .renderingMode(.template)
+                    .resizable()
+                    .foregroundColor(.gray400)
+                    .frame(width: 20, height: 20)
+                    .padding(.trailing, 20)
+            })
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .frame(maxWidth: .infinity)
-        
+        .background(Color.gray25)
+    }
+    
+    //MARK: - 작성 취소 얼럿
+    var alertWriteCancel: some View {
+        VStack(alignment: .center, spacing: 0) {
+            
+            Text("se_b_post_write_back".localized)
+                .foregroundColor(Color.gray870)
+                .font(.buttons1420Medium)
+                .multilineTextAlignment(.center)
+            
+            HStack {
+                CommonButton2(title: "a_no".localized, type: .defaults(), disabled: .constant(true))
+                    .padding(.trailing, 2)
+                    .onTapGesture {
+                        showWriteCancelView.toggle()
+                    }
+                
+                CommonButton(title: "a_yes".localized, bgColor: Color.blue)
+                    .padding(.leading, 2)
+                    .onTapGesture {
+                        showWriteCancelView.toggle()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+            }
+            .padding(.top, 24)
+        }
+        .padding(EdgeInsets(top: 37, leading: 32, bottom: 40, trailing: 32))
+        .background(Color.gray25.cornerRadius(24))
+        .shadow(color: .black.opacity(0.08), radius: 2, x: 0, y: 0)
+        .shadow(color: .black.opacity(0.16), radius: 24, x: 0, y: 0)
+        .padding(.horizontal, 50)
     }
     
 }
@@ -407,13 +455,16 @@ extension EditorPage {
     
     // 취소버튼 클릭시 검사
     func checkMinimalData() -> Bool {
-        return !currentKoreanTxt.isEmpty || !currentEnglishTxt.isEmpty
+        return selectedMainCategoryName.count>0 || selectedSubCategoryName.count>0 || currentKoreanTxt.count>0 || currentEnglishTxt.count>0
     }
     
     // 등록버튼 클릭시 검사
     func checkPostData() -> Bool {
-        if !currentKoreanTxt.isEmpty &&
-            !currentEnglishTxt.isEmpty {
+        if selectedMainCategoryName.count>0 && 
+            selectedSubCategoryName.count>0 &&
+            currentKoreanTxt.count>0 &&
+            currentEnglishTxt.count>0 
+        {
             return true
         }
         else {

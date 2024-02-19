@@ -42,6 +42,18 @@
 		E045E9D72B65A75B00E3BD60 /* JoinAgreeCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */; };
 		E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */; };
 		E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */; };
+		E063922C2B82DAC5003D0428 /* CommonButton2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063922B2B82DAC5003D0428 /* CommonButton2.swift */; };
+		E063922E2B82DAEF003D0428 /* CustomButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063922D2B82DAEF003D0428 /* CustomButtonStyle.swift */; };
+		E06392342B82FAFD003D0428 /* BottomPopupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392332B82FAFD003D0428 /* BottomPopupConfig.swift */; };
+		E06392362B82FB03003D0428 /* CentrePopupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392352B82FB03003D0428 /* CentrePopupConfig.swift */; };
+		E06392382B82FB0C003D0428 /* TopPopupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392372B82FB0C003D0428 /* TopPopupConfig.swift */; };
+		E063923A2B82FB14003D0428 /* PopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392392B82FB14003D0428 /* PopupManager.swift */; };
+		E063923C2B82FB1C003D0428 /* PopupBottomStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063923B2B82FB1C003D0428 /* PopupBottomStackView.swift */; };
+		E063923E2B82FB22003D0428 /* PopupCentreStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063923D2B82FB22003D0428 /* PopupCentreStackView.swift */; };
+		E06392402B82FB28003D0428 /* PopupTopStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063923F2B82FB28003D0428 /* PopupTopStackView.swift */; };
+		E06392422B82FB2E003D0428 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392412B82FB2E003D0428 /* PopupView.swift */; };
+		E06392442B82FB70003D0428 /* ConfigurableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392432B82FB70003D0428 /* ConfigurableProtocol.swift */; };
+		E06392462B82FB76003D0428 /* PopupProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392452B82FB76003D0428 /* PopupProtocol.swift */; };
 		E068E9702B68E49A00500585 /* Apis+LoginSNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */; };
 		E068E9722B68E4BE00500585 /* ApiControl+LoginSNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */; };
 		E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E071A05B2B6364F5009E5C9A /* PermissionPage.swift */; };
@@ -172,16 +184,6 @@
 		E0DBDE112B4FD03F007615A8 /* CustomBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE102B4FD03F007615A8 /* CustomBottomView.swift */; };
 		E0DBDE132B4FD04C007615A8 /* FollowAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE122B4FD04C007615A8 /* FollowAlertView.swift */; };
 		E0DBDE162B4FD069007615A8 /* CommonAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE152B4FD069007615A8 /* CommonAlertView.swift */; };
-		E0DBDE1C2B4FD094007615A8 /* BottomPopupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE1B2B4FD094007615A8 /* BottomPopupConfig.swift */; };
-		E0DBDE1E2B4FD0A9007615A8 /* CentrePopupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE1D2B4FD0A9007615A8 /* CentrePopupConfig.swift */; };
-		E0DBDE202B4FD0B7007615A8 /* TopPopupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE1F2B4FD0B7007615A8 /* TopPopupConfig.swift */; };
-		E0DBDE222B4FD0C4007615A8 /* PopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE212B4FD0C4007615A8 /* PopupManager.swift */; };
-		E0DBDE242B4FD0D1007615A8 /* ConfigurableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE232B4FD0D1007615A8 /* ConfigurableProtocol.swift */; };
-		E0DBDE262B4FD0DC007615A8 /* PopupProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE252B4FD0DC007615A8 /* PopupProtocol.swift */; };
-		E0DBDE282B4FD0E8007615A8 /* PopupBottomStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE272B4FD0E8007615A8 /* PopupBottomStackView.swift */; };
-		E0DBDE2A2B4FD0F3007615A8 /* PopupCentreStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE292B4FD0F3007615A8 /* PopupCentreStackView.swift */; };
-		E0DBDE2C2B4FD0FF007615A8 /* PopupTopStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE2B2B4FD0FF007615A8 /* PopupTopStackView.swift */; };
-		E0DBDE2E2B4FD10B007615A8 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE2D2B4FD10B007615A8 /* PopupView.swift */; };
 		E0DBDE332B4FD14E007615A8 /* LocationPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE322B4FD14E007615A8 /* LocationPermission.swift */; };
 		E0DBDE352B4FD159007615A8 /* CameraPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE342B4FD159007615A8 /* CameraPermission.swift */; };
 		E0DBDE392B4FD172007615A8 /* PermissionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDE382B4FD172007615A8 /* PermissionViewModel.swift */; };
@@ -252,6 +254,18 @@
 		E045E9D62B65A75B00E3BD60 /* JoinAgreeCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeCheckView.swift; sourceTree = "<group>"; };
 		E045E9D82B65A77D00E3BD60 /* JoinAgreeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinAgreeViewModel.swift; sourceTree = "<group>"; };
 		E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeViewModel.swift; sourceTree = "<group>"; };
+		E063922B2B82DAC5003D0428 /* CommonButton2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton2.swift; sourceTree = "<group>"; };
+		E063922D2B82DAEF003D0428 /* CustomButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonStyle.swift; sourceTree = "<group>"; };
+		E06392332B82FAFD003D0428 /* BottomPopupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPopupConfig.swift; sourceTree = "<group>"; };
+		E06392352B82FB03003D0428 /* CentrePopupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentrePopupConfig.swift; sourceTree = "<group>"; };
+		E06392372B82FB0C003D0428 /* TopPopupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPopupConfig.swift; sourceTree = "<group>"; };
+		E06392392B82FB14003D0428 /* PopupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupManager.swift; sourceTree = "<group>"; };
+		E063923B2B82FB1C003D0428 /* PopupBottomStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupBottomStackView.swift; sourceTree = "<group>"; };
+		E063923D2B82FB22003D0428 /* PopupCentreStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupCentreStackView.swift; sourceTree = "<group>"; };
+		E063923F2B82FB28003D0428 /* PopupTopStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupTopStackView.swift; sourceTree = "<group>"; };
+		E06392412B82FB2E003D0428 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
+		E06392432B82FB70003D0428 /* ConfigurableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableProtocol.swift; sourceTree = "<group>"; };
+		E06392452B82FB76003D0428 /* PopupProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupProtocol.swift; sourceTree = "<group>"; };
 		E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Apis+LoginSNS.swift"; sourceTree = "<group>"; };
 		E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+LoginSNS.swift"; sourceTree = "<group>"; };
 		E071A05B2B6364F5009E5C9A /* PermissionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionPage.swift; sourceTree = "<group>"; };
@@ -371,16 +385,6 @@
 		E0DBDE102B4FD03F007615A8 /* CustomBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBottomView.swift; sourceTree = "<group>"; };
 		E0DBDE122B4FD04C007615A8 /* FollowAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowAlertView.swift; sourceTree = "<group>"; };
 		E0DBDE152B4FD069007615A8 /* CommonAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonAlertView.swift; sourceTree = "<group>"; };
-		E0DBDE1B2B4FD094007615A8 /* BottomPopupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPopupConfig.swift; sourceTree = "<group>"; };
-		E0DBDE1D2B4FD0A9007615A8 /* CentrePopupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentrePopupConfig.swift; sourceTree = "<group>"; };
-		E0DBDE1F2B4FD0B7007615A8 /* TopPopupConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPopupConfig.swift; sourceTree = "<group>"; };
-		E0DBDE212B4FD0C4007615A8 /* PopupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupManager.swift; sourceTree = "<group>"; };
-		E0DBDE232B4FD0D1007615A8 /* ConfigurableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableProtocol.swift; sourceTree = "<group>"; };
-		E0DBDE252B4FD0DC007615A8 /* PopupProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupProtocol.swift; sourceTree = "<group>"; };
-		E0DBDE272B4FD0E8007615A8 /* PopupBottomStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupBottomStackView.swift; sourceTree = "<group>"; };
-		E0DBDE292B4FD0F3007615A8 /* PopupCentreStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupCentreStackView.swift; sourceTree = "<group>"; };
-		E0DBDE2B2B4FD0FF007615A8 /* PopupTopStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupTopStackView.swift; sourceTree = "<group>"; };
-		E0DBDE2D2B4FD10B007615A8 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		E0DBDE322B4FD14E007615A8 /* LocationPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermission.swift; sourceTree = "<group>"; };
 		E0DBDE342B4FD159007615A8 /* CameraPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermission.swift; sourceTree = "<group>"; };
 		E0DBDE382B4FD172007615A8 /* PermissionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionViewModel.swift; sourceTree = "<group>"; };
@@ -614,6 +618,44 @@
 				E0B3B1F92B7B62B40004C69E /* TabHomeMyLearningView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		E063922F2B82FACD003D0428 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E063923B2B82FB1C003D0428 /* PopupBottomStackView.swift */,
+				E063923D2B82FB22003D0428 /* PopupCentreStackView.swift */,
+				E063923F2B82FB28003D0428 /* PopupTopStackView.swift */,
+				E06392412B82FB2E003D0428 /* PopupView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E06392302B82FAD4003D0428 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E06392432B82FB70003D0428 /* ConfigurableProtocol.swift */,
+				E06392452B82FB76003D0428 /* PopupProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		E06392312B82FADB003D0428 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				E06392392B82FB14003D0428 /* PopupManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		E06392322B82FAE1003D0428 /* Configurables */ = {
+			isa = PBXGroup;
+			children = (
+				E06392332B82FAFD003D0428 /* BottomPopupConfig.swift */,
+				E06392352B82FB03003D0428 /* CentrePopupConfig.swift */,
+				E06392372B82FB0C003D0428 /* TopPopupConfig.swift */,
+			);
+			path = Configurables;
 			sourceTree = "<group>";
 		};
 		E071A05D2B63650D009E5C9A /* ViewModel */ = {
@@ -988,7 +1030,10 @@
 		E0DBDDD12B4FCE7A007615A8 /* NewPopup */ = {
 			isa = PBXGroup;
 			children = (
-				E0DBDE142B4FD05E007615A8 /* PopupView */,
+				E06392322B82FAE1003D0428 /* Configurables */,
+				E06392312B82FADB003D0428 /* Managers */,
+				E06392302B82FAD4003D0428 /* Protocols */,
+				E063922F2B82FACD003D0428 /* Views */,
 				E0DBDE152B4FD069007615A8 /* CommonAlertView.swift */,
 			);
 			path = NewPopup;
@@ -1067,6 +1112,8 @@
 			children = (
 				E0DBDDDB2B4FCEC4007615A8 /* PrimaryButton01.swift */,
 				E00FDAF12B5FDF660080761B /* CommonButton.swift */,
+				E063922B2B82DAC5003D0428 /* CommonButton2.swift */,
+				E063922D2B82DAEF003D0428 /* CustomButtonStyle.swift */,
 			);
 			path = CustomButton;
 			sourceTree = "<group>";
@@ -1115,55 +1162,6 @@
 				E0DBDE082B4FD003007615A8 /* CustomBottomSheetModel.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		E0DBDE142B4FD05E007615A8 /* PopupView */ = {
-			isa = PBXGroup;
-			children = (
-				E0DBDE1A2B4FD08A007615A8 /* Configurables */,
-				E0DBDE192B4FD083007615A8 /* Managers */,
-				E0DBDE182B4FD07D007615A8 /* Protocols */,
-				E0DBDE172B4FD076007615A8 /* Views */,
-			);
-			path = PopupView;
-			sourceTree = "<group>";
-		};
-		E0DBDE172B4FD076007615A8 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E0DBDE272B4FD0E8007615A8 /* PopupBottomStackView.swift */,
-				E0DBDE292B4FD0F3007615A8 /* PopupCentreStackView.swift */,
-				E0DBDE2B2B4FD0FF007615A8 /* PopupTopStackView.swift */,
-				E0DBDE2D2B4FD10B007615A8 /* PopupView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		E0DBDE182B4FD07D007615A8 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				E0DBDE232B4FD0D1007615A8 /* ConfigurableProtocol.swift */,
-				E0DBDE252B4FD0DC007615A8 /* PopupProtocol.swift */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
-		E0DBDE192B4FD083007615A8 /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				E0DBDE212B4FD0C4007615A8 /* PopupManager.swift */,
-			);
-			path = Managers;
-			sourceTree = "<group>";
-		};
-		E0DBDE1A2B4FD08A007615A8 /* Configurables */ = {
-			isa = PBXGroup;
-			children = (
-				E0DBDE1B2B4FD094007615A8 /* BottomPopupConfig.swift */,
-				E0DBDE1D2B4FD0A9007615A8 /* CentrePopupConfig.swift */,
-				E0DBDE1F2B4FD0B7007615A8 /* TopPopupConfig.swift */,
-			);
-			path = Configurables;
 			sourceTree = "<group>";
 		};
 		E0DBDE2F2B4FD138007615A8 /* ViewModel */ = {
@@ -1452,6 +1450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0DBDD8A2B4FC9F1007615A8 /* SliderModel.swift in Sources */,
+				E063922C2B82DAC5003D0428 /* CommonButton2.swift in Sources */,
 				E0DBDD392B4FB7F9007615A8 /* DefineKey.swift in Sources */,
 				E0DBDE462B4FD1F5007615A8 /* TabHomePage.swift in Sources */,
 				E0DBDD6D2B4FC928007615A8 /* ConfigManager.swift in Sources */,
@@ -1462,7 +1461,9 @@
 				E0DBDE0D2B4FD01D007615A8 /* BottomAlertView.swift in Sources */,
 				E0DBDDC02B4FCE01007615A8 /* UINavigationController+Extension.swift in Sources */,
 				E002E17A2B56E8D600F64CA4 /* Profile.swift in Sources */,
+				E06392382B82FB0C003D0428 /* TopPopupConfig.swift in Sources */,
 				E0DBDDBE2B4FCDF2007615A8 /* UILabel+Extension.swift in Sources */,
+				E06392462B82FB76003D0428 /* PopupProtocol.swift in Sources */,
 				E0DBDD962B4FCD05007615A8 /* UIWindow+Extension.swift in Sources */,
 				E0DBDDCA2B4FCE37007615A8 /* URL+Extension.swift in Sources */,
 				E0BDD4212B661673007D5742 /* PhoneNumberTextFieldStyle.swift in Sources */,
@@ -1470,37 +1471,34 @@
 				E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */,
 				E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */,
 				E002E1822B56E91400F64CA4 /* FlipView.swift in Sources */,
-				E0DBDE222B4FD0C4007615A8 /* PopupManager.swift in Sources */,
 				E0DBDDB02B4FCDA4007615A8 /* Shape+Extension.swift in Sources */,
 				E0DBDDF82B4FCF88007615A8 /* LoadingViewContainer.swift in Sources */,
 				E0DBDD6B2B4FC91D007615A8 /* PermissionManager.swift in Sources */,
 				E0DBDD822B4FC9C1007615A8 /* Apis+LoginJoin.swift in Sources */,
 				E0DBDD9E2B4FCD3A007615A8 /* Bool+Extension.swift in Sources */,
-				E0DBDE202B4FD0B7007615A8 /* TopPopupConfig.swift in Sources */,
 				E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */,
 				E0DBDDD62B4FCEA2007615A8 /* CustomKeyPad.swift in Sources */,
 				E0DBDE002B4FCFB5007615A8 /* ActivityIndicator.swift in Sources */,
 				E0DBDDB22B4FCDAE007615A8 /* Spacer+Extension.swift in Sources */,
 				E0F11EA32B80495B0014F503 /* EditorInputView.swift in Sources */,
 				E0DBDDAC2B4FCD8E007615A8 /* Int+Extension.swift in Sources */,
-				E0DBDE1E2B4FD0A9007615A8 /* CentrePopupConfig.swift in Sources */,
 				E0DBDD902B4FCA10007615A8 /* LoginJoinModel.swift in Sources */,
 				E0DBDDBA2B4FCDDB007615A8 /* UIFont+Extension.swift in Sources */,
 				E0DBDDB82B4FCDD0007615A8 /* UIColor+Extension.swift in Sources */,
 				E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */,
-				E0DBDE2C2B4FD0FF007615A8 /* PopupTopStackView.swift in Sources */,
 				E0DBDE112B4FD03F007615A8 /* CustomBottomView.swift in Sources */,
 				E0DBDE412B4FD1B1007615A8 /* LocationPage.swift in Sources */,
 				E0DBDDC82B4FCE2C007615A8 /* UIViewController+Extension.swift in Sources */,
 				E0DBDDAA2B4FCD81007615A8 /* Image+Extension.swift in Sources */,
 				E0DBDD942B4FCCFA007615A8 /* Bundle+Extension.swift in Sources */,
+				E06392362B82FB03003D0428 /* CentrePopupConfig.swift in Sources */,
+				E06392402B82FB28003D0428 /* PopupTopStackView.swift in Sources */,
 				E0DBDDFE2B4FCFA9007615A8 /* TranslateLoadingView.swift in Sources */,
 				E0DBDD7A2B4FC98C007615A8 /* ApiControl+LoginJoin.swift in Sources */,
 				E0DBDD782B4FC980007615A8 /* ApiControl+Swipe.swift in Sources */,
 				E0DBDDC42B4FCE17007615A8 /* UITextField+Extension.swift in Sources */,
 				E0DBDDF42B4FCF72007615A8 /* BarView.swift in Sources */,
 				E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */,
-				E0DBDE282B4FD0E8007615A8 /* PopupBottomStackView.swift in Sources */,
 				E016784C2B6257CD00943945 /* Apis+Login.swift in Sources */,
 				E0DBDD592B4FC890007615A8 /* DefineSize.swift in Sources */,
 				E0DBDDEA2B4FCF19007615A8 /* MultilineTextField.swift in Sources */,
@@ -1514,6 +1512,7 @@
 				E068E9702B68E49A00500585 /* Apis+LoginSNS.swift in Sources */,
 				E0DBDCFD2B4FB60F007615A8 /* ContentView.swift in Sources */,
 				E0DBDE482B4FD203007615A8 /* TabSwipeCardPage.swift in Sources */,
+				E06392442B82FB70003D0428 /* ConfigurableProtocol.swift in Sources */,
 				E0DBDE062B4FCFD9007615A8 /* TabBarAccessor.swift in Sources */,
 				E002E18D2B57BB0800F64CA4 /* LoginButtonView.swift in Sources */,
 				E0DBDDD02B4FCE66007615A8 /* ErrorHandler.swift in Sources */,
@@ -1532,10 +1531,10 @@
 				E0BDD41E2B6615A4007D5742 /* PhoneNumberLoginPage.swift in Sources */,
 				E0F11EA02B7F43F60014F503 /* EditorCategoryRowView.swift in Sources */,
 				E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */,
+				E06392342B82FAFD003D0428 /* BottomPopupConfig.swift in Sources */,
 				E0DBDE332B4FD14E007615A8 /* LocationPermission.swift in Sources */,
 				E0F11E9A2B7EF9CD0014F503 /* ToastView.swift in Sources */,
 				E0DBDD432B4FC661007615A8 /* DefineBottomSheet.swift in Sources */,
-				E0DBDE1C2B4FD094007615A8 /* BottomPopupConfig.swift in Sources */,
 				E0DBDE022B4FCFBF007615A8 /* PageableScrollView.swift in Sources */,
 				E0DBDD3D2B4FC636007615A8 /* DefineUrl.swift in Sources */,
 				E0DBDD6F2B4FC93B007615A8 /* CommonFunction.swift in Sources */,
@@ -1543,21 +1542,21 @@
 				E0DBDDB42B4FCDBB007615A8 /* UIApplication+Extension.swift in Sources */,
 				E0DBDDEE2B4FCF36007615A8 /* CustomNavigationButton.swift in Sources */,
 				E0DBDD802B4FC9B4007615A8 /* Apis+Swipe.swift in Sources */,
+				E06392422B82FB2E003D0428 /* PopupView.swift in Sources */,
 				E0DBDD652B4FC8F9007615A8 /* BottomSheetManager.swift in Sources */,
 				E0DBDE092B4FD003007615A8 /* CustomBottomSheetModel.swift in Sources */,
 				E0DBDE352B4FD159007615A8 /* CameraPermission.swift in Sources */,
 				E002E1862B56E93600F64CA4 /* CircleProgressBarView.swift in Sources */,
 				E002E1882B56E94700F64CA4 /* StampView.swift in Sources */,
 				E01678502B62580500943945 /* LoginModel.swift in Sources */,
-				E0DBDE2E2B4FD10B007615A8 /* PopupView.swift in Sources */,
 				E0DBDE132B4FD04C007615A8 /* FollowAlertView.swift in Sources */,
 				E0DBDE3D2B4FD194007615A8 /* LoginPage.swift in Sources */,
 				E0DBDDAE2B4FCD9A007615A8 /* NSObject_Extension.swift in Sources */,
 				E0DBDE3B2B4FD17D007615A8 /* LoginViewModel.swift in Sources */,
 				E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */,
+				E063923C2B82FB1C003D0428 /* PopupBottomStackView.swift in Sources */,
 				E0DBDD982B4FCD10007615A8 /* Array+Extension.swift in Sources */,
 				E045E9CF2B65A69C00E3BD60 /* JoinPasswordPage.swift in Sources */,
-				E0DBDE242B4FD0D1007615A8 /* ConfigurableProtocol.swift in Sources */,
 				E0DBDD672B4FC906007615A8 /* RefreshManager.swift in Sources */,
 				E0DBDD842B4FC9CE007615A8 /* ConfigModel.swift in Sources */,
 				E0DBDD8E2B4FCA05007615A8 /* RecordingModel.swift in Sources */,
@@ -1565,6 +1564,7 @@
 				E002E17E2B56E8F200F64CA4 /* SwipeView.swift in Sources */,
 				E0DBDCFB2B4FB60F007615A8 /* SecondEnglishApp.swift in Sources */,
 				E00FDAFC2B5FE0440080761B /* JoinEmailPage.swift in Sources */,
+				E063923E2B82FB22003D0428 /* PopupCentreStackView.swift in Sources */,
 				E0DBDDF62B4FCF7D007615A8 /* LoadingView.swift in Sources */,
 				E0DBDDA22B4FCD53007615A8 /* Color+Extension.swift in Sources */,
 				E0F11E9E2B7F3C5D0014F503 /* EditorCategoryView.swift in Sources */,
@@ -1579,7 +1579,6 @@
 				E0DBDDB62B4FCDC5007615A8 /* UIButton+Extension.swift in Sources */,
 				E045E9D72B65A75B00E3BD60 /* JoinAgreeCheckView.swift in Sources */,
 				E0DBDDEC2B4FCF28007615A8 /* CustomNavigationBar.swift in Sources */,
-				E0DBDE262B4FD0DC007615A8 /* PopupProtocol.swift in Sources */,
 				E0DBDD9A2B4FCD1C007615A8 /* AVPlayer+Extension.swift in Sources */,
 				E0DBDDCE2B4FCE4C007615A8 /* Sequence+Extension.swift in Sources */,
 				E0DBDDA62B4FCD69007615A8 /* Dictionary+Extension.swift in Sources */,
@@ -1590,7 +1589,6 @@
 				E002E1782B56E83500F64CA4 /* SwipeCardViewModel.swift in Sources */,
 				E0DBDD692B4FC912007615A8 /* TabManager.swift in Sources */,
 				E0DBDD412B4FC652007615A8 /* Define.swift in Sources */,
-				E0DBDE2A2B4FD0F3007615A8 /* PopupCentreStackView.swift in Sources */,
 				E002E18B2B57BAFD00F64CA4 /* LoginEmailView.swift in Sources */,
 				E068E9722B68E4BE00500585 /* ApiControl+LoginSNS.swift in Sources */,
 				E0DBDDE82B4FCF0D007615A8 /* ExpandingTextView.swift in Sources */,
@@ -1600,6 +1598,7 @@
 				E0DBDDFA2B4FCF93007615A8 /* LoadingViewInPage.swift in Sources */,
 				E071A0642B63654C009E5C9A /* PermissionText.swift in Sources */,
 				E0002F3E2B7DF4EA0018D9CD /* EditorPage.swift in Sources */,
+				E063922E2B82DAEF003D0428 /* CustomButtonStyle.swift in Sources */,
 				E0DBDD762B4FC972007615A8 /* ApiControl+Slider.swift in Sources */,
 				E016784E2B6257E600943945 /* ApiControl+Login.swift in Sources */,
 				E0DBDD5D2B4FC8B6007615A8 /* UserManager.swift in Sources */,
@@ -1611,6 +1610,7 @@
 				E0DBDDDC2B4FCEC4007615A8 /* PrimaryButton01.swift in Sources */,
 				E0DBDD5B2B4FC8A9007615A8 /* LanguageManager.swift in Sources */,
 				E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */,
+				E063923A2B82FB14003D0428 /* PopupManager.swift in Sources */,
 				E002E1842B56E92600F64CA4 /* SwipeCardBackView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

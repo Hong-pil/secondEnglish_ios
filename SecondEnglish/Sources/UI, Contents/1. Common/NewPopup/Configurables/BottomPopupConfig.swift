@@ -2,7 +2,7 @@
 //  BottomPopupConfig.swift
 //  SecondEnglish
 //
-//  Created by kimhongpil on 1/11/24.
+//  Created by kimhongpil on 2/19/24.
 //
 
 //
@@ -31,6 +31,7 @@ public extension BottomPopupConfig {
     func dragGestureProgressToClose(_ value: CGFloat) -> Self { changing(path: \.dragGestureProgressToClose, to: value) }
     func dragGestureAnimation(_ value: Animation) -> Self { changing(path: \.dragGestureAnimation, to: value) }
     func transitionAnimation(_ value: Animation) -> Self { changing(path: \.transitionAnimation, to: value) }
+    func tapOutsideHandler(_ value: @escaping () -> Void) -> Self { changing(path: \.tapOutsideHandler, to: value) }
 }
 public struct BottomPopupConfig: Configurable {
     var backgroundColour: Color = .white
@@ -46,4 +47,5 @@ public struct BottomPopupConfig: Configurable {
     var dragGestureProgressToClose: CGFloat = 1/3
     var dragGestureAnimation: Animation = .interactiveSpring()
     var transitionAnimation: Animation = .spring(response: 0.44, dampingFraction: 1, blendDuration: 0.4)
+    var tapOutsideHandler: () -> Void = {}
 }

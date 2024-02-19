@@ -1,12 +1,12 @@
 //
-//  PopupTopStackView.swift
+//  PopupBottomStackView.swift
 //  SecondEnglish
 //
-//  Created by kimhongpil on 1/11/24.
+//  Created by kimhongpil on 2/19/24.
 //
 
 //
-//  PopupTopStackView.swift of PopupView
+//  PopupBottomStackView.swift of PopupView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -17,54 +17,60 @@
 
 import SwiftUI
 
-struct PopupTopStackView: View {
-    let items: [AnyPopup<TopPopupConfig>]
-    @State private var heights: [AnyPopup<TopPopupConfig>: CGFloat] = [:]
+struct PopupBottomStackView: View {
+    let items: [AnyPopup<BottomPopupConfig>]
+    @State private var heights: [AnyPopup<BottomPopupConfig>: CGFloat] = [:]
     @State private var gestureTranslation: CGFloat = 0
 
 
     var body: some View {
-        ZStack(alignment: .bottom, content: createPopupStack)
+        ZStack(alignment: .top, content: createPopupStack)
+            .background(createTapArea())
             .ignoresSafeArea()
             .animation(transitionAnimation, value: items)
             .animation(transitionAnimation, value: heights)
             .animation(dragGestureAnimation, value: gestureTranslation)
-            .simultaneousGesture(popupDragGesture)
+            .gesture(popupDragGesture)
     }
 }
 
-private extension PopupTopStackView {
+private extension PopupBottomStackView {
     func createPopupStack() -> some View {
         ForEach(items, id: \.self, content: createPopup)
     }
 }
 
-private extension PopupTopStackView {
-    func createPopup(_ item: AnyPopup<TopPopupConfig>) -> some View {
+private extension PopupBottomStackView {
+    func createPopup(_ item: AnyPopup<BottomPopupConfig>) -> some View {
         item.body
-            .padding(.top, contentTopPadding)
+            .padding(.bottom, contentBottomPadding)
             .readHeight { saveHeight($0, for: item) }
             .frame(width: width, height: height)
             .background(backgroundColour)
             .cornerRadius(getCornerRadius(for: item))
             .opacity(getOpacity(for: item))
             .offset(y: getOffset(for: item))
-            .scaleEffect(getScale(for: item), anchor: .bottom)
-            .alignToTop(topPadding)
+            .scaleEffect(getScale(for: item), anchor: .top)
+            .alignToBottom(bottomPadding)
             .transition(transition)
             .zIndex(isLast(item).doubleValue)
+    }
+    
+    func createTapArea() -> some View {
+        Color.black.opacity(0.00000000001)
+            .onTapGesture(perform: config.tapOutsideHandler)
     }
 }
 
 // MARK: -Gesture Handler
-private extension PopupTopStackView {
+private extension PopupBottomStackView {
     var popupDragGesture: some Gesture {
         DragGesture()
             .onChanged(onPopupDragGestureChanged)
             .onEnded(onPopupDragGestureEnded)
     }
     func onPopupDragGestureChanged(_ value: DragGesture.Value) {
-        gestureTranslation = min(0, value.translation.height)
+        gestureTranslation = max(0, value.translation.height)
     }
     func onPopupDragGestureEnded(_ value: DragGesture.Value) {
         if translationProgress() >= gestureClosingThresholdFactor { items.last?.dismiss() }
@@ -73,8 +79,8 @@ private extension PopupTopStackView {
 }
 
 // MARK: -View Handlers
-private extension PopupTopStackView {
-    func getCornerRadius(for item: AnyPopup<TopPopupConfig>) -> CGFloat {
+private extension PopupBottomStackView {
+    func getCornerRadius(for item: AnyPopup<BottomPopupConfig>) -> CGFloat {
         if isLast(item) { return cornerRadius.active }
         if gestureTranslation.isZero || !isNextToLast(item) { return cornerRadius.inactive }
 
@@ -82,7 +88,7 @@ private extension PopupTopStackView {
         let differenceProgress = difference * translationProgress()
         return cornerRadius.inactive + differenceProgress
     }
-    func getOpacity(for item: AnyPopup<TopPopupConfig>) -> Double {
+    func getOpacity(for item: AnyPopup<BottomPopupConfig>) -> Double {
         if isLast(item) { return 1 }
         if gestureTranslation.isZero { return  1 - invertedIndex(of: item).doubleValue * opacityFactor }
 
@@ -90,7 +96,7 @@ private extension PopupTopStackView {
         let progressDifference = isNextToLast(item) ? 1 - translationProgress() : max(0.6, 1 - translationProgress())
         return 1 - scaleValue * progressDifference
     }
-    func getScale(for item: AnyPopup<TopPopupConfig>) -> CGFloat {
+    func getScale(for item: AnyPopup<BottomPopupConfig>) -> CGFloat {
         if isLast(item) { return 1 }
         if gestureTranslation.isZero { return  1 - invertedIndex(of: item).floatValue * scaleFactor }
 
@@ -98,31 +104,44 @@ private extension PopupTopStackView {
         let progressDifference = isNextToLast(item) ? 1 - translationProgress() : max(0.7, 1 - translationProgress())
         return 1 - scaleValue * progressDifference
     }
-    func getOffset(for item: AnyPopup<TopPopupConfig>) -> CGFloat { isLast(item) ? gestureTranslation : invertedIndex(of: item).floatValue * offsetFactor }
-    func saveHeight(_ height: CGFloat, for item: AnyPopup<TopPopupConfig>) { heights[item] = height }
+    func saveHeight(_ height: CGFloat, for item: AnyPopup<BottomPopupConfig>) {
+        switch config.contentFillsWholeHeight {
+            case true: heights[item] = getMaxHeight()
+            case false: heights[item] = min(height, getMaxHeight() - bottomPadding)
+        }
+    }
+    func getMaxHeight() -> CGFloat {
+        let basicHeight = UIScreen.height - UIScreen.safeArea.top
+        let stackedViewsCount = min(max(0, config.maxStackedElements - 1), items.count - 1)
+        let stackedViewsHeight = config.stackedViewsOffset * .init(stackedViewsCount) * maxHeightStackedFactor
+        return basicHeight - stackedViewsHeight + maxHeightFactor
+    }
+    func getOffset(for item: AnyPopup<BottomPopupConfig>) -> CGFloat { isLast(item) ? gestureTranslation : invertedIndex(of: item).floatValue * offsetFactor }
 }
 
-private extension PopupTopStackView {
+private extension PopupBottomStackView {
     func translationProgress() -> CGFloat { abs(gestureTranslation) / height }
-    func isLast(_ item: AnyPopup<TopPopupConfig>) -> Bool { items.last == item }
-    func isNextToLast(_ item: AnyPopup<TopPopupConfig>) -> Bool { index(of: item) == items.count - 2 }
-    func invertedIndex(of item: AnyPopup<TopPopupConfig>) -> Int { items.count - 1 - index(of: item) }
-    func index(of item: AnyPopup<TopPopupConfig>) -> Int { items.firstIndex(of: item) ?? 0 }
+    func isLast(_ item: AnyPopup<BottomPopupConfig>) -> Bool { items.last == item }
+    func isNextToLast(_ item: AnyPopup<BottomPopupConfig>) -> Bool { index(of: item) == items.count - 2 }
+    func invertedIndex(of item: AnyPopup<BottomPopupConfig>) -> Int { items.count - 1 - index(of: item) }
+    func index(of item: AnyPopup<BottomPopupConfig>) -> Int { items.firstIndex(of: item) ?? 0 }
 }
 
-private extension PopupTopStackView {
-    var contentTopPadding: CGFloat { config.contentIgnoresSafeArea ? 0 : max(UIScreen.safeArea.top - config.topPadding, 0) }
-    var topPadding: CGFloat { config.topPadding }
+private extension PopupBottomStackView {
+    var contentBottomPadding: CGFloat { config.contentIgnoresSafeArea ? 0 : max(UIScreen.safeArea.bottom - config.bottomPadding, 0) }
+    var bottomPadding: CGFloat { config.bottomPadding }
     var width: CGFloat { UIScreen.width - config.horizontalPadding * 2 }
     var height: CGFloat { heights.first { $0.key == items.last }?.value ?? 0 }
+    var maxHeightFactor: CGFloat { 12 }
+    var maxHeightStackedFactor: CGFloat { 0.85 }
     var opacityFactor: Double { 1 / config.maxStackedElements.doubleValue }
-    var offsetFactor: CGFloat { config.stackedViewsOffset }
+    var offsetFactor: CGFloat { -config.stackedViewsOffset }
     var scaleFactor: CGFloat { config.stackedViewsScale }
     var cornerRadius: (active: CGFloat, inactive: CGFloat) { (config.activeViewCornerRadius, config.stackedViewsCornerRadius) }
     var backgroundColour: Color { config.backgroundColour }
     var transitionAnimation: Animation { config.transitionAnimation }
     var dragGestureAnimation: Animation { config.dragGestureAnimation }
     var gestureClosingThresholdFactor: CGFloat { config.dragGestureProgressToClose }
-    var transition: AnyTransition { .move(edge: .top) }
-    var config: TopPopupConfig { items.last?.configurePopup(popup: .init()) ?? .init() }
+    var transition: AnyTransition { .move(edge: .bottom) }
+    var config: BottomPopupConfig { items.last?.configurePopup(popup: .init()) ?? .init() }
 }
