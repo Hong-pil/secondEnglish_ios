@@ -442,6 +442,25 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    //MARK: - 카드 신고하기
+    func reportCard(isSuccess: @escaping(Bool) -> Void) {
+        
+    }
+    
+    //MARK: - 카드 차단하기
+    func blockCard(isSuccess: @escaping(Bool) -> Void) {
+        
+    }
+    
+    //MARK: - 유저 차단하기
+    func blockUser(isSuccess: @escaping(Bool) -> Void) {
+        
+    }
+    
+    
+    
+    
+    
     
     
     

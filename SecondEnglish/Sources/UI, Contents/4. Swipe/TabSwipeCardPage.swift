@@ -188,7 +188,10 @@ extension TabSwipeCardPage: View {
             switch bottomSheetManager.pressedCardMorType {
             case .Report:
                 // 한 번 호출했으면 더 이상 가져오지 않음
-                if DefineBottomSheet.reportListItems.count==0 {
+                if DefineBottomSheet.reportListItems.count > 0 {
+                    bottomSheetManager.show.swipeCardReport = true
+                }
+                else if DefineBottomSheet.reportListItems.count == 0 {
                     viewModel.requestReportList(isSuccess: { list, isSuccess in
                         if isSuccess {
                             DefineBottomSheet.reportListItems = list
@@ -198,15 +201,37 @@ extension TabSwipeCardPage: View {
                     })
                 }
             case .BoardBlock:
-                fLog("idpil::: 글 차단 눌렀음")
+                viewModel.blockCard() { isSuccess in
+                    if isSuccess {
+                        //
+                    }
+                }
             case .UserBlock:
-                fLog("idpil::: 유저 차단 눌렀음")
+                viewModel.blockUser() { isSuccess in
+                    if isSuccess {
+                        //
+                    }
+                }
             default:
                 fLog("")
             }
             
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
             bottomSheetManager.pressedCardMorType = .None
+        }
+        .onChange(of: bottomSheetManager.pressedCardReportCode) {
+            if bottomSheetManager.pressedCardReportCode != -1 {
+                fLog("idpil::: 신고하기 누른 코드값 : \(bottomSheetManager.pressedCardReportCode)")
+                
+                viewModel.reportCard() { isSuccess in
+                    if isSuccess {
+                        //
+                    }
+                }
+            }
+            
+            // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
+            bottomSheetManager.pressedCardReportCode = -1
         }
     }
 

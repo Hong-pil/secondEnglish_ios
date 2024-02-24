@@ -28,12 +28,11 @@ struct ContentViewPopup: ViewModifier {
             // Swipe Tab -> 카드 더보기
             .bottomSheet(
                 isPresented: $bottomSheetManager.show.swipeCardMore,
-                height: BottomSheetInfo.middleHeight,
+                height: self.getPopupHeight(type: CustomBottomSheetClickType.SwipeCardMore),
                 topBarCornerRadius: DefineSize.CornerRadius.BottomSheet,
                 content: {
                     CustomBottomView(
-                        title: "a_language_filter".localized,
-                        //title: "", // 제목없는 팝업뷰 테스트
+                        title: "", // 제목없는 팝업뷰
                         type: CustomBottomSheetClickType.SwipeCardMore,
                         onPressItemMore: { buttonType in
                             //fLog("\n--- \(buttonType) ---\n")
@@ -46,12 +45,11 @@ struct ContentViewPopup: ViewModifier {
             // Swipe Tab -> 카드 더보기 - 신고하기
             .bottomSheet(
                 isPresented: $bottomSheetManager.show.swipeCardReport,
-                height: BottomSheetInfo.middleHeight,
+                height: self.getPopupHeight(type: CustomBottomSheetClickType.SwipeCardReport),
                 topBarCornerRadius: DefineSize.CornerRadius.BottomSheet,
                 content: {
                     CustomBottomView(
-                        title: "a_language_filter".localized,
-                        //title: "", // 제목없는 팝업뷰 테스트
+                        title: "", // 제목없는 팝업뷰
                         type: CustomBottomSheetClickType.SwipeCardReport,
                         onPressItemReportCode: { reportCode in
                             //fLog("\n--- \(reportCode) ---\n")
@@ -64,12 +62,14 @@ struct ContentViewPopup: ViewModifier {
         
     }
     
-    func getPopupHeight() -> CGFloat {
+    func getPopupHeight(type: CustomBottomSheetClickType) -> CGFloat {
         var finalHeight: CGFloat = 0.0
         
-        switch bottomSheetManager.customBottomSheetClickType {
+        switch type {
         case .SwipeCardMore:
             finalHeight = self.defineSize(isTitleEmpty: true, size: DefineBottomSheet.cardMoreItem.count)
+        case .SwipeCardReport:
+            finalHeight = self.defineSize(isTitleEmpty: true, size: DefineBottomSheet.reportListItems.count)
 
         default:
             finalHeight = 100
@@ -82,21 +82,23 @@ struct ContentViewPopup: ViewModifier {
         if size > 0 {
             switch size {
             case 1...3:
-                finalHeight = CGFloat(size) * 75.0
+                finalHeight = 200.0
             case 4...6:
-                finalHeight = CGFloat(size) * 57.0
+                finalHeight = 330.0
             case 7...9:
-                finalHeight = CGFloat(size) * 55.0
+                finalHeight = 450.0
             case 10...12:
-                finalHeight = CGFloat(size) * 53.0
-            case 13..<15:
-                finalHeight = CGFloat(size) * 51.0
-            case 16..<20:
-                finalHeight = CGFloat(size) * 45.0
+                finalHeight = 580.0
+            case 13...15:
+                finalHeight = 700.0
+            case 16..<18:
+                finalHeight = 810.0
             default:
                 finalHeight = .infinity
             }
         }
+        
+        
         
         // 팝업 상단 타이틀이 있는 경우 -> 타이틀 높이를 더해줌
         if !isTitleEmpty {
