@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "editor_post_loading.json",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

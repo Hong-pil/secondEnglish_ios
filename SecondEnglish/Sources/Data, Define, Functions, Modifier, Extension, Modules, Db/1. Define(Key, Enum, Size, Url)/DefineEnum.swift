@@ -18,6 +18,12 @@ enum TokenResponseType: Int {
     case ExpiredRefreshToken
 }
 
+enum EditorPostCheckType {
+    case IsThereEmptySentence
+    case IsCategoryEmpty
+    case CheckOK
+}
+
 enum bTab {
     case my
     case swipe_card
@@ -353,6 +359,7 @@ enum LandingPageEnum: Int {
     case ReplyCommunity
     case WebView
     case Minute
+    case SwipePage
 }
 
 enum SwipeCardSortType: Int {

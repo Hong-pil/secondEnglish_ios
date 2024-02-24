@@ -45,8 +45,6 @@ class SwipeCardViewModel: ObservableObject {
 //            fLog("idpil::: Work Completed!")
 //        }
         
-        
-        
         NotificationCenter.default.addObserver(self, selector: #selector(adjustMovedCategoryData(_:)),
                                                name: NSNotification.Name(rawValue: DefineNotification.moveToSwipeTab),
                                                object: nil)
@@ -58,7 +56,6 @@ class SwipeCardViewModel: ObservableObject {
     
     @objc func adjustMovedCategoryData(_ notification: Notification) {
         if let categoryIdx:Int = notification.userInfo![DefineKey.swipeViewCategoryIdx] as? Int {
-            
             
             self.categoryTabIndex = categoryIdx
             self.moveCategoryTab = true
@@ -141,6 +138,8 @@ class SwipeCardViewModel: ObservableObject {
                     
                     // 카테고리별 영어문장 데이터
                     if self.categoryList.count > 0 {
+                        
+                        // 카테고리별 영어문장 조회
                         self.requestSwipeListByCategory(
                             category: self.categoryList[self.categoryTabIndex], // 첫 카테고리로 시작
                             sortType: .Latest,
@@ -385,8 +384,8 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     //MARK: - 내가 좋아요한 카드 리스트 조회
-    func requestMyCardList(uid: String, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getMyCardList(uid: uid)
+    func requestMyCardList(isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getMyCardList()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
@@ -416,14 +415,37 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    //MARK: - 신고하기 카테고리 리스트 조회
+    func requestReportList(isSuccess: @escaping([ReportListData], Bool) -> Void) {
+        ApiControl.getReportList()
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess([], false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    
+                    isSuccess(value.data, true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
     
     
     
     
-    
-    
-    
-    
+    //MARK: - 함수 모음
     func setIsFirstLoadFalse() {
         self.isFirstLoad = false
     }

@@ -26,6 +26,9 @@
 		E002E1B92B5A47CD00F64CA4 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = E002E1B82B5A47CD00F64CA4 /* GoogleSignIn */; };
 		E002E1BB2B5A47CD00F64CA4 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E002E1BA2B5A47CD00F64CA4 /* GoogleSignInSwift */; };
 		E002E1BF2B5A49EB00F64CA4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E002E1BE2B5A49EB00F64CA4 /* GoogleService-Info.plist */; };
+		E003BA9A2B8605B300C55590 /* NetworkMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */; };
+		E003BA9C2B86200D00C55590 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9B2B86200D00C55590 /* Authenticator.swift */; };
+		E003BA9F2B863B1700C55590 /* UserNamePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9E2B863B1700C55590 /* UserNamePage.swift */; };
 		E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */; };
 		E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF12B5FDF660080761B /* CommonButton.swift */; };
 		E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */; };
@@ -62,6 +65,7 @@
 		E085DDC02B5113DD00CF44A8 /* secondEnglish_loading.png in Resources */ = {isa = PBXBuildFile; fileRef = E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */; };
 		E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC12B51519800CF44A8 /* AppDelegate.swift */; };
 		E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */; };
+		E093EFB72B89EE7C0043AD43 /* ContentView+Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E093EFB62B89EE7C0043AD43 /* ContentView+Popup.swift */; };
 		E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E098DE992B70760A000059B3 /* CustomScrollView.swift */; };
 		E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */; };
 		E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */; };
@@ -84,6 +88,7 @@
 		E0C0D7C52B4FE9A600A7C01B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7C42B4FE9A600A7C01B /* Lottie */; };
 		E0C0D7C82B4FE9B000A7C01B /* ExyteMediaPicker in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7C72B4FE9B000A7C01B /* ExyteMediaPicker */; };
 		E0C0D7CB2B4FE9B900A7C01B /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7CA2B4FE9B900A7C01B /* BottomSheet */; };
+		E0CF069C2B8748920009C02C /* CustomBubbleShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0CF069B2B8748920009C02C /* CustomBubbleShape.swift */; };
 		E0DBDCFB2B4FB60F007615A8 /* SecondEnglishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */; };
 		E0DBDCFD2B4FB60F007615A8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */; };
 		E0DBDCFF2B4FB610007615A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDCFE2B4FB610007615A8 /* Assets.xcassets */; };
@@ -239,6 +244,9 @@
 		E002E18C2B57BB0800F64CA4 /* LoginButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButtonView.swift; sourceTree = "<group>"; };
 		E002E1962B57C20400F64CA4 /* SnsLoginControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnsLoginControl.swift; sourceTree = "<group>"; };
 		E002E1BE2B5A49EB00F64CA4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitorManager.swift; sourceTree = "<group>"; };
+		E003BA9B2B86200D00C55590 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
+		E003BA9E2B863B1700C55590 /* UserNamePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNamePage.swift; sourceTree = "<group>"; };
 		E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginPage.swift; sourceTree = "<group>"; };
 		E00FDAF12B5FDF660080761B /* CommonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton.swift; sourceTree = "<group>"; };
 		E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Modifier.swift"; sourceTree = "<group>"; };
@@ -274,6 +282,7 @@
 		E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = secondEnglish_loading.png; sourceTree = "<group>"; };
 		E085DDC12B51519800CF44A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Alert.swift"; sourceTree = "<group>"; };
+		E093EFB62B89EE7C0043AD43 /* ContentView+Popup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Popup.swift"; sourceTree = "<group>"; };
 		E098DE992B70760A000059B3 /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
 		E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeControlPanel.swift; sourceTree = "<group>"; };
 		E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeCardView.swift; sourceTree = "<group>"; };
@@ -281,6 +290,7 @@
 		E0BA02502B5E875400AA11A5 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberLoginPage.swift; sourceTree = "<group>"; };
 		E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberTextFieldStyle.swift; sourceTree = "<group>"; };
+		E0CF069B2B8748920009C02C /* CustomBubbleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBubbleShape.swift; sourceTree = "<group>"; };
 		E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondEnglish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondEnglishApp.swift; sourceTree = "<group>"; };
 		E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -479,6 +489,7 @@
 				E0BDD41C2B66153E007D5742 /* 2. PhoneNumberLoginPage */,
 				E002E18F2B57BBFC00F64CA4 /* 3. EmailLoginPage - 이메일로 로그인하기 */,
 				E002E1902B57BC2700F64CA4 /* 4. FindPassword */,
+				E003BA9D2B863AC500C55590 /* 5. AddUserName */,
 			);
 			path = "1. Login";
 			sourceTree = "<group>";
@@ -537,6 +548,15 @@
 				E002E1962B57C20400F64CA4 /* SnsLoginControl.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		E003BA9D2B863AC500C55590 /* 5. AddUserName */ = {
+			isa = PBXGroup;
+			children = (
+				E0CF069A2B87487E0009C02C /* View */,
+				E003BA9E2B863B1700C55590 /* UserNamePage.swift */,
+			);
+			path = "5. AddUserName";
 			sourceTree = "<group>";
 		};
 		E00FDAF72B5FE01D0080761B /* 4. Agree - 회원가입 마지막단계 */ = {
@@ -695,6 +715,14 @@
 			isa = PBXGroup;
 			children = (
 				E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E0CF069A2B87487E0009C02C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E0CF069B2B8748920009C02C /* CustomBubbleShape.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -884,6 +912,7 @@
 				E0DBDD722B4FC95C007615A8 /* ApiControl */,
 				E0DBDD712B4FC955007615A8 /* Apis */,
 				E0DBDD702B4FC94E007615A8 /* Model */,
+				E003BA9B2B86200D00C55590 /* Authenticator.swift */,
 			);
 			path = "4. Api, Codables";
 			sourceTree = "<group>";
@@ -910,6 +939,7 @@
 				E0DBDD682B4FC912007615A8 /* TabManager.swift */,
 				E0DBDD6A2B4FC91D007615A8 /* PermissionManager.swift */,
 				E0DBDD6C2B4FC928007615A8 /* ConfigManager.swift */,
+				E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */,
 			);
 			path = "2. Manager";
 			sourceTree = "<group>";
@@ -935,6 +965,7 @@
 				E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */,
 				E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */,
 				E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */,
+				E093EFB62B89EE7C0043AD43 /* ContentView+Popup.swift */,
 			);
 			name = "100. Root - 앱이 처음 시작하는 곳";
 			path = "100. Root - 앱이 처음 시작하는 곳";
@@ -1512,6 +1543,7 @@
 				E068E9702B68E49A00500585 /* Apis+LoginSNS.swift in Sources */,
 				E0DBDCFD2B4FB60F007615A8 /* ContentView.swift in Sources */,
 				E0DBDE482B4FD203007615A8 /* TabSwipeCardPage.swift in Sources */,
+				E0CF069C2B8748920009C02C /* CustomBubbleShape.swift in Sources */,
 				E06392442B82FB70003D0428 /* ConfigurableProtocol.swift in Sources */,
 				E0DBDE062B4FCFD9007615A8 /* TabBarAccessor.swift in Sources */,
 				E002E18D2B57BB0800F64CA4 /* LoginButtonView.swift in Sources */,
@@ -1547,6 +1579,7 @@
 				E0DBDE092B4FD003007615A8 /* CustomBottomSheetModel.swift in Sources */,
 				E0DBDE352B4FD159007615A8 /* CameraPermission.swift in Sources */,
 				E002E1862B56E93600F64CA4 /* CircleProgressBarView.swift in Sources */,
+				E003BA9F2B863B1700C55590 /* UserNamePage.swift in Sources */,
 				E002E1882B56E94700F64CA4 /* StampView.swift in Sources */,
 				E01678502B62580500943945 /* LoginModel.swift in Sources */,
 				E0DBDE132B4FD04C007615A8 /* FollowAlertView.swift in Sources */,
@@ -1554,6 +1587,7 @@
 				E0DBDDAE2B4FCD9A007615A8 /* NSObject_Extension.swift in Sources */,
 				E0DBDE3B2B4FD17D007615A8 /* LoginViewModel.swift in Sources */,
 				E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */,
+				E093EFB72B89EE7C0043AD43 /* ContentView+Popup.swift in Sources */,
 				E063923C2B82FB1C003D0428 /* PopupBottomStackView.swift in Sources */,
 				E0DBDD982B4FCD10007615A8 /* Array+Extension.swift in Sources */,
 				E045E9CF2B65A69C00E3BD60 /* JoinPasswordPage.swift in Sources */,
@@ -1570,6 +1604,7 @@
 				E0F11E9E2B7F3C5D0014F503 /* EditorCategoryView.swift in Sources */,
 				E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */,
 				E01678522B62584B00943945 /* Check.swift in Sources */,
+				E003BA9A2B8605B300C55590 /* NetworkMonitorManager.swift in Sources */,
 				E0DBDD7C2B4FC99B007615A8 /* Apis.swift in Sources */,
 				E0DBDD3F2B4FC643007615A8 /* DefineEnum.swift in Sources */,
 				E0DBDE0F2B4FD02C007615A8 /* CustomAlertView.swift in Sources */,
@@ -1603,6 +1638,7 @@
 				E016784E2B6257E600943945 /* ApiControl+Login.swift in Sources */,
 				E0DBDD5D2B4FC8B6007615A8 /* UserManager.swift in Sources */,
 				E0DBDDBC2B4FCDE7007615A8 /* UIImage+Extension.swift in Sources */,
+				E003BA9C2B86200D00C55590 /* Authenticator.swift in Sources */,
 				E0DBDDCC2B4FCE41007615A8 /* View+Extension.swift in Sources */,
 				E0DBDDA02B4FCD48007615A8 /* CALayer+Extension.swift in Sources */,
 				E0DBDDDE2B4FCED0007615A8 /* LottieView.swift in Sources */,

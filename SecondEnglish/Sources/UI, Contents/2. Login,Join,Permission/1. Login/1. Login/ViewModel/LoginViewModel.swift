@@ -24,6 +24,11 @@ class LoginViewModel: NSObject ,ObservableObject {
     @Published var joinIdx: String = ""
     @Published var joinType: LoginType = .google
     
+    @Published var showAddUserNamePage = false
+    @Published var authSuccessedLoginId: String?
+    @Published var authSuccessedLoginType: LoginUserType?
+    
+    
     // 초기화 후, 슈퍼 클래스의 초기화 호출
     override init() {
         super.init()
@@ -67,8 +72,27 @@ class LoginViewModel: NSObject ,ObservableObject {
         loadingStatus = .Close
         
         if success {
+            
+            /**
+             * 기존 코드 (사용 안 함)
+             */
             // 다른 방식으로 로그인해도 DB에 저장되는 uid는 동일해야 하니까, deviceUUID를 구해서 전송함.
-            requestAddSnsUser(loginId: idx, loginType: type)
+            //requestAddSnsUser(loginId: idx, loginType: type)
+            
+            
+            
+            
+            /**
+             * 기존 회원은 별명을 등록할 필요 없음. 이거 분기처리 해야됨.
+             * 일단은, 별명등록하는 화면으로 무조건 넘어감
+             */
+            self.authSuccessedLoginId = idx
+            self.authSuccessedLoginType = type
+            self.showAddUserNamePage = true
+            
+            
+            
+            
         }
         else {
             self.alertTitle = ""
@@ -77,10 +101,10 @@ class LoginViewModel: NSObject ,ObservableObject {
         }
     }
     
-    
-    func requestAddSnsUser(loginId: String, loginType: LoginUserType) {
+    // 로그인 성공 요청
+    func requestAddSnsUser(loginId: String, loginType: LoginUserType, user_nickname: String, isSuccess: @escaping(Bool)->Void) {
         loadingStatus = .ShowWithTouchable
-        ApiControl.addSnsUser(loginId: loginId, loginType: loginType.rawValue)
+        ApiControl.addSnsUser(loginId: loginId, loginType: loginType.rawValue, user_nickname: user_nickname)
             .sink { error in
                 
                 self.loadingStatus = .Close
@@ -109,12 +133,14 @@ class LoginViewModel: NSObject ,ObservableObject {
                         fLog("\n--- Login Result ---------------------------------\nuid : \(uid)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\n")
                         UserManager.shared.setLoginData(
                             uid: uid,
+                            user_nickname: user_nickname,
                             loginUserType: loginType.rawValue,
                             accessToken: access_token,
                             refreshToken: refresh_token
                         )
                         UserManager.shared.checkLogin()
-                        UserManager.shared.showLoginView = false
+                        isSuccess(true)
+                        //UserManager.shared.showLoginView = false
                     }
                     else {
                         // Error
@@ -302,6 +328,7 @@ class LoginViewModel: NSObject ,ObservableObject {
                     fLog("\n--- Login Result ---------------------------------\nuid : \(uid)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\n")
                     UserManager.shared.setLoginData(
                         uid: uid,
+                        user_nickname: "",
                         loginUserType: LoginUserType.Phone.rawValue,
                         accessToken: access_token,
                         refreshToken: refresh_token

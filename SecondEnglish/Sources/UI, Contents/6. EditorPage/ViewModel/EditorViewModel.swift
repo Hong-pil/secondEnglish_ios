@@ -89,6 +89,34 @@ class EditorViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    //MARK: - 내 카드 리스트 등록
+    func addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>], isPostComplete: @escaping((Bool) -> Void)) {
+        ApiControl.addCardList(type1: type1, type2: type2, type3: type3, sentence_list: sentence_list)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                //isPostComplete(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        isPostComplete(true)
+                    }
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
     // 선택된 MainCategory에 대한 SubCategoryList
     func getSubCategoryList(selectedMainCategoryName: String) -> [String] {
         var finalSubCategoryList: [String] = []

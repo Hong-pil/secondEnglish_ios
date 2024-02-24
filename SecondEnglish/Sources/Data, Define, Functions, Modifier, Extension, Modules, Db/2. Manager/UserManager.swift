@@ -22,6 +22,7 @@ class UserManager: ObservableObject {
     @Published var showLoginView = false
     @Published var showLoginAlert = false
     @Published var showAlertAuthError = false
+    @Published var showAlertNetworkError = false
     @Published var showSettingAuth = false
     @Published var showClubJoinAlert = false
     @Published var deletePostAlert = false
@@ -156,11 +157,13 @@ class UserManager: ObservableObject {
     }
     
     func setLoginData(uid:String,
+                      user_nickname: String,
                       loginUserType:String,
                       accessToken:String,
                       refreshToken:String)
     {
         self.uid = uid
+        self.userNick = user_nickname
         self.loginUserType = loginUserType
         self.accessToken = accessToken
         self.refreshToken = refreshToken
@@ -222,6 +225,7 @@ class UserManager: ObservableObject {
         self.refreshToken = ""
         self.fcmToken = ""
         self.integUid = ""
+        self.userNick = ""
         self.userEmail = ""
         
         self.expiredTime = 0
@@ -338,7 +342,7 @@ class UserManager: ObservableObject {
             
             
 //            fLog("\n--- check expired token -------------------------------\nregDate : \(regDate)\nexpiredTime : \(expiredTime)\nexpiredDate : \(expiredDate)\ncheckMinutes : \(checkMinutes)\nduration : \(duration)\naccessToken : \(accessToken)\nintegUid : \(uid)\n\n")
-            fLog("\n--- check expired token -------------------------------\nregDate : \(regDate)\nexpiredTime : \(expiredTime)\nexpiredDate : \(expiredDate)\ncheckMinutes : \(checkMinutes)\nduration : \(duration)\naccessToken : \(accessToken)\nintegUid : \(integUid)\n\n")
+            fLog("\n--- check expired token -------------------------------\nregDate : \(regDate)\nexpiredTime : \(expiredTime)\nexpiredDate : \(expiredDate)\ncheckMinutes : \(checkMinutes)\nduration : \(duration)\naccessToken : \(accessToken)\nuserNick : \(userNick)\nintegUid : \(integUid)\n\n")
             
             if duration > checkMinutes {
                 return true

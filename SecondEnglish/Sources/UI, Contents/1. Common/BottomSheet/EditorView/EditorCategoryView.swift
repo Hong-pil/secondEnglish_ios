@@ -34,40 +34,43 @@ extension EditorCategoryView: View {
                 .font(.title51622Medium)
                 .foregroundColor(.stateEnableGray900)
             
-            Group {
-                if viewType == .MainCategory {
-                    if let list = mainCategoryList {
-                        ForEach(Array(list.enumerated()), id: \.offset) { index, item in
-                            EditorCategoryRowView(
-                                viewType: viewType,
-                                categoryName: item,
-                                onPressCategory: { categoryName in
-                                    selectedCategoryName = categoryName
-                                    isShow = false
-                                },
-                                selectedCategoryName: selectedCategoryName
-                            )
+            ScrollView(showsIndicators: false) {
+                Group {
+                    if viewType == .MainCategory {
+                        if let list = mainCategoryList {
+                            ForEach(Array(list.enumerated()), id: \.offset) { index, item in
+                                EditorCategoryRowView(
+                                    viewType: viewType,
+                                    categoryName: item,
+                                    onPressCategory: { categoryName in
+                                        selectedCategoryName = categoryName
+                                        isShow = false
+                                    },
+                                    selectedCategoryName: selectedCategoryName
+                                )
+                            }
+                        }
+                    }
+                    else if viewType == .SubCategory {
+                        if let list = subCategoryList {
+                            ForEach(Array(list.enumerated()), id: \.offset) { index, item in
+                                EditorCategoryRowView(
+                                    viewType: viewType,
+                                    categoryName: item,
+                                    onPressCategory: { categoryName in
+                                        selectedCategoryName = categoryName
+                                        isShow = false
+                                    },
+                                    selectedCategoryName: selectedCategoryName
+                                )
+                            }
                         }
                     }
                 }
-                else if viewType == .SubCategory {
-                    if let list = subCategoryList {
-                        ForEach(Array(list.enumerated()), id: \.offset) { index, item in
-                            EditorCategoryRowView(
-                                viewType: viewType,
-                                categoryName: item,
-                                onPressCategory: { categoryName in
-                                    selectedCategoryName = categoryName
-                                    isShow = false
-                                },
-                                selectedCategoryName: selectedCategoryName
-                            )
-                        }
-                    }
-                }
+                .padding(.top, 20)
             }
-            .padding(.top, 20)
         }
+        .padding(.horizontal, 20)
     }
 }
 

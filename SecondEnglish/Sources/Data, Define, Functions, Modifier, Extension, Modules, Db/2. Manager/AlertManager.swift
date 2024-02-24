@@ -180,4 +180,16 @@ class AlertManager {
             UserManager.shared.replyEditRequestAlert = true
         }
     }
+    
+    func showAlertNetworkDisconnected() {
+        SimpleAlertView(
+            contents: "se_a_disconnected_network".localized,
+            buttons: ["h_confirm".localized]
+        ) { _ in
+            PopupManager.dismissAll()
+        }
+        .present {
+            UserManager.shared.showAlertNetworkError = true
+        }
+    }
 }

@@ -18,7 +18,7 @@ struct SecondEnglishApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     init() {
-        
+        NetworkMonitorManager.shared.startNetworkMonitoring()
         UserManager.shared.start()
         
         // Kakao 설정 (키 값을 번들에서 가져온다.)

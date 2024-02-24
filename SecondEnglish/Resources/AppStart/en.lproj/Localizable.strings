@@ -10,13 +10,15 @@
 "alert_common_button_cancel" = "취소";
 "alert_common_button_setting" = "설정";
 "alert_common_button_ok" = "확인";
-"k_select_to_main_category" = "main 카테고리 선택";
-"k_select_to_sub_category" = "sub 카테고리 선택";
+"k_select_to_main_category" = "주 카테고리 선택";
+"k_select_to_sub_category" = "부 카테고리 선택";
 "g_main_category_select" = "카테고리 대분류 선택";
 "m_sub_category_select" = "카테고리 소분류 선택";
 "se_j_write_korean" = "한글을 입력해 주세요.";
 "se_j_write_english" = "영어를 입력해 주세요.";
-
+"se_j_write_category" = "카테고리를 모두 선택해주세요.";
+"se_j_write_sentence" = "카드 내용을 모두 입력해주세요.";
+"se_a_disconnected_network" = "네트워크 상태를 확인해 주세요.";
 
 
 

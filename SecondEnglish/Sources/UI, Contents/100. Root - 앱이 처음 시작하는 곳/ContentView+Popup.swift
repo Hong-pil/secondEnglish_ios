@@ -1,0 +1,112 @@
+//
+//  ContentViewPopup.swift
+//  SecondEnglish
+//
+//  Created by kimhongpil on 2/24/24.
+//
+
+import Foundation
+import SwiftUI
+
+struct ContentViewPopup: ViewModifier {
+    
+    @StateObject var userManager = UserManager.shared
+    @StateObject var bottomSheetManager = BottomSheetManager.shared
+    @StateObject var languageManager = LanguageManager.shared
+    
+    private struct BottomSheetInfo {
+        static let bigHeight: CGFloat = 765
+        static let middleHeight: CGFloat = 290
+        static let middleHalfHeight: CGFloat = 250
+        static let smallHeight: CGFloat = 210
+        static let onlyOne: CGFloat = 160
+        static let boardReportHeight: CGFloat = 420
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            // Swipe Tab -> 카드 더보기
+            .bottomSheet(
+                isPresented: $bottomSheetManager.show.swipeCardMore,
+                height: BottomSheetInfo.middleHeight,
+                topBarCornerRadius: DefineSize.CornerRadius.BottomSheet,
+                content: {
+                    CustomBottomView(
+                        title: "a_language_filter".localized,
+                        //title: "", // 제목없는 팝업뷰 테스트
+                        type: CustomBottomSheetClickType.SwipeCardMore,
+                        onPressItemMore: { buttonType in
+                            //fLog("\n--- \(buttonType) ---\n")
+                            bottomSheetManager.pressedCardMorType = buttonType
+                        },
+                        isShow: $bottomSheetManager.show.swipeCardMore
+                    )
+                }
+            )
+            // Swipe Tab -> 카드 더보기 - 신고하기
+            .bottomSheet(
+                isPresented: $bottomSheetManager.show.swipeCardReport,
+                height: BottomSheetInfo.middleHeight,
+                topBarCornerRadius: DefineSize.CornerRadius.BottomSheet,
+                content: {
+                    CustomBottomView(
+                        title: "a_language_filter".localized,
+                        //title: "", // 제목없는 팝업뷰 테스트
+                        type: CustomBottomSheetClickType.SwipeCardReport,
+                        onPressItemReportCode: { reportCode in
+                            //fLog("\n--- \(reportCode) ---\n")
+                            bottomSheetManager.pressedCardReportCode = reportCode
+                        },
+                        isShow: $bottomSheetManager.show.swipeCardReport
+                    )
+                }
+            )
+        
+    }
+    
+    func getPopupHeight() -> CGFloat {
+        var finalHeight: CGFloat = 0.0
+        
+        switch bottomSheetManager.customBottomSheetClickType {
+        case .SwipeCardMore:
+            finalHeight = self.defineSize(isTitleEmpty: true, size: DefineBottomSheet.cardMoreItem.count)
+
+        default:
+            finalHeight = 100
+        }
+        return finalHeight
+    }
+    
+    func defineSize(isTitleEmpty: Bool, size: Int) -> CGFloat {
+        var finalHeight: CGFloat = 0.0
+        if size > 0 {
+            switch size {
+            case 1...3:
+                finalHeight = CGFloat(size) * 75.0
+            case 4...6:
+                finalHeight = CGFloat(size) * 57.0
+            case 7...9:
+                finalHeight = CGFloat(size) * 55.0
+            case 10...12:
+                finalHeight = CGFloat(size) * 53.0
+            case 13..<15:
+                finalHeight = CGFloat(size) * 51.0
+            case 16..<20:
+                finalHeight = CGFloat(size) * 45.0
+            default:
+                finalHeight = .infinity
+            }
+        }
+        
+        // 팝업 상단 타이틀이 있는 경우 -> 타이틀 높이를 더해줌
+        if !isTitleEmpty {
+            if size == 1 {
+                finalHeight += 80.0
+            }
+            else {
+                finalHeight += 50.0
+            }
+        }
+        return finalHeight
+    }
+}

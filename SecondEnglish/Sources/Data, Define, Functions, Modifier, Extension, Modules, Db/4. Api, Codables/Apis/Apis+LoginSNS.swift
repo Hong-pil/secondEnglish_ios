@@ -10,7 +10,7 @@ import Alamofire
 import Foundation
 
 enum ApisLoginSNS {
-    case addSnsUser(login_id: String, login_type: String)
+    case addSnsUser(login_id: String, login_type: String, user_nickname: String)
 }
 
 extension ApisLoginSNS: TargetType {
@@ -42,10 +42,11 @@ extension ApisLoginSNS: TargetType {
     
     var task: Task {
         switch self {
-        case .addSnsUser(let login_id, let login_type):
+        case .addSnsUser(let login_id, let login_type, let user_nickname):
             var params = defaultParams
             params["login_id"] = login_id
             params["login_type"] = login_type
+            params["user_nickname"] = user_nickname
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)

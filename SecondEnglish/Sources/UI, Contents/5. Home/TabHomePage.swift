@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TabHomePage {
-    @StateObject var viewModel = TabHomeViewModel()
+    @StateObject var viewModel = TabHomeViewModel.shared
     @StateObject var swipeTabViewModel = SwipeCardViewModel.shared
     
     @State var spacing: CGFloat = 10
@@ -39,7 +39,11 @@ struct TabHomePage {
 extension TabHomePage: View {
     var body: some View {
         VStack(spacing: 0) {
-            header
+            if viewModel.categoryList.count>0 {
+                header
+            } else {
+                emptyView
+            }
             
             ScrollViewReader { scrollviewReader in
                 ScrollView {
@@ -160,8 +164,8 @@ extension TabHomePage: View {
             })
         }
         .background(Color.bgLightGray50)
-        .task {
-            viewModel.requestMyCardList(uid: UserManager.shared.uid, isSuccess: { success in
+        .onAppear {
+            viewModel.requestMyCardList(isSuccess: { success in
                 //
             })
             
@@ -173,103 +177,137 @@ extension TabHomePage: View {
         ScrollViewReader { scrollviewReader in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
-                    if viewModel.categoryList.count > 0 {
-                        ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
-                            let isSelected = clickedSubTabIndex == index
-                            
-                            VStack(spacing: 0) {
-                                Text(element)
-                                    .font(clickedSubTabIndex==index ? .buttons1420Medium : .body21420Regular)
-                                    .foregroundColor(clickedSubTabIndex==index ? Color.gray25 : Color.gray850)
-                                    .frame(minWidth: 70)
-                                    .frame(height: 40)
-                                    .padding(.horizontal, 15)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(isSelected
-                                                                                      ? Color.gray850
-                                                                                      : Color.gray199.opacity(1), lineWidth: 1))
-                                    .background(RoundedRectangle(cornerRadius: 8).fill(isSelected
-                                                                                       ? Color.gray850
-                                                                                       : Color.gray25))
-                                    .padding(.vertical, 10)
-                                    .shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
-                                    // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
-                                    .onTapGesture {
-                                        
-                                        /**
-                                         * 카테고리 리스트 이동
-                                         */
-                                        clickedSubTabIndex = index
-                                        withAnimation {
-                                            scrollviewReader.scrollTo(index, anchor: .top)
-                                        }
-                                        
-                                        
-                                        // 카테고리 버튼 클릭시, 해당 카테고리의 카드배너 리스트로 이동
-                                        for (sentenceIndex, sentenceItem) in viewModel.sentenceList.enumerated() {
-                                            if viewModel.categoryList[index] == (sentenceItem.type3 ?? "") {
+                    ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                        let isSelected = clickedSubTabIndex == index
+                        
+                        VStack(spacing: 0) {
+                            Text(element)
+                                .font(clickedSubTabIndex==index ? .buttons1420Medium : .body21420Regular)
+                                .foregroundColor(clickedSubTabIndex==index ? Color.gray25 : Color.gray850)
+                                .frame(minWidth: 70)
+                                .frame(height: 40)
+                                .padding(.horizontal, 15)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isSelected
+                                                                                  ? Color.gray850
+                                                                                  : Color.gray199.opacity(1), lineWidth: 1))
+                                .background(RoundedRectangle(cornerRadius: 8).fill(isSelected
+                                                                                   ? Color.gray850
+                                                                                   : Color.gray25))
+                                .padding(.vertical, 10)
+                                .shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
+                                // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
+                                .onTapGesture {
+                                    
+                                    /**
+                                     * 카테고리 리스트 이동
+                                     */
+                                    clickedSubTabIndex = index
+                                    withAnimation {
+                                        scrollviewReader.scrollTo(index, anchor: .top)
+                                    }
+                                    
+                                    
+                                    // 카테고리 버튼 클릭시, 해당 카테고리의 카드배너 리스트로 이동
+                                    for (sentenceIndex, sentenceItem) in viewModel.sentenceList.enumerated() {
+                                        if viewModel.categoryList[index] == (sentenceItem.type3 ?? "") {
+                                            
+                                            if sentenceItem.isStartPointCategory ?? false {
                                                 
-                                                if sentenceItem.isStartPointCategory ?? false {
-                                                    
-                                                    withAnimation {
-                                                        cardBannerCurrentIndex = sentenceIndex
-                                                    }
+                                                withAnimation {
+                                                    cardBannerCurrentIndex = sentenceIndex
                                                 }
                                             }
                                         }
+                                    }
+                                    
+                                }
+                                .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
+                                    // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
+                                    
+                                    // 카테고리 버튼 이동 유무
+                                    if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
                                         
+                                        // 카드배너 왼족으로 이동
+                                        if oldValue > newValue {
+                                            //showPreviousStep = true
+                                            
+                                        }
+                                        // 카드배너 오른쪽으로 이동
+                                        else if oldValue < newValue {
+                                            showNextStep = true
+                                        }
                                     }
-                                    .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
-                                        // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
+                                }
+                                .onChange(of: showPreviousStep) {
+                                    if showPreviousStep {
                                         
-                                        // 카테고리 버튼 이동 유무
-                                        if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
-                                            
-                                            // 카드배너 왼족으로 이동
-                                            if oldValue > newValue {
-                                                //showPreviousStep = true
-                                                
-                                            }
-                                            // 카드배너 오른쪽으로 이동
-                                            else if oldValue < newValue {
-                                                showNextStep = true
-                                            }
+                                        clickedSubTabIndex -= 1
+                                        withAnimation {
+                                            scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
                                         }
+                                        
+                                        showPreviousStep = false // 초기화
                                     }
-                                    .onChange(of: showPreviousStep) {
-                                        if showPreviousStep {
-                                            
-                                            clickedSubTabIndex -= 1
-                                            withAnimation {
-                                                scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
-                                            }
-                                            
-                                            showPreviousStep = false // 초기화
+                                }
+                                .onChange(of: showNextStep) {
+                                    if showNextStep {
+                                        
+                                        clickedSubTabIndex += 1
+                                        withAnimation {
+                                            scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
                                         }
+                                        
+                                        
+                                        showNextStep = false // 초기화
                                     }
-                                    .onChange(of: showNextStep) {
-                                        if showNextStep {
-                                            
-                                            clickedSubTabIndex += 1
-                                            withAnimation {
-                                                scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
-                                            }
-                                            
-                                            
-                                            showNextStep = false // 초기화
-                                        }
-                                    }
-                                    //.id(index)
-                            }
-                            .padding(.leading, index==0 ? 20 : 10)
-                            .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
-                            
+                                }
+                                //.id(index)
                         }
+                        .padding(.leading, index==0 ? 20 : 10)
+                        .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
                         
                     }
                 }
             }
         }
+    }
+    
+    var emptyView: some View {
+        VStack(spacing: 0) {
+            Image("like_empty")
+                .resizable()
+                .frame(width: 200, height: 200)
+            
+            
+            Text("학습한 이력이 없습니다.")
+                .font(.title32028Bold)
+                .foregroundColor(.gray800)
+                .padding(.top, 10)
+            
+            Text("하트를 눌러 나만의 공간을 만들어보세요 :)")
+                .font(.caption11218Regular)
+                .foregroundColor(.gray500)
+                .padding(.top, 7)
+            
+            
+            Button(action: {
+                // Swipe Tab 으로 이동
+                LandingManager.shared.showSwipePage = true
+            }, label: {
+                Text("학습하러 가기")
+                    .font(.title5Roboto1622Medium)
+                    .foregroundColor(Color.gray25)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Capsule().fill(Color.stateActivePrimaryDefault))
+            })
+            .buttonStyle(PlainButtonStyle()) // 버튼 깜빡임 방지
+            .padding(.vertical, 30)
+        }
+        .frame(maxWidth: .infinity)
+        .background(RoundedRectangle(cornerRadius: 20).fill(Color.gray25))
+        .padding(20)
     }
 }
 

@@ -23,7 +23,8 @@ struct ContentView: View {
             PermissionPage()
                 .opacity(userManager.isFirstLaunching ? 1.0 : 0.0)
         }
-        //.modifier(ContentViewAlert())
+        .modifier(ContentViewAlert())
+        .modifier(ContentViewPopup())
         
     }
 }

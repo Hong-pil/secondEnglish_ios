@@ -12,6 +12,7 @@ import NaturalLanguage
 struct SwipeCardFrontView: View {
     let card: SwipeDataList
     let isTapLikeBtn: (Int, Bool) -> Void
+    let isTapMoreBtn: () -> Void
     @State var isShowHint: Bool = false
     
     // TTS
@@ -24,10 +25,22 @@ struct SwipeCardFrontView: View {
         GeometryReader { geometry in
             VStack(alignment: .leading, spacing: 5) {
                 
-                Text(card.type3 ?? "")
-                    .font(.caption21116Regular)
-                    .foregroundColor(.gray600)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                HStack(spacing: 0) {
+                    Text("made by \(card.user_name ?? "")")
+                        .font(.caption21116Regular)
+                        .foregroundColor(.green)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        isTapMoreBtn()
+                    }, label: {
+                        Image("icon_more_dark")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                            .padding(5).background(Color.gray25.opacity(0.3)) // 클릭 범위 확장
+                    })
+                }
                 
                 Spacer()
                 

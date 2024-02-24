@@ -23,6 +23,8 @@ struct SwipeDataList: Codable, Hashable {
     var korean: String? = ""
     var english: String? = ""
     var isLike: Bool? = false
+    var isUserBlock: Bool? = false
+    var isCardBlock: Bool? = false
     var isStartPointCategory: Bool? = false // 각 카테고리 시작점 유무 (홈탭에서 카드배너 넘겨질 때 카테고리 버튼 이동하는데 사용함)
     var isEndPointCategory: Bool? = false // 각 카테고리 마지막점 유무 (홈탭에서 카드배너 넘겨질 때 카테고리 버튼 이동하는데 사용함)
 }
@@ -72,4 +74,14 @@ struct MyLearningProgressData: Codable, Hashable {
     var category: String? = ""
     var category_setence_count: Int? = 0
     var like_number: Int? = 0
+}
+
+struct ReportListResponse: Codable {
+    var code: Int = 0
+    var data: [ReportListData] = []
+    var message: String? = ""
+}
+struct ReportListData: Codable, Hashable {
+    var name: String? = ""
+    var code: Int? = 0
 }

@@ -18,6 +18,17 @@ struct ContentViewAlert: ViewModifier {
     func body(content: Content) -> some View {
         content
         
+        // 네트워크 끊김
+            .showCustomAlert(
+                isPresented: $userManager.showAlertNetworkError,
+                type: .Default,
+                title: "",
+                message: "se_a_disconnected_network".localized,
+                detailMessage: "",
+                buttons: ["h_confirm".localized],
+                onClick: { buttonIndex in
+                    //
+                })
         // Config Alert
         /*
          긴급공지, 업데이트 강제/권장

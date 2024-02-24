@@ -27,6 +27,7 @@ struct EditorInputView {
     var isKeyboardFocused: ((Bool) -> Void)
     var forceKeyboardUpIndex: Int
     var isItemDelete: ((Bool, Int) -> Void)
+    var isDisableDelete: Bool
     
     
     // [카드뷰 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위한 기능]
@@ -72,8 +73,8 @@ extension EditorInputView: View {
                     )
                 
                     Rectangle()
-                        .fill(Color.gray400)
-                        .frame(height: (cardIndex==activeCardIndex) ? 2 : 1)
+                        .fill(Color.primaryDefault)
+                        .frame(height: (cardIndex==activeCardIndex) ? 3 : 1)
                     
                     Text("한글")
                         .font(.caption21116Regular)
@@ -103,9 +104,10 @@ extension EditorInputView: View {
                         forceKeyboardUpIndex: forceKeyboardUpIndex,
                         cardIndex: cardIndex
                     )
+                    .padding(.top, 5)
                     
                     Rectangle()
-                        .fill(Color.gray400)
+                        .fill(Color.primaryDefault)
                         .frame(height: (cardIndex==activeCardIndex) ? 3 : 1)
                     
                     Text("영어")
@@ -116,9 +118,9 @@ extension EditorInputView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위해 사이즈 설정
             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-            .clipShape(RoundedRectangle(cornerRadius: 15))
-            .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.green, lineWidth: 1.0))
-            .background(RoundedRectangle(cornerRadius: 15).fill(Color.gray25))
+            .background(Color.gray25)
+            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .shadow(radius: 3) // .clipShape 하지 않으면, 안쪽 뷰 요소들에도 그림자가 적용됨
             
             
             // Delete button
@@ -155,22 +157,32 @@ extension EditorInputView: View {
         .gesture(
             DragGesture()
                 .onChanged { gesture in
+                    
+                    /**
+                     * Drag되는 동안 카드가 움직이게 하는 기능인데, 주석처리한 이유 :
+                     * 스크롤 하는 동안, 손 동작이 조금만 옆으로 움직여도 카드뷰가 움직이는 문제가 있음
+                     */
                     // Only allow dragging to the left
-                    if gesture.translation.width < 0 {
-                        self.swipeLeftOffset = gesture.translation
-                    }
+//                    if gesture.translation.width < 0 {
+//                        self.swipeLeftOffset = gesture.translation
+//                    }
                 }
                 .onEnded { gesture in
-                    if gesture.translation.width < sizeInfo.swipeLeftOffsetSize {
-                        // Threshold to show delete button
-                        withAnimation {
-                            self.swipeLeftOffset.width = sizeInfo.swipeLeftOffsetSize // Adjust based on your delete button's width
-                            self.isShowingDeleteButton = true
-                        }
-                    } else {
-                        withAnimation {
-                            self.swipeLeftOffset = .zero
-                            self.isShowingDeleteButton = false
+                    /**
+                     * 리스트가 하나 남아 있을 땐, 삭제할 수 없도록 움직이지 않음
+                     */
+                    if !isDisableDelete {
+                        if gesture.translation.width < sizeInfo.swipeLeftOffsetSize {
+                            // Threshold to show delete button
+                            withAnimation {
+                                self.swipeLeftOffset.width = sizeInfo.swipeLeftOffsetSize // Adjust based on your delete button's width
+                                self.isShowingDeleteButton = true
+                            }
+                        } else {
+                            withAnimation {
+                                self.swipeLeftOffset = .zero
+                                self.isShowingDeleteButton = false
+                            }
                         }
                     }
                 }
@@ -238,9 +250,8 @@ struct EditorInputRowView: View {
                             )
             )
             .font(.body11622Regular)
-            .lineLimit(2)
             .foregroundColor(.gray900)
-            .padding(.vertical, 11)
+            .padding(.vertical, 5).background(Color.gray25) // TextField 클릭 감도 높임
             //.opacity(currentTxt.isEmpty ? 0.2 : 1) // currentTxt 확인 테스트용
             .onChange(of: currentTxt) {
                 if currentTxt.count > maxlength {

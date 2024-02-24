@@ -35,7 +35,6 @@ extension EditorCategoryRowView: View {
                 }
             }
             .frame(height: 24)
-            .padding(.horizontal, 20)
         })
     }
 }

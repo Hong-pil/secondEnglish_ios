@@ -10,22 +10,15 @@ import SwiftUI
 struct EditorPage {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject var viewModel = EditorViewModel()
+    @StateObject var homeTabViewModel = TabHomeViewModel.shared
     
     // 호출하는 곳에서 받아야 함
     var completion: ((Bool, String) -> Void)
     
     // ToolbarItem 버튼 클릭 유무
     @State var showWriteCancelView = false
-    @State var isClickSaveBtn = false
     
-    @State var selectedMainCategoryName: String = "" {
-        didSet(oldValue) {
-            // 메인 카테고리 변경한 경우 -> 서브 카테고리 초기화
-            if oldValue != selectedMainCategoryName {
-                self.selectedSubCategoryName = "m_summury_select".localized
-            }
-        }
-    }
+    @State var selectedMainCategoryName: String = ""
     @State var selectedSubCategoryName: String = ""
     @State var categoryBottomSheetHeight: CGFloat = 0.0
     
@@ -116,6 +109,7 @@ extension EditorPage: View {
                                                         isOnlyEditMode = true
                                                     }
                                                     
+                                                    
                                                     // 작성했던 이전 카드 중에서 특정 카드를 수정하려고 선택한 경우
                                                     if isOnlyEditMode {
                                                         sentenceListUpdate(activedIndex: index)
@@ -153,7 +147,8 @@ extension EditorPage: View {
                                                     
                                                     self.sentenceListDelete(deleteRequestIndex: itemIndex)
                                                 }
-                                            }
+                                            },
+                                            isDisableDelete: sentenceList.count==1 ? true : false // 리스트가 하나 남아 있을 땐, 삭제할 수 없도록 좌측으로 Swipe 되지 않음
                                         )
                                         .padding(.top, index==0 ? 20 : 10)
                                         .padding(.bottom, index==(sentenceList.count-1) ? 20 : 0)
@@ -206,13 +201,48 @@ extension EditorPage: View {
                 // 등록버튼
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        if checkPostData() {
-                            isClickSaveBtn = true
+                        
+                        switch checkPostData() {
+                        case .IsCategoryEmpty:
+                            toastMessage = "se_j_write_category".localized
+                            showToast()
+                        case .IsThereEmptySentence:
+                            toastMessage = "se_j_write_sentence".localized
+                            showToast()
+                        case .CheckOK:
+                            
+                            // 키보드 내리기
+                            UIApplication.shared.endEditing()
+                            
+                            StatusManager.shared.loadingStatus = .ShowWithTouchable
+                            
+                            viewModel.addCardList(
+                                type1: "Basic",
+                                type2: selectedMainCategoryName,
+                                type3: selectedSubCategoryName,
+                                sentence_list: sentenceList
+                            ) { isComplete in
+                                if isComplete {
+                                    // 로딩되는거 보여주려고 딜레이시킴
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        StatusManager.shared.loadingStatus = .Close
+                                        presentationMode.wrappedValue.dismiss()
+                                        
+                                        
+                                        // 등록한 카테고리의 index 값을 가져온다.
+                                        if let categoryIndex = self.getCategoryIndex() {
+                                            
+                                            // Swipe Tab으로 이동 후, 등록한 카테고리의 내용을 갱신해서 보여준다.
+                                            self.moveToSwipeTab(categoryIdx: categoryIndex)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }, label: {
                         Text(type == .Write ? "d_registration".localized : "s_modifying".localized)
-                            .foregroundColor(checkPostData() ? Color.primaryDefault : Color.stateEnableGray400)
-                            .font(.body21420Regular)
+                            .foregroundColor(Color.stateEnableGray900)
+                            .font(.title41824Medium)
                     })
                 }
             }
@@ -279,6 +309,9 @@ extension EditorPage: View {
     var categorySelectView: some View {
         HStack(spacing: 0) {
             Button(action: {
+                // 키보드 내리기 (키보드 올라가 있을 땐 팝업 안 보임)
+                UIApplication.shared.endEditing()
+                
                 isShowMainCategoryListView.toggle()
             }, label: {
                 HStack(spacing: 0) {
@@ -293,17 +326,29 @@ extension EditorPage: View {
                         .foregroundColor(.stateEnableGray400)
                         .padding(.leading, 8)
                 }
+                .onChange(of: selectedMainCategoryName, initial: false) { oldValue, newValue in
+                    // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
+                    
+                    // 메인 카테고리 변경한 경우 -> 서브 카테고리 초기화
+                    if oldValue != newValue {
+                        self.selectedSubCategoryName = ""
+                    }
+                }
             })
             .disabled(type == .Modify)
             
             if viewModel.getSubCategoryList(selectedMainCategoryName: selectedMainCategoryName).count > 0 {
                 Button(action: {
+                    // 키보드 내리기 (키보드 올라가 있을 땐 팝업 안 보임)
+                    UIApplication.shared.endEditing()
+                    
                     isShowSubCategoryListView.toggle()
                 }, label: {
                     HStack(spacing: 0) {
                         Text(selectedSubCategoryName.count > 0 ? selectedSubCategoryName : "k_select_to_sub_category".localized)
                             .font(.body21420Regular)
                             .foregroundColor(.gray900)
+                            .lineLimit(1)
                         
                         Image("icon_outline_dropdown")
                             .resizable()
@@ -317,6 +362,7 @@ extension EditorPage: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(EdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20))
     }
     
     var footerView: some View {
@@ -333,7 +379,6 @@ extension EditorPage: View {
                     .padding(.leading, 20)
                 
                 Button {
-                    
                     isPressPlusButton = true
                     
                     // 데이터 가공, 목표 형태
@@ -342,7 +387,6 @@ extension EditorPage: View {
                     //  {"korean_txt": "", "english_txt": ""},
                     //  ...
                     // ]
-                    
                     sentenceList.insert(
                         [
                             sizeInfo.koreanKey: currentKoreanTxt,
@@ -350,11 +394,7 @@ extension EditorPage: View {
                         ],
                         at: currentCardIndex
                     )
-                    
-
-                    fLog("idpil::: sentenceList : \(sentenceList)")
-                    
-                    
+                    //fLog("idpil::: sentenceList : \(sentenceList)")
                     
                     
                     // 리스트 마지막 카드의 한국어 textfield 키보드 올림
@@ -523,28 +563,49 @@ extension EditorPage {
     
     // 취소버튼 클릭시 검사
     func checkMinimalData() -> Bool {
-        return selectedMainCategoryName.count>0 || selectedSubCategoryName.count>0 || currentKoreanTxt.count>0 || currentEnglishTxt.count>0
+        return selectedMainCategoryName.count>0 ||
+                selectedSubCategoryName.count>0 ||
+            (
+                // view load될 때 sentenceList에 빈 문자 저장함
+                sentenceList.count>1 ?
+                    sentenceList.count>1 :
+                    (currentKoreanTxt.count>0 || currentEnglishTxt.count>0)
+            )
+        
     }
     
     // 등록버튼 클릭시 검사
-    func checkPostData() -> Bool {
-        if selectedMainCategoryName.count>0 && 
-            selectedSubCategoryName.count>0 &&
-            currentKoreanTxt.count>0 &&
-            currentEnglishTxt.count>0 
-        {
-            return true
+    func checkPostData() -> EditorPostCheckType {
+        
+        // 1. 입력 중이던 카드 내용 업데이트
+        sentenceList[currentCardIndex][sizeInfo.koreanKey] = currentKoreanTxt
+        sentenceList[currentCardIndex][sizeInfo.englishKey] = currentEnglishTxt
+        
+        // 2. 선택 안 된 카테고리가 있는지 검사
+        if selectedMainCategoryName.isEmpty || selectedSubCategoryName.isEmpty {
+            return .IsCategoryEmpty
         }
-        else {
-            return false
+        
+        // 3. 빈 문장 있는지 검사
+        for item in sentenceList {
+            //fLog("koreanKey : \(item[sizeInfo.koreanKey] ?? "")")
+            //fLog("englishKey : \(item[sizeInfo.englishKey] ?? "")")
+            if (item[sizeInfo.koreanKey] ?? "").isEmpty ||
+                (item[sizeInfo.englishKey] ?? "").isEmpty {
+                
+                return .IsThereEmptySentence
+            }
         }
+        
+        // 3. 검사 통과
+        return .CheckOK
     }
     
     func getMainCategoryBottomSheetHeight() -> CGFloat {
         if viewModel.type2CategoryList.count > 0 {
             switch viewModel.type2CategoryList.count {
             case 1...3:
-                return 190.0
+                return 260.0
             case 4...6:
                 return 320.0
             case 7...9:
@@ -577,6 +638,34 @@ extension EditorPage {
             }
         } else {
             return 0.0
+        }
+    }
+    
+    private func getCategoryIndex() -> Int? {
+        var categoryIndex: Int?
+        
+        for (index, item) in homeTabViewModel.myLearningProgressList.enumerated() {
+            
+            // 선택한 카테고리와 같은 아이템
+            if selectedSubCategoryName == (item.category ?? "") {
+                categoryIndex = index
+                break
+            }
+        }
+        
+        return categoryIndex
+    }
+    
+    private func moveToSwipeTab(categoryIdx: Int) {
+        // Swipe Tab 으로 이동
+        LandingManager.shared.showSwipePage = true
+        
+        //NotificationCenter.default.post(name: Notification.Name("workCompleted"), object: nil)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
+                                            object: nil,
+                                            userInfo: [DefineKey.swipeViewCategoryIdx : categoryIdx] as [String : Any])
         }
     }
 }

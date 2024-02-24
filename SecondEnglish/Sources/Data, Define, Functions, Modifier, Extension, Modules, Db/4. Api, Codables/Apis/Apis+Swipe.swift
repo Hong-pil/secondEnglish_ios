@@ -14,10 +14,12 @@ enum ApisSwipe {
     case swipeCategory
     case swipeList
     case swipeListByCategory(category: String)
-    case myCategoryProgress(uid: String)
+    case myCategoryProgress
     case likeCard(cardIdx: Int, isLike: Int)
     case myLikeCardList(uid: String)
-    case myCardList(uid: String)
+    case myCardList
+    case addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>])
+    case reportList
 }
 
 extension ApisSwipe: TargetType {
@@ -44,6 +46,10 @@ extension ApisSwipe: TargetType {
             return "api/card/my"
         case .myCardList:
             return "api/card/my/list"
+        case .addCardList:
+            return "api/beginner_sentence/add/sentence_list"
+        case .reportList:
+            return "api/report/category/all"
         }
     }
     
@@ -64,6 +70,10 @@ extension ApisSwipe: TargetType {
             return .get
         case .myCardList:
             return .get
+        case .addCardList:
+            return .post
+        case .reportList:
+            return .get
         }
     }
     
@@ -74,12 +84,12 @@ extension ApisSwipe: TargetType {
     var task: Task {
         switch self {
         case .swipeCategory:
-            var params = defaultParams
+            let params = defaultParams
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: URLEncoding.default)
         case .swipeList:
-            var params = defaultParams
+            let params = defaultParams
             
 //            params[DefineKey.integUid] = UserManager.shared.integUid
 //            params["page"] = page
@@ -99,10 +109,10 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
             
-        case .myCategoryProgress(let uid):
+        case .myCategoryProgress:
             var params = defaultParams
             
-            params["uid"] = uid
+            params["uid"] = UserManager.shared.uid
 
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
@@ -123,12 +133,31 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return.requestParameters(parameters: params, encoding: URLEncoding.default)
             
-        case .myCardList(let uid):
+        case .myCardList:
             var params = defaultParams
-            params["uid"] = uid
+            params["uid"] = UserManager.shared.uid
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .addCardList(let type1, let type2, let type3, let sentence_list):
+            var params = defaultParams
+            params["user_name"] = UserManager.shared.userNick
+            params["type1"] = type1
+            params["type2"] = type2
+            params["type3"] = type3
+            params["sentence_list"] = sentence_list
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .reportList:
+            let params = defaultParams
+
+            log(params: params)
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+            
             
         }
     }

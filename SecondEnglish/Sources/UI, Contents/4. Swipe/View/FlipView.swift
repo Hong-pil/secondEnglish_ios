@@ -12,6 +12,7 @@ struct FlipView {
     let item: SwipeDataList
     @State var isFlipped: Bool = false
     let isTapLikeBtn: (Int, Bool) -> Void
+    let isTapMoreBtn: () -> Void
     var speechSynthesizer: AVSpeechSynthesizer // TTS
 }
 
@@ -26,7 +27,7 @@ extension FlipView: View {
                 .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
             } else {
                 // Front View Content
-                SwipeCardFrontView(card: item, isTapLikeBtn: isTapLikeBtn)
+                SwipeCardFrontView(card: item, isTapLikeBtn: isTapLikeBtn, isTapMoreBtn: isTapMoreBtn)
             }
         }
         // Apply flip animation to the container

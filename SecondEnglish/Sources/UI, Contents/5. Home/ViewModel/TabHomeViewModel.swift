@@ -10,6 +10,7 @@ import Combine
 
 class TabHomeViewModel: ObservableObject {
     var cancellable = Set<AnyCancellable>()
+    static let shared = TabHomeViewModel()
     
     //alert
     @Published var showAlert: Bool = false
@@ -21,8 +22,8 @@ class TabHomeViewModel: ObservableObject {
     
     
     //MARK: - 내가 좋아요한 카드 리스트 조회
-    func requestMyCardList(uid: String, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getMyCardList(uid: uid)
+    func requestMyCardList(isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getMyCardList()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
@@ -75,7 +76,7 @@ class TabHomeViewModel: ObservableObject {
     
     //MARK: - 카테고리별 진도확인 리스트 조회
     func requestMyCategoryProgress() {
-        ApiControl.getMyCategoryProgress(uid: UserManager.shared.uid)
+        ApiControl.getMyCategoryProgress()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")

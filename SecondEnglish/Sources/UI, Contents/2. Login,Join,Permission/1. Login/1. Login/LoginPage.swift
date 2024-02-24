@@ -117,6 +117,16 @@ struct LoginPage : View {
                 .navigationDestination(isPresented: $showPhoneNumberLoginPage) {
                     PhoneNumberLoginPage()
                 }
+                .navigationDestination(isPresented: $viewModel.showAddUserNamePage) {
+                    if let loginSuccessUserId = viewModel.authSuccessedLoginId,
+                       let loginSuccessType = viewModel.authSuccessedLoginType
+                    {
+                        UserNamePage(
+                            authSuccessedLoginId: loginSuccessUserId,
+                            authSuccessedLoginType: loginSuccessType
+                        )
+                    }
+                }
 //                .navigationBarBackground {
 //                    Color.bgLightGray50
 //                }
@@ -140,11 +150,11 @@ struct LoginPage : View {
             LoadingViewInPage(loadingStatus: $viewModel.loadingStatus)
         }
         .onAppear() {
-            fLog("로그인페이지 onAppear")
+            //fLog("로그인페이지 onAppear")
             userManager.isLookAround = false
         }
         .onDisappear() {
-            fLog("로그인페이지 onDisappear")
+            //fLog("로그인페이지 onDisappear")
         }
         // 외부(카톡)에서 공유링크타고 앱 진입시, 해당 게시글의 메인 화면이여야 됨 (클럽 게시글이면 클럽 메인, 커뮤니티 게시글이면 커뮤니티 메인)
         // 그래서 비회원으로 진입시 로그인 화면이 보여져 있는 경우에는 로그인 화면을 닫음

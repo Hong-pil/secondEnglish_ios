@@ -34,6 +34,7 @@ class LandingManager: ObservableObject {
     
     @Published var showWeb:Bool = false
     @Published var showMinute:Bool = false
+    @Published var showSwipePage: Bool = false
     
     @Published var chatId:String = ""
 
@@ -399,6 +400,8 @@ class LandingManager: ObservableObject {
             self.showHomeEventBanner = true
         case .Minute:
             self.showMinute = true
+        case .SwipePage:
+            self.showSwipePage = true
         default:
             fLog("")
         }

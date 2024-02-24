@@ -28,18 +28,20 @@ struct TabHomeMyLearningView: View {
         .overlay(RoundedRectangle(cornerRadius: 7).stroke(Color.primaryDefault, lineWidth: 0.5))
         .background(RoundedRectangle(cornerRadius: 7).fill(Color.gray25))
         .onTapGesture {
-            fLog("idpil::: 버튼 클릭 했음")
-            /**
-             * 함수로 따로 뺄 것
-             */
-            LandingManager.shared.showMinute = true
-//                                NotificationCenter.default.post(name: Notification.Name("workCompleted"), object: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
-                                                object: nil,
-                                                userInfo: [DefineKey.swipeViewCategoryIdx : itemIndex] as [String : Any])
-            }
-            
+            self.moveToSwipeTab(categoryIdx: itemIndex)
+        }
+    }
+    
+    private func moveToSwipeTab(categoryIdx: Int) {
+        // Swipe Tab 으로 이동
+        LandingManager.shared.showSwipePage = true
+        
+        //NotificationCenter.default.post(name: Notification.Name("workCompleted"), object: nil)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
+                                            object: nil,
+                                            userInfo: [DefineKey.swipeViewCategoryIdx : categoryIdx] as [String : Any])
         }
     }
 }

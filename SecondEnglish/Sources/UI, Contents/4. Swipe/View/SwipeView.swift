@@ -14,6 +14,7 @@ struct SwipeView: View {
     var speechSynthesizer: AVSpeechSynthesizer // TTS
     let onRemove: (LikeType) -> Void
     let isTapLikeBtn: (Int, Bool) -> Void
+    let isTapMoreBtn: () -> Void
     @State private var offset = CGSize.zero
     
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
@@ -25,6 +26,7 @@ struct SwipeView: View {
             FlipView(
                 item: card,
                 isTapLikeBtn: isTapLikeBtn,
+                isTapMoreBtn: isTapMoreBtn,
                 speechSynthesizer: speechSynthesizer
             )
             

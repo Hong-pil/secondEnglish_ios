@@ -35,10 +35,10 @@ extension Main: View {
             }
             .ignoresSafeArea(edges: .bottom) // bottom SafeArea 없는게 계산하기 편함
         }
-        .onChange(of: landingManager.showMinute) {
-            if landingManager.showMinute {
-                tabStateHandler.selection = .swipe_card   // 미닛 탭으로 이동
-                landingManager.showMinute = false
+        .onChange(of: landingManager.showSwipePage) {
+            if landingManager.showSwipePage {
+                tabStateHandler.selection = .swipe_card // move to Swipe Tab
+                landingManager.showSwipePage = false
             }
         }
         .fullScreenCover(isPresented: $isShowEditorView) {
