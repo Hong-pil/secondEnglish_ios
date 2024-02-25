@@ -85,3 +85,9 @@ struct ReportListData: Codable, Hashable {
     var name: String? = ""
     var code: Int? = 0
 }
+
+struct ReportCardResponse: Codable {
+    var code: Int = 0
+    var success: Bool? = false
+    var message: String? = ""
+}

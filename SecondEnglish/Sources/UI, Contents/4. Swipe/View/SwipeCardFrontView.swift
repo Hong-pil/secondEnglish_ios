@@ -23,7 +23,7 @@ struct SwipeCardFrontView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(spacing: 0) {
                 
                 HStack(spacing: 0) {
                     Text("made by \(card.user_name ?? "")")
@@ -60,7 +60,6 @@ struct SwipeCardFrontView: View {
                     Text("힌트기능 ! 단어 하나씩 보여주기 :)")
                         .opacity(isShowHint ? 1 : 0)
                 }
-                
                 
                 Spacer()
                 

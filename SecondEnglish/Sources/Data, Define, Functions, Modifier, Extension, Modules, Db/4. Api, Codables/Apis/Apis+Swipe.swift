@@ -19,7 +19,10 @@ enum ApisSwipe {
     case myLikeCardList(uid: String)
     case myCardList
     case addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>])
-    case reportList
+    case getReportList
+    case doReportCard(targetUid: String, targetCardIdx: Int, reportCode: Int)
+    case doBlockCard(cardIdx: Int, isBlock: Int)
+    case doBlockUser(targetUid: String, isBlock: Int)
 }
 
 extension ApisSwipe: TargetType {
@@ -48,8 +51,14 @@ extension ApisSwipe: TargetType {
             return "api/card/my/list"
         case .addCardList:
             return "api/beginner_sentence/add/sentence_list"
-        case .reportList:
+        case .getReportList:
             return "api/report/category/all"
+        case .doReportCard:
+            return "api/card/report"
+        case .doBlockCard:
+            return "api/card/block"
+        case .doBlockUser:
+            return "api/user/block"
         }
     }
     
@@ -72,8 +81,14 @@ extension ApisSwipe: TargetType {
             return .get
         case .addCardList:
             return .post
-        case .reportList:
+        case .getReportList:
             return .get
+        case .doReportCard:
+            return .post
+        case .doBlockCard:
+            return .post
+        case .doBlockUser:
+            return .post
         }
     }
     
@@ -151,13 +166,39 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
             
-        case .reportList:
+        case .getReportList:
             let params = defaultParams
 
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
             
+        case .doReportCard(let targetUid, let targetCardIdx, let reportCode):
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            params["targetUid"] = targetUid
+            params["targetCardIdx"] = targetCardIdx
+            params["reportCode"] = reportCode
             
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .doBlockCard(let cardIdx, let isBlock):
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            params["cardIdx"] = cardIdx
+            params["isBlock"] = isBlock
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .doBlockUser(let targetUid, let isBlock):
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            params["targetUid"] = targetUid
+            params["isBlock"] = isBlock
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
             
         }
     }

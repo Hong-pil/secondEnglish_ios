@@ -53,12 +53,6 @@ extension TabSwipeCardPage: View {
             
             ZStack {
                 GeometryReader { geometry in
-    //                LinearGradient(gradient: Gradient(colors: [Color.init(#colorLiteral(red: 0.8509803922, green: 0.6549019608, blue: 0.7803921569, alpha: 1)), Color.init(#colorLiteral(red: 1, green: 0.9882352941, blue: 0.862745098, alpha: 1))]), startPoint: .bottom, endPoint: .top)
-    //                    .frame(width: geometry.size.width * 1.5, height: geometry.size.height)
-    //                    .background(Color.blue)
-    //                    .clipShape(Circle())
-    //                    .offset(x: -geometry.size.width / 4, y: -geometry.size.height / 2)
-                    
                     DoneView {
                         withAnimation {
                             //self.users = self.setList()
@@ -118,8 +112,14 @@ extension TabSwipeCardPage: View {
                                     })
                                 //MARK: 책 쌓아놓은 것 같은 효과
                                 //.animation(.spring())
-                                .frame(width: self.getCardWidth(geometry, id: (card.customId ?? 0)), height: geometry.size.height * 0.7)
-                                .offset(x: 0, y: self.getCardOffset(geometry, id: (card.customId ?? 0)))
+                                .frame(
+                                    width: self.getCardWidth(geometry, id: (card.customId ?? 0)),
+                                    height: geometry.size.height * 0.7
+                                )
+//                                .offset(
+//                                    x: 0,
+//                                    y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+//                                )
                             }
                         }
                     }
@@ -146,17 +146,18 @@ extension TabSwipeCardPage: View {
         }
         .padding(30)
         .onAppear {
-//            viewModel.requestSwipeList(sortType: .Latest) { success in
-//                if success {
-//                    
-//                    // 내 좋아요 내역 조회
-//                    viewModel.requestMyLikeCardList(uid: UserManager.shared.uid, isSuccess: { success in
-//                        //
-//                        
-//                    })
-//                }
-//            }
-            
+            if viewModel.categoryList.count > 0 {
+                // 카테고리별 영어문장 조회
+                viewModel.requestSwipeListByCategory(
+                    category: viewModel.categoryList[viewModel.categoryTabIndex], // 첫 카테고리로 시작
+                    sortType: .Latest,
+                    isSuccess: { success in
+                        //
+                    }
+                )
+            } else {
+                viewModel.requestCategory()
+            }
         }
         .onChange(of: maxID) {
             //fLog("idpil::: currentID : \(currentID)")
@@ -201,15 +202,15 @@ extension TabSwipeCardPage: View {
                     })
                 }
             case .BoardBlock:
-                viewModel.blockCard() { isSuccess in
+                viewModel.blockCard(cardIdx: 5, isBlock: 1) { isSuccess in
                     if isSuccess {
-                        //
+                        fLog("idpil::: 카드차단 성공 :)")
                     }
                 }
             case .UserBlock:
-                viewModel.blockUser() { isSuccess in
+                viewModel.blockUser(targetUid: "ppppppp", isBlock: 1) { isSuccess in
                     if isSuccess {
-                        //
+                        fLog("idpil::: 유저차단 성공 :)")
                     }
                 }
             default:
@@ -221,9 +222,13 @@ extension TabSwipeCardPage: View {
         }
         .onChange(of: bottomSheetManager.pressedCardReportCode) {
             if bottomSheetManager.pressedCardReportCode != -1 {
-                fLog("idpil::: 신고하기 누른 코드값 : \(bottomSheetManager.pressedCardReportCode)")
+                //fLog("idpil::: 신고하기 누른 코드값 : \(bottomSheetManager.pressedCardReportCode)")
                 
-                viewModel.reportCard() { isSuccess in
+                viewModel.reportCard(
+                    targetUid: "qqqqqqq",
+                    targetCardIdx: 100,
+                    reportCode: bottomSheetManager.pressedCardReportCode
+                ) { isSuccess in
                     if isSuccess {
                         //
                     }

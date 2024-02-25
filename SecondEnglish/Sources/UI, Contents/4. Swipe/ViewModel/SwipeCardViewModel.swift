@@ -38,8 +38,6 @@ class SwipeCardViewModel: ObservableObject {
     
     
     init() {
-        self.requestCategory()
-        
 //        NotificationCenter.default.addObserver(forName: Notification.Name("workCompleted"), object: nil, queue: nil) { _ in
 //          // Handler ...
 //            fLog("idpil::: Work Completed!")
@@ -443,18 +441,84 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     //MARK: - 카드 신고하기
-    func reportCard(isSuccess: @escaping(Bool) -> Void) {
-        
+    func reportCard(targetUid: String, targetCardIdx: Int, reportCode: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.doReportCard(targetUid: targetUid, targetCardIdx: targetCardIdx, reportCode: reportCode)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
     }
     
     //MARK: - 카드 차단하기
-    func blockCard(isSuccess: @escaping(Bool) -> Void) {
-        
+    func blockCard(cardIdx: Int, isBlock: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.doBlockCard(cardIdx: cardIdx, isBlock: isBlock)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
     }
     
     //MARK: - 유저 차단하기
-    func blockUser(isSuccess: @escaping(Bool) -> Void) {
-        
+    func blockUser(targetUid: String, isBlock: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.doBlockUser(targetUid: targetUid, isBlock: isBlock)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
     }
     
     
