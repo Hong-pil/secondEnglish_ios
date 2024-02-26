@@ -30,6 +30,8 @@ struct SwipeCardFrontView: View {
                         .font(.caption21116Regular)
                         .foregroundColor(.green)
                     
+                    Text("customid : \(card.customId ?? -1)")
+                    
                     Spacer()
                     
                     Button(action: {

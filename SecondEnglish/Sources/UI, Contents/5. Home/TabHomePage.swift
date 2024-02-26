@@ -41,98 +41,32 @@ extension TabHomePage: View {
         VStack(spacing: 0) {
             if viewModel.categoryList.count>0 {
                 header
+                
+                myList
             } else {
                 emptyView
             }
             
+            //MARK: - 내 학습 진도
             ScrollViewReader { scrollviewReader in
                 ScrollView {
-                    
-                    //MARK: - 좋아요한 배너 리스트 (검색어 : Carousel Slider)
-                    // [Ref] https://www.youtube.com/watch?v=DgTPWYM5Hm4
-                    if viewModel.sentenceList.count > 0 {
-                        ZStack {
-                            ForEach(Array(viewModel.sentenceList.enumerated()), id: \.offset) { index, item in
-                                
-                                TabHomeCardView(item: item, cardWidth: cardBannerWidth)
-                                    .padding(.top, 30)
-                                    .opacity(cardBannerCurrentIndex == index ? 1.0 : 0.5)
-                                    .scaleEffect(cardBannerCurrentIndex == index ? 1.2 : 0.8)
-                                    .offset(
-                                        x: CGFloat(index - cardBannerCurrentIndex) * (cardBannerWidth+cardBannerDistance) + dragOffset,
-                                        y: 0
-                                    )
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .gesture(
-                            DragGesture()
-                                .onEnded({ gesture in
-                                    
-                                    /**
-                                     * [민감도 기준]
-                                     * threshold 값을 낮출 수록 민감도 기준이 낮아지기 때문에 잘 넘어감.
-                                     */
-                                    let threshold: CGFloat = 30
-                                    
-                                    fLog("idpil::: gesture.translation.width: \(gesture.translation.width)")
-                                    
-                                    // 손가락으로 좌-우 Swipe한 길이
-                                    if gesture.translation.width > threshold {
-                                        withAnimation {
-                                            cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
-                                        }
-                                    }
-                                    else if gesture.translation.width < -threshold {
-                                        withAnimation {
-                                            cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
-                                            )
-                                        }
-                                    }
-                                })
-                        )
-                        
-                        HStack(spacing: 30) {
-                            Button(action: {
-                                withAnimation {
-                                    cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
-                                }
-                            }, label: {
-                                Text("<")
-                                    .font(.title13240Bold)
-                            })
+                    VStack(spacing: 0) {
+                        ForEach(Array(viewModel.myLearningProgressList.enumerated()), id: \.offset) { index, item in
                             
-                            Button(action: {
-                                withAnimation {
-                                    cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
-                                    )
-                                }
-                            }, label: {
-                                Text(">")
-                                    .font(.title13240Bold)
-                            })
+                            /**
+                             * 카테고리 글자에서 잘바꿈 하려고 중간에 개행문자(\n)를 입력해 놨다.
+                             * 문제는 값을 가져오면 \\n로 내려온다. 그래서 아래와 같이 변경해준다.
+                             * 원인) DB에서는 \n 을 \\n 으로 저장한다고 함.
+                             */
+                            TabHomeMyLearningView(
+                                category: (item.category ?? "").replacingOccurrences(of: "\\n", with: "\n"),
+                                categorySetenceCount: item.category_setence_count ?? 0,
+                                likeNumber: item.like_number ?? 0,
+                                itemIndex: index
+                            )
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 20)
                         }
-                        .padding(.vertical, 30)
-                    }
-                    
-                    
-                    
-                    
-                    //MARK: - 내 학습 진도
-                    ForEach(Array(viewModel.myLearningProgressList.enumerated()), id: \.offset) { index, item in
-                        
-                        /**
-                         * 카테고리 글자에서 잘바꿈 하려고 중간에 개행문자(\n)를 입력해 놨다.
-                         * 문제는 값을 가져오면 \\n로 내려온다. 그래서 아래와 같이 변경해준다.
-                         * 원인) DB에서는 \n 을 \\n 으로 저장한다고 함.
-                         */
-                        TabHomeMyLearningView(
-                            category: (item.category ?? "").replacingOccurrences(of: "\\n", with: "\n"),
-                            categorySetenceCount: item.category_setence_count ?? 0,
-                            likeNumber: item.like_number ?? 0,
-                            itemIndex: index
-                        )
-                        .padding(.horizontal, 20)
                     }
                 }
                 .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
@@ -308,6 +242,77 @@ extension TabHomePage: View {
         .frame(maxWidth: .infinity)
         .background(RoundedRectangle(cornerRadius: 20).fill(Color.gray25))
         .padding(20)
+    }
+    
+    var myList: some View {
+        VStack(spacing: 0) {
+            //MARK: - 좋아요한 배너 리스트 (검색어 : Carousel Slider)
+            // [Ref] https://www.youtube.com/watch?v=DgTPWYM5Hm4
+            if viewModel.sentenceList.count > 0 {
+                ZStack {
+                    ForEach(Array(viewModel.sentenceList.enumerated()), id: \.offset) { index, item in
+                        
+                        TabHomeCardView(item: item, cardWidth: cardBannerWidth)
+                            .padding(.top, 30)
+                            .opacity(cardBannerCurrentIndex == index ? 1.0 : 0.5)
+                            .scaleEffect(cardBannerCurrentIndex == index ? 1.2 : 0.8)
+                            .offset(
+                                x: CGFloat(index - cardBannerCurrentIndex) * (cardBannerWidth+cardBannerDistance) + dragOffset,
+                                y: 0
+                            )
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .gesture(
+                    DragGesture()
+                        .onEnded({ gesture in
+                            
+                            /**
+                             * [민감도 기준]
+                             * threshold 값을 낮출 수록 민감도 기준이 낮아지기 때문에 잘 넘어감.
+                             */
+                            let threshold: CGFloat = 30
+                            
+                            fLog("idpil::: gesture.translation.width: \(gesture.translation.width)")
+                            
+                            // 손가락으로 좌-우 Swipe한 길이
+                            if gesture.translation.width > threshold {
+                                withAnimation {
+                                    cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
+                                }
+                            }
+                            else if gesture.translation.width < -threshold {
+                                withAnimation {
+                                    cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
+                                    )
+                                }
+                            }
+                        })
+                )
+                
+                HStack(spacing: 30) {
+                    Button(action: {
+                        withAnimation {
+                            cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
+                        }
+                    }, label: {
+                        Text("<")
+                            .font(.title13240Bold)
+                    })
+                    
+                    Button(action: {
+                        withAnimation {
+                            cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
+                            )
+                        }
+                    }, label: {
+                        Text(">")
+                            .font(.title13240Bold)
+                    })
+                }
+                .padding(.vertical, 30)
+            }
+        }
     }
 }
 

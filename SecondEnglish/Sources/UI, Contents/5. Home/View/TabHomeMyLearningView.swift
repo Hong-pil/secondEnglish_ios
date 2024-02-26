@@ -25,8 +25,12 @@ struct TabHomeMyLearningView: View {
         }
         .padding(EdgeInsets(top: 15, leading: 20, bottom: 15, trailing: 20))
         .clipShape(RoundedRectangle(cornerRadius: 7))
-        .overlay(RoundedRectangle(cornerRadius: 7).stroke(Color.primaryDefault, lineWidth: 0.5))
-        .background(RoundedRectangle(cornerRadius: 7).fill(Color.gray25))
+        //.overlay(RoundedRectangle(cornerRadius: 7).stroke(Color.primaryDefault, lineWidth: 0.5))
+        .background(
+            RoundedRectangle(cornerRadius: 7)
+                .fill(Color.gray25)
+                .shadow(color: .gray300, radius: 2, x: 2, y: 2)
+        )
         .onTapGesture {
             self.moveToSwipeTab(categoryIdx: itemIndex)
         }

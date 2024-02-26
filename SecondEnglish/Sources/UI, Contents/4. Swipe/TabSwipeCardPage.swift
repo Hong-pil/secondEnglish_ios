@@ -116,18 +116,18 @@ extension TabSwipeCardPage: View {
                                     width: self.getCardWidth(geometry, id: (card.customId ?? 0)),
                                     height: geometry.size.height * 0.7
                                 )
-//                                .offset(
-//                                    x: 0,
-//                                    y: self.getCardOffset(geometry, id: (card.customId ?? 0))
-//                                )
+                                .offset(
+                                    x: 0,
+                                    y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                )
                             }
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    //.background(Color.yellow.opacity(0.7))
                     .opacity(viewModel.swipeList.count>0 ? 1 : 0)
                 }
             }
+            .background(Color.yellow.opacity(0.5))
             
             HStack(spacing: 15) {
                 Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
@@ -327,7 +327,7 @@ extension TabSwipeCardPage: View {
                                     }
                                     .id(index)
                             }
-                            .padding(.leading, index==0 ? 20 : 10)
+                            .padding(.leading, index==0 ? 3 : 10)
                             .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
                             
                         }
@@ -359,7 +359,10 @@ extension TabSwipeCardPage {
     ///   - geometry: The geometry proxy of the parent
     ///   - id: The ID of the current user
     private func getCardWidth(_ geometry: GeometryProxy, id: Int) -> CGFloat {
-        let offset: CGFloat = CGFloat(viewModel.swipeList.count - 1 - id) * 10
+        let offset: CGFloat = CGFloat((viewModel.swipeList.count-1) - id) * 10
+        fLog("idpil::: id : \(id)")
+        fLog("idpil::: offset : \(offset)")
+        fLog("idpil::: return value : \(geometry.size.width - offset)")
         return geometry.size.width - offset
     }
     
