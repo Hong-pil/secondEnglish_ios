@@ -32,10 +32,8 @@ struct TabSwipeCardPage {
     /// List of users
     //@State var users: [User] = []
     
-    
-    
-    // Sentence Card
-    @State var isTapLikeBtn: Bool = false
+    @State private var selectedMainCategoryName: String = ""
+    @State private var isShowMainCategoryListView: Bool = false
     
     /**
      * [주의사항]
@@ -49,7 +47,20 @@ struct TabSwipeCardPage {
 extension TabSwipeCardPage: View {
     var body: some View {
         VStack(spacing: 0) {
-            categoryTabView
+            
+            ZStack {
+                HStack(spacing: 0) {
+                    mainCategoryButton
+                    
+                    categoryTabView
+                }
+                .padding(.top, 20)
+                
+                if self.selectedMainCategoryName.isEmpty {
+                    emptyBubbleShapeView
+                }
+            }
+            
             
             ZStack {
                 GeometryReader { geometry in
@@ -64,17 +75,15 @@ extension TabSwipeCardPage: View {
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    //.background(Color.green.opacity(0.7))
                     
                     ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
                         Group {
                             // Range Operator
                             if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
-//                                let _ = fLog("로그확인::: maxID : \(maxID)")
-//                                let _ = fLog("로그확인::: minID : \(minID)")
-//                                let _ = fLog("로그확인::: index : \(index)")
-//                                let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
-                                
+                                //let _ = fLog("로그확인::: maxID : \(maxID)")
+                                //let _ = fLog("로그확인::: minID : \(minID)")
+                                //let _ = fLog("로그확인::: index : \(index)")
+                                //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
                                 
                                 SwipeView(
                                     card: card,
@@ -109,11 +118,13 @@ extension TabSwipeCardPage: View {
                                         )
                                         
                                         bottomSheetManager.show.swipeCardMore = true
-                                    })
+                                    },
+                                    isLastCard: index==(maxID-1) ? true : false
+                                )
                                 //MARK: 책 쌓아놓은 것 같은 효과
                                 //.animation(.spring())
                                 .frame(
-                                    width: self.getCardWidth(geometry, id: (card.customId ?? 0)),
+                                    width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
                                     height: geometry.size.height * 0.7
                                 )
                                 .offset(
@@ -127,7 +138,6 @@ extension TabSwipeCardPage: View {
                     .opacity(viewModel.swipeList.count>0 ? 1 : 0)
                 }
             }
-            .background(Color.yellow.opacity(0.5))
             
             HStack(spacing: 15) {
                 Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
@@ -143,20 +153,34 @@ extension TabSwipeCardPage: View {
                 )
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.vertical, 20)
+            .padding(.trailing, 20)
         }
-        .padding(30)
         .onAppear {
-            if viewModel.categoryList.count > 0 {
+            if viewModel.mainCategoryList.count>0 && viewModel.subCategoryList.count>0 {
                 // 카테고리별 영어문장 조회
                 viewModel.requestSwipeListByCategory(
-                    category: viewModel.categoryList[viewModel.categoryTabIndex], // 첫 카테고리로 시작
+                    category: viewModel.subCategoryList[viewModel.categoryTabIndex], // 첫 카테고리로 시작
                     sortType: .Latest,
                     isSuccess: { success in
                         //
                     }
                 )
             } else {
-                viewModel.requestCategory()
+                viewModel.requestMainCategory() { isSuccess in
+                    if isSuccess {
+                        if viewModel.mainCategoryList.count > 0 {
+                            self.selectedMainCategoryName = viewModel.mainCategoryList[0]
+                            
+                            viewModel.requestCategory(isInit: true, category: self.selectedMainCategoryName) { isSuccess in
+                                if isSuccess {
+                                    //
+                                }
+                            }
+                            
+                        }
+                    }
+                }
             }
         }
         .onChange(of: maxID) {
@@ -238,14 +262,63 @@ extension TabSwipeCardPage: View {
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
             bottomSheetManager.pressedCardReportCode = -1
         }
+        // Main Category List BottomSheet
+        .bottomSheet(
+            isPresented: $isShowMainCategoryListView,
+            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.mainCategoryList),
+            content: {
+                EditorCategoryView(
+                    viewType: EditorCategoryViewType.MainCategory,
+                    mainCategoryList: viewModel.mainCategoryList,
+                    isShow: $isShowMainCategoryListView,
+                    selectedCategoryName: $selectedMainCategoryName
+                )
+                .onChange(of: selectedMainCategoryName) {
+                    
+                    viewModel.requestCategory(isInit: true, category: selectedMainCategoryName) { isSuccess in
+                        if isSuccess {
+                            viewModel.moveCategoryTab = true
+                        }
+                    }
+                }
+            }
+        )
     }
 
+    var mainCategoryButton: some View {
+        HStack(spacing: 0) {
+            Text(self.selectedMainCategoryName)
+                .font(.buttons1420Medium)
+                .foregroundColor(.gray800)
+            
+            Image("icon_outline_dropdown")
+                .resizable()
+                .renderingMode(.template)
+                .frame(width: 13, height: 13)
+                .foregroundColor(.gray800)
+                .padding(.leading, 5)
+        }
+        //.frame(minWidth: 70)
+        .frame(height: 40)
+        .padding(.horizontal, 15)
+        .clipShape(Capsule())
+        .overlay(Capsule().stroke(Color.gray850.opacity(1), lineWidth: 1))
+        .background(Capsule().fill(Color.gray25))
+        .padding(.vertical, 10)
+        .padding(.leading, 20)
+        .padding(.trailing, 5)
+        .onTapGesture {
+            self.isShowMainCategoryListView = true
+        }
+    }
+    
     var categoryTabView: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
-                    if viewModel.categoryList.count > 0 {
-                        ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                    
+                    if viewModel.subCategoryList.count > 0 {
+                        ForEach(Array(viewModel.subCategoryList.enumerated()), id: \.offset) { index, element in
                             let isSelected = viewModel.categoryTabIndex == index
                             
                             VStack(spacing: 0) {
@@ -255,15 +328,15 @@ extension TabSwipeCardPage: View {
                                     .frame(minWidth: 70)
                                     .frame(height: 40)
                                     .padding(.horizontal, 15)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(isSelected
+                                    .clipShape(Capsule())
+                                    .overlay(Capsule().stroke(isSelected
                                                                                       ? Color.gray850
                                                                                       : Color.gray199.opacity(1), lineWidth: 1))
-                                    .background(RoundedRectangle(cornerRadius: 8).fill(isSelected
+                                    .background(Capsule().fill(isSelected
                                                                                        ? Color.gray850
                                                                                        : Color.gray25))
                                     .padding(.vertical, 10)
-                                    .shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
+                                    //.shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
                                     // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
                                     .onTapGesture {
                                         
@@ -312,13 +385,11 @@ extension TabSwipeCardPage: View {
                                             
                                             
                                             viewModel.requestSwipeListByCategory(
-                                                category: viewModel.categoryList[viewModel.categoryTabIndex],
+                                                category: viewModel.subCategoryList[viewModel.categoryTabIndex],
                                                 sortType: .Latest,
                                                 isSuccess: { success in
                                                 }
                                             )
-                                            
-                                            
                                             
                                             viewModel.moveCategoryTab = false // 초기화
                                         }
@@ -328,7 +399,7 @@ extension TabSwipeCardPage: View {
                                     .id(index)
                             }
                             .padding(.leading, index==0 ? 3 : 10)
-                            .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
+                            .padding(.trailing, (index==viewModel.subCategoryList.count-1) ? 20 : 0)
                             
                         }
                         
@@ -336,6 +407,35 @@ extension TabSwipeCardPage: View {
                 }
             }
         }
+    }
+    
+    var emptyBubbleShapeView: some View {
+        CustomBubbleShape(
+            tailWidth: 10,
+            tailHeight: 5,
+            tailPosition: 0.2,
+            tailDirection: .up,
+            tailOffset: 0
+        )
+        .fill(Color.red)
+        .frame(width: 195, height: 35)
+        .overlay(
+            HStack(spacing: 5) {
+                Group {
+                    Text("지금 다른 주제도 확인해보세요!")
+                    
+                    Button(action: {
+                        
+                    }, label: {
+                        Image(systemName: "xmark")
+                    })
+                }
+                .font(.caption11218Regular)
+                .foregroundColor(.gray25)
+            }
+        )
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .offset(x: 15, y: 50)
     }
     
     /**
@@ -360,9 +460,6 @@ extension TabSwipeCardPage {
     ///   - id: The ID of the current user
     private func getCardWidth(_ geometry: GeometryProxy, id: Int) -> CGFloat {
         let offset: CGFloat = CGFloat((viewModel.swipeList.count-1) - id) * 10
-        fLog("idpil::: id : \(id)")
-        fLog("idpil::: offset : \(offset)")
-        fLog("idpil::: return value : \(geometry.size.width - offset)")
         return geometry.size.width - offset
     }
     

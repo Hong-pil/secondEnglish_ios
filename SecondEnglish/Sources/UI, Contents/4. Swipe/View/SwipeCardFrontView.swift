@@ -9,11 +9,19 @@ import SwiftUI
 import AVFoundation
 import NaturalLanguage
 
+/**
+ * Hint 기능, ChatGTP 한테 물어봐서 해결했음.
+ * 1. swiftui에서 버튼을 클릭할 때마다 Text()에서 어떤 문장에서 단어를 하나씩 보여주는 기능을 알려줘.
+ * 2. swiftui에서 Text()에서 처음에는 보이지 않다가, 버튼을 클릭할 때마다  어떤 문장에서 단어를 하나씩 더해서 보여주는 기능을 알려줘.
+ * 3. swiftui에서 [String] 타입의 Text를 보여줄 때, 단어 길이만큼 밑줄을 표시하는 기능을 알려줘.
+ */
 struct SwipeCardFrontView: View {
     let card: SwipeDataList
+    var hintTxt: [String]
     let isTapLikeBtn: (Int, Bool) -> Void
     let isTapMoreBtn: () -> Void
-    @State var isShowHint: Bool = false
+    
+    @State private var currentHintWordIndex = -1
     
     // TTS
     //@State var ttsText: String = ""
@@ -30,8 +38,6 @@ struct SwipeCardFrontView: View {
                         .font(.caption21116Regular)
                         .foregroundColor(.green)
                     
-                    Text("customid : \(card.customId ?? -1)")
-                    
                     Spacer()
                     
                     Button(action: {
@@ -46,21 +52,38 @@ struct SwipeCardFrontView: View {
                 
                 Spacer()
                 
-                VStack(spacing: 30) {
-                    HStack(spacing: 5) {
-                        Image(systemName: "star")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.yellow)
-                        
-                        Text(card.korean ?? "Empty")
-                            .multilineTextAlignment(.leading)
-                            .font(.title32028Bold)
-                            .foregroundColor(.gray850)
-                    }
+                VStack(spacing: 20) {
+                    Text(card.korean ?? "Empty")
+                        .multilineTextAlignment(.leading)
+                        .font(.title32028Bold)
+                        .foregroundColor(.gray850)
                     
-                    Text("힌트기능 ! 단어 하나씩 보여주기 :)")
-                        .opacity(isShowHint ? 1 : 0)
+                    HStack(spacing: 0) {
+                        ForEach(Array(hintTxt.enumerated()), id: \.offset) { index, word in
+                            
+                            HStack {
+                                
+                                if currentHintWordIndex < index {
+                                    Text(word)
+                                        .foregroundColor(.clear) // 실제 글자는 보이지 않게 설정
+                                        //.underline(true, color: .black)
+                                        .background(Rectangle().foregroundColor(Color.gray500)) // 밑줄 색상 설정
+                                } else {
+                                    Text(word)
+                                }
+                                
+                                if index < hintTxt.count-1 {
+                                    Text(" ")
+                                }
+                                // 밑줄을 글자 길이만큼 표시
+//                                Text(String(repeating: "_", count: word.count))
+//                                    .foregroundColor(.clear) // 실제 글자는 보이지 않게 설정
+                                    //.background(Rectangle().foregroundColor(.black)) // 밑줄 색상 설정
+                            }
+                        }
+                    }
+                    .opacity((currentHintWordIndex > -1) ? 1 : 0)
+                    
                 }
                 
                 Spacer()
@@ -82,7 +105,14 @@ struct SwipeCardFrontView: View {
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장
                         .onTapGesture {
-                            isShowHint.toggle()
+                            
+//                            fLog("currentHintWordIndex : \(currentHintWordIndex)")
+//                            fLog("hintTxt.count : \(hintTxt.count)")
+//                            fLog((currentHintWordIndex > -1) ? hintTxt[currentHintWordIndex] : "")
+                            
+                            if currentHintWordIndex < hintTxt.count-1 {
+                                currentHintWordIndex = (currentHintWordIndex + 1) % hintTxt.count
+                            }
                         }
                     
 //                    Image(systemName: "speaker.wave.2")

@@ -26,7 +26,7 @@ class EditorViewModel: ObservableObject {
     
     //MARK: - 카테고리 조회
     func requestCategory() {
-        ApiControl.getSwipeCategory()
+        ApiControl.getSwipeCategory(category: "")
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")

@@ -30,7 +30,8 @@ class SwipeCardViewModel: ObservableObject {
     @Published var percentCountSwipeList: [SwipeDataList] = [] // 계산용
     @Published var swipeList: [SwipeDataList] = []
     @Published var countOfSwipeList: Double = 0
-    @Published var categoryList: [String] = []
+    @Published var mainCategoryList: [String] = []
+    @Published var subCategoryList: [String] = []
     @Published var cardPercentArr: [SwipeDataList] = [] // 카드 퍼센트 계산용
     
     // Card Like
@@ -59,7 +60,7 @@ class SwipeCardViewModel: ObservableObject {
             self.moveCategoryTab = true
             
             self.requestSwipeListByCategory(
-                category: self.categoryList[self.categoryTabIndex], // 첫 카테고리로 시작
+                category: self.subCategoryList[self.categoryTabIndex], // 첫 카테고리로 시작
                 sortType: .Latest,
                 isSuccess: { success in
                     //
@@ -110,11 +111,9 @@ class SwipeCardViewModel: ObservableObject {
     
     
     
-    
-    
-    //MARK: - 카테고리 조회
-    func requestCategory() {
-        ApiControl.getSwipeCategory()
+    //MARK: - 메인 카테고리 조회
+    func requestMainCategory(isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getSwipeMainCategory()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
@@ -126,20 +125,67 @@ class SwipeCardViewModel: ObservableObject {
                 
             } receiveValue: { value in
                 if value.code == 200 {
-                    self.typeList = value.data ?? []
                     
                     // 카테고리 헤더 데이터
                     for type in value.data ?? [] {
-                        self.categoryList.append(type.type3 ?? "")
+                        self.mainCategoryList.append(type.type2 ?? "")
                     }
-                    self.categoryList = self.categoryList.uniqued() // 중복제거
+                    
+                    // 중복제거
+                    self.mainCategoryList = self.mainCategoryList.uniqued()
+                    
+                    
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    //MARK: - 카테고리 조회
+    func requestCategory(isInit: Bool, category: String, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getSwipeCategory(category: category)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                
+            } receiveValue: { value in
+                if value.code == 200 {
+                    
+                    if isInit {
+                        self.subCategoryList = []
+                        self.categoryTabIndex = 0
+                    }
+                    
+                    self.typeList = value.data ?? []
+                    
+                    
+                    
+                    // 카테고리 헤더 데이터
+                    for type in value.data ?? [] {
+                        self.subCategoryList.append(type.type3 ?? "")
+                    }
+                    
+                    // 중복제거
+                    self.subCategoryList = self.subCategoryList.uniqued()
                     
                     // 카테고리별 영어문장 데이터
-                    if self.categoryList.count > 0 {
+                    if self.subCategoryList.count > 0 {
                         
                         // 카테고리별 영어문장 조회
                         self.requestSwipeListByCategory(
-                            category: self.categoryList[self.categoryTabIndex], // 첫 카테고리로 시작
+                            category: self.subCategoryList[self.categoryTabIndex], // 첫 카테고리로 시작
                             sortType: .Latest,
                             isSuccess: { success in
                                 //
@@ -147,6 +193,7 @@ class SwipeCardViewModel: ObservableObject {
                         )
                     }
                     
+                    isSuccess(true)
                 }
                 else {
                     self.alertMessage = ErrorHandler.getCommonMessage()
@@ -195,7 +242,7 @@ class SwipeCardViewModel: ObservableObject {
                     for element in arr {
                         dumArr.append(element.type3 ?? "")
                     }
-                    self.categoryList = dumArr.uniqued()
+                    self.subCategoryList = dumArr.uniqued()
                     
                     
                     
@@ -225,7 +272,7 @@ class SwipeCardViewModel: ObservableObject {
                     
                     
                     // 처음 Step부터 시작하기
-                    self.resetSwipeList(category: self.categoryList[0])
+                    self.resetSwipeList(category: self.subCategoryList[0])
                     
                     isSuccess(true)
                 }

@@ -18,7 +18,6 @@ struct UserNamePage {
     @FocusState private var isKeyboardFocused: Bool
     @State private var txt: String = ""
     @State private var isNameCheckOK: Bool = false
-    private let txtPlaceholder: String = "반드시 입력이 필요해요."
 }
 
 extension UserNamePage: View {

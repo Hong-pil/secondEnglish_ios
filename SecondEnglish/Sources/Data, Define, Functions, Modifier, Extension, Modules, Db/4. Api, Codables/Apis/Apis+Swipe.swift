@@ -11,7 +11,8 @@ import Foundation
 
 
 enum ApisSwipe {
-    case swipeCategory
+    case swipeCategory(category: String)
+    case swipeMainCategory
     case swipeList
     case swipeListByCategory(category: String)
     case myCategoryProgress
@@ -37,6 +38,8 @@ extension ApisSwipe: TargetType {
         switch self {
         case .swipeCategory:
             return "api/beginner_sentence/category"
+        case .swipeMainCategory:
+            return "api/beginner_sentence/category/main"
         case .swipeList:
             return "api/beginner_sentence/all"
         case .swipeListByCategory:
@@ -66,6 +69,8 @@ extension ApisSwipe: TargetType {
     var method: Moya.Method {
         switch self {
         case .swipeCategory:
+            return .get
+        case .swipeMainCategory:
             return .get
         case .swipeList:
             return .get
@@ -98,7 +103,14 @@ extension ApisSwipe: TargetType {
     
     var task: Task {
         switch self {
-        case .swipeCategory:
+        case .swipeCategory(let category):
+            var params = defaultParams
+            
+            params["category"] = category
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: URLEncoding.default)
+        case .swipeMainCategory:
             let params = defaultParams
             
             log(params: params)
@@ -115,11 +127,11 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
             
-        case .swipeListByCategory(let catetory):
+        case .swipeListByCategory(let category):
             var params = defaultParams
             
             params["uid"] = UserManager.shared.uid
-            params["category"] = catetory
+            params["category"] = category
 
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)

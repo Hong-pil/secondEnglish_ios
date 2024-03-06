@@ -15,6 +15,7 @@ struct SwipeView: View {
     let onRemove: (LikeType) -> Void
     let isTapLikeBtn: (Int, Bool) -> Void
     let isTapMoreBtn: () -> Void
+    let isLastCard: Bool // 맨 위에 보이는 카드만 Drag Gesture 가능
     @State private var offset = CGSize.zero
     
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
@@ -27,7 +28,8 @@ struct SwipeView: View {
                 item: card,
                 isTapLikeBtn: isTapLikeBtn,
                 isTapMoreBtn: isTapMoreBtn,
-                speechSynthesizer: speechSynthesizer
+                speechSynthesizer: speechSynthesizer,
+                isLastCard: isLastCard
             )
             
             // Stamps for like/dislike/superlike that fade in as you swipe
@@ -57,34 +59,38 @@ struct SwipeView: View {
         .gesture(
             DragGesture()
                 .onChanged { gesture in
-                    offset = gesture.translation
+                    if isLastCard {
+                        offset = gesture.translation
+                    }
                 }
                 .onEnded { gesture in
-                    if offset.width > 100 {
-                        fLog("idpil::: 오른쪽")
-                        onRemove(.like)
-                    } else if offset.width < -100 {
-                        fLog("idpil::: 왼쪽")
-                        onRemove(.dislike)
-                    } else if offset.height < -100 {
-                        fLog("idpil::: 위쪽")
-                        //onRemove(.superlike)
-                        withAnimation(.spring()) {
-                            offset = .zero
-                            
-                            isTapLikeBtn(card.idx ?? 0, true)
+                    if isLastCard {
+                        if offset.width > 100 {
+                            fLog("idpil::: 오른쪽")
+                            onRemove(.like)
+                        } else if offset.width < -100 {
+                            fLog("idpil::: 왼쪽")
+                            onRemove(.dislike)
+                        } else if offset.height < -100 {
+                            fLog("idpil::: 위쪽")
+                            //onRemove(.superlike)
+                            withAnimation(.spring()) {
+                                offset = .zero
+                                
+                                isTapLikeBtn(card.idx ?? 0, true)
+                            }
+                        } else if offset.height > 100 {
+                            fLog("idpil::: 아래쪽")
+                            withAnimation(.spring()) {
+                                offset = .zero
+                                
+                                isTapLikeBtn(card.idx ?? 0, false)
+                            }
                         }
-                    } else if offset.height > 100 {
-                        fLog("idpil::: 아래쪽")
-                        withAnimation(.spring()) {
-                            offset = .zero
-                            
-                            isTapLikeBtn(card.idx ?? 0, false)
-                        }
-                    }
-                    else {
-                        withAnimation(.spring()) {
-                            offset = .zero
+                        else {
+                            withAnimation(.spring()) {
+                                offset = .zero
+                            }
                         }
                     }
                 }

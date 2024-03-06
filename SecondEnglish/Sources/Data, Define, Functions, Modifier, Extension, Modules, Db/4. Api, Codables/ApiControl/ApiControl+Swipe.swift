@@ -11,10 +11,59 @@ import Combine
 import CombineMoya
 
 extension ApiControl {
-    static func getSwipeCategory() -> AnyPublisher<SwipeCategory, ErrorModel> {
+    
+    static func getSwipeMainCategory() -> AnyPublisher<SwipeCategory, ErrorModel> {
         Future<SwipeCategory, ErrorModel> { promise in
             
-            let apis: ApisSwipe = .swipeCategory
+            let apis: ApisSwipe = .swipeMainCategory
+            
+            //call
+            let provider = MoyaProvider<ApisSwipe>()
+            provider.requestPublisher(apis)
+                .sink(receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else { return }
+                    fLog(error)
+                    promise(.failure(ErrorModel(code: "error")))
+                }, receiveValue: { response in
+                    
+                    jsonLog(data: response.data, systemCode: response.statusCode, isLogOn: apis.isResponseLog())
+                    
+                    //error check start --------------------------------------------------------------------------------
+                    if ErrorHandler.checkAuthError(code: response.statusCode) {
+                        return
+                    }
+                    
+                    if response.statusCode != 200 {
+                        let result = try? JSONDecoder().decode(ErrorModel.self, from: response.data)
+                        if result != nil {
+                            promise(.failure(result!))
+                        }
+                        else {
+                            promise(.failure(ErrorModel(code: "error")))
+                        }
+                        
+                        return
+                    }
+                    //error check end --------------------------------------------------------------------------------
+                    
+                    let result = try? JSONDecoder().decode(SwipeCategory.self, from: response.data)
+                    if result != nil {
+                        promise(.success(result!))
+                    }
+                    else {
+                        promise(.failure(ErrorModel(code: "error")))
+                    }
+                })
+                .store(in: &canclelables)
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    
+    static func getSwipeCategory(category: String) -> AnyPublisher<SwipeCategory, ErrorModel> {
+        Future<SwipeCategory, ErrorModel> { promise in
+            
+            let apis: ApisSwipe = .swipeCategory(category: category)
             
             //call
             let provider = MoyaProvider<ApisSwipe>()

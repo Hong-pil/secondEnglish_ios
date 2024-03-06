@@ -259,7 +259,7 @@ extension EditorPage: View {
         // Main Category List BottomSheet
         .bottomSheet(
             isPresented: $isShowMainCategoryListView,
-            height: getMainCategoryBottomSheetHeight(),
+            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.type2CategoryList),
             content: {
                 EditorCategoryView(
                     viewType: EditorCategoryViewType.MainCategory,
@@ -277,7 +277,8 @@ extension EditorPage: View {
         // Sub Category List BottomSheet
         .bottomSheet(
             isPresented: $isShowSubCategoryListView,
-            height: getSubCategoryBottomSheetHeight(),
+            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.getSubCategoryList(selectedMainCategoryName: selectedMainCategoryName)),
+            //height: getSubCategoryBottomSheetHeight(),
             content: {
                 EditorCategoryView(
                     viewType: EditorCategoryViewType.SubCategory,
@@ -599,46 +600,6 @@ extension EditorPage {
         
         // 3. 검사 통과
         return .CheckOK
-    }
-    
-    func getMainCategoryBottomSheetHeight() -> CGFloat {
-        if viewModel.type2CategoryList.count > 0 {
-            switch viewModel.type2CategoryList.count {
-            case 1...3:
-                return 260.0
-            case 4...6:
-                return 320.0
-            case 7...9:
-                return 440.0
-            case 10..<14:
-                return 610.0
-            default:
-                return .infinity
-            }
-        } else {
-            return 0.0
-        }
-    }
-    
-    func getSubCategoryBottomSheetHeight() -> CGFloat {
-        let subCategoryList = viewModel.getSubCategoryList(selectedMainCategoryName: selectedMainCategoryName)
-        
-        if subCategoryList.count > 0 {
-            switch subCategoryList.count {
-            case 1...3:
-                return 190.0
-            case 4...6:
-                return 320.0
-            case 7...9:
-                return 440.0
-            case 10..<14:
-                return 610.0
-            default:
-                return .infinity
-            }
-        } else {
-            return 0.0
-        }
     }
     
     private func getCategoryIndex() -> Int? {

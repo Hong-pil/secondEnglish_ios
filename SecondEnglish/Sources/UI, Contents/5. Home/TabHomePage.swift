@@ -105,6 +105,16 @@ extension TabHomePage: View {
             
             viewModel.requestMyCategoryProgress()
         }
+        .onChange(of: UserManager.shared.isLogin) {
+            // 여기 뷰 띄워놓고 로그인뷰를 팝업으로 띄운 다음 로그인 진행을 하기 때문에, 로그인 성공한 경우 데이터 다시 요청
+            if UserManager.shared.isLogin {
+                viewModel.requestMyCardList(isSuccess: { success in
+                    //
+                })
+                
+                viewModel.requestMyCategoryProgress()
+            }
+        }
     }
     
     var header: some View {

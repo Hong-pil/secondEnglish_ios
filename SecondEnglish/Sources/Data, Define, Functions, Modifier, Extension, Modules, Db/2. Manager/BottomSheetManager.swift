@@ -229,4 +229,23 @@ class BottomSheetManager: ObservableObject {
         }
     }
     
+    
+    func getBottomSheetHeight(list: [Any]) -> CGFloat {
+        if list.count > 0 {
+            switch list.count {
+            case 1...3:
+                return 260.0
+            case 4...6:
+                return 320.0
+            case 7...9:
+                return 440.0
+            case 10..<14:
+                return 610.0
+            default:
+                return .infinity
+            }
+        } else {
+            return 0.0
+        }
+    }
 }
