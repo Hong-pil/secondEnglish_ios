@@ -59,6 +59,19 @@ struct ContentViewPopup: ViewModifier {
                     )
                 }
             )
+            // Main Category List BottomSheet
+            .bottomSheet(
+                isPresented: $bottomSheetManager.show.swipePageMainCategory,
+                height: DefineSize.Screen.Height / 2, // 아이템 갯수 많아서 popup이 화면을 가리면 사용성이 떨어져서 스크린 높이의 절반으로 설정함.
+                content: {
+                    EditorCategoryView(
+                        viewType: EditorCategoryViewType.SwipePageMainCategory,
+                        mainCategoryList: DefineBottomSheet.swipePageMainCategoryListItems,
+                        isShow: $bottomSheetManager.show.swipePageMainCategory,
+                        selectedCategoryName: $bottomSheetManager.swipePageMainCategoryName
+                    )
+                }
+            )
         
     }
     

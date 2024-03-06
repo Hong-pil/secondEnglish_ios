@@ -132,8 +132,10 @@ class SwipeCardViewModel: ObservableObject {
                     }
                     
                     // 중복제거
-                    self.mainCategoryList = self.mainCategoryList.uniqued()
+                    //self.mainCategoryList = self.mainCategoryList.uniqued()
                     
+                    // 중복제거
+                    DefineBottomSheet.swipePageMainCategoryListItems = self.mainCategoryList.uniqued()
                     
                     
                     isSuccess(true)

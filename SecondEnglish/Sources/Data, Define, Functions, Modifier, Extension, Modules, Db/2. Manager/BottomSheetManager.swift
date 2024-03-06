@@ -12,6 +12,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 
 enum CustomBottomSheetClickType: Int {
@@ -146,6 +147,7 @@ class BottomSheetManager: ObservableObject {
         var sliderAuto: Bool = false
         var swipeCardMore: Bool = false
         var swipeCardReport: Bool = false
+        var swipePageMainCategory: Bool = false
     }
     
     //    let ver = PopupType.BottomSheet.Post
@@ -155,6 +157,8 @@ class BottomSheetManager: ObservableObject {
     @Published var pressedCardMorType: MoreButtonType = .None
     // 카드 신고하기 팝업에서 클릭한 아이템
     @Published var pressedCardReportCode: Int = -1
+    @AppStorage(DefineKey.swipePageMainCategoryName) var swipePageMainCategoryName: String = ""
+    
     
     // 홈탭 -> Popular탭 -> GLOBAL버튼
     @Published var onPressPopularGlobal: String = "en_global".localized

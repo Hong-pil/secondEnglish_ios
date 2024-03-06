@@ -21,8 +21,8 @@ extension EditorCategoryRowView: View {
         }, label: {
             HStack(spacing: 0) {
                 Text(categoryName)
-                    .font(.body11622Regular)
-                    .foregroundColor(selectedCategoryName == categoryName ? Color.primaryDefault : Color.gray800)
+                    .font(.title51622Medium)
+                    .foregroundColor(selectedCategoryName == categoryName ? Color.primaryDefault : Color.gray400)
                 
                 Spacer()
                 
@@ -34,7 +34,6 @@ extension EditorCategoryRowView: View {
                         .foregroundColor(.primaryDefault)
                 }
             }
-            .frame(height: 24)
         })
     }
 }

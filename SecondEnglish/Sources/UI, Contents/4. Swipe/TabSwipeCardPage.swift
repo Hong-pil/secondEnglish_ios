@@ -32,9 +32,6 @@ struct TabSwipeCardPage {
     /// List of users
     //@State var users: [User] = []
     
-    @State private var selectedMainCategoryName: String = ""
-    @State private var isShowMainCategoryListView: Bool = false
-    
     /**
      * [주의사항]
      * 자식뷰에서 변수 선언하면 기능 작동은 하는데, 로딩시간이 엄청 길어지는 문제가 있음.
@@ -48,18 +45,23 @@ extension TabSwipeCardPage: View {
     var body: some View {
         VStack(spacing: 0) {
             
-            ZStack {
-                HStack(spacing: 0) {
-                    mainCategoryButton
-                    
-                    categoryTabView
-                }
-                .padding(.top, 20)
-                
-                if self.selectedMainCategoryName.isEmpty {
-                    emptyBubbleShapeView
-                }
-            }
+            mainCategoryButton
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            subCategoryTabView
+            
+//            ZStack {
+//                VStack(spacing: 0) {
+//                    mainCategoryButton
+//                    
+//                    categoryTabView
+//                }
+//                .padding(.top, 20)
+//                
+//                if self.selectedMainCategoryName.isEmpty {
+//                    emptyBubbleShapeView
+//                }
+//            }
             
             
             ZStack {
@@ -170,9 +172,13 @@ extension TabSwipeCardPage: View {
                 viewModel.requestMainCategory() { isSuccess in
                     if isSuccess {
                         if viewModel.mainCategoryList.count > 0 {
-                            self.selectedMainCategoryName = viewModel.mainCategoryList[0]
                             
-                            viewModel.requestCategory(isInit: true, category: self.selectedMainCategoryName) { isSuccess in
+                            bottomSheetManager.swipePageMainCategoryName = DefineBottomSheet.swipePageMainCategoryListItems[0]
+                            
+                            viewModel.requestCategory(
+                                isInit: true,
+                                category: DefineBottomSheet.swipePageMainCategoryListItems[0]
+                            ) { isSuccess in
                                 if isSuccess {
                                     //
                                 }
@@ -262,32 +268,21 @@ extension TabSwipeCardPage: View {
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
             bottomSheetManager.pressedCardReportCode = -1
         }
-        // Main Category List BottomSheet
-        .bottomSheet(
-            isPresented: $isShowMainCategoryListView,
-            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.mainCategoryList),
-            content: {
-                EditorCategoryView(
-                    viewType: EditorCategoryViewType.MainCategory,
-                    mainCategoryList: viewModel.mainCategoryList,
-                    isShow: $isShowMainCategoryListView,
-                    selectedCategoryName: $selectedMainCategoryName
-                )
-                .onChange(of: selectedMainCategoryName) {
-                    
-                    viewModel.requestCategory(isInit: true, category: selectedMainCategoryName) { isSuccess in
-                        if isSuccess {
-                            viewModel.moveCategoryTab = true
-                        }
-                    }
+        .onChange(of: bottomSheetManager.swipePageMainCategoryName) {
+            viewModel.requestCategory(
+                isInit: true,
+                category: bottomSheetManager.swipePageMainCategoryName
+            ) { isSuccess in
+                if isSuccess {
+                    viewModel.moveCategoryTab = true
                 }
             }
-        )
+        }
     }
 
     var mainCategoryButton: some View {
         HStack(spacing: 0) {
-            Text(self.selectedMainCategoryName)
+            Text(bottomSheetManager.swipePageMainCategoryName)
                 .font(.buttons1420Medium)
                 .foregroundColor(.gray800)
             
@@ -308,11 +303,13 @@ extension TabSwipeCardPage: View {
         .padding(.leading, 20)
         .padding(.trailing, 5)
         .onTapGesture {
-            self.isShowMainCategoryListView = true
+            //self.isShowMainCategoryListView = true
+            
+            bottomSheetManager.show.swipePageMainCategory = true
         }
     }
     
-    var categoryTabView: some View {
+    var subCategoryTabView: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
@@ -398,11 +395,10 @@ extension TabSwipeCardPage: View {
                                     }
                                     .id(index)
                             }
-                            .padding(.leading, index==0 ? 3 : 10)
+                            .padding(.leading, index==0 ? 20 : 10)
                             .padding(.trailing, (index==viewModel.subCategoryList.count-1) ? 20 : 0)
                             
                         }
-                        
                     }
                 }
             }

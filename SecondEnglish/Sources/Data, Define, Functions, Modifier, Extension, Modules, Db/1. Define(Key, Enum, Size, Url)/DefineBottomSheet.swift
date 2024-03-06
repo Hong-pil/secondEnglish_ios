@@ -14,6 +14,8 @@ struct DefineBottomSheet {
     
     static var reportListItems: [ReportListData] = []
     
+    static var swipePageMainCategoryListItems: [String] = []
+    
     static var sliderAutoItems = [
         CustomBottomSheetModel(SEQ: 1, title: "자동"),
         CustomBottomSheetModel(SEQ: 2, title: "수동")

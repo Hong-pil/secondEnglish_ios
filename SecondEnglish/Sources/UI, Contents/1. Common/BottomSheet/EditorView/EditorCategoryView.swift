@@ -10,6 +10,7 @@ import SwiftUI
 enum EditorCategoryViewType: Int {
     case MainCategory
     case SubCategory
+    case SwipePageMainCategory
 }
 
 struct EditorCategoryView {
@@ -30,13 +31,18 @@ struct EditorCategoryView {
 extension EditorCategoryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(viewType == .MainCategory ? "g_main_category_select".localized : "m_sub_category_select".localized)
-                .font(.title51622Medium)
-                .foregroundColor(.stateEnableGray900)
+            if viewType == .MainCategory ||
+                viewType == .SubCategory {
+                Text(viewType == .MainCategory ? "g_main_category_select".localized : "m_sub_category_select".localized)
+                    .font(.title41824Medium)
+                    .foregroundColor(.stateEnableGray900)
+                    .padding(.bottom, 20)
+            }
             
             ScrollView(showsIndicators: false) {
-                Group {
-                    if viewType == .MainCategory {
+                VStack(spacing: 0) {
+                    if viewType == .MainCategory ||
+                        viewType == .SwipePageMainCategory {
                         if let list = mainCategoryList {
                             ForEach(Array(list.enumerated()), id: \.offset) { index, item in
                                 EditorCategoryRowView(
@@ -48,6 +54,8 @@ extension EditorCategoryView: View {
                                     },
                                     selectedCategoryName: selectedCategoryName
                                 )
+                                .padding(.top, index==0 ? 0 : 10)
+                                .padding(.bottom, index==list.count-1 ? 10 : 0)
                             }
                         }
                     }
@@ -67,7 +75,6 @@ extension EditorCategoryView: View {
                         }
                     }
                 }
-                .padding(.top, 20)
             }
         }
         .padding(.horizontal, 20)
