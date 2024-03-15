@@ -23,6 +23,8 @@ class UserManager: ObservableObject {
     @Published var showLoginAlert = false
     @Published var showAlertAuthError = false
     @Published var showAlertNetworkError = false
+    @Published var showCardShuffleError = false
+    @Published var showCardCutError = false
     @Published var showSettingAuth = false
     @Published var showClubJoinAlert = false
     @Published var deletePostAlert = false

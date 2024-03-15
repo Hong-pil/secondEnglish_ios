@@ -19,6 +19,7 @@ enum CustomBottomSheetClickType: Int {
     case SliderAuto
     case SwipeCardMore
     case SwipeCardReport
+    case SwipeCardCut
 }
 
 enum MoreButtonType: Int {
@@ -31,6 +32,12 @@ enum MoreButtonType: Int {
     case UserBlock
     case Edit
     case Delete
+}
+
+enum SwipeCardCutType: CGFloat {
+    case Percent_70 = 0.3 // 70% 자르기
+    case Percent_50 = 0.5 // 50% 자르기
+    case Percent_30 = 0.7 // 30% 자르기
 }
 
 // (공통) 목록, 글/댓글 더보기
@@ -147,7 +154,7 @@ class BottomSheetManager: ObservableObject {
         var sliderAuto: Bool = false
         var swipeCardMore: Bool = false
         var swipeCardReport: Bool = false
-        var swipePageMainCategory: Bool = false
+        var swipeCardCut: Bool = false
     }
     
     //    let ver = PopupType.BottomSheet.Post
@@ -157,7 +164,8 @@ class BottomSheetManager: ObservableObject {
     @Published var pressedCardMorType: MoreButtonType = .None
     // 카드 신고하기 팝업에서 클릭한 아이템
     @Published var pressedCardReportCode: Int = -1
-    @AppStorage(DefineKey.swipePageMainCategoryName) var swipePageMainCategoryName: String = ""
+    // 선택한 카드 자르기 퍼센트
+    @Published var pressedCardCutPercent: CGFloat = 0.0
     
     
     // 홈탭 -> Popular탭 -> GLOBAL버튼

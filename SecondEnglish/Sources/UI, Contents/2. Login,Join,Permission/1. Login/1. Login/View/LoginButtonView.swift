@@ -11,7 +11,6 @@ enum LoginButtonType: Int {
     case google
     case apple
     case kakaotalk
-    case phone
 }
 
 struct LoginButtonView : View {
@@ -41,23 +40,11 @@ struct LoginButtonView : View {
             onPress()
         } label: {
             ZStack {
-                HStack(spacing: 0) {
-                    Group {
-                        if buttonType == .phone {
-                            Image(systemName: "phone.fill")
-                                .resizable()
-                                .renderingMode(.template)
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.primaryDefault)
-                        } else {
-                            Image(iconName)
-                                .resizable()
-                                .frame(width: sizeInfo.iconSize.width, height: sizeInfo.iconSize.height)
-                        }
-                    }
+                Image(iconName)
+                    .resizable()
+                    .frame(width: sizeInfo.iconSize.width, height: sizeInfo.iconSize.height)
                     .padding(.leading, sizeInfo.horizontalPadding)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 HStack(spacing: 0) {
                     Text(snsName)

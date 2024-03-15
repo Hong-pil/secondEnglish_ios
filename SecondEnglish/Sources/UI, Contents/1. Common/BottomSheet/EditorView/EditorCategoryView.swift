@@ -10,7 +10,6 @@ import SwiftUI
 enum EditorCategoryViewType: Int {
     case MainCategory
     case SubCategory
-    case SwipePageMainCategory
 }
 
 struct EditorCategoryView {
@@ -41,8 +40,7 @@ extension EditorCategoryView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    if viewType == .MainCategory ||
-                        viewType == .SwipePageMainCategory {
+                    if viewType == .MainCategory {
                         if let list = mainCategoryList {
                             ForEach(Array(list.enumerated()), id: \.offset) { index, item in
                                 EditorCategoryRowView(

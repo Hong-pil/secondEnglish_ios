@@ -15,6 +15,7 @@ struct CustomBottomView: View {
     let type: CustomBottomSheetClickType
     var onPressItemMore: ((MoreButtonType) -> Void) = {_ in}
     var onPressItemReportCode: ((Int) -> Void) = {_ in}
+    var onPressItemCutPercent: ((CGFloat) -> Void) = {_ in}
     
     //var onPressGlobalLan: ((GlobalLanType) -> Void) = {_ in }
     var onPressGlobalLan: ((String) -> Void) = {_ in }
@@ -64,6 +65,19 @@ struct CustomBottomView: View {
                             item: element,
                             onPress: { reportCode in
                                 onPressItemReportCode(reportCode)
+                                isShow = false
+                            }
+                        )
+                        .padding(.top, index==0 ? 10 : 20)
+                    }
+                }
+                else if type == .SwipeCardCut {
+                    ForEach(Array(DefineBottomSheet.swipeCardCutPercentItems.enumerated()), id: \.offset) { index, element in
+                        
+                        CustomBottomItemSwipeCardCutView(
+                            item: element,
+                            onPress: { percent in
+                                onPressItemCutPercent(percent)
                                 isShow = false
                             }
                         )
@@ -143,4 +157,41 @@ struct CustomBottomItemReportView: View {
             onPress(item.code ?? 0)
         }
     }
+}
+
+struct CustomBottomItemSwipeCardCutView: View {
+    let item: CustomBottomSheetModel
+    let onPress: ((CGFloat) -> Void)
+    
+    private struct sizeInfo {
+        static let Hpadding: CGFloat = DefineSize.Contents.HorizontalPadding
+    }
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            Text(item.title)
+                .font(.body11622Regular)
+                .foregroundColor(.gray870)
+                .padding(.leading, 20)
+            
+            Spacer()
+        }
+        .background(Color.gray25)
+        .onTapGesture {
+            switch item.SEQ {
+            case 1:
+                // 30% 자르기
+                onPress(SwipeCardCutType.Percent_30.rawValue)
+            case 2:
+                // 50% 자르기
+                onPress(SwipeCardCutType.Percent_50.rawValue)
+            case 3:
+                // 70% 자르기
+                onPress(SwipeCardCutType.Percent_70.rawValue)
+            default:
+                fLog("")
+            }
+        }
+    }
+    
 }

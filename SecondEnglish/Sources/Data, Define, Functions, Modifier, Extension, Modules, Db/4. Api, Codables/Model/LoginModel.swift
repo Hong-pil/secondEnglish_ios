@@ -113,3 +113,32 @@ struct RenewalTokenData : Codable {
         expires_in = (try? container.decode(Int.self, forKey: .expires_in)) ?? 0
     }
 }
+
+struct LoginJoinDataResponse: Codable {
+    var code: Int = 0
+    var success: Bool? = false
+    var message: String? = ""
+}
+
+struct LoginSuccessResponse: Codable {
+    var code: Int = 0
+    var success: Bool = false
+    var message: String? = ""
+    var uid: String? = ""
+    var nickname: String? = ""
+    var access_token: String? = ""
+    var refresh_token: String? = ""
+}
+
+struct UserInfoResponse: Codable {
+    var code: Int = 0
+    var data: UserInfoResponseData? = nil
+}
+
+struct UserInfoResponseData: Codable {
+    var uid: String? = ""
+    var email: String? = ""
+    var hphone: String? = ""
+    var nickname: String? = ""
+    var mdate: String? = ""
+}

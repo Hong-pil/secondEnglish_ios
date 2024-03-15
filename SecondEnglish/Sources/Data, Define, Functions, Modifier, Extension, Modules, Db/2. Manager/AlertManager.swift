@@ -192,4 +192,5 @@ class AlertManager {
             UserManager.shared.showAlertNetworkError = true
         }
     }
+    
 }

@@ -76,8 +76,6 @@
 		E0BA02562B5EA05300AA11A5 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02552B5EA05300AA11A5 /* KakaoSDKAuth */; };
 		E0BA02582B5EA05300AA11A5 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02572B5EA05300AA11A5 /* KakaoSDKCommon */; };
 		E0BA025A2B5EA05300AA11A5 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02592B5EA05300AA11A5 /* KakaoSDKUser */; };
-		E0BDD41E2B6615A4007D5742 /* PhoneNumberLoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */; };
-		E0BDD4212B661673007D5742 /* PhoneNumberTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */; };
 		E0C0D7B32B4FE93000A7C01B /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B22B4FE93000A7C01B /* CombineMoya */; };
 		E0C0D7B52B4FE93000A7C01B /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B42B4FE93000A7C01B /* Moya */; };
 		E0C0D7B72B4FE93000A7C01B /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7B62B4FE93000A7C01B /* ReactiveMoya */; };
@@ -117,18 +115,15 @@
 		E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD732B4FC965007615A8 /* ApiControl.swift */; };
 		E0DBDD762B4FC972007615A8 /* ApiControl+Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD752B4FC972007615A8 /* ApiControl+Slider.swift */; };
 		E0DBDD782B4FC980007615A8 /* ApiControl+Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD772B4FC980007615A8 /* ApiControl+Swipe.swift */; };
-		E0DBDD7A2B4FC98C007615A8 /* ApiControl+LoginJoin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD792B4FC98C007615A8 /* ApiControl+LoginJoin.swift */; };
 		E0DBDD7C2B4FC99B007615A8 /* Apis.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD7B2B4FC99B007615A8 /* Apis.swift */; };
 		E0DBDD7E2B4FC9A8007615A8 /* Apis+Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD7D2B4FC9A8007615A8 /* Apis+Slider.swift */; };
 		E0DBDD802B4FC9B4007615A8 /* Apis+Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD7F2B4FC9B4007615A8 /* Apis+Swipe.swift */; };
-		E0DBDD822B4FC9C1007615A8 /* Apis+LoginJoin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD812B4FC9C1007615A8 /* Apis+LoginJoin.swift */; };
 		E0DBDD842B4FC9CE007615A8 /* ConfigModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD832B4FC9CE007615A8 /* ConfigModel.swift */; };
 		E0DBDD862B4FC9D9007615A8 /* CommonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD852B4FC9D9007615A8 /* CommonModel.swift */; };
 		E0DBDD882B4FC9E5007615A8 /* SettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD872B4FC9E5007615A8 /* SettingModel.swift */; };
 		E0DBDD8A2B4FC9F1007615A8 /* SliderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD892B4FC9F1007615A8 /* SliderModel.swift */; };
 		E0DBDD8C2B4FC9FB007615A8 /* SwipeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD8B2B4FC9FB007615A8 /* SwipeModel.swift */; };
 		E0DBDD8E2B4FCA05007615A8 /* RecordingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD8D2B4FCA05007615A8 /* RecordingModel.swift */; };
-		E0DBDD902B4FCA10007615A8 /* LoginJoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD8F2B4FCA10007615A8 /* LoginJoinModel.swift */; };
 		E0DBDD922B4FCA26007615A8 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD912B4FCA26007615A8 /* String+Extension.swift */; };
 		E0DBDD942B4FCCFA007615A8 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD932B4FCCFA007615A8 /* Bundle+Extension.swift */; };
 		E0DBDD962B4FCD05007615A8 /* UIWindow+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDD952B4FCD05007615A8 /* UIWindow+Extension.swift */; };
@@ -288,8 +283,6 @@
 		E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeCardView.swift; sourceTree = "<group>"; };
 		E0B3B1F92B7B62B40004C69E /* TabHomeMyLearningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeMyLearningView.swift; sourceTree = "<group>"; };
 		E0BA02502B5E875400AA11A5 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberLoginPage.swift; sourceTree = "<group>"; };
-		E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberTextFieldStyle.swift; sourceTree = "<group>"; };
 		E0CF069B2B8748920009C02C /* CustomBubbleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBubbleShape.swift; sourceTree = "<group>"; };
 		E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondEnglish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondEnglishApp.swift; sourceTree = "<group>"; };
@@ -323,18 +316,15 @@
 		E0DBDD732B4FC965007615A8 /* ApiControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiControl.swift; sourceTree = "<group>"; };
 		E0DBDD752B4FC972007615A8 /* ApiControl+Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+Slider.swift"; sourceTree = "<group>"; };
 		E0DBDD772B4FC980007615A8 /* ApiControl+Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+Swipe.swift"; sourceTree = "<group>"; };
-		E0DBDD792B4FC98C007615A8 /* ApiControl+LoginJoin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ApiControl+LoginJoin.swift"; sourceTree = "<group>"; };
 		E0DBDD7B2B4FC99B007615A8 /* Apis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apis.swift; sourceTree = "<group>"; };
 		E0DBDD7D2B4FC9A8007615A8 /* Apis+Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Apis+Slider.swift"; sourceTree = "<group>"; };
 		E0DBDD7F2B4FC9B4007615A8 /* Apis+Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Apis+Swipe.swift"; sourceTree = "<group>"; };
-		E0DBDD812B4FC9C1007615A8 /* Apis+LoginJoin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Apis+LoginJoin.swift"; sourceTree = "<group>"; };
 		E0DBDD832B4FC9CE007615A8 /* ConfigModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigModel.swift; sourceTree = "<group>"; };
 		E0DBDD852B4FC9D9007615A8 /* CommonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonModel.swift; sourceTree = "<group>"; };
 		E0DBDD872B4FC9E5007615A8 /* SettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingModel.swift; sourceTree = "<group>"; };
 		E0DBDD892B4FC9F1007615A8 /* SliderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderModel.swift; sourceTree = "<group>"; };
 		E0DBDD8B2B4FC9FB007615A8 /* SwipeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeModel.swift; sourceTree = "<group>"; };
 		E0DBDD8D2B4FCA05007615A8 /* RecordingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingModel.swift; sourceTree = "<group>"; };
-		E0DBDD8F2B4FCA10007615A8 /* LoginJoinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginJoinModel.swift; sourceTree = "<group>"; };
 		E0DBDD912B4FCA26007615A8 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		E0DBDD932B4FCCFA007615A8 /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
 		E0DBDD952B4FCD05007615A8 /* UIWindow+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extension.swift"; sourceTree = "<group>"; };
@@ -486,7 +476,6 @@
 			isa = PBXGroup;
 			children = (
 				E002E1912B57BC7A00F64CA4 /* 1. Login */,
-				E0BDD41C2B66153E007D5742 /* 2. PhoneNumberLoginPage */,
 				E002E18F2B57BBFC00F64CA4 /* 3. EmailLoginPage - 이메일로 로그인하기 */,
 				E002E1902B57BC2700F64CA4 /* 4. FindPassword */,
 				E003BA9D2B863AC500C55590 /* 5. AddUserName */,
@@ -700,23 +689,6 @@
 				E098DE992B70760A000059B3 /* CustomScrollView.swift */,
 			);
 			path = CustomScrollView;
-			sourceTree = "<group>";
-		};
-		E0BDD41C2B66153E007D5742 /* 2. PhoneNumberLoginPage */ = {
-			isa = PBXGroup;
-			children = (
-				E0BDD41F2B661667007D5742 /* View */,
-				E0BDD41D2B6615A4007D5742 /* PhoneNumberLoginPage.swift */,
-			);
-			path = "2. PhoneNumberLoginPage";
-			sourceTree = "<group>";
-		};
-		E0BDD41F2B661667007D5742 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				E0BDD4202B661673007D5742 /* PhoneNumberTextFieldStyle.swift */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		E0CF069A2B87487E0009C02C /* View */ = {
@@ -1026,7 +998,6 @@
 				E0DBDD892B4FC9F1007615A8 /* SliderModel.swift */,
 				E0DBDD8B2B4FC9FB007615A8 /* SwipeModel.swift */,
 				E0DBDD8D2B4FCA05007615A8 /* RecordingModel.swift */,
-				E0DBDD8F2B4FCA10007615A8 /* LoginJoinModel.swift */,
 				E016784F2B62580500943945 /* LoginModel.swift */,
 			);
 			path = Model;
@@ -1038,7 +1009,6 @@
 				E0DBDD7B2B4FC99B007615A8 /* Apis.swift */,
 				E0DBDD7D2B4FC9A8007615A8 /* Apis+Slider.swift */,
 				E0DBDD7F2B4FC9B4007615A8 /* Apis+Swipe.swift */,
-				E0DBDD812B4FC9C1007615A8 /* Apis+LoginJoin.swift */,
 				E016784B2B6257CD00943945 /* Apis+Login.swift */,
 				E068E96F2B68E49A00500585 /* Apis+LoginSNS.swift */,
 			);
@@ -1051,7 +1021,6 @@
 				E0DBDD732B4FC965007615A8 /* ApiControl.swift */,
 				E0DBDD752B4FC972007615A8 /* ApiControl+Slider.swift */,
 				E0DBDD772B4FC980007615A8 /* ApiControl+Swipe.swift */,
-				E0DBDD792B4FC98C007615A8 /* ApiControl+LoginJoin.swift */,
 				E016784D2B6257E600943945 /* ApiControl+Login.swift */,
 				E068E9712B68E4BE00500585 /* ApiControl+LoginSNS.swift */,
 			);
@@ -1497,7 +1466,6 @@
 				E06392462B82FB76003D0428 /* PopupProtocol.swift in Sources */,
 				E0DBDD962B4FCD05007615A8 /* UIWindow+Extension.swift in Sources */,
 				E0DBDDCA2B4FCE37007615A8 /* URL+Extension.swift in Sources */,
-				E0BDD4212B661673007D5742 /* PhoneNumberTextFieldStyle.swift in Sources */,
 				E002E1972B57C20400F64CA4 /* SnsLoginControl.swift in Sources */,
 				E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */,
 				E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */,
@@ -1505,7 +1473,6 @@
 				E0DBDDB02B4FCDA4007615A8 /* Shape+Extension.swift in Sources */,
 				E0DBDDF82B4FCF88007615A8 /* LoadingViewContainer.swift in Sources */,
 				E0DBDD6B2B4FC91D007615A8 /* PermissionManager.swift in Sources */,
-				E0DBDD822B4FC9C1007615A8 /* Apis+LoginJoin.swift in Sources */,
 				E0DBDD9E2B4FCD3A007615A8 /* Bool+Extension.swift in Sources */,
 				E045E9D92B65A77D00E3BD60 /* JoinAgreeViewModel.swift in Sources */,
 				E0DBDDD62B4FCEA2007615A8 /* CustomKeyPad.swift in Sources */,
@@ -1513,7 +1480,6 @@
 				E0DBDDB22B4FCDAE007615A8 /* Spacer+Extension.swift in Sources */,
 				E0F11EA32B80495B0014F503 /* EditorInputView.swift in Sources */,
 				E0DBDDAC2B4FCD8E007615A8 /* Int+Extension.swift in Sources */,
-				E0DBDD902B4FCA10007615A8 /* LoginJoinModel.swift in Sources */,
 				E0DBDDBA2B4FCDDB007615A8 /* UIFont+Extension.swift in Sources */,
 				E0DBDDB82B4FCDD0007615A8 /* UIColor+Extension.swift in Sources */,
 				E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */,
@@ -1525,7 +1491,6 @@
 				E06392362B82FB03003D0428 /* CentrePopupConfig.swift in Sources */,
 				E06392402B82FB28003D0428 /* PopupTopStackView.swift in Sources */,
 				E0DBDDFE2B4FCFA9007615A8 /* TranslateLoadingView.swift in Sources */,
-				E0DBDD7A2B4FC98C007615A8 /* ApiControl+LoginJoin.swift in Sources */,
 				E0DBDD782B4FC980007615A8 /* ApiControl+Swipe.swift in Sources */,
 				E0DBDDC42B4FCE17007615A8 /* UITextField+Extension.swift in Sources */,
 				E0DBDDF42B4FCF72007615A8 /* BarView.swift in Sources */,
@@ -1560,7 +1525,6 @@
 				E002E1802B56E90400F64CA4 /* SwipeCardFrontView.swift in Sources */,
 				E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */,
 				E0DBDD612B4FC8D2007615A8 /* AlertManager.swift in Sources */,
-				E0BDD41E2B6615A4007D5742 /* PhoneNumberLoginPage.swift in Sources */,
 				E0F11EA02B7F43F60014F503 /* EditorCategoryRowView.swift in Sources */,
 				E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */,
 				E06392342B82FAFD003D0428 /* BottomPopupConfig.swift in Sources */,

@@ -139,6 +139,7 @@ struct DefineKey {
     
     
     //MARK: - m
+    static let mainCategoryName = "mainCategoryName"
     static let minuteIdx = "minuteIdx"
     static let minuteDetail = "minuteDetail"
     static let minuteInsert = "minuteInsert"
@@ -222,7 +223,6 @@ struct DefineKey {
     static let size = "size"
     static let showFanitRewardAd = "showFanitRewardAd"
     static let signupTp = "signupTp"
-    static let swipePageMainCategoryName = "swipePageMainCategoryName"
     
     
     //MARK: - t

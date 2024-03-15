@@ -26,6 +26,7 @@ class SwipeCardViewModel: ObservableObject {
     
     // View Data
     @Published var typeList: [SwipeCategoryList] = []
+    @Published var grammarInfo: SwipeDataGrammar?
     @Published var fixedSwipeList_0: [SwipeDataList] = [] // 처음 한 번만 저장
     @Published var percentCountSwipeList: [SwipeDataList] = [] // 계산용
     @Published var swipeList: [SwipeDataList] = []
@@ -125,18 +126,13 @@ class SwipeCardViewModel: ObservableObject {
                 
             } receiveValue: { value in
                 if value.code == 200 {
-                    
                     // 카테고리 헤더 데이터
                     for type in value.data ?? [] {
                         self.mainCategoryList.append(type.type2 ?? "")
                     }
                     
                     // 중복제거
-                    //self.mainCategoryList = self.mainCategoryList.uniqued()
-                    
-                    // 중복제거
-                    DefineBottomSheet.swipePageMainCategoryListItems = self.mainCategoryList.uniqued()
-                    
+                    self.mainCategoryList = self.mainCategoryList.uniqued()
                     
                     isSuccess(true)
                 }
@@ -223,7 +219,7 @@ class SwipeCardViewModel: ObservableObject {
                 if value.code == 200 {
                     //self.swipeList = value.data ?? []
                     
-                    guard let arr = value.data else { return }
+                    guard let arr = value.data?.list else { return }
                     
 //                    var dummyArr = arr
 //
@@ -303,8 +299,12 @@ class SwipeCardViewModel: ObservableObject {
             } receiveValue: { value in
                 if value.code == 200 {
                     //self.swipeList = value.data ?? []
+                    //fLog("idpil::: 쌍따옴표 확인 : \(value.data?.grammar)")
                     
-                    guard var arr = value.data else { return }
+                    guard var arr = value.data?.list else { return }
+                    guard var grammar = value.data?.grammar else { return }
+                    self.grammarInfo = grammar
+                    
                     
                     switch(sortType) {
                     case .Latest:
@@ -580,6 +580,51 @@ class SwipeCardViewModel: ObservableObject {
     //MARK: - 함수 모음
     func setIsFirstLoadFalse() {
         self.isFirstLoad = false
+    }
+    
+    func shuffleSwipeList() {
+        var dummyArr = self.swipeList
+        dummyArr.shuffle()
+        
+        for (index, _) in self.swipeList.enumerated() {
+            dummyArr[index].customId = index + 1
+        }
+        
+        self.swipeList = dummyArr
+    }
+    
+    func cutSwipeList(percent: CGFloat) {
+        
+//        let thirtyPercent = sliceArray(exampleArray, by: 0.3) // 70% 자르기
+//        let fiftyPercent = sliceArray(exampleArray, by: 0.5) // 50% 자르기
+//        let seventyPercent = sliceArray(exampleArray, by: 0.7) // 30% 자르기
+        self.swipeList = sliceArray(self.swipeList, by: percent)
+        
+        
+        var dummyArr = self.swipeList
+        
+        for (index, _) in self.swipeList.enumerated() {
+            dummyArr[index].customId = index + 1
+        }
+        
+        self.swipeList = dummyArr
+        self.percentCountSwipeList = dummyArr
+        self.countOfSwipeList = Double(self.swipeList.count)
+    }
+    
+    // 배열 자르기
+    /**
+     * [ChatGPT]
+     * Swift에서 배열을 특정 비율로 자르려면, 배열의 전체 길이에 원하는 비율을 곱하여 얻은 인덱스를 사용하여 배열의 일부를 추출할 수 있습니다. 예를 들어, 배열을 30%, 50%, 70% 만큼 자르기 위해서는 각각 전체 길이의 0.3, 0.5, 0.7을 곱한 후, Int 타입으로 변환하여 정수 인덱스를 얻어야 합니다. 이 인덱스를 사용하여 배열의 시작부터 해당 인덱스까지의 부분을 추출할 수 있습니다.
+     *
+     * 이 코드는 먼저 sliceArray라는 함수를 정의합니다. 이 함수는 배열과 자르고자 하는 비율을 입력으로 받아, 해당 비율만큼 배열의 앞부분을 추출하여 반환합니다. 예제에서는 exampleArray라는 배열을 생성하고, 이 배열을 30%, 50%, 70% 만큼 각각 자른 결과를 출력합니다.
+     
+       위 코드의 sliceArray 함수는 제네릭을 사용하여 어떤 타입의 배열이든 처리할 수 있도록 설계되었습니다. guard문을 사용하여 입력된 배열이 비어 있지 않고, 비율이 0보다 큰 경우에만 작업을 수행하도록 합니다. 배열의 길이에 비율을 곱한 후, Int로 변환하여 배열의 시작부터 계산된 인덱스까지의 부분 배열을 반환합니다.
+     */
+    func sliceArray<T>(_ array: [T], by percentage: Double) -> [T] {
+        guard !array.isEmpty, percentage > 0 else { return [] }
+        let endIndex = Int(Double(array.count) * percentage)
+        return Array(array.prefix(endIndex))
     }
     
     func resetSwipeList(category: String) {

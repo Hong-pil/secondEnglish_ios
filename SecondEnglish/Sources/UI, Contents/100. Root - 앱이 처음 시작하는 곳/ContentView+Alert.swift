@@ -29,6 +29,22 @@ struct ContentViewAlert: ViewModifier {
                 onClick: { buttonIndex in
                     //
                 })
+        // 카드 랜덤정렬 불가
+            .popup(isPresenting: $userManager.showCardShuffleError,
+                   cornerRadius: 5,
+                   locationType: .bottom,
+                   autoDismiss: .after(2),
+                   popup:
+                    CommonPopupView(text: "card_shuffle_error".localized)
+            )
+        // 카드 자르기 불가
+            .popup(isPresenting: $userManager.showCardCutError,
+                   cornerRadius: 5,
+                   locationType: .bottom,
+                   autoDismiss: .after(2),
+                   popup:
+                    CommonPopupView(text: "card_cut_error".localized)
+            )
         // Config Alert
         /*
          긴급공지, 업데이트 강제/권장

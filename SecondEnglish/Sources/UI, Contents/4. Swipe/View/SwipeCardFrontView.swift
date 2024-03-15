@@ -21,7 +21,9 @@ struct SwipeCardFrontView: View {
     let isTapLikeBtn: (Int, Bool) -> Void
     let isTapMoreBtn: () -> Void
     
-    @State private var currentHintWordIndex = -1
+    @State private var currentHintWordIndex = 0
+    // 사용자가 보게 될 텍스트를 관리할 상태 변수
+    @State private var visibleHintText = ""
     
     // TTS
     //@State var ttsText: String = ""
@@ -53,36 +55,47 @@ struct SwipeCardFrontView: View {
                 Spacer()
                 
                 VStack(spacing: 20) {
+                    
                     Text(card.korean ?? "Empty")
-                        .multilineTextAlignment(.leading)
+                        //.multilineTextAlignment(.leading)
                         .font(.title32028Bold)
                         .foregroundColor(.gray850)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    HStack(spacing: 0) {
-                        ForEach(Array(hintTxt.enumerated()), id: \.offset) { index, word in
-                            
-                            HStack {
-                                
-                                if currentHintWordIndex < index {
-                                    Text(word)
-                                        .foregroundColor(.clear) // 실제 글자는 보이지 않게 설정
-                                        //.underline(true, color: .black)
-                                        .background(Rectangle().foregroundColor(Color.gray500)) // 밑줄 색상 설정
-                                } else {
-                                    Text(word)
-                                }
-                                
-                                if index < hintTxt.count-1 {
-                                    Text(" ")
-                                }
-                                // 밑줄을 글자 길이만큼 표시
-//                                Text(String(repeating: "_", count: word.count))
-//                                    .foregroundColor(.clear) // 실제 글자는 보이지 않게 설정
-                                    //.background(Rectangle().foregroundColor(.black)) // 밑줄 색상 설정
-                            }
-                        }
-                    }
-                    .opacity((currentHintWordIndex > -1) ? 1 : 0)
+                    
+                    Text(visibleHintText)
+                        .font(.title5Roboto1622Medium)
+                        .foregroundColor(.gray600)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+//                    if currentHintWordIndex > -1 {
+//                        // 힌트
+//                        HStack(spacing: 0) {
+//                            ForEach(Array(hintTxt.enumerated()), id: \.offset) { index, word in
+//                                if currentHintWordIndex < index {
+//                                    Text(word)
+//                                        .font(.body21420Regular)
+//                                        .foregroundColor(.clear) // 실제 글자는 보이지 않게 설정
+//                                        //.underline(true, color: .black)
+//                                        .background(Rectangle().foregroundColor(Color.gray500)) // 밑줄 색상 설정
+//                                } else {
+//                                    Text(word)
+//                                        .font(.body21420Regular)
+//                                }
+//                                
+//                                if index < hintTxt.count-1 {
+//                                    Text(" ")
+//                                        .font(.body21420Regular)
+//                                }
+//                                
+////                                // 밑줄을 글자 길이만큼 표시
+////                                Text(String(repeating: "_", count: word.count))
+////                                    .foregroundColor(.clear) // 실제 글자는 보이지 않게 설정
+////                                    .background(Rectangle().foregroundColor(.black)) // 밑줄 색상 설정
+//                            }
+//                        }
+//                        //.opacity((currentHintWordIndex > -1) ? 1 : 0)
+//                    }
                     
                 }
                 
@@ -110,9 +123,28 @@ struct SwipeCardFrontView: View {
 //                            fLog("hintTxt.count : \(hintTxt.count)")
 //                            fLog((currentHintWordIndex > -1) ? hintTxt[currentHintWordIndex] : "")
                             
-                            if currentHintWordIndex < hintTxt.count-1 {
-                                currentHintWordIndex = (currentHintWordIndex + 1) % hintTxt.count
-                            }
+//                            if currentHintWordIndex < hintTxt.count-1 {
+//                                currentHintWordIndex = (currentHintWordIndex + 1) % hintTxt.count
+//                            }
+                            
+                            
+                            
+                            // 모든 단어를 다 보여줬다면 더 이상 업데이트하지 않음
+                            guard currentHintWordIndex < hintTxt.count else { return }
+                            
+                            // 다음 단어를 추가
+                            visibleHintText += (currentHintWordIndex > 0 ? " " : "") + hintTxt[currentHintWordIndex]
+                            
+                            // 보여줄 단어 수를 업데이트
+                            currentHintWordIndex += 1
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                         }
                     
 //                    Image(systemName: "speaker.wave.2")

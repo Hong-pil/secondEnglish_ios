@@ -37,8 +37,6 @@ struct LoginPage : View {
         static let horizontalPadding: CGFloat = 30.0
     }
     
-    @State private var showPhoneNumberLoginPage = false
-    
     @State var showBottomSheetLanguageView = false
     @StateObject var languageManager = LanguageManager.shared
     @StateObject var userManager = UserManager.shared
@@ -79,9 +77,6 @@ struct LoginPage : View {
                     }
                     .padding(.bottom, sizeInfo.padding10)
                     
-                    LoginButtonView(iconName: "btn_logo_login_kakaotalk", snsName: "휴대폰 번호", buttonType: .phone) {
-                        showPhoneNumberLoginPage = true
-                    }
                     
                     //signup with email
 //                    NavigationLink(destination: JoinPasswordPage(email: "hana_815@naver.com")) {
@@ -114,9 +109,6 @@ struct LoginPage : View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.bgLightGray50)
-                .navigationDestination(isPresented: $showPhoneNumberLoginPage) {
-                    PhoneNumberLoginPage()
-                }
                 .navigationDestination(isPresented: $viewModel.showAddUserNamePage) {
                     if let loginSuccessUserId = viewModel.authSuccessedLoginId,
                        let loginSuccessType = viewModel.authSuccessedLoginType

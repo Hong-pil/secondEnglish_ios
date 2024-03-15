@@ -14,11 +14,15 @@ struct DefineBottomSheet {
     
     static var reportListItems: [ReportListData] = []
     
-    static var swipePageMainCategoryListItems: [String] = []
-    
     static var sliderAutoItems = [
         CustomBottomSheetModel(SEQ: 1, title: "자동"),
         CustomBottomSheetModel(SEQ: 2, title: "수동")
+    ]
+    
+    static var swipeCardCutPercentItems = [
+        CustomBottomSheetModel(SEQ: 1, title: "30% 자르기"),
+        CustomBottomSheetModel(SEQ: 2, title: "50% 자르기"),
+        CustomBottomSheetModel(SEQ: 3, title: "70% 자르기")
     ]
     
     static var globalLanItems: [CustomBottomSheetModel] = []

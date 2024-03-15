@@ -9,8 +9,58 @@ import Foundation
 
 struct SwipeDataResponse: Codable {
     var code: Int = 0
-    var data: [SwipeDataList]? = []
+    var data: SwipeDataListData? = nil
     var message: String? = ""
+}
+
+struct SwipeDataListData: Codable {
+    var list: [SwipeDataList]? = []
+    var grammar: SwipeDataGrammar? = nil
+}
+
+struct SwipeDataGrammar: Codable {
+    var type2: String? = ""
+    var type2_sort_num: Int? = 0
+    var step1_title: String? = ""
+    var step1_content: String? = ""
+    var step2_title: String? = ""
+    var step2_content: String? = ""
+    var step3_title: String? = ""
+    var step3_content: String? = ""
+    var step4_title: String? = ""
+    var step4_content: String? = ""
+    var step5_title: String? = ""
+    var step5_content: String? = ""
+    var step6_title: String? = ""
+    var step6_content: String? = ""
+    var step7_title: String? = ""
+    var step7_content: String? = ""
+    var step8_title: String? = ""
+    var step8_content: String? = ""
+    var step9_title: String? = ""
+    var step9_content: String? = ""
+    var step10_title: String? = ""
+    var step10_content: String? = ""
+    var step11_title: String? = ""
+    var step11_content: String? = ""
+    var step12_title: String? = ""
+    var step12_content: String? = ""
+    var step13_title: String? = ""
+    var step13_content: String? = ""
+    var step14_title: String? = ""
+    var step14_content: String? = ""
+    var step15_title: String? = ""
+    var step15_content: String? = ""
+    var step16_title: String? = ""
+    var step16_content: String? = ""
+    var step17_title: String? = ""
+    var step17_content: String? = ""
+    var step18_title: String? = ""
+    var step18_content: String? = ""
+    var step19_title: String? = ""
+    var step19_content: String? = ""
+    var step20_title: String? = ""
+    var step20_content: String? = ""
 }
 
 struct SwipeDataList: Codable, Hashable {

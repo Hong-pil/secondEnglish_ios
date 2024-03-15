@@ -59,16 +59,20 @@ struct ContentViewPopup: ViewModifier {
                     )
                 }
             )
-            // Main Category List BottomSheet
+            // Swipe Tab -> 카드 자르기
             .bottomSheet(
-                isPresented: $bottomSheetManager.show.swipePageMainCategory,
-                height: DefineSize.Screen.Height / 2, // 아이템 갯수 많아서 popup이 화면을 가리면 사용성이 떨어져서 스크린 높이의 절반으로 설정함.
+                isPresented: $bottomSheetManager.show.swipeCardCut,
+                height: self.getPopupHeight(type: CustomBottomSheetClickType.SwipeCardCut),
+                topBarCornerRadius: DefineSize.CornerRadius.BottomSheet,
                 content: {
-                    EditorCategoryView(
-                        viewType: EditorCategoryViewType.SwipePageMainCategory,
-                        mainCategoryList: DefineBottomSheet.swipePageMainCategoryListItems,
-                        isShow: $bottomSheetManager.show.swipePageMainCategory,
-                        selectedCategoryName: $bottomSheetManager.swipePageMainCategoryName
+                    CustomBottomView(
+                        title: "", // 제목없는 팝업뷰
+                        type: CustomBottomSheetClickType.SwipeCardCut,
+                        onPressItemCutPercent: { percent in
+                            fLog("\n--- \(percent) ---\n")
+                            bottomSheetManager.pressedCardCutPercent = percent
+                        },
+                        isShow: $bottomSheetManager.show.swipeCardCut
                     )
                 }
             )
@@ -83,7 +87,8 @@ struct ContentViewPopup: ViewModifier {
             finalHeight = self.defineSize(isTitleEmpty: true, size: DefineBottomSheet.cardMoreItem.count)
         case .SwipeCardReport:
             finalHeight = self.defineSize(isTitleEmpty: true, size: DefineBottomSheet.reportListItems.count)
-
+        case .SwipeCardCut:
+            finalHeight = self.defineSize(isTitleEmpty: true, size: DefineBottomSheet.swipeCardCutPercentItems.count)
         default:
             finalHeight = 100
         }
