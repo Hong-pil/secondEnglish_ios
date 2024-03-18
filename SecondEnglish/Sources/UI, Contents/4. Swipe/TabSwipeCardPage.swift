@@ -166,61 +166,60 @@ extension TabSwipeCardPage: View {
                         
                         
                         ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
-                            Group {
-                                // Range Operator
-                                if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
-                                    //let _ = fLog("로그확인::: maxID : \(maxID)")
-                                    //let _ = fLog("로그확인::: minID : \(minID)")
-                                    //let _ = fLog("로그확인::: index : \(index)")
-                                    //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
-                                    
-                                    SwipeView(
-                                        card: card,
-                                        speechSynthesizer: speechSynthesizer,
-                                        onRemove: { likeType in
-                                            withAnimation { removeProfile(card)
-                                            }
-                                            
-                                            onLike(card, type: likeType)
-                                        },
-                                        isTapLikeBtn: { cardIdx, isLike in
-                                            //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
-                                            
-                                            // 좋아요 취소 요청 -> false -> 0
-                                            // 좋아요 요청 -> true -> 1
-                                            viewModel.likeCard(
-                                                cardIdx: cardIdx,
-                                                isLike: isLike ? 1 : 0,
-                                                clickIndex: index,
-                                                isSuccess: { isSuccess in
-                                                    if isSuccess {
-                                                        //fLog("idpil::: 좋아요 성공!!!")
-                                                    } else {
-                                                        //fLog("idpil::: 좋아요 실패!!!")
-                                                    }
-                                                    
-                                                })
-                                        },
-                                        isTapMoreBtn: {
-                                            DefineBottomSheet.commonMore(
-                                                type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
-                                            )
-                                            
-                                            bottomSheetManager.show.swipeCardMore = true
-                                        },
-                                        isLastCard: index==(maxID-1) ? true : false
-                                    )
-                                    //MARK: 책 쌓아놓은 것 같은 효과
-                                    //.animation(.spring())
-                                    .frame(
-                                        width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
-                                        height: geometry.size.height * 0.7
-                                    )
-                                    .offset(
-                                        x: 0,
-                                        y: self.getCardOffset(geometry, id: (card.customId ?? 0))
-                                    )
-                                }
+                            
+                            // Range Operator
+                            if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
+                                //let _ = fLog("로그확인::: maxID : \(maxID)")
+                                //let _ = fLog("로그확인::: minID : \(minID)")
+                                //let _ = fLog("로그확인::: index : \(index)")
+                                //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
+                                
+                                SwipeView(
+                                    card: card,
+                                    speechSynthesizer: speechSynthesizer,
+                                    onRemove: { likeType in
+                                        withAnimation { removeProfile(card)
+                                        }
+                                        
+                                        onLike(card, type: likeType)
+                                    },
+                                    isTapLikeBtn: { cardIdx, isLike in
+                                        //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                        
+                                        // 좋아요 취소 요청 -> false -> 0
+                                        // 좋아요 요청 -> true -> 1
+                                        viewModel.likeCard(
+                                            cardIdx: cardIdx,
+                                            isLike: isLike ? 1 : 0,
+                                            clickIndex: index,
+                                            isSuccess: { isSuccess in
+                                                if isSuccess {
+                                                    //fLog("idpil::: 좋아요 성공!!!")
+                                                } else {
+                                                    //fLog("idpil::: 좋아요 실패!!!")
+                                                }
+                                                
+                                            })
+                                    },
+                                    isTapMoreBtn: {
+                                        DefineBottomSheet.commonMore(
+                                            type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
+                                        )
+                                        
+                                        bottomSheetManager.show.swipeCardMore = true
+                                    },
+                                    isLastCard: index==(maxID-1) ? true : false
+                                )
+                                //MARK: 책 쌓아놓은 것 같은 효과
+                                //.animation(.spring())
+                                .frame(
+                                    width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
+                                    height: geometry.size.height * 0.7
+                                )
+                                .offset(
+                                    x: 0,
+                                    y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                )
                             }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
@@ -314,9 +313,8 @@ extension TabSwipeCardPage: View {
             if self.isShowMainCategoryListView {
                 mainCategoryListView
             }
-            
         }
-        .onAppear {
+        .task {
             if viewModel.mainCategoryList.count>0 && viewModel.subCategoryList.count>0 {
                 // 카테고리별 영어문장 조회
                 viewModel.requestSwipeListByCategory(
@@ -428,6 +426,9 @@ extension TabSwipeCardPage: View {
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
             bottomSheetManager.pressedCardReportCode = -1
         }
+        .onChange(of: viewModel.noti_selectedMainCategoryName) {
+            self.selectedMainCategoryItem = viewModel.noti_selectedMainCategoryName
+        }
         .onChange(of: self.selectedMainCategoryItem) {
             viewModel.requestCategory(
                 isInit: true,
@@ -435,6 +436,8 @@ extension TabSwipeCardPage: View {
             ) { isSuccess in
                 if isSuccess {
                     viewModel.moveCategoryTab = true
+                    
+                    viewModel.isNotificationCenter = false // 초기화
                 }
             }
         }

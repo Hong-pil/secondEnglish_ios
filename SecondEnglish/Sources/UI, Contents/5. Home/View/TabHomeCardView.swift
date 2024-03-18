@@ -32,7 +32,7 @@ extension TabHomeCardView: View {
                     cardWidth: cardWidth
                 )
                 // Correct the orientation of the content
-                .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
+                .rotation3DEffect(.degrees(180), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
                     
             } else {
                 // Front View Content
@@ -47,7 +47,7 @@ extension TabHomeCardView: View {
             }
         }
         // Apply flip animation to the container
-        .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0.0, y: 1.0, z: 0.0))
+        .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
         .onTapGesture {
             withAnimation {
                 isFlipped.toggle()

@@ -45,7 +45,7 @@ struct TabHomeMyLearningView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
                                             object: nil,
-                                            userInfo: [DefineKey.swipeViewCategoryIdx : categoryIdx] as [String : Any])
+                                            userInfo: [DefineKey.subCategoryIndexAndName : categoryIdx] as [String : Any])
         }
     }
 }

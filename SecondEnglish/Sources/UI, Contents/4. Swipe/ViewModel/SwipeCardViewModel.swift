@@ -38,6 +38,11 @@ class SwipeCardViewModel: ObservableObject {
     // Card Like
     @Published var myLikeCardIdxList: [Int] = []
     
+    // NotificationCenter를 통해 탭 이동시키는 변수
+    @Published var isNotificationCenter: Bool = false
+    @Published var noti_selectedMainCategoryName: String = ""
+    @Published var noti_selectedSubCategoryIndex: Int = 0
+    
     
     init() {
 //        NotificationCenter.default.addObserver(forName: Notification.Name("workCompleted"), object: nil, queue: nil) { _ in
@@ -55,18 +60,24 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     @objc func adjustMovedCategoryData(_ notification: Notification) {
-        if let categoryIdx:Int = notification.userInfo![DefineKey.swipeViewCategoryIdx] as? Int {
+        if let subCategoryIndexAndName: [String: Any] = notification.userInfo![DefineKey.subCategoryIndexAndName] as? [String: Any] {
             
-            self.categoryTabIndex = categoryIdx
-            self.moveCategoryTab = true
+            self.categoryTabIndex = subCategoryIndexAndName["subCategoryIdx"] as? Int ?? 0
+            self.noti_selectedMainCategoryName = subCategoryIndexAndName["mainCategoryName"] as? String ?? ""
             
-            self.requestSwipeListByCategory(
-                category: self.subCategoryList[self.categoryTabIndex], // 첫 카테고리로 시작
-                sortType: .Latest,
-                isSuccess: { success in
-                    //
-                }
-            )
+            self.isNotificationCenter = true
+            
+            
+//            self.categoryTabIndex
+//            self.moveCategoryTab = true
+//            
+//            self.requestSwipeListByCategory(
+//                category: subCategoryName,
+//                sortType: .Latest,
+//                isSuccess: { success in
+//                    //
+//                }
+//            )
             
             
 //            ApiControl.listOne(idx: categoryIdx) { oneResult in
@@ -163,7 +174,12 @@ class SwipeCardViewModel: ObservableObject {
                     
                     if isInit {
                         self.subCategoryList = []
-                        self.categoryTabIndex = 0
+                        
+                        // NotificationCenter로 넘어온 경우에는 adjustMovedCategoryData에서 categoryTabIndex 값을 저장시키기 때문에 여기서 초기화 하면 안 됨
+                        if !self.isNotificationCenter {
+                            self.categoryTabIndex = 0
+                        }
+                        
                     }
                     
                     self.typeList = value.data ?? []
@@ -302,7 +318,7 @@ class SwipeCardViewModel: ObservableObject {
                     //fLog("idpil::: 쌍따옴표 확인 : \(value.data?.grammar)")
                     
                     guard var arr = value.data?.list else { return }
-                    guard var grammar = value.data?.grammar else { return }
+                    guard let grammar = value.data?.grammar else { return }
                     self.grammarInfo = grammar
                     
                     

@@ -605,14 +605,14 @@ extension EditorPage {
     private func getCategoryIndex() -> Int? {
         var categoryIndex: Int?
         
-        for (index, item) in homeTabViewModel.myLearningProgressList.enumerated() {
-            
-            // 선택한 카테고리와 같은 아이템
-            if selectedSubCategoryName == (item.category ?? "") {
-                categoryIndex = index
-                break
-            }
-        }
+//        for (index, item) in homeTabViewModel.myLearningProgressList.enumerated() {
+//            
+//            // 선택한 카테고리와 같은 아이템
+//            if selectedSubCategoryName == (item.sub_category ?? "") {
+//                categoryIndex = index
+//                break
+//            }
+//        }
         
         return categoryIndex
     }
@@ -626,7 +626,7 @@ extension EditorPage {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
                                             object: nil,
-                                            userInfo: [DefineKey.swipeViewCategoryIdx : categoryIdx] as [String : Any])
+                                            userInfo: [DefineKey.subCategoryIndexAndName : categoryIdx] as [String : Any])
         }
     }
 }

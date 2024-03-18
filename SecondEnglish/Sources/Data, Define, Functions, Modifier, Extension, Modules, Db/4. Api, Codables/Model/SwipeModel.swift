@@ -121,9 +121,23 @@ struct MyLearningProgressResponse: Codable {
     var message: String? = ""
 }
 struct MyLearningProgressData: Codable, Hashable {
-    var category: String? = ""
-    var category_setence_count: Int? = 0
+    var main_category: String? = ""
+    var sub_category: String? = ""
+    var category_sentence_count: Int? = 0
     var like_number: Int? = 0
+}
+
+// 변환된 데이터 모델
+struct MyLearningProgressMainCategory: Codable {
+    let main_category: String
+    var sub_category_list: [MyLearningProgressSubCategory]
+    var isLike: Bool? = false
+}
+
+struct MyLearningProgressSubCategory: Codable {
+    let sub_category: String
+    let category_sentence_count: Int
+    let like_number: Int
 }
 
 struct ReportListResponse: Codable {

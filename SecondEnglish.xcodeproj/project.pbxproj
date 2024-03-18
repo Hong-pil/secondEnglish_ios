@@ -87,6 +87,7 @@
 		E0C0D7C82B4FE9B000A7C01B /* ExyteMediaPicker in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7C72B4FE9B000A7C01B /* ExyteMediaPicker */; };
 		E0C0D7CB2B4FE9B900A7C01B /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = E0C0D7CA2B4FE9B900A7C01B /* BottomSheet */; };
 		E0CF069C2B8748920009C02C /* CustomBubbleShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0CF069B2B8748920009C02C /* CustomBubbleShape.swift */; };
+		E0D5E8A32BA574AF0046E134 /* TabHomeMyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D5E8A22BA574AF0046E134 /* TabHomeMyProgressView.swift */; };
 		E0DBDCFB2B4FB60F007615A8 /* SecondEnglishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */; };
 		E0DBDCFD2B4FB60F007615A8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */; };
 		E0DBDCFF2B4FB610007615A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDCFE2B4FB610007615A8 /* Assets.xcassets */; };
@@ -284,6 +285,7 @@
 		E0B3B1F92B7B62B40004C69E /* TabHomeMyLearningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeMyLearningView.swift; sourceTree = "<group>"; };
 		E0BA02502B5E875400AA11A5 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E0CF069B2B8748920009C02C /* CustomBubbleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBubbleShape.swift; sourceTree = "<group>"; };
+		E0D5E8A22BA574AF0046E134 /* TabHomeMyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeMyProgressView.swift; sourceTree = "<group>"; };
 		E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondEnglish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DBDCFA2B4FB60F007615A8 /* SecondEnglishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondEnglishApp.swift; sourceTree = "<group>"; };
 		E0DBDCFC2B4FB60F007615A8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 				E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */,
 				E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */,
 				E0B3B1F92B7B62B40004C69E /* TabHomeMyLearningView.swift */,
+				E0D5E8A22BA574AF0046E134 /* TabHomeMyProgressView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1497,6 +1500,7 @@
 				E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */,
 				E016784C2B6257CD00943945 /* Apis+Login.swift in Sources */,
 				E0DBDD592B4FC890007615A8 /* DefineSize.swift in Sources */,
+				E0D5E8A32BA574AF0046E134 /* TabHomeMyProgressView.swift in Sources */,
 				E0DBDDEA2B4FCF19007615A8 /* MultilineTextField.swift in Sources */,
 				E0DBDE162B4FD069007615A8 /* CommonAlertView.swift in Sources */,
 				E0DBDD3B2B4FC628007615A8 /* DefineNotification.swift in Sources */,

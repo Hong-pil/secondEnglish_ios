@@ -33,7 +33,7 @@ struct DefineKey {
     
     
     //MARK: - c
-    static let swipeViewCategoryIdx = "swipeViewCategoryIdx"
+    static let subCategoryIndexAndName = "subCategoryIndexAndName"
     static let countryIsoTwo = "countryIsoTwo"
     static let country = "country"
     static let clientId = "clientId"
