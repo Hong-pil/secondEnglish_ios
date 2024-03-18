@@ -213,84 +213,100 @@ extension TabHomePage: View {
     }
     
     var myList: some View {
-        VStack(spacing: 0) {
-            //MARK: - 좋아요한 배너 리스트 (검색어 : Carousel Slider)
-            // [Ref] https://www.youtube.com/watch?v=DgTPWYM5Hm4
-            if viewModel.sentenceList.count > 0 {
-                ZStack {
-                    ForEach(Array(viewModel.sentenceList.enumerated()), id: \.offset) { index, item in
-                        
-                        TabHomeCardView(item: item, cardWidth: cardBannerWidth)
-                            .padding(.top, 30)
-                            .opacity(cardBannerCurrentIndex == index ? 1.0 : 0.5)
-                            .scaleEffect(cardBannerCurrentIndex == index ? 1.2 : 0.8)
-                            .offset(
-                                x: CGFloat(index - cardBannerCurrentIndex) * (cardBannerWidth+cardBannerDistance) + dragOffset,
-                                y: 0
-                            )
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .gesture(
-                    DragGesture()
-                        .onEnded({ gesture in
-                            
-                            /**
-                             * [민감도 기준]
-                             * threshold 값을 낮출 수록 민감도 기준이 낮아지기 때문에 잘 넘어감.
-                             */
-                            let threshold: CGFloat = 30
-                            
-                            //fLog("idpil::: gesture.translation.width: \(gesture.translation.width)")
-                            
-                            // 손가락으로 좌-우 Swipe한 길이
-                            if gesture.translation.width > threshold {
-                                withAnimation {
-                                    cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
-                                }
-                            }
-                            else if gesture.translation.width < -threshold {
-                                withAnimation {
-                                    cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
-                                    )
-                                }
-                            }
-                            
-                            isNotMainCategoryButtonClick = true
-                        })
-                )
-                
-                HStack(spacing: 30) {
-                    Button(action: {
-                        withAnimation {
-                            cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
-                        }
-                        isNotMainCategoryButtonClick = true
-                    }, label: {
-                        Text("<")
-                            .font(.title13240Bold)
-                    })
-                    
-                    Button(action: {
-                        withAnimation {
-                            cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
-                            )
-                        }
-                        isNotMainCategoryButtonClick = true
-                    }, label: {
-                        Text(">")
-                            .font(.title13240Bold)
-                    })
-                }
-                .padding(.vertical, 30)
-            }
-        }
-        .background(
+        ZStack {
             Image("home_bg_02")
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .aspectRatio(contentMode: .fit)
                 .overlay(Color.primaryDefault.opacity(0.6))
-        )
+            
+            VStack(spacing: 0) {
+                //MARK: - 좋아요한 배너 리스트 (검색어 : Carousel Slider)
+                // [Ref] https://www.youtube.com/watch?v=DgTPWYM5Hm4
+                if viewModel.sentenceList.count > 0 {
+                    ZStack {
+                        ForEach(Array(viewModel.sentenceList.enumerated()), id: \.offset) { index, item in
+                            
+                            TabHomeCardView(item: item, cardWidth: cardBannerWidth)
+                                .padding(.top, 30)
+                                .opacity(cardBannerCurrentIndex == index ? 1.0 : 0.5)
+                                .scaleEffect(cardBannerCurrentIndex == index ? 1.2 : 0.8)
+                                .offset(
+                                    x: CGFloat(index - cardBannerCurrentIndex) * (cardBannerWidth+cardBannerDistance) + dragOffset,
+                                    y: 0
+                                )
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .gesture(
+                        DragGesture()
+                            .onEnded({ gesture in
+                                
+                                /**
+                                 * [민감도 기준]
+                                 * threshold 값을 낮출 수록 민감도 기준이 낮아지기 때문에 잘 넘어감.
+                                 */
+                                let threshold: CGFloat = 30
+                                
+                                //fLog("idpil::: gesture.translation.width: \(gesture.translation.width)")
+                                
+                                // 손가락으로 좌-우 Swipe한 길이
+                                if gesture.translation.width > threshold {
+                                    withAnimation {
+                                        cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
+                                    }
+                                }
+                                else if gesture.translation.width < -threshold {
+                                    withAnimation {
+                                        cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
+                                        )
+                                    }
+                                }
+                                
+                                isNotMainCategoryButtonClick = true
+                            })
+                    )
+                    
+                    ZStack {
+                        Text("\(cardBannerCurrentIndex+1) / \(viewModel.sentenceList.count)")
+                            .font(.caption11218Regular)
+                            .foregroundColor(.gray100)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        HStack(spacing: 15) {
+                            Group {
+                                Button(action: {
+                                    withAnimation {
+                                        cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
+                                    }
+                                    isNotMainCategoryButtonClick = true
+                                }, label: {
+                                    Image(systemName: "chevron.left.square.fill")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                })
+                                
+                                Button(action: {
+                                    withAnimation {
+                                        cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
+                                        )
+                                    }
+                                    isNotMainCategoryButtonClick = true
+                                }, label: {
+                                    Image(systemName: "chevron.right.square.fill")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                })
+                            }
+                            .frame(width: 25, height: 25)
+                            .foregroundColor(.gray25)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.trailing, 20)
+                    }
+                    .padding(.top, 40)
+                }
+            }
+        }
     }
 }
 

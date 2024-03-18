@@ -40,7 +40,7 @@ extension FlipView: View {
         .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0.0, y: 1.0, z: 0.0))
         .onTapGesture {
             if isLastCard {
-                withAnimation {
+                withAnimation(.easeIn(duration: 0.2)) {
                     isFlipped.toggle()
                 }
             }

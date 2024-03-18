@@ -49,7 +49,7 @@ extension TabHomeCardView: View {
         // Apply flip animation to the container
         .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
         .onTapGesture {
-            withAnimation {
+            withAnimation(.easeIn(duration: 0.2)) {
                 isFlipped.toggle()
             }
         }
@@ -66,16 +66,25 @@ struct TabHomeCardViewRow: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: 5)
                 .fill(Color.gray25)
-                .stroke(Color.primaryDefault, lineWidth: 0.5)
+                //.stroke(Color.primaryDefault, lineWidth: 0.5)
+                .shadow(color: .gray25.opacity(0.5), radius: 5, x: 0, y: 0)
                 
             VStack(spacing: 30) {
-                Text(category)
+                
                 Text(sentence)
-                Text(isStartPointCategory ? "시작 포인트임 :)" : "None :>")
-                Text(isEndPointCategory ? "마지막 포인트임 :)" : "None")
+                    .font(.title5Roboto1622Medium)
+                    .foregroundColor(.gray800)
+                
+                
+                
+                // [데이터 확인용]
+                //Text(category)
+                //Text(isStartPointCategory ? "시작 포인트임 :)" : "None :>")
+                //Text(isEndPointCategory ? "마지막 포인트임 :)" : "None")
             }
+            .padding(10)
         }
         .frame(width: cardWidth, height: 150)
         //.fixedSize(horizontal: false, vertical: true)
