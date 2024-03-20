@@ -260,6 +260,24 @@
         "revision" : "65e8f29b2d63c4e38e736b25c27b83e012159be8",
         "version" : "1.25.2"
       }
+    },
+    {
+      "identity" : "swiftui-navigation-bar-color",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/haifengkao/SwiftUI-Navigation-Bar-Color",
+      "state" : {
+        "revision" : "498fb60eb569cabe9cd7c8b92304e5888adaf7f9",
+        "version" : "0.10.0"
+      }
+    },
+    {
+      "identity" : "swipecellsui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/DominikButz/SwipeCellSUI",
+      "state" : {
+        "revision" : "7c0437c567733f99edf79432dd8b3390c173b0b5",
+        "version" : "2.1.3"
+      }
     }
   ],
   "version" : 2

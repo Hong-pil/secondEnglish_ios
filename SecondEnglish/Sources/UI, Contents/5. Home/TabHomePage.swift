@@ -32,35 +32,54 @@ struct TabHomePage {
     @State private var cardBannerCurrentIndex: Int = 0
     @State private var isNotMainCategoryButtonClick: Bool = false
     @GestureState private var dragOffset: CGFloat = 0
-    
 }
 
 extension TabHomePage: View {
     var body: some View {
         VStack(spacing: 0) {
+            
+            header
+            
+            //MARK: - 내가 좋아요한 문장들
             if viewModel.categoryList.count>0 {
-                header
+                tabBarView
                 
                 myList
             } else {
                 emptyView
             }
             
-            //MARK: - 내 학습 진도
             ScrollViewReader { scrollviewReader in
                 ScrollView {
-                    VStack(spacing: 0) {
+                    LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
+                        
                         ForEach(Array(viewModel.myLearningProgressList.enumerated()), id: \.offset) { index, item in
                             
-                            TabHomeMyProgressView(categoryData: item)
-//                            TabHomeMyLearningView(
-//                                category: (item.sub_category ?? "").replacingOccurrences(of: "\\n", with: "\n"),
-//                                categorySetenceCount: item.category_sentence_count ?? 0,
-//                                likeNumber: item.like_number ?? 0,
-//                                itemIndex: index
-//                            )
-                            .padding(.top, index==0 ? 20 : 10)
-                            .padding(.bottom, index==viewModel.myLearningProgressList.count-1 ? 20 : 0)
+                            Section {
+                                /**
+                                 * [주의]
+                                 * VStack 으로 감싸지 않으면 데이터가 모두다 로딩되지 않는 문제가 있음.
+                                 */
+                                VStack(spacing: 0) {
+                                    ForEach((Array(item.sub_category_list.enumerated())), id: \.offset) { subIndex, subItem in
+                                        
+                                        MyProgressCellView(
+                                            sub_category_index: subIndex,
+                                            sub_category: subItem.sub_category,
+                                            main_category: item.main_category,
+                                            like_number: subItem.like_number,
+                                            category_sentence_count: subItem.category_sentence_count
+                                        )
+                                    }
+                                }
+                                .padding(.bottom, index==viewModel.myLearningProgressList.count-1 ? 20 : 0)
+                            } header: {
+                                MyProgressHeaderView(
+                                    isLike: item.isLike ?? false,
+                                    main_category: item.main_category,
+                                    index: index
+                                )
+                            }
                         }
                     }
                 }
@@ -94,83 +113,118 @@ extension TabHomePage: View {
     }
     
     var header: some View {
+        HStack(spacing: 0) {
+            Image("text_logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 20)
+            
+            Spacer()
+            
+            Button {
+                //NavigationBarActionManager.shared.buttonActionSubject.send(("", .Menu))
+            } label: {
+                Image("icon_outline_alarm new")
+                    .resizable()
+                    .frame(width: 25, height: 25)
+//                    .renderingMode(.template)
+//                    .foregroundColor(.gray900)
+            }
+            
+            Button {
+                NavigationBarActionManager.shared.buttonActionSubject.send(("", .Menu))
+            } label: {
+                Image("icon_top_menu")
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width: 25, height: 25)
+                    .foregroundColor(.gray900)
+                    .padding(.leading, 15)
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+    
+    var tabBarView: some View {
         ScrollViewReader { scrollviewReader in
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 0) {
-                    ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
-                        let isSelected = clickedSubTabIndex == index
-                        
-                        VStack(spacing: 0) {
-                            Text(element)
-                                .font(clickedSubTabIndex==index ? .buttons1420Medium : .body21420Regular)
-                                .foregroundColor(clickedSubTabIndex==index ? Color.gray25 : Color.gray850)
-                                .frame(minWidth: 70)
-                                .frame(height: 40)
-                                .padding(.horizontal, 15)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isSelected
-                                                                                  ? Color.gray850
-                                                                                  : Color.gray199.opacity(1), lineWidth: 1))
-                                .background(RoundedRectangle(cornerRadius: 8).fill(isSelected
-                                                                                   ? Color.gray850
-                                                                                   : Color.gray25))
-                                .shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
-                                .onTapGesture {
-                                    
-                                    // 카테고리 리스트 이동
-                                    clickedSubTabIndex = index
-                                    withAnimation {
-                                        scrollviewReader.scrollTo(index, anchor: .top)
-                                    }
-                                    
-                                    
-                                    // 클릭한 헤더 버튼의 카드 위치로 이동
-                                    for (sentenceIndex, sentenceItem) in viewModel.sentenceList.enumerated() {
+                if viewModel.categoryList.count>0 {
+                    HStack(spacing: 0) {
+                        ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                            let isSelected = clickedSubTabIndex == index
+                            
+                            VStack(spacing: 0) {
+                                Text(element)
+                                    .font(clickedSubTabIndex==index ? .buttons1420Medium : .body21420Regular)
+                                    .foregroundColor(clickedSubTabIndex==index ? Color.gray25 : Color.gray850)
+                                    .frame(minWidth: 70)
+                                    .padding(.vertical, 7)
+                                    .padding(.horizontal, 10)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(isSelected
+                                                                                      ? Color.gray850
+                                                                                      : Color.gray199.opacity(1), lineWidth: 1))
+                                    .background(RoundedRectangle(cornerRadius: 8).fill(isSelected
+                                                                                       ? Color.gray850
+                                                                                       : Color.gray25))
+                                    .shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
+                                    .onTapGesture {
                                         
-                                        if viewModel.categoryList[index] == (sentenceItem.type3 ?? "") {
-                                            if sentenceItem.isStartPointCategory ?? false {
-                                                withAnimation {
-                                                    cardBannerCurrentIndex = sentenceIndex
+                                        // 카테고리 리스트 이동
+                                        clickedSubTabIndex = index
+                                        withAnimation {
+                                            scrollviewReader.scrollTo(index, anchor: .top)
+                                        }
+                                        
+                                        
+                                        // 클릭한 헤더 버튼의 카드 위치로 이동
+                                        for (sentenceIndex, sentenceItem) in viewModel.sentenceList.enumerated() {
+                                            
+                                            if viewModel.categoryList[index] == (sentenceItem.type3 ?? "") {
+                                                if sentenceItem.isStartPointCategory ?? false {
+                                                    withAnimation {
+                                                        cardBannerCurrentIndex = sentenceIndex
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            // sub 카테고리 배너가 움직일 때, 시작점 또는 끝점에서 main 카테고리 버튼 움직이게 만듬
-                                .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
-                                    // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
-                            
-                                    // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
-                                    // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
-                                    if isNotMainCategoryButtonClick {
-//                                        // 카드배너 왼족으로 이동
-                                        if oldValue > newValue {
-                                            if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
-                                                clickedSubTabIndex -= 1
+                                // sub 카테고리 배너가 움직일 때, 시작점 또는 끝점에서 main 카테고리 버튼 움직이게 만듬
+                                    .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
+                                        // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
+                                
+                                        // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
+                                        // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
+                                        if isNotMainCategoryButtonClick {
+    //                                        // 카드배너 왼족으로 이동
+                                            if oldValue > newValue {
+                                                if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
+                                                    clickedSubTabIndex -= 1
+                                                }
                                             }
-                                        }
-                                        // 카드배너 오른쪽으로 이동
-                                        else if oldValue < newValue {
-                                            if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
-                                                
-                                                clickedSubTabIndex += 1
+                                            // 카드배너 오른쪽으로 이동
+                                            else if oldValue < newValue {
+                                                if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
+                                                    
+                                                    clickedSubTabIndex += 1
+                                                }
                                             }
+                                            
+                                            withAnimation {
+                                                scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
+                                            }
+                                            
+                                            isNotMainCategoryButtonClick = false // 초기화
                                         }
-                                        
-                                        withAnimation {
-                                            scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
-                                        }
-                                        
-                                        isNotMainCategoryButtonClick = false // 초기화
                                     }
-                                }
-                                //.id(index)
+                                    //.id(index)
+                            }
+                            .padding(.leading, index==0 ? 20 : 10)
+                            .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
                         }
-                        .padding(.leading, index==0 ? 20 : 10)
-                        .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
                     }
+                    .padding(.vertical, 10)
                 }
-                .padding(.vertical, 10)
             }
         }
     }

@@ -355,9 +355,12 @@ extension TabSwipeCardPage: View {
             if maxID == 0 {
                 curPercent = 100.0
                 
-                // 다음 스탭으로 넘어감
-                viewModel.categoryTabIndex += 1
-                viewModel.moveCategoryTab = true
+                // [예외처리] 서브 카테고리 마지막인 경우, 더이상 넘어갈 스텝이 없음
+                if viewModel.categoryTabIndex != viewModel.subCategoryList.count-1 {
+                    // 다음 스탭으로 넘어감
+                    viewModel.categoryTabIndex += 1
+                    viewModel.moveCategoryTab = true
+                }
             }
             // currentID > 0 -> 카드를 넘기고 있는 경우
             else {

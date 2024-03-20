@@ -259,35 +259,34 @@ extension EditorPage: View {
         // Main Category List BottomSheet
         .bottomSheet(
             isPresented: $isShowMainCategoryListView,
-            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.type2CategoryList),
+            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.mainCategoryList),
             content: {
                 EditorCategoryView(
                     viewType: EditorCategoryViewType.MainCategory,
-                    mainCategoryList: viewModel.type2CategoryList,
+                    mainCategoryList: viewModel.mainCategoryList,
                     isShow: $isShowMainCategoryListView,
                     selectedCategoryName: $selectedMainCategoryName
                 )
                 .onChange(of: selectedMainCategoryName) {
-                    fLog("idpil::: 선택된 main category : \(selectedMainCategoryName)")
-                    
-                    fLog("idpil::: 보여줄 subCategoryList : \(viewModel.getSubCategoryList(selectedMainCategoryName: selectedMainCategoryName))")
+                    if viewModel.mainCategoryList.count > 0 {
+                        viewModel.requestCategory(category: self.selectedMainCategoryName)
+                    }
                 }
             }
         )
         // Sub Category List BottomSheet
         .bottomSheet(
             isPresented: $isShowSubCategoryListView,
-            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.getSubCategoryList(selectedMainCategoryName: selectedMainCategoryName)),
-            //height: getSubCategoryBottomSheetHeight(),
+            height: BottomSheetManager.shared.getBottomSheetHeight(list: viewModel.subCategoryList),
             content: {
                 EditorCategoryView(
                     viewType: EditorCategoryViewType.SubCategory,
-                    subCategoryList: viewModel.getSubCategoryList(selectedMainCategoryName: selectedMainCategoryName),
+                    subCategoryList: viewModel.subCategoryList,
                     isShow: $isShowSubCategoryListView,
                     selectedCategoryName: $selectedSubCategoryName
                 )
                 .onChange(of: selectedSubCategoryName) {
-                    fLog("idpil::: 선택된 sub category : \(selectedSubCategoryName)")
+                    //fLog("idpil::: 선택된 sub category : \(selectedSubCategoryName)")
                 }
             }
         )
@@ -338,7 +337,7 @@ extension EditorPage: View {
             })
             .disabled(type == .Modify)
             
-            if viewModel.getSubCategoryList(selectedMainCategoryName: selectedMainCategoryName).count > 0 {
+            if viewModel.subCategoryList.count > 0 {
                 Button(action: {
                     // 키보드 내리기 (키보드 올라가 있을 땐 팝업 안 보임)
                     UIApplication.shared.endEditing()

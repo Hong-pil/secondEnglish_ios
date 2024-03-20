@@ -21,6 +21,16 @@
 "se_a_disconnected_network" = "네트워크 상태를 확인해 주세요.";
 "card_shuffle_error" = "더이상 랜덤정렬은 불가능해요.";
 "card_cut_error" = "더이상 자르기는 불가능해요.";
+"m_read_alam" = "모든 알림 읽기";
+"m_view_alam" = "모든 알림 보기";
+"a_previous_alam_check" = "이전 알림 확인하기";
+"se_m_all_alam_check" = "모든 알림을 다 확인했어요.";
+"j_wrote_post" = "작성한 글";
+"l_like_do" = "누른 좋아요";
+"l_like_get" = "받은 좋아요";
+"b_block_post" = "차단한 글";
+"b_block_user" = "차단한 사용자";
+
 
 
 
@@ -371,7 +381,6 @@
 "j_auto" = "자동";
 "j_assets" = "자산";
 "j_free_board" = "자유게시판";
-"j_wrote_post" = "작성 글";
 "j_wrote_rely" = "작성 댓글";
 "j_posts_comments_usage_history" = "작성한 게시글, 댓글 및 이용내역";
 "j_balance" = "잔액";

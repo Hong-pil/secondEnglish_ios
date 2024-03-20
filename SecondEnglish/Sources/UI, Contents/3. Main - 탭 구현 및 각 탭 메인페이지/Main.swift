@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import SwiftUINavigationBarColor
 
 struct Main {
     @StateObject var userManager = UserManager.shared
     @StateObject var landingManager = LandingManager.shared
     @StateObject var tabStateHandler: TabStateHandlerManager = TabStateHandlerManager()
     @StateObject var languageManager = LanguageManager.shared
+    @StateObject var viewModel = MainViewModel()
     
     @State private var isFirstLoaded: Bool = true
     @State private var isShowEditorView: Bool = false
+    @State private var navigationBarColor: Color = .bgLightGray50
     
     private struct sizeInfo {
         static let numberOfTabs: CGFloat = 3.0
@@ -34,6 +37,9 @@ extension Main: View {
                 LoadingView()
             }
             .ignoresSafeArea(edges: .bottom) // bottom SafeArea 없는게 계산하기 편함
+            .navigationDestination(isPresented: $viewModel.showMenuPage) {
+                MenuPage()
+            }
         }
         .onChange(of: landingManager.showSwipePage) {
             if landingManager.showSwipePage {
@@ -63,6 +69,11 @@ extension Main: View {
                 tabStateHandler.selection = .my
             }
         })
+        .navigationBarBackground {
+            // 아래 라이브러리 사용함
+            // https://github.com/haifengkao/SwiftUI-Navigation-Bar-Color
+            navigationBarColor.shadow(radius: 0)
+        }
     }
     
     var contentTabView: some View {
@@ -91,6 +102,7 @@ extension Main: View {
                 Group {
                     Button {
                         tabStateHandler.selection = .my
+                        navigationBarColor = Color.bgLightGray50
                     } label: {
                         VStack(spacing: 8) {
                             Image(systemName: "bookmark.square")
@@ -127,6 +139,7 @@ extension Main: View {
                     
                     Button {
                         tabStateHandler.selection = .swipe_card
+                        navigationBarColor = Color.gray25
                     } label: {
                         VStack(spacing: 8) {
                             Image(systemName: "arrow.left.and.right.righttriangle.left.righttriangle.right")
