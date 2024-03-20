@@ -251,7 +251,7 @@ class BottomSheetManager: ObservableObject {
                 return 320.0
             case 7...9:
                 return 440.0
-            case 10..<14:
+            case 10..<17:
                 return 610.0
             default:
                 return .infinity

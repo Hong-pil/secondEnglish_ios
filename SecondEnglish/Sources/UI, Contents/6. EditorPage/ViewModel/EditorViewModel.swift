@@ -73,7 +73,7 @@ class EditorViewModel: ObservableObject {
                 
             } receiveValue: { value in
                 if value.code == 200 {
-                    
+                    self.subCategoryList = []
                     self.typeList = value.data ?? []
                     
                     // 카테고리 헤더 데이터

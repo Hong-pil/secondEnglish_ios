@@ -75,7 +75,7 @@ struct TabHomeCardViewRow: View {
                 
                 Text(sentence)
                     .font(.title5Roboto1622Medium)
-                    .foregroundColor(.gray800)
+                    .foregroundColor(.black)
                 
                 
                 

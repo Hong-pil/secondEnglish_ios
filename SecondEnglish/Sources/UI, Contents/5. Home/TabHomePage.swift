@@ -219,11 +219,14 @@ extension TabHomePage: View {
                                     }
                                     //.id(index)
                             }
-                            .padding(.leading, index==0 ? 20 : 10)
-                            .padding(.trailing, (index==viewModel.categoryList.count-1) ? 20 : 0)
+                            .padding(EdgeInsets(
+                                top: 15, 
+                                leading: index==0 ? 20 : 10,
+                                bottom: 10,
+                                trailing: (index==viewModel.categoryList.count-1) ? 20 : 0
+                            ))
                         }
                     }
-                    .padding(.vertical, 10)
                 }
             }
         }

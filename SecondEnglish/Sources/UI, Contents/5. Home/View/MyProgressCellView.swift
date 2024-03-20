@@ -26,7 +26,7 @@ struct MyProgressCellView: View {
                 Text(String(category_sentence_count))
             }
             .font(.buttons1420Medium)
-            .foregroundColor(.black)
+            .foregroundColor(.gray700)
             
             Image(systemName: "chevron.right")
                 .resizable()
@@ -48,7 +48,7 @@ struct MyProgressCellView: View {
         .padding(.bottom, 5)
         .onTapGesture {
             self.moveToSwipeTab(
-                categoryIdx: sub_category_index,
+                subCategoryIdx: sub_category_index,
                 subCategoryName: sub_category,
                 mainCategoryName: main_category
             )
@@ -57,8 +57,8 @@ struct MyProgressCellView: View {
     }
     
     
-    private func moveToSwipeTab(categoryIdx: Int, subCategoryName: String, mainCategoryName: String) {
-        let dataDic: [String: Any] = ["subCategoryIdx": categoryIdx, "subCategoryName" : subCategoryName, "mainCategoryName": mainCategoryName]
+    private func moveToSwipeTab(subCategoryIdx: Int, subCategoryName: String, mainCategoryName: String) {
+        let dataDic: [String: Any] = ["subCategoryIdx": subCategoryIdx, "subCategoryName" : subCategoryName, "mainCategoryName": mainCategoryName]
         
         // Swipe Tab 으로 이동
         LandingManager.shared.showSwipePage = true

@@ -230,10 +230,14 @@ extension EditorPage: View {
                                         
                                         
                                         // 등록한 카테고리의 index 값을 가져온다.
-                                        if let categoryIndex = self.getCategoryIndex() {
+                                        if let subCategoryIndex = self.getSubCategoryIndex(item: selectedSubCategoryName) {
                                             
                                             // Swipe Tab으로 이동 후, 등록한 카테고리의 내용을 갱신해서 보여준다.
-                                            self.moveToSwipeTab(categoryIdx: categoryIndex)
+                                            self.moveToSwipeTab(
+                                                subCategoryIdx: subCategoryIndex,
+                                                subCategoryName: selectedSubCategoryName,
+                                                mainCategoryName: selectedMainCategoryName
+                                            )
                                         }
                                     }
                                 }
@@ -601,31 +605,28 @@ extension EditorPage {
         return .CheckOK
     }
     
-    private func getCategoryIndex() -> Int? {
+    private func getSubCategoryIndex(item: String) -> Int? {
         var categoryIndex: Int?
-        
-//        for (index, item) in homeTabViewModel.myLearningProgressList.enumerated() {
-//            
-//            // 선택한 카테고리와 같은 아이템
-//            if selectedSubCategoryName == (item.sub_category ?? "") {
-//                categoryIndex = index
-//                break
-//            }
-//        }
-        
+        if let index = viewModel.subCategoryList.firstIndex(of: item) {
+            categoryIndex = index
+        }
         return categoryIndex
     }
     
-    private func moveToSwipeTab(categoryIdx: Int) {
+    private func moveToSwipeTab(subCategoryIdx: Int, subCategoryName: String, mainCategoryName: String) {
+        let dataDic: [String: Any] = ["subCategoryIdx": subCategoryIdx, "subCategoryName" : subCategoryName, "mainCategoryName": mainCategoryName]
+        
         // Swipe Tab 으로 이동
         LandingManager.shared.showSwipePage = true
         
         //NotificationCenter.default.post(name: Notification.Name("workCompleted"), object: nil)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            NotificationCenter.default.post(name: Notification.Name(DefineNotification.moveToSwipeTab),
-                                            object: nil,
-                                            userInfo: [DefineKey.subCategoryIndexAndName : categoryIdx] as [String : Any])
+            NotificationCenter.default.post(
+                name: Notification.Name(DefineNotification.moveToSwipeTab),
+                object: nil,
+                userInfo: [DefineKey.subCategoryIndexAndName : dataDic] as [String : Any]
+            )
         }
     }
 }

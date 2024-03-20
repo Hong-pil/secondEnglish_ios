@@ -52,8 +52,8 @@ extension EditorCategoryView: View {
                                     },
                                     selectedCategoryName: selectedCategoryName
                                 )
-                                .padding(.top, index==0 ? 0 : 10)
-                                .padding(.bottom, index==list.count-1 ? 10 : 0)
+                                .padding(.top, index==0 ? 0 : 15)
+                                .padding(.bottom, index==list.count-1 ? 15 : 0)
                             }
                         }
                     }
@@ -69,6 +69,8 @@ extension EditorCategoryView: View {
                                     },
                                     selectedCategoryName: selectedCategoryName
                                 )
+                                .padding(.top, index==0 ? 0 : 15)
+                                .padding(.bottom, index==list.count-1 ? 15 : 0)
                             }
                         }
                     }
