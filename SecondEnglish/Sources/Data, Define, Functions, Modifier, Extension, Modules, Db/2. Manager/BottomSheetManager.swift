@@ -155,6 +155,7 @@ class BottomSheetManager: ObservableObject {
         var swipeCardMore: Bool = false
         var swipeCardReport: Bool = false
         var swipeCardCut: Bool = false
+        var grammarInfo: Bool = false
     }
     
     //    let ver = PopupType.BottomSheet.Post
@@ -166,6 +167,8 @@ class BottomSheetManager: ObservableObject {
     @Published var pressedCardReportCode: Int = -1
     // 선택한 카드 자르기 퍼센트
     @Published var pressedCardCutPercent: CGFloat = 0.0
+    
+    @Published var grammarInfo: SwipeDataGrammar?
     
     
     // 홈탭 -> Popular탭 -> GLOBAL버튼

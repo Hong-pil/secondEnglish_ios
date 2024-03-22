@@ -76,6 +76,15 @@ struct ContentViewPopup: ViewModifier {
                     )
                 }
             )
+            // Swipe Tab -> HELP
+            .bottomSheet(
+                isPresented: $bottomSheetManager.show.grammarInfo,
+                height: .infinity,
+                topBarCornerRadius: DefineSize.CornerRadius.BottomSheet,
+                content: {
+                    GrammarInfoView()
+                }
+            )
         
     }
     

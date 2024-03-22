@@ -173,10 +173,10 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
-    static func getSwipeListByCategory(category: String, isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<SwipeDataResponse, ErrorModel> {
+    static func getSwipeListByCategory(main_category: String, sub_category: String, isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<SwipeDataResponse, ErrorModel> {
         Future<SwipeDataResponse, ErrorModel> { promise in
             
-            let apis: ApisSwipe = .swipeListByCategory(category: category)
+            let apis: ApisSwipe = .swipeListByCategory(main_category: main_category, sub_category: sub_category)
             
             //call
             let provider = MoyaProvider<ApisSwipe>()
@@ -872,7 +872,7 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
-    static func doBlockUser(targetUid: String, isBlock: Int, isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<ReportCardResponse, ErrorModel> {
+    static func doBlockUser(targetUid: String, targetNickname: String, isBlock: Bool, isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<ReportCardResponse, ErrorModel> {
         Future<ReportCardResponse, ErrorModel> { promise in
             
             // 토큰 로직 완성해야됨
@@ -901,6 +901,7 @@ extension ApiControl {
                 } receiveValue: { token in
                     let apis: ApisSwipe = .doBlockUser(
                         targetUid: targetUid,
+                        targetNickname: targetNickname,
                         isBlock: isBlock
                     )
                     let provider = MoyaProvider<ApisSwipe>()

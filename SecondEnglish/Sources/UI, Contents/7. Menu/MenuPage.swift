@@ -13,6 +13,13 @@ struct MenuPage {
     @StateObject var userManager = UserManager.shared
     
     @State private var isShowSettingPage: Bool = false
+    @State private var isShowMySentencePage: Bool = false
+    @State private var isShowPostLikePage: Bool = false
+    @State private var isShowGetLikePage: Bool = false
+    @State private var isShowCardBlockPage: Bool = false
+    @State private var isShowUserBlockPage: Bool = false
+    @State private var isShowPopularCardTop10Page_Week: Bool = false
+    @State private var isShowPopularCardTop10Page_Month: Bool = false
     @State private var isShowAlarmPage = false
     
     private struct sizeInfo {
@@ -25,8 +32,8 @@ extension MenuPage: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 
-                MenuAlarmView(alimList: viewModel.alimList,
-                              unreadCount: viewModel.alimUnread?.count ?? 0) { alimId in
+                MenuAlarmView(alimList: [],
+                              unreadCount: 0) { alimId in
                     
 //                    vm.alimRead(id: alimId) {
 //                        vm.getAlimUnreadList()
@@ -39,8 +46,23 @@ extension MenuPage: View {
                 profileView
                     .padding(.bottom, sizeInfo.listSpacing)
                 
-                MenuInfoView()
-                    .modifier(CornerRadiusListModifier())
+                MenuInfoView(
+                    mySentenceNum: viewModel.mySentenceNum,
+                    myPostLikeNum: viewModel.myPostLikeNum,
+                    myGetLikeNum: viewModel.myGetLikeNum,
+                    onPress: { buttonType in
+                        if buttonType == .Sentence {
+                            isShowMySentencePage = true
+                        }
+                        else if buttonType == .PostLike {
+                            isShowPostLikePage = true
+                        }
+                        else if buttonType == .GetLike {
+                            isShowGetLikePage = true
+                        }
+                    }
+                )
+                .modifier(CornerRadiusListModifier())
                 
                 Text("MY")
                     .font(Font.caption11218Regular)
@@ -51,7 +73,7 @@ extension MenuPage: View {
                 VStack(spacing: 0) {
                     MenuLinkView(text: "b_block_post".localized, position: .Top, showLine: true, onPress: {
                         if userManager.isLogin {
-                            //showMyClubPage = true
+                            isShowCardBlockPage = true
                         }
                         else {
                             AlertManager().showLoginAlert()
@@ -61,7 +83,36 @@ extension MenuPage: View {
                     
                     MenuLinkView(text: "b_block_user".localized, position: .Top, showLine: true, onPress: {
                         if userManager.isLogin {
-                            //showMyMinutePage = true
+                            isShowUserBlockPage = true
+                        }
+                        else {
+                            AlertManager().showLoginAlert()
+                        }
+                        
+                    })
+                }
+                .modifier(CornerRadiusListModifier())
+                
+                Text("SERVICE")
+                    .font(Font.caption11218Regular)
+                    .foregroundColor(Color.gray800)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(EdgeInsets(top: sizeInfo.listSpacing, leading: DefineSize.Contents.HorizontalPadding + 20, bottom: sizeInfo.listSpacing, trailing: 0))
+                
+                VStack(spacing: 0) {
+                    MenuLinkView(text: "top10_card_week".localized, position: .Top, showLine: true, onPress: {
+                        if userManager.isLogin {
+                            isShowPopularCardTop10Page_Week = true
+                        }
+                        else {
+                            AlertManager().showLoginAlert()
+                        }
+                        
+                    })
+                    
+                    MenuLinkView(text: "top10_card_month".localized, position: .Top, showLine: true, onPress: {
+                        if userManager.isLogin {
+                            isShowPopularCardTop10Page_Month = true
                         }
                         else {
                             AlertManager().showLoginAlert()
@@ -94,12 +145,38 @@ extension MenuPage: View {
                 })
             }
         }
+        .task {
+            viewModel.getMySentence()
+            viewModel.getMyPostLike()
+            viewModel.getMyGetLike()
+        }
         .background(Color.bgLightGray50)
         .navigationDestination(isPresented: $isShowSettingPage) {
             SettingPage()
         }
         .navigationDestination(isPresented: $isShowAlarmPage) {
             AlertPage()
+        }
+        .navigationDestination(isPresented: $isShowMySentencePage) {
+            MenuCommonSubPage(type: .Sentence)
+        }
+        .navigationDestination(isPresented: $isShowPostLikePage) {
+            MenuCommonSubPage(type: .PostLike)
+        }
+        .navigationDestination(isPresented: $isShowGetLikePage) {
+            MenuCommonSubPage(type: .GetLike)
+        }
+        .navigationDestination(isPresented: $isShowCardBlockPage) {
+            MenuCommonSubPage(type: .CardBlock)
+        }
+        .navigationDestination(isPresented: $isShowUserBlockPage) {
+            MenuCommonSubPage(type: .UserBlock)
+        }
+        .navigationDestination(isPresented: $isShowPopularCardTop10Page_Week) {
+            MenuCommonSubPage(type: .PopularTop10Week)
+        }
+        .navigationDestination(isPresented: $isShowPopularCardTop10Page_Month) {
+            MenuCommonSubPage(type: .PopularTop10Month)
         }
     }
     

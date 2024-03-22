@@ -45,13 +45,15 @@ extension TabHomePage: View {
                 tabBarView
                 
                 myList
-            } else {
-                emptyView
             }
             
             ScrollViewReader { scrollviewReader in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
+                        
+                        if viewModel.categoryList.count == 0 {
+                            emptyView
+                        }
                         
                         ForEach(Array(viewModel.myLearningProgressList.enumerated()), id: \.offset) { index, item in
                             
@@ -91,6 +93,7 @@ extension TabHomePage: View {
                  */
                 UIScrollView.appearance().bounces = false
             })
+            .padding(.top, viewModel.categoryList.count==0 ? 20 : 0)
         }
         .background(Color.bgLightGray50)
         .onAppear {
@@ -126,7 +129,7 @@ extension TabHomePage: View {
             } label: {
                 Image("icon_outline_alarm new")
                     .resizable()
-                    .frame(width: 25, height: 25)
+                    .frame(width: 27, height: 27)
 //                    .renderingMode(.template)
 //                    .foregroundColor(.gray900)
             }
@@ -137,9 +140,9 @@ extension TabHomePage: View {
                 Image("icon_top_menu")
                     .resizable()
                     .renderingMode(.template)
-                    .frame(width: 25, height: 25)
+                    .frame(width: 27, height: 27)
                     .foregroundColor(.gray900)
-                    .padding(.leading, 15)
+                    .padding(.leading, 20)
             }
         }
         .padding(.horizontal, 20)
@@ -242,7 +245,7 @@ extension TabHomePage: View {
             Text("학습한 이력이 없습니다.")
                 .font(.title32028Bold)
                 .foregroundColor(.gray800)
-                .padding(.top, 10)
+                .padding(.top, 5)
             
             Text("하트를 눌러 나만의 공간을 만들어보세요 :)")
                 .font(.caption11218Regular)
@@ -265,8 +268,9 @@ extension TabHomePage: View {
             .padding(.vertical, 30)
         }
         .frame(maxWidth: .infinity)
-        .background(RoundedRectangle(cornerRadius: 20).fill(Color.gray25))
-        .padding(20)
+        //.background(RoundedRectangle(cornerRadius: 20).fill(Color.gray25))
+        .background(Color.gray25)
+        .padding(.bottom, 15)
     }
     
     var myList: some View {

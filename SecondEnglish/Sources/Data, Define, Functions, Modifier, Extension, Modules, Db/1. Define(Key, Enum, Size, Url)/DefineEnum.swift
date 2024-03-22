@@ -24,6 +24,16 @@ enum EditorPostCheckType {
     case CheckOK
 }
 
+enum MenuButtonType: Int {
+    case Sentence
+    case PostLike
+    case GetLike
+    case CardBlock
+    case UserBlock
+    case PopularTop10Week
+    case PopularTop10Month
+}
+
 enum bTab {
     case my
     case swipe_card

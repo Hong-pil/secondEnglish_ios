@@ -67,6 +67,7 @@ struct SwipeDataList: Codable, Hashable {
     var customId: Int? = 0
     var idx: Int? = 0
     var user_name: String? = ""
+    var uid: String? = ""
     var type1: String? = ""
     var type2: String? = ""
     var type3: String? = ""
@@ -113,6 +114,26 @@ struct MyCardResponse: Codable {
 struct MyCardData: Codable {
     var sentence_list: [SwipeDataList] = []
     var category_list: [String] = []
+}
+
+struct UserBlockResponse: Codable {
+    var code: Int = 0
+    var data: [UserBlockData] = []
+    var message: String? = ""
+}
+struct UserBlockData: Codable, Hashable {
+    var idx: Int = 0
+    var createdAt: String? = ""
+    var updatedAt: String? = ""
+    var uid: String? = ""
+    var target_uid: String? = ""
+    var target_nickname: String? = ""
+}
+
+struct PopularCardTop10Response: Codable {
+    var code: Int = 0
+    var data: [SwipeDataList] = []
+    var message: String? = ""
 }
 
 struct MyLearningProgressResponse: Codable {

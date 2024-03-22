@@ -73,8 +73,8 @@ extension EditorInputView: View {
                     )
                 
                     Rectangle()
-                        .fill(Color.primaryDefault)
-                        .frame(height: (cardIndex==activeCardIndex) ? 3 : 1)
+                        .fill(cardIndex==activeCardIndex ? Color.primaryDefault : Color.gray300)
+                        .frame(height: (cardIndex==activeCardIndex) ? 2 : 1)
                     
                     Text("한글")
                         .font(.caption21116Regular)
@@ -107,8 +107,8 @@ extension EditorInputView: View {
                     .padding(.top, 5)
                     
                     Rectangle()
-                        .fill(Color.primaryDefault)
-                        .frame(height: (cardIndex==activeCardIndex) ? 3 : 1)
+                        .fill(cardIndex==activeCardIndex ? Color.primaryDefault : Color.gray300)
+                        .frame(height: (cardIndex==activeCardIndex) ? 2 : 1)
                     
                     Text("영어")
                         .font(.caption21116Regular)
@@ -181,8 +181,8 @@ extension EditorInputView: View {
                         } else {
                             withAnimation {
                                 self.swipeLeftOffset = .zero
-                                self.isShowingDeleteButton = false
                             }
+                            self.isShowingDeleteButton = false
                         }
                     }
                 }

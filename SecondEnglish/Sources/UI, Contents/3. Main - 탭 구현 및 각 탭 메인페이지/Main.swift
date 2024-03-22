@@ -45,6 +45,8 @@ extension Main: View {
             if landingManager.showSwipePage {
                 tabStateHandler.selection = .swipe_card // move to Swipe Tab
                 landingManager.showSwipePage = false
+                
+                navigationBarColor = Color.gray25
             }
         }
         .fullScreenCover(isPresented: $isShowEditorView) {

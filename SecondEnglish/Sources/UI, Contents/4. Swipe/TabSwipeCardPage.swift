@@ -15,9 +15,9 @@ struct TabSwipeCardPage {
     
     @State private var isShowMainCategoryButtonAnimation = false
     @State private var isShowMainCategoryListView = false
-    @State private var isShowGrammarInfo: Bool = false
     @State private var currentCardIndex: Int = 0
     @State private var curPercent: Double = 0.0
+    @State private var clickCardItem: SwipeDataList?
     @AppStorage(DefineKey.mainCategoryName) var selectedMainCategoryItem: String = ""
     
     /**
@@ -27,8 +27,6 @@ struct TabSwipeCardPage {
      * 그래서 전역변수 하나만 생성해서, 자식뷰로 넘겨주는 방식으로 해결했음.
      */
     let speechSynthesizer = AVSpeechSynthesizer() // TTS
-    
-    
     
     
     /**
@@ -42,6 +40,7 @@ struct TabSwipeCardPage {
     @State private var randomCardOffsets = [sizeInfo.index0RandomCardOffset, sizeInfo.index1RandomCardOffset, sizeInfo.index2RandomCardOffset, sizeInfo.index3RandomCardOffset]
     @State private var isShowRandomCardShuffle: Bool = false
     @State private var randomCardList: [SwipeDataList] = []
+    
     
     
     private struct sizeInfo {
@@ -65,73 +64,7 @@ extension TabSwipeCardPage: View {
         ZStack {
             VStack(spacing: 0) {
                 
-                HStack(spacing: 10) {
-                    mainCategoryButton
-                    
-                    Button(action: {
-                        withAnimation {
-                            self.isShowGrammarInfo = true
-                        }
-                    }, label: {
-                        Image("icon_help")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                    })
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        bottomSheetManager.show.swipeCardCut = true
-                    }, label: {
-                        Image(systemName: "scissors")
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 20)
-                            .foregroundColor(.primaryDefault)
-                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                    })
-                    
-                    Button(action: {
-                        
-                        if viewModel.swipeList.count < 4 {
-                            UserManager.shared.showCardShuffleError = true
-                        }
-                        
-                        if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
-                            
-                            // 랜덤카드 데이터 세팅
-                            self.setRandomCardList() {
-                                
-                                self.isShowRandomCardShuffle = true
-                                
-                                viewModel.shuffleSwipeList()
-                                
-                                self.doShuffleRandomCard()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    self.doShuffleRandomCard()
-                                    
-                                    // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                        self.isShowRandomCardShuffle = false
-                                    }
-                                }
-                                
-                            }
-                        }
-                    }, label: {
-                        Image(systemName: "shuffle")
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.primaryDefault)
-                            .frame(height: 20)
-                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                    })
-                    .padding(.leading, 5)
-                    .padding(.trailing, 20)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                header
                 
                 subCategoryTabView
                 
@@ -207,6 +140,8 @@ extension TabSwipeCardPage: View {
                                         )
                                         
                                         bottomSheetManager.show.swipeCardMore = true
+                                        
+                                        self.clickCardItem = card
                                     },
                                     isLastCard: index==(maxID-1) ? true : false
                                 )
@@ -306,10 +241,6 @@ extension TabSwipeCardPage: View {
                 .padding(.trailing, 20)
             }
             
-            if self.isShowGrammarInfo {
-                grammarInfoView
-            }
-            
             if self.isShowMainCategoryListView {
                 mainCategoryListView
             }
@@ -318,7 +249,8 @@ extension TabSwipeCardPage: View {
             if viewModel.mainCategoryList.count>0 && viewModel.subCategoryList.count>0 {
                 // 카테고리별 영어문장 조회
                 viewModel.requestSwipeListByCategory(
-                    category: viewModel.subCategoryList[viewModel.categoryTabIndex], // 첫 카테고리로 시작
+                    main_category: self.selectedMainCategoryItem,
+                    sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
                     sortType: .Latest,
                     isSuccess: { success in
                         //
@@ -338,7 +270,19 @@ extension TabSwipeCardPage: View {
                                 category: self.selectedMainCategoryItem
                             ) { isSuccess in
                                 if isSuccess {
-                                    //
+                                    
+                                    // 카테고리별 영어문장 데이터
+                                    if viewModel.subCategoryList.count > 0 {
+                                        // 카테고리별 영어문장 조회
+                                        viewModel.requestSwipeListByCategory(
+                                            main_category: self.selectedMainCategoryItem,
+                                            sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                                            sortType: .Latest,
+                                            isSuccess: { success in
+                                                //
+                                            }
+                                        )
+                                    }
                                 }
                             }
                             
@@ -399,9 +343,15 @@ extension TabSwipeCardPage: View {
                     }
                 }
             case .UserBlock:
-                viewModel.blockUser(targetUid: "ppppppp", isBlock: 1) { isSuccess in
-                    if isSuccess {
-                        fLog("idpil::: 유저차단 성공 :)")
+                if let item = self.clickCardItem {
+                    viewModel.blockUser(
+                        targetUid: item.uid ?? "",
+                        targetNickname: item.user_name ?? "",
+                        isBlock: item.isUserBlock ?? false
+                    ) { isSuccess in
+                        if isSuccess {
+                            fLog("idpil::: 유저차단 성공 :)")
+                        }
                     }
                 }
             default:
@@ -438,9 +388,21 @@ extension TabSwipeCardPage: View {
                 category: self.selectedMainCategoryItem
             ) { isSuccess in
                 if isSuccess {
-                    viewModel.moveCategoryTab = true
                     
-                    viewModel.isNotificationCenter = false // 초기화
+                    // 카테고리별 영어문장 데이터
+                    if viewModel.subCategoryList.count > 0 {
+                        // 카테고리별 영어문장 조회
+                        viewModel.requestSwipeListByCategory(
+                            main_category: self.selectedMainCategoryItem,
+                            sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                            sortType: .Latest,
+                            isSuccess: { success in
+                                viewModel.moveCategoryTab = true
+                                
+                                viewModel.isNotificationCenter = false // 초기화
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -460,6 +422,76 @@ extension TabSwipeCardPage: View {
         }
     }
 
+    var header: some View {
+        HStack(spacing: 10) {
+            mainCategoryButton
+            
+            Button(action: {
+                withAnimation {
+                    bottomSheetManager.show.grammarInfo = true
+                }
+            }, label: {
+                Image("icon_help")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+            })
+            
+            Spacer()
+            
+            Button(action: {
+                bottomSheetManager.show.swipeCardCut = true
+            }, label: {
+                Image(systemName: "scissors")
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 20)
+                    .foregroundColor(.primaryDefault)
+                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
+            })
+            
+            Button(action: {
+                
+                if viewModel.swipeList.count < 4 {
+                    UserManager.shared.showCardShuffleError = true
+                }
+                
+                if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
+                    
+                    // 랜덤카드 데이터 세팅
+                    self.setRandomCardList() {
+                        
+                        self.isShowRandomCardShuffle = true
+                        
+                        viewModel.shuffleSwipeList()
+                        
+                        self.doShuffleRandomCard()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            self.doShuffleRandomCard()
+                            
+                            // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                self.isShowRandomCardShuffle = false
+                            }
+                        }
+                        
+                    }
+                }
+            }, label: {
+                Image(systemName: "shuffle")
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(.primaryDefault)
+                    .frame(height: 20)
+                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
+            })
+            .padding(.leading, 5)
+            .padding(.trailing, 20)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
     var mainCategoryButton: some View {
         HStack(spacing: 0) {
             Text(self.selectedMainCategoryItem)
@@ -532,8 +564,9 @@ extension TabSwipeCardPage: View {
 //                                        }
                                         
                                         
-                                            viewModel.requestSwipeListByCategory(
-                                            category: element,
+                                        viewModel.requestSwipeListByCategory(
+                                            main_category: self.selectedMainCategoryItem,
+                                            sub_category: element,
                                             sortType: .Latest,
                                             isSuccess: { success in
                                                 //
@@ -564,7 +597,8 @@ extension TabSwipeCardPage: View {
                                             
                                             
                                             viewModel.requestSwipeListByCategory(
-                                                category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                                                main_category: self.selectedMainCategoryItem,
+                                                sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
                                                 sortType: .Latest,
                                                 isSuccess: { success in
                                                 }
@@ -585,310 +619,6 @@ extension TabSwipeCardPage: View {
                 }
             }
         }
-    }
-    
-    var grammarInfoView: some View {
-        VStack(spacing: 0) {
-            Button(action: {
-                self.isShowGrammarInfo = false
-            }, label: {
-                Image(systemName: "xmark")
-                    .padding(5).background(Color.gray25) // 클릭 영역 확장
-            })
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 5))
-            
-            
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    // 첫 번째만 (padding 값이 다름)
-                    Group {
-                        if let title = viewModel.grammarInfo?.step1_title,
-                           let content = viewModel.grammarInfo?.step1_content {
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, 20)
-                            
-                            /**
-                             * 카테고리 글자에서 잘바꿈 하려고 중간에 개행문자(\n)를 입력해 놨다.
-                             * 문제는 값을 가져오면 \\n로 내려온다. 그래서 아래와 같이 변경해준다.
-                             * 원인) DB에서는 \n 을 \\n 으로 저장한다고 함.
-                             */
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(.buttons1420Medium)
-                            .foregroundColor(.gray850)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                    }
-                    .textSelection(.enabled)
-                    
-                    Group {
-                        if let title = viewModel.grammarInfo?.step2_title,
-                           let content = viewModel.grammarInfo?.step2_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step3_title,
-                           let content = viewModel.grammarInfo?.step3_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step4_title,
-                           let content = viewModel.grammarInfo?.step4_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step5_title,
-                           let content = viewModel.grammarInfo?.step5_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step6_title,
-                           let content = viewModel.grammarInfo?.step6_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step7_title,
-                           let content = viewModel.grammarInfo?.step7_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step8_title,
-                           let content = viewModel.grammarInfo?.step8_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step9_title,
-                           let content = viewModel.grammarInfo?.step9_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step10_title,
-                           let content = viewModel.grammarInfo?.step10_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step11_title,
-                           let content = viewModel.grammarInfo?.step11_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step12_title,
-                           let content = viewModel.grammarInfo?.step12_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step13_title,
-                           let content = viewModel.grammarInfo?.step13_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step14_title,
-                           let content = viewModel.grammarInfo?.step14_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step15_title,
-                           let content = viewModel.grammarInfo?.step15_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step16_title,
-                           let content = viewModel.grammarInfo?.step16_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step17_title,
-                           let content = viewModel.grammarInfo?.step17_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step18_title,
-                           let content = viewModel.grammarInfo?.step18_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step19_title,
-                           let content = viewModel.grammarInfo?.step19_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                        
-                        if let title = viewModel.grammarInfo?.step20_title,
-                           let content = viewModel.grammarInfo?.step20_content{
-                            Text(title)
-                                .font(sizeInfo.grammarTextFont_title)
-                                .foregroundColor(sizeInfo.grammarTextFontColor_title)
-                                .padding(.top, sizeInfo.grammarTextPaddingTop_title)
-                            
-                            Text((content).replacingOccurrences(of: "\\n", with: "\n"))
-                            .font(sizeInfo.grammarTextFont_content)
-                            .foregroundColor(sizeInfo.grammarTextFontColor_content)
-                            .padding(.top, sizeInfo.grammarTextPaddingTop_content)
-                        }
-                    }
-                    .textSelection(.enabled)
-                }
-            }
-            .onAppear {
-                // TabHomePage 에서 ScrollView bounces false로 설정했기 때문에, 여기서 다시 true로 설정해줘야 됨
-                UIScrollView.appearance().bounces = true
-            }
-            .padding(.horizontal, 10)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
-            .background(
-                RoundedRectangle(cornerRadius: 20).fill(Color.gray25)
-                    //.padding(5)
-                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 0)
-                    .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 0)
-            )
-        }
-        .padding(20)
-        .background(Color.gray25.opacity(0.1111111111111111)) // 배경 클릭 안 되게 하기 위해 설정 (화면에는 안 보임)
     }
     
     var emptyBubbleShapeView: some View {

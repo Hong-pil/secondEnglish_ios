@@ -43,9 +43,9 @@ struct MyProgressCellView: View {
         .background(
             Rectangle()
                 .fill(Color.gray25)
-                .shadow(color: .gray200, radius: 2, x: 2, y: 2)
+                .shadow(color: .gray200, radius: 1, x: 2, y: 2)
         )
-        .padding(.bottom, 5)
+        .padding(.bottom, 6)
         .onTapGesture {
             self.moveToSwipeTab(
                 subCategoryIdx: sub_category_index,

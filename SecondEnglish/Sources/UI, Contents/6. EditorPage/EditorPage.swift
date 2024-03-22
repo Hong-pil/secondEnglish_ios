@@ -228,7 +228,6 @@ extension EditorPage: View {
                                         StatusManager.shared.loadingStatus = .Close
                                         presentationMode.wrappedValue.dismiss()
                                         
-                                        
                                         // 등록한 카테고리의 index 값을 가져온다.
                                         if let subCategoryIndex = self.getSubCategoryIndex(item: selectedSubCategoryName) {
                                             

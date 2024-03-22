@@ -26,7 +26,6 @@ class SwipeCardViewModel: ObservableObject {
     
     // View Data
     @Published var typeList: [SwipeCategoryList] = []
-    @Published var grammarInfo: SwipeDataGrammar?
     @Published var fixedSwipeList_0: [SwipeDataList] = [] // 처음 한 번만 저장
     @Published var percentCountSwipeList: [SwipeDataList] = [] // 계산용
     @Published var swipeList: [SwipeDataList] = []
@@ -194,19 +193,6 @@ class SwipeCardViewModel: ObservableObject {
                     // 중복제거
                     self.subCategoryList = self.subCategoryList.uniqued()
                     
-                    // 카테고리별 영어문장 데이터
-                    if self.subCategoryList.count > 0 {
-                        
-                        // 카테고리별 영어문장 조회
-                        self.requestSwipeListByCategory(
-                            category: self.subCategoryList[self.categoryTabIndex], // 첫 카테고리로 시작
-                            sortType: .Latest,
-                            isSuccess: { success in
-                                //
-                            }
-                        )
-                    }
-                    
                     isSuccess(true)
                 }
                 else {
@@ -301,8 +287,8 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     //MARK: - 카테고리별 영어문장 조회
-    func requestSwipeListByCategory(category: String, sortType: SwipeCardSortType, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getSwipeListByCategory(category: category)
+    func requestSwipeListByCategory(main_category: String, sub_category: String, sortType: SwipeCardSortType, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getSwipeListByCategory(main_category: main_category, sub_category: sub_category)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
@@ -319,7 +305,7 @@ class SwipeCardViewModel: ObservableObject {
                     
                     guard var arr = value.data?.list else { return }
                     guard let grammar = value.data?.grammar else { return }
-                    self.grammarInfo = grammar
+                    BottomSheetManager.shared.grammarInfo = grammar
                     
                     
                     switch(sortType) {
@@ -560,8 +546,8 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     //MARK: - 유저 차단하기
-    func blockUser(targetUid: String, isBlock: Int, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.doBlockUser(targetUid: targetUid, isBlock: isBlock)
+    func blockUser(targetUid: String, targetNickname: String, isBlock: Bool, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.doBlockUser(targetUid: targetUid, targetNickname: targetNickname, isBlock: isBlock)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")

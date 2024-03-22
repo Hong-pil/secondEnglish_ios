@@ -9,6 +9,12 @@ import SwiftUI
 
 struct MenuInfoView: View {
     
+    var mySentenceNum: Int
+    var myPostLikeNum: Int
+    var myGetLikeNum: Int
+    
+    let onPress: (MenuButtonType) -> Void
+    
     private struct sizeInfo {
         static let cellHeight: CGFloat = 78.0
         
@@ -24,10 +30,10 @@ struct MenuInfoView: View {
                     
                     ZStack {
                         Button {
-                            //onPress(.Post)
+                            onPress(.Sentence)
                         } label: {
                             VStack {
-                                Text("7")
+                                Text(String(mySentenceNum))
                                     .font(Font.body21420Regular)
                                     .foregroundColor(Color.gray900)
                                     .fixedSize(horizontal: true, vertical: true)
@@ -53,10 +59,10 @@ struct MenuInfoView: View {
                     
                     ZStack {
                         Button {
-                            //onPress(.Comment)
+                            onPress(.PostLike)
                         } label: {
                             VStack {
-                                Text("7")
+                                Text(String(myPostLikeNum))
                                     .font(Font.body21420Regular)
                                     .foregroundColor(Color.gray900)
                                     .fixedSize(horizontal: true, vertical: true)
@@ -81,10 +87,10 @@ struct MenuInfoView: View {
                     
                     ZStack {
                         Button {
-                            //onPress(.Save)
+                            onPress(.GetLike)
                         } label: {
                             VStack {
-                                Text("7")
+                                Text(String(myGetLikeNum))
                                     .font(Font.body21420Regular)
                                     .foregroundColor(Color.gray900)
                                     .fixedSize(horizontal: true, vertical: true)
@@ -110,6 +116,6 @@ struct MenuInfoView: View {
     }
 }
 
-#Preview {
-    MenuInfoView()
-}
+//#Preview {
+//    MenuInfoView()
+//}

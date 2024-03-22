@@ -14,7 +14,7 @@ enum ApisSwipe {
     case swipeCategory(category: String)
     case swipeMainCategory
     case swipeList
-    case swipeListByCategory(category: String)
+    case swipeListByCategory(main_category: String, sub_category: String)
     case myCategoryProgress
     case likeCard(cardIdx: Int, isLike: Int)
     case myLikeCardList(uid: String)
@@ -23,7 +23,7 @@ enum ApisSwipe {
     case getReportList
     case doReportCard(targetUid: String, targetCardIdx: Int, reportCode: Int)
     case doBlockCard(cardIdx: Int, isBlock: Int)
-    case doBlockUser(targetUid: String, isBlock: Int)
+    case doBlockUser(targetUid: String, targetNickname: String, isBlock: Bool)
 }
 
 extension ApisSwipe: TargetType {
@@ -127,11 +127,12 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
             
-        case .swipeListByCategory(let category):
+        case .swipeListByCategory(let main_category, let sub_category):
             var params = defaultParams
             
             params["uid"] = UserManager.shared.uid
-            params["category"] = category
+            params["main_category"] = main_category
+            params["sub_category"] = sub_category
 
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
@@ -169,6 +170,7 @@ extension ApisSwipe: TargetType {
             
         case .addCardList(let type1, let type2, let type3, let sentence_list):
             var params = defaultParams
+            params["uid"] = UserManager.shared.uid
             params["user_name"] = UserManager.shared.userNick
             params["type1"] = type1
             params["type2"] = type2
@@ -203,11 +205,14 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
             
-        case .doBlockUser(let targetUid, let isBlock):
+        case .doBlockUser(let targetUid, let targetNickname, let isBlock):
             var params = defaultParams
             params["uid"] = UserManager.shared.uid
             params["targetUid"] = targetUid
-            params["isBlock"] = isBlock
+            params["targetNickname"] = targetNickname
+            // 차단된 상태(isBlock==true)이면 => 차단해제(false)로 요청
+            // 차단 안 된 상태(isBlock==false)이면 => 차단(true)으로 요청
+            params["isBlock"] = isBlock ? "false" : "true"
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
