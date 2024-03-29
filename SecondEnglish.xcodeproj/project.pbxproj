@@ -88,10 +88,13 @@
 		E085DDC22B51519800CF44A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC12B51519800CF44A8 /* AppDelegate.swift */; };
 		E085DDC42B5151FA00CF44A8 /* ContentView+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */; };
 		E08D010B2BAAD52D0021D8AC /* GrammarInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08D010A2BAAD52D0021D8AC /* GrammarInfoView.swift */; };
+		E090ED912BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E090ED902BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift */; };
+		E090ED9E2BAE855E0096F822 /* InfiniteCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E090ED9D2BAE855E0096F822 /* InfiniteCarousel.swift */; };
 		E093EFB72B89EE7C0043AD43 /* ContentView+Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E093EFB62B89EE7C0043AD43 /* ContentView+Popup.swift */; };
 		E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E098DE992B70760A000059B3 /* CustomScrollView.swift */; };
 		E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */; };
 		E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */; };
+		E0B366612BB56790008BD503 /* RoundedCornersShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B366602BB56790008BD503 /* RoundedCornersShape.swift */; };
 		E0BA024E2B5DD86200AA11A5 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA024D2B5DD86200AA11A5 /* JWTDecode */; };
 		E0BA02512B5E875400AA11A5 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E0BA02502B5E875400AA11A5 /* Config.xcconfig */; };
 		E0BA02542B5EA05300AA11A5 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = E0BA02532B5EA05300AA11A5 /* KakaoSDK */; };
@@ -325,10 +328,13 @@
 		E085DDC12B51519800CF44A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E085DDC32B5151FA00CF44A8 /* ContentView+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Alert.swift"; sourceTree = "<group>"; };
 		E08D010A2BAAD52D0021D8AC /* GrammarInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrammarInfoView.swift; sourceTree = "<group>"; };
+		E090ED902BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSubPageCellFlipPopularView.swift; sourceTree = "<group>"; };
+		E090ED9D2BAE855E0096F822 /* InfiniteCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarousel.swift; sourceTree = "<group>"; };
 		E093EFB62B89EE7C0043AD43 /* ContentView+Popup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Popup.swift"; sourceTree = "<group>"; };
 		E098DE992B70760A000059B3 /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
 		E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeControlPanel.swift; sourceTree = "<group>"; };
 		E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeCardView.swift; sourceTree = "<group>"; };
+		E0B366602BB56790008BD503 /* RoundedCornersShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornersShape.swift; sourceTree = "<group>"; };
 		E0BA02502B5E875400AA11A5 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		E0C41ED82BA8407000EB276A /* StatusBar+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatusBar+Modifier.swift"; sourceTree = "<group>"; };
 		E0CF069B2B8748920009C02C /* CustomBubbleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBubbleShape.swift; sourceTree = "<group>"; };
@@ -682,6 +688,7 @@
 				E050FAF22BA9624200390420 /* MenuLinkView.swift */,
 				E0D295062BAD404700A19515 /* MenuSubPageCellFlipView.swift */,
 				E0D295082BAD6D9F00A19515 /* MenuSubPageCellBasicView.swift */,
+				E090ED902BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -751,6 +758,8 @@
 				E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */,
 				E07BE6212BA916DD008DDEB7 /* MyProgressCellView.swift */,
 				E07BE6232BA916F9008DDEB7 /* MyProgressHeaderView.swift */,
+				E090ED9D2BAE855E0096F822 /* InfiniteCarousel.swift */,
+				E0B366602BB56790008BD503 /* RoundedCornersShape.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1685,6 +1694,7 @@
 				E0DBDD612B4FC8D2007615A8 /* AlertManager.swift in Sources */,
 				E0F11EA02B7F43F60014F503 /* EditorCategoryRowView.swift in Sources */,
 				E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */,
+				E090ED912BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift in Sources */,
 				E06392342B82FAFD003D0428 /* BottomPopupConfig.swift in Sources */,
 				E0DBDE332B4FD14E007615A8 /* LocationPermission.swift in Sources */,
 				E0F11E9A2B7EF9CD0014F503 /* ToastView.swift in Sources */,
@@ -1697,6 +1707,7 @@
 				E045E9D52B65A73C00E3BD60 /* JoinAgreeCheckSubView.swift in Sources */,
 				E0DBDDB42B4FCDBB007615A8 /* UIApplication+Extension.swift in Sources */,
 				E0DBDDEE2B4FCF36007615A8 /* CustomNavigationButton.swift in Sources */,
+				E090ED9E2BAE855E0096F822 /* InfiniteCarousel.swift in Sources */,
 				E0DBDD802B4FC9B4007615A8 /* Apis+Swipe.swift in Sources */,
 				E06392422B82FB2E003D0428 /* PopupView.swift in Sources */,
 				E0DBDD652B4FC8F9007615A8 /* BottomSheetManager.swift in Sources */,
@@ -1723,6 +1734,7 @@
 				E050FAEC2BA9544B00390420 /* AlertPageViewModel.swift in Sources */,
 				E0DBDD842B4FC9CE007615A8 /* ConfigModel.swift in Sources */,
 				E0DBDD8E2B4FCA05007615A8 /* RecordingModel.swift in Sources */,
+				E0B366612BB56790008BD503 /* RoundedCornersShape.swift in Sources */,
 				E0DBDDC22B4FCE0B007615A8 /* UIScreen+Extension.swift in Sources */,
 				E002E17E2B56E8F200F64CA4 /* SwipeView.swift in Sources */,
 				E0DBDCFB2B4FB60F007615A8 /* SecondEnglishApp.swift in Sources */,

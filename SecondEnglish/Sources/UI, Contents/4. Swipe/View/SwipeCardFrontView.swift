@@ -102,9 +102,11 @@ struct SwipeCardFrontView: View {
                 Spacer()
                 
                 HStack(spacing: 20) {
-                    Image(systemName: (card.isLike ?? false) ? "bookmark.fill" : "bookmark")
+                    Image("icon_fill_bookmark")
+                        .resizable()
                         .renderingMode(.template)
-                        .foregroundColor(.gray850)
+                        .frame(width: 25, height: 25)
+                        .foregroundColor((card.isLike ?? false) ? Color.primaryDefault : Color.stateDisabledGray200)
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장
                         .onTapGesture {
@@ -114,7 +116,11 @@ struct SwipeCardFrontView: View {
                         }
                     
                     Image(systemName: "figure.highintensity.intervaltraining")
-                        .foregroundColor(.gray850)
+                        .resizable()
+                        .renderingMode(.template)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 25)
+                        .foregroundColor(visibleHintText.count>0 ? Color.primaryDefault : Color.stateDisabledGray200)
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장
                         .onTapGesture {

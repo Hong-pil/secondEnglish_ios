@@ -62,7 +62,7 @@ extension MenuCommonSubPage: View {
                     }
             case .PopularTop10Week:
                 // 주간 인기글
-                popularTop10WeekView
+                popularTop10View
                     .task {
                         fLog("idpil::: 6")
                         naviTitle = "top10_card_week".localized
@@ -70,7 +70,7 @@ extension MenuCommonSubPage: View {
                     }
             case .PopularTop10Month:
                 // 월간 인기글
-                popularTop10MonthView
+                popularTop10View
                     .task {
                         fLog("idpil::: 7")
                         naviTitle = "top10_card_month".localized
@@ -139,39 +139,54 @@ extension MenuCommonSubPage: View {
             LazyVStack(spacing: 0) {
                 ForEach(Array((viewModel.userBlockData ?? []).enumerated()), id: \.offset) { index, item in
                     
-                    MenuSubPageCellBasicView(item: item.target_nickname ?? "")
-                }
-            }
-        }
-    }
-    
-    var popularTop10WeekView: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(Array((viewModel.popularCardTop10Data ?? []).enumerated()), id: \.offset) { index, item in
-                    
-                    MenuSubPageCellFlipView(
-                        item: item,
-                        isDoItemDelete: false
+                    MenuSubPageCellBasicView(
+                        target_nickname: item.target_nickname ?? "",
+                        target_uid: item.target_uid ?? ""
                     )
                 }
             }
         }
     }
     
-    var popularTop10MonthView: some View {
+    var popularTop10View: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 ForEach(Array((viewModel.popularCardTop10Data ?? []).enumerated()), id: \.offset) { index, item in
                     
-                    MenuSubPageCellFlipView(
-                        item: item,
-                        isDoItemDelete: false
-                    )
+                    ZStack {
+                        MenuSubPageCellFlipPopularView(
+                            item: item,
+                            isDoItemDelete: false
+                        )
+                        
+                        ZStack {
+                            Image("top10_bookmark")
+                                .resizable()
+                                .renderingMode(.template)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 40) // 높이에 맞춰 비율 유지함(.aspectRatio 다음에 위치해야 됨)
+                                .foregroundColor(
+                                    Color.primaryDefault
+                                        .opacity((index < 3) ? 1.0 : 0.3)
+                                )
+                            
+                            Text("\(index + 1)")
+                                .font(.title51622Medium.weight(.bold))
+                                .foregroundColor(
+                                    (index < 3) ? Color.gray25 : Color.primaryDefault
+                                )
+                                .padding(.bottom, 10)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                        .padding(.trailing, 10)
+                    }
+                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+                    //.fixedSize(horizontal: true, vertical: true)
                 }
             }
         }
     }
+    
 }
 
 //#Preview {

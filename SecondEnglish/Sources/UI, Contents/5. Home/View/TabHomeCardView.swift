@@ -14,43 +14,64 @@ import SwiftUI
 struct TabHomeCardView {
     let item: SwipeDataList
     let cardWidth: CGFloat
+    let cardHeight: CGFloat
+    var isAutoPlay: Bool = false
     @State var isFlipped: Bool = false
 }
 
 extension TabHomeCardView: View {
     var body: some View {
         ZStack {
-            // Decide which view to show based on the flip state
-            if isFlipped {
-                // Back View Content
-                TabHomeCardViewRow(
-                    sentence: item.english ?? "",
+            if isAutoPlay {
+                TabHomeCardViewRow_NoFlip(
+                    korean: item.korean ?? "",
+                    english: item.english ?? "",
                     category: item.type3 ?? "",
                     isStartPointCategory: item.isStartPointCategory ?? false,
                     isEndPointCategory: item.isEndPointCategory ?? false,
                     isFlipped: isFlipped,
-                    cardWidth: cardWidth
+                    cardWidth: cardWidth,
+                    cardHeight: cardHeight
                 )
-                // Correct the orientation of the content
-                .rotation3DEffect(.degrees(180), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
-                    
-            } else {
-                // Front View Content
-                TabHomeCardViewRow(
-                    sentence: item.korean ?? "",
-                    category: item.type3 ?? "",
-                    isStartPointCategory: item.isStartPointCategory ?? false,
-                    isEndPointCategory: item.isEndPointCategory ?? false,
-                    isFlipped: isFlipped,
-                    cardWidth: cardWidth
-                )
+            }
+            else {
+                // Decide which view to show based on the flip state
+                if isFlipped {
+                    // Back View Content
+                    TabHomeCardViewRow(
+                        sentence: item.english ?? "",
+                        category: item.type3 ?? "",
+                        isStartPointCategory: item.isStartPointCategory ?? false,
+                        isEndPointCategory: item.isEndPointCategory ?? false,
+                        isFlipped: isFlipped,
+                        cardWidth: cardWidth,
+                        cardHeight: cardHeight
+                    )
+                    // Correct the orientation of the content
+                    .rotation3DEffect(.degrees(180), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
+                        
+                } else {
+                    // Front View Content
+                    TabHomeCardViewRow(
+                        sentence: item.korean ?? "",
+                        category: item.type3 ?? "",
+                        isStartPointCategory: item.isStartPointCategory ?? false,
+                        isEndPointCategory: item.isEndPointCategory ?? false,
+                        isFlipped: isFlipped,
+                        cardWidth: cardWidth,
+                        cardHeight: 150
+                    )
+                }
             }
         }
         // Apply flip animation to the container
         .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
         .onTapGesture {
-            withAnimation(.easeIn(duration: 0.2)) {
-                isFlipped.toggle()
+            // 오토모드에서는 View Flip 안 함
+            if !isAutoPlay {
+                withAnimation(.easeIn(duration: 0.2)) {
+                    isFlipped.toggle()
+                }
             }
         }
     }
@@ -63,6 +84,7 @@ struct TabHomeCardViewRow: View {
     let isEndPointCategory: Bool
     let isFlipped: Bool
     let cardWidth: CGFloat
+    let cardHeight: CGFloat
     
     var body: some View {
         ZStack {
@@ -86,7 +108,48 @@ struct TabHomeCardViewRow: View {
             }
             .padding(10)
         }
-        .frame(width: cardWidth, height: 150)
+        .frame(width: cardWidth, height: cardHeight)
+        //.fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+struct TabHomeCardViewRow_NoFlip: View {
+    let korean: String
+    let english: String
+    let category: String
+    let isStartPointCategory: Bool
+    let isEndPointCategory: Bool
+    let isFlipped: Bool
+    let cardWidth: CGFloat
+    let cardHeight: CGFloat
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(Color.gray25)
+                //.stroke(Color.primaryDefault, lineWidth: 0.5)
+                .shadow(color: .gray25.opacity(0.5), radius: 5, x: 0, y: 0)
+                
+            VStack(spacing: 30) {
+                
+                Text(korean)
+                    .font(.title5Roboto1622Medium)
+                    .foregroundColor(.black)
+                
+                Text(english)
+                    .font(.title5Roboto1622Medium)
+                    .foregroundColor(.black)
+                
+                
+                
+                // [데이터 확인용]
+                //Text(category)
+                //Text(isStartPointCategory ? "시작 포인트임 :)" : "None :>")
+                //Text(isEndPointCategory ? "마지막 포인트임 :)" : "None")
+            }
+            .padding(10)
+        }
+        .frame(width: cardWidth, height: cardHeight)
         //.fixedSize(horizontal: false, vertical: true)
     }
 }

@@ -1,13 +1,13 @@
 //
-//  MenuSubPageCellFlipView.swift
+//  MenuSubPageCellFlipPopularView.swift
 //  SecondEnglish
 //
-//  Created by kimhongpil on 3/22/24.
+//  Created by kimhongpil on 3/23/24.
 //
 
 import SwiftUI
 
-struct MenuSubPageCellFlipView: View {
+struct MenuSubPageCellFlipPopularView: View {
     let item: SwipeDataList
     @State var isFlipped: Bool = false
     
@@ -26,7 +26,7 @@ struct MenuSubPageCellFlipView: View {
                     // Decide which view to show based on the flip state
                     if isFlipped {
                         // Back View Content
-                        MenuSubPageCellFlip(
+                        MenuSubPageCellFlipPopular(
                             sentence: item.english ?? "",
                             category: item.type3 ?? "",
                             isFlipped: isFlipped
@@ -36,7 +36,7 @@ struct MenuSubPageCellFlipView: View {
                             
                     } else {
                         // Front View Content
-                        MenuSubPageCellFlip(
+                        MenuSubPageCellFlipPopular(
                             sentence: item.korean ?? "",
                             category: item.type3 ?? "",
                             isFlipped: isFlipped
@@ -83,7 +83,7 @@ struct MenuSubPageCellFlipView: View {
                 .transition(.move(edge: .trailing))
             }
         }
-        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+        //.padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
         .offset(x: swipeLeftOffset.width, y: 0)
         .gesture(
             DragGesture()
@@ -118,7 +118,11 @@ struct MenuSubPageCellFlipView: View {
     }
 }
 
-struct MenuSubPageCellFlip: View {
+//#Preview {
+//    MenuSubPageCellFlipPopularView()
+//}
+
+struct MenuSubPageCellFlipPopular: View {
     let sentence: String
     let category: String
     let isFlipped: Bool
@@ -129,17 +133,14 @@ struct MenuSubPageCellFlip: View {
                 .font(.title5Roboto1622Medium)
                 .foregroundColor(.black)
                 .padding(.vertical, 20)
+                .frame(maxWidth: DefineSize.Screen.Width / 1.3, alignment: .leading) // '북마크 순위' 이미지와 안 겹치게 하려고 사이즈 설정함.
+                //.background(Color.yellow.opacity(0.3))
             
         }
         .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위해 사이즈 설정
-        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+        .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 0))
         .background(Color.gray25)
         .clipShape(RoundedRectangle(cornerRadius: 5))
         .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 0) // .clipShape 하지 않으면, 안쪽 뷰 요소들에도 그림자가 적용됨
     }
 }
-
-//#Preview {
-//    MenuSubPageCellFlipView()
-//}
-

@@ -24,14 +24,18 @@ struct TabHomePage {
     
     
     // Header
-    @State private var clickedSubTabIndex: Int = 0
-    
-    // Card Banner
-    private let cardBannerWidth: CGFloat = UIScreen.main.bounds.size.width - 130 // UIScreen.main.bounds.size.width 가 디바이스 가로 폭인데 실제 적용하면 화면 가로영역을 벗어나기 때문에 -130 정도를 적용한 것.
-    private let cardBannerDistance: CGFloat = 20 // 카드 간의 간격
+    @State private var headerTabIndex: Int = 0
+    @State private var isMoveFirstHeader: Bool = false
+    @State private var isMoveLastHeader: Bool = false
     @State private var cardBannerCurrentIndex: Int = 0
     @State private var isNotMainCategoryButtonClick: Bool = false
-    @GestureState private var dragOffset: CGFloat = 0
+    
+    @State private var selectedTabIndex: Int = 1
+    @State private var isAutoPlay: Bool = false
+    
+    private struct sizeInfo {
+        static let CarouselViewHeight: CGFloat = 300
+    }
 }
 
 extension TabHomePage: View {
@@ -41,17 +45,23 @@ extension TabHomePage: View {
             header
             
             //MARK: - 내가 좋아요한 문장들
-            if viewModel.categoryList.count>0 {
-                tabBarView
-                
-                myList
-            }
+//            if viewModel.categoryList.count>0 {
+//                //tabBarView
+//
+//                myFavoriteCardList
+//            }
             
             ScrollViewReader { scrollviewReader in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
                         
-                        if viewModel.categoryList.count == 0 {
+                        if viewModel.categoryList.count > 0 {
+                            //tabBarView
+                            
+                            myFavoriteCardList
+                                .padding(.top, 20)
+                                .padding(.bottom, 20)
+                        } else {
                             emptyView
                         }
                         
@@ -74,14 +84,24 @@ extension TabHomePage: View {
                                         )
                                     }
                                 }
-                                .padding(.bottom, index==viewModel.myLearningProgressList.count-1 ? 20 : 0)
+                                .background(Color.gray25)
+                                .clipShape(
+                                    RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 5)
+                                )
+                                //.padding(.horizontal, 10)
+                                .padding(.bottom, index==viewModel.myLearningProgressList.count-1 ? 20 : 15)
                             } header: {
                                 MyProgressHeaderView(
                                     isLike: item.isLike ?? false,
                                     main_category: item.main_category,
                                     index: index
                                 )
+                                .clipShape(
+                                    RoundedCornersShape(corners: [.topLeft, .topRight], radius: 5)
+                                )
+                                //.padding(.horizontal, 10)
                             }
+                            
                         }
                     }
                 }
@@ -148,18 +168,91 @@ extension TabHomePage: View {
         .padding(.horizontal, 20)
     }
     
+    var categoryListView: some View {
+        ScrollViewReader { scrollviewReader in
+            ScrollView(.horizontal, showsIndicators: false) {
+                if viewModel.categoryList.count>0 {
+                    HStack(spacing: 0) {
+                        ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                            
+                            VStack(spacing: 0) {
+                                Text(element)
+                                    .font(headerTabIndex==index ? .title51622Medium : .caption11218Regular)
+                                    .foregroundColor(headerTabIndex==index ? Color.gray25 : Color.gray50)
+                                    //.frame(minWidth: 70)
+                                    .padding(.vertical, 5)
+                                    .padding(.horizontal, 5)
+                                // sub 카테고리 배너가 움직일 때, 시작점 또는 끝점에서 main 카테고리 버튼 움직이게 만듬
+                                    .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
+                                        // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
+                                
+                                        // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
+                                        // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
+                                        if isNotMainCategoryButtonClick {
+                                            //fLog("idpil::: isMoveFirstHeader : \(isMoveFirstHeader)")
+                                            //fLog("idpil::: isMoveLastHeader : \(isMoveLastHeader)")
+                                            
+                                            if isMoveFirstHeader {
+                                                //fLog("idpil::: 헤더 첫번째")
+                                                headerTabIndex = 0
+                                            }
+                                            else if isMoveLastHeader {
+                                                //fLog("idpil::: 헤더 마지막번째")
+                                                headerTabIndex = viewModel.categoryList.count-1
+                                            }
+                                            else {
+                                                // 카드배너 왼족으로 이동
+                                                if oldValue > newValue {
+                                                    if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
+                                                        headerTabIndex -= 1
+                                                    }
+                                                }
+                                                // 카드배너 오른쪽으로 이동
+                                                else if oldValue < newValue {
+                                                    if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
+                                                        
+                                                        headerTabIndex += 1
+                                                    }
+                                                }
+                                            }
+                                            
+                                            withAnimation {
+                                                scrollviewReader.scrollTo(headerTabIndex, anchor: .top)
+                                            }
+                                            
+                                            isNotMainCategoryButtonClick = false // 초기화
+                                        }
+                                    }
+                                    //.id(index)
+                            }
+                            .padding(EdgeInsets(
+                                top: 10,
+                                leading: index==0 ? 20 : 10,
+                                bottom: 0,
+                                trailing: (index==viewModel.categoryList.count-1) ? 20 : 0
+                            ))
+                        }
+                    }
+                }
+            }
+            .scrollDisabled(true)
+
+        }
+    }
+    
+    // 사용 안 함
     var tabBarView: some View {
         ScrollViewReader { scrollviewReader in
             ScrollView(.horizontal, showsIndicators: false) {
                 if viewModel.categoryList.count>0 {
                     HStack(spacing: 0) {
                         ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
-                            let isSelected = clickedSubTabIndex == index
+                            let isSelected = headerTabIndex == index
                             
                             VStack(spacing: 0) {
                                 Text(element)
-                                    .font(clickedSubTabIndex==index ? .buttons1420Medium : .body21420Regular)
-                                    .foregroundColor(clickedSubTabIndex==index ? Color.gray25 : Color.gray850)
+                                    .font(headerTabIndex==index ? .buttons1420Medium : .body21420Regular)
+                                    .foregroundColor(headerTabIndex==index ? Color.gray25 : Color.gray850)
                                     .frame(minWidth: 70)
                                     .padding(.vertical, 7)
                                     .padding(.horizontal, 10)
@@ -174,7 +267,7 @@ extension TabHomePage: View {
                                     .onTapGesture {
                                         
                                         // 카테고리 리스트 이동
-                                        clickedSubTabIndex = index
+                                        headerTabIndex = index
                                         withAnimation {
                                             scrollviewReader.scrollTo(index, anchor: .top)
                                         }
@@ -199,22 +292,35 @@ extension TabHomePage: View {
                                         // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
                                         // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
                                         if isNotMainCategoryButtonClick {
-    //                                        // 카드배너 왼족으로 이동
-                                            if oldValue > newValue {
-                                                if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
-                                                    clickedSubTabIndex -= 1
-                                                }
+                                            //fLog("idpil::: isMoveFirstHeader : \(isMoveFirstHeader)")
+                                            //fLog("idpil::: isMoveLastHeader : \(isMoveLastHeader)")
+                                            
+                                            if isMoveFirstHeader {
+                                                //fLog("idpil::: 헤더 첫번째")
+                                                headerTabIndex = 0
                                             }
-                                            // 카드배너 오른쪽으로 이동
-                                            else if oldValue < newValue {
-                                                if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
-                                                    
-                                                    clickedSubTabIndex += 1
+                                            else if isMoveLastHeader {
+                                                //fLog("idpil::: 헤더 마지막번째")
+                                                headerTabIndex = viewModel.categoryList.count-1
+                                            }
+                                            else {
+                                                // 카드배너 왼족으로 이동
+                                                if oldValue > newValue {
+                                                    if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
+                                                        headerTabIndex -= 1
+                                                    }
+                                                }
+                                                // 카드배너 오른쪽으로 이동
+                                                else if oldValue < newValue {
+                                                    if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
+                                                        
+                                                        headerTabIndex += 1
+                                                    }
                                                 }
                                             }
                                             
                                             withAnimation {
-                                                scrollviewReader.scrollTo(clickedSubTabIndex, anchor: .top)
+                                                scrollviewReader.scrollTo(headerTabIndex, anchor: .top)
                                             }
                                             
                                             isNotMainCategoryButtonClick = false // 초기화
@@ -273,101 +379,88 @@ extension TabHomePage: View {
         .padding(.bottom, 15)
     }
     
-    var myList: some View {
+    var myFavoriteCardList: some View {
         ZStack {
+            InfiniteCarousel(
+                data: viewModel.sentenceList,
+                height: sizeInfo.CarouselViewHeight,
+                cornerRadius: 15,
+                transition: .scale,
+                returnIndex: { index, isMoveFirst, isMoveLast in
+                    //fLog("idpil::: isMoveFirst : \(isMoveFirst) / isMoveLast : \(isMoveLast)")
+                    self.isMoveFirstHeader = isMoveFirst
+                    self.isMoveLastHeader = isMoveLast
+//                    if isMoveFirst {
+//                        fLog("idpil::: 무한루트 시작점")
+//                    }
+//                    else if isMoveLast {
+//                        fLog("idpil::: 무한루트 끝점")
+//                    }
+                    
+                    /**
+                     * InfiniteCarousel() 에서 '무한루프'를 위해 인덱스는 1부터 시작한다.
+                     * 그래서 -1을 해준 뒤 저장해준다.
+                     */
+                    self.cardBannerCurrentIndex = index-1
+                    
+                    isNotMainCategoryButtonClick = true
+                    
+                },
+                isAutoPlay: isAutoPlay,
+                content: { item in
+                    TabHomeCardView(
+                        item: item,
+                        cardWidth: .infinity,
+                        cardHeight: 150,
+                        isAutoPlay: isAutoPlay
+                    )
+                }
+            )
+            
+            
+            // 오토모드에서는 TabView 스크롤 제스처 안 되도록 막는다.
+            // TabView 스크롤 엄청 빨리 했을 때, categoryList 이랑 싱크 안 맞는 경우가 생긴다.
+            // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
+            if isAutoPlay {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(Color.gray25.opacity(0.1111111111111111111))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 150)
+                    .padding(40)
+            }
+            
+            
+            categoryListView
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            
+            ZStack {
+                Text("\(cardBannerCurrentIndex+1) / \(viewModel.sentenceList.count)")
+                    .font(.caption11218Regular)
+                    .foregroundColor(.gray100)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                
+                Button(action: {
+                    self.isAutoPlay.toggle()
+                }, label: {
+                    Image(systemName: self.isAutoPlay ? "autostartstop.slash" : "autostartstop")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 25, height: 25)
+                        .foregroundColor(.gray25)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.trailing, 25)
+                })
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            .padding(.bottom, 10)
+        }
+        .background(
             Image("home_bg_02")
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .frame(height: sizeInfo.CarouselViewHeight)
+                .aspectRatio(contentMode: .fill)
                 .overlay(Color.primaryDefault.opacity(0.6))
-            
-            VStack(spacing: 0) {
-                //MARK: - 좋아요한 배너 리스트 (검색어 : Carousel Slider)
-                // [Ref] https://www.youtube.com/watch?v=DgTPWYM5Hm4
-                if viewModel.sentenceList.count > 0 {
-                    ZStack {
-                        ForEach(Array(viewModel.sentenceList.enumerated()), id: \.offset) { index, item in
-                            
-                            TabHomeCardView(item: item, cardWidth: cardBannerWidth)
-                                .padding(.top, 30)
-                                .opacity(cardBannerCurrentIndex == index ? 1.0 : 0.5)
-                                .scaleEffect(cardBannerCurrentIndex == index ? 1.2 : 0.8)
-                                .offset(
-                                    x: CGFloat(index - cardBannerCurrentIndex) * (cardBannerWidth+cardBannerDistance) + dragOffset,
-                                    y: 0
-                                )
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .gesture(
-                        DragGesture()
-                            .onEnded({ gesture in
-                                
-                                /**
-                                 * [민감도 기준]
-                                 * threshold 값을 낮출 수록 민감도 기준이 낮아지기 때문에 잘 넘어감.
-                                 */
-                                let threshold: CGFloat = 30
-                                
-                                //fLog("idpil::: gesture.translation.width: \(gesture.translation.width)")
-                                
-                                // 손가락으로 좌-우 Swipe한 길이
-                                if gesture.translation.width > threshold {
-                                    withAnimation {
-                                        cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
-                                    }
-                                }
-                                else if gesture.translation.width < -threshold {
-                                    withAnimation {
-                                        cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
-                                        )
-                                    }
-                                }
-                                
-                                isNotMainCategoryButtonClick = true
-                            })
-                    )
-                    
-                    ZStack {
-                        Text("\(cardBannerCurrentIndex+1) / \(viewModel.sentenceList.count)")
-                            .font(.caption11218Regular)
-                            .foregroundColor(.gray100)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        HStack(spacing: 15) {
-                            Group {
-                                Button(action: {
-                                    withAnimation {
-                                        cardBannerCurrentIndex = max(0, cardBannerCurrentIndex-1)
-                                    }
-                                    isNotMainCategoryButtonClick = true
-                                }, label: {
-                                    Image(systemName: "chevron.left.square.fill")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                })
-                                
-                                Button(action: {
-                                    withAnimation {
-                                        cardBannerCurrentIndex = min(viewModel.sentenceList.count-1, cardBannerCurrentIndex+1
-                                        )
-                                    }
-                                    isNotMainCategoryButtonClick = true
-                                }, label: {
-                                    Image(systemName: "chevron.right.square.fill")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                })
-                            }
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.gray25)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.trailing, 20)
-                    }
-                    .padding(.top, 40)
-                }
-            }
-        }
+        )
     }
 }
 

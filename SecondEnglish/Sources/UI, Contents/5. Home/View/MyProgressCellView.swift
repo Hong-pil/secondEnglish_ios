@@ -15,44 +15,61 @@ struct MyProgressCellView: View {
     var category_sentence_count: Int
     
     var body: some View {
-        HStack(spacing: 0) {
-            Group {
+        ZStack {
+            HStack(spacing: 0) {
                 Text(sub_category)
+                    .font(.buttons1420Medium)
+                    .foregroundColor(.gray700)
                     .frame(width: DefineSize.Screen.Width/2, alignment: .leading)
-                
+                    
                 Spacer()
-                Text(String(like_number))
-                Text(" / ")
-                Text(String(category_sentence_count))
+                
+                Text("\(String(like_number)) / \(String(category_sentence_count))")
+                    .font(.buttons1420Medium)
+                    .foregroundColor(.gray700)
+                
+                Image(systemName: "chevron.right")
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width: 10, height: 10)
+                    .foregroundColor(.gray400)
+                    .padding(.leading, 20)
+                    .padding(.top, 2)
+                
             }
-            .font(.buttons1420Medium)
-            .foregroundColor(.gray700)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .onTapGesture {
+                self.moveToSwipeTab(
+                    subCategoryIdx: sub_category_index,
+                    subCategoryName: sub_category,
+                    mainCategoryName: main_category
+                )
+                
+            }
             
-            Image(systemName: "chevron.right")
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 10, height: 10)
-                .foregroundColor(.gray400)
+            /**
+             * [오늘 추가된 문장 개수 알림]
+             * '서브 카테고리' 글자 끝에서 조금 위에 위치하기 위해 '보이지 않는 Text()' 사용
+             */
+            Text(sub_category)
+                .font(.buttons1420Medium)
+                .foregroundColor(.gray700)
+                .opacity(0)
                 .padding(.leading, 20)
-                .padding(.top, 2)
-            
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .background(
-            Rectangle()
-                .fill(Color.gray25)
-                .shadow(color: .gray200, radius: 1, x: 2, y: 2)
-        )
-        .padding(.bottom, 6)
-        .onTapGesture {
-            self.moveToSwipeTab(
-                subCategoryIdx: sub_category_index,
-                subCategoryName: sub_category,
-                mainCategoryName: main_category
-            )
-            
+                .padding(.trailing, 17)
+                .background(
+                    Text("7")
+                        .font(.caption31013Regular)
+                        .fontWeight(.bold)
+                        .foregroundColor(.gray25)
+                        .padding(5)
+                        .background(Circle().fill(Color.red.opacity(0.8)))
+                        .padding(.bottom, 15)
+                        .frame(maxWidth: .infinity, alignment: .topTrailing)
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MenuSubPageCellBasicView: View {
-    let item: String
+    let target_nickname: String
+    let target_uid: String
     
     // [카드뷰 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위한 기능]
     // Tracks the offset of the swipe gesture
@@ -22,9 +23,9 @@ struct MenuSubPageCellBasicView: View {
     var body: some View {
         HStack(spacing: 20) {
             MenuSubPageCellBasic(
-                txt: item
+                target_nickname: target_nickname,
+                target_uid: target_uid
             )
-            
             
             // Delete button
             if isShowingDeleteButton {
@@ -90,15 +91,23 @@ struct MenuSubPageCellBasicView: View {
 }
 
 struct MenuSubPageCellBasic: View {
-    let txt: String
+    let target_nickname: String
+    let target_uid: String
     
     var body: some View {
-        VStack(spacing: 30) {
-            Text(txt)
+        HStack(spacing: 0) {
+            Image(CommonFunction.getRandomDefaultImage(UserUniqueId: target_uid))
+                .resizable()
+                .scaledToFill()
+                .frame(width: DefineSize.Size.ProfileThumbnailM.width, height: DefineSize.Size.ProfileThumbnailM.height, alignment: .leading)
+                .clipped()
+                .cornerRadius(DefineSize.CornerRadius.ProfileThumbnailM)
+            
+            Text("\(target_nickname)")
                 .font(.title5Roboto1622Medium)
                 .foregroundColor(.black)
                 .padding(.vertical, 20)
-            
+                .padding(.leading, 10)
         }
         .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위해 사이즈 설정
         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))

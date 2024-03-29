@@ -20,7 +20,6 @@ class TabHomeViewModel: ObservableObject {
     @Published var categoryList: [String] = []
     @Published var myLearningProgressList: [MyLearningProgressMainCategory] = []
     
-    
     //MARK: - 내가 좋아요한 카드 리스트 조회
     func requestMyCardList(isSuccess: @escaping(Bool) -> Void) {
         ApiControl.getMyCardList()
@@ -237,5 +236,4 @@ class TabHomeViewModel: ObservableObject {
         
         return tmpMyLearningProgressList
     }
-    
 }
