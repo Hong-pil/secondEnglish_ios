@@ -20,7 +20,7 @@ class MenuViewModel: ObservableObject {
     @Published var myGetLikeNum: Int = 0
     @Published var cardBlockData: MyCardData?
     @Published var userBlockData: [UserBlockData]?
-    @Published var popularCardTop10Data: [SwipeDataList]?
+    @Published var popularCardTop10Data: PopularCardTop10Data?
     
     // 작성한 글
     func getMySentence() {
@@ -169,7 +169,8 @@ class MenuViewModel: ObservableObject {
             } receiveValue: { value in
                 if value.code == 200 {
                     self.popularCardTop10Data = value.data
-                    fLog("idpil::: popularCardTop10Data : \(self.popularCardTop10Data)")
+                    //fLog("idpil::: popularCardTop10Data : \(self.popularCardTop10Data)")
+                    
                 }
                 else {
                     self.alertMessage = ErrorHandler.getCommonMessage()
@@ -180,4 +181,29 @@ class MenuViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    
+    // String -> Date (yyyyMMdd 형식)
+    func StringToDate(timeString: String) -> String? {
+        let stringDate: String? = ""
+        
+        let myFormatter = DateFormatter()
+        myFormatter.dateFormat = "yyyyMMdd"  // String의 문자열 형식과 동일 해야함
+        myFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone?
+        
+        let date = myFormatter.date(from: timeString)
+        
+        guard let NOdate = date else { return stringDate }
+        
+        return self.DateToString(timeDate: NOdate)
+    }
+    
+    // Date -> String
+    func DateToString(timeDate: Date) -> String? {
+        let myFormatter = DateFormatter()
+        myFormatter.dateFormat = "yyyy.MM.dd"  // 변환할 형식
+        let dateString = myFormatter.string(from: timeDate)
+        return dateString
+    }
+    
 }

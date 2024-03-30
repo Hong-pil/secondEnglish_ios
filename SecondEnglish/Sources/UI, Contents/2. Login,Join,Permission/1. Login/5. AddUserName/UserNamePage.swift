@@ -123,7 +123,7 @@ extension UserNamePage: View {
                     
                     self.requestLogin()
                 }, label: {
-                    Text("완료")
+                    Text("a_done".localized)
                         .font(.title41824Medium)
                         .foregroundColor(isNameCheckOK ? .gray25 : .primaryDefault)
                         .padding(.vertical, 15)
@@ -138,7 +138,7 @@ extension UserNamePage: View {
                     
                     self.requestLogin()
                 }, label: {
-                    Text("완료")
+                    Text("a_done".localized)
                         .font(.title41824Medium)
                         .foregroundColor(isNameCheckOK ? .gray25 : .primaryDefault)
                         .padding(.vertical, 15)

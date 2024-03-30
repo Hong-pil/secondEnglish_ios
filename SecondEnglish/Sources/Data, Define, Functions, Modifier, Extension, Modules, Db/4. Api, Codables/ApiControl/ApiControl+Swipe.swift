@@ -478,6 +478,11 @@ extension ApiControl {
                                 data: error.response?.data) {
                             case .WrongRequestToken:
                                 fLog("idpil::: 잘못된 토큰인 경우")
+                                
+                                // 원래는 로그아웃 하면 안 되고, accesstoken 다시 발급받고, 이 api 호출 다시 해야됨.
+                                PopupManager.dismissAll()
+                                UserManager.shared.logout()
+                                
                             case .ExpiredAccessToken:
                                 fLog("idpil::: AccessToken 만료된 경우")
                                 
@@ -489,6 +494,9 @@ extension ApiControl {
                                 
                             case .ExpiredRefreshToken:
                                 fLog("idpil::: RefreshToken 만료된 경우")
+                                
+                                PopupManager.dismissAll()
+                                UserManager.shared.logout()
                             }
                             
                             isExpiredAccessToken()

@@ -11,26 +11,11 @@ struct TabHomePage {
     @StateObject var viewModel = TabHomeViewModel.shared
     @StateObject var swipeTabViewModel = SwipeCardViewModel.shared
     
-    @State var spacing: CGFloat = 10
-    @State var headspace: CGFloat = 10
-    @State var sidesScaling: CGFloat = 0.8
-    @State var isWrap: Bool = false
-    @State var autoScroll: Bool = false
-    @State var time: TimeInterval = 1
-    @State var currentIndex: Int = 0
-    
-    @State var isFlipped: Bool = false
-    @State var isDisabled: Bool = false
-    
-    
-    // Header
     @State private var headerTabIndex: Int = 0
+    @State private var cardBannerCurrentIndex: Int = 0
     @State private var isMoveFirstHeader: Bool = false
     @State private var isMoveLastHeader: Bool = false
-    @State private var cardBannerCurrentIndex: Int = 0
     @State private var isNotMainCategoryButtonClick: Bool = false
-    
-    @State private var selectedTabIndex: Int = 1
     @State private var isAutoPlay: Bool = false
     
     private struct sizeInfo {
@@ -53,11 +38,12 @@ extension TabHomePage: View {
             
             ScrollViewReader { scrollviewReader in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
-                        
+                    
+                    VStack(spacing: 0) {
                         if viewModel.categoryList.count > 0 {
                             //tabBarView
-                            
+                    
+                            // 여기를 LazyVStack으로 감싸면, 스크롤 내렸다가 다시 올렸을 때 이전 위치 보장이 안 됨. 그래서 VStack으로 감싸야 됨.
                             myFavoriteCardList
                                 .padding(.top, 20)
                                 .padding(.bottom, 20)
@@ -65,65 +51,76 @@ extension TabHomePage: View {
                             emptyView
                         }
                         
-                        ForEach(Array(viewModel.myLearningProgressList.enumerated()), id: \.offset) { index, item in
-                            
-                            Section {
-                                /**
-                                 * [주의]
-                                 * VStack 으로 감싸지 않으면 데이터가 모두다 로딩되지 않는 문제가 있음.
-                                 */
-                                VStack(spacing: 0) {
-                                    ForEach((Array(item.sub_category_list.enumerated())), id: \.offset) { subIndex, subItem in
-                                        
-                                        MyProgressCellView(
-                                            sub_category_index: subIndex,
-                                            sub_category: subItem.sub_category,
-                                            main_category: item.main_category,
-                                            like_number: subItem.like_number,
-                                            category_sentence_count: subItem.category_sentence_count
-                                        )
+                        
+                        LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
+                            ForEach(Array(viewModel.myLearningProgressList.enumerated()), id: \.offset) { index, item in
+                                
+                                Section {
+                                    /**
+                                     * [주의]
+                                     * VStack 으로 감싸지 않으면 데이터가 모두다 로딩되지 않는 문제가 있음.
+                                     */
+                                    VStack(spacing: 0) {
+                                        ForEach((Array(item.sub_category_list.enumerated())), id: \.offset) { subIndex, subItem in
+                                            
+                                            MyProgressCellView(
+                                                sub_category_index: subIndex,
+                                                sub_category: subItem.sub_category,
+                                                main_category: item.main_category,
+                                                like_number: subItem.like_number,
+                                                today_new_count: subItem.today_new_count,
+                                                category_sentence_count: subItem.category_sentence_count
+                                            )
+                                        }
                                     }
+                                    .background(Color.gray25)
+                                    .clipShape(
+                                        RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 5)
+                                    )
+                                    //.padding(.horizontal, 10)
+                                    .padding(.bottom, index==viewModel.myLearningProgressList.count-1 ? 20 : 15)
+                                } header: {
+                                    MyProgressHeaderView(
+                                        isLike: item.isLike ?? false,
+                                        main_category: item.main_category,
+                                        index: index
+                                    )
+                                    .clipShape(
+                                        RoundedCornersShape(corners: [.topLeft, .topRight], radius: 5)
+                                    )
+                                    //.padding(.horizontal, 10)
                                 }
-                                .background(Color.gray25)
-                                .clipShape(
-                                    RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 5)
-                                )
-                                //.padding(.horizontal, 10)
-                                .padding(.bottom, index==viewModel.myLearningProgressList.count-1 ? 20 : 15)
-                            } header: {
-                                MyProgressHeaderView(
-                                    isLike: item.isLike ?? false,
-                                    main_category: item.main_category,
-                                    index: index
-                                )
-                                .clipShape(
-                                    RoundedCornersShape(corners: [.topLeft, .topRight], radius: 5)
-                                )
-                                //.padding(.horizontal, 10)
+                                
                             }
-                            
                         }
                     }
                 }
             }
-            .onAppear(perform: {
-                //UIScrollView.appearance().backgroundColor = UIColor(Color.blue)
-                /**
-                 * ScrollView bounce 비활성하는 이유 : 스크롤뷰 bounce되면 좋아요한 배너 리스트 넘길 때, 잘 안 넘겨짐.
-                 */
-                UIScrollView.appearance().bounces = false
-            })
             .padding(.top, viewModel.categoryList.count==0 ? 20 : 0)
+//            .onAppear(perform: {
+//                //UIScrollView.appearance().backgroundColor = UIColor(Color.blue)
+//                /**
+//                 * ScrollView bounce 비활성하는 이유 : 스크롤뷰 bounce되면 좋아요한 배너 리스트 넘길 때, 잘 안 넘겨짐.
+//                 */
+//                UIScrollView.appearance().bounces = false
+//            })
+            
         }
         .background(Color.bgLightGray50)
         .onAppear {
-            viewModel.requestMyCardList(isSuccess: { success in
-                //
-            })
-            
-            viewModel.requestMyCategoryProgress()
+            fLog("idpil::: called tabhomepage onappear")
+            if !viewModel.isFirst {
+                viewModel.isFirst = true
+                
+                viewModel.requestMyCardList(isSuccess: { success in
+                    //
+                })
+                
+                viewModel.requestMyCategoryProgress()
+            }
         }
         .onChange(of: UserManager.shared.isLogin) {
+            fLog("idpil::: called tabhomepage onchange isLogin : \(UserManager.shared.isLogin)")
             // 여기 뷰 띄워놓고 로그인뷰를 팝업으로 띄운 다음 로그인 진행을 하기 때문에, 로그인 성공한 경우 데이터 다시 요청
             if UserManager.shared.isLogin {
                 viewModel.requestMyCardList(isSuccess: { success in
@@ -192,26 +189,34 @@ extension TabHomePage: View {
                                             //fLog("idpil::: isMoveFirstHeader : \(isMoveFirstHeader)")
                                             //fLog("idpil::: isMoveLastHeader : \(isMoveLastHeader)")
                                             
+                                            // 마지막 번째 카드에서, 우측으로 넘겨서 첫 번째 카드로 이동하는 경우
                                             if isMoveFirstHeader {
-                                                //fLog("idpil::: 헤더 첫번째")
                                                 headerTabIndex = 0
                                             }
+                                            // 첫 번째 카드에서, 좌측으로 넘겨서 마지막 번째 카드로 이동하는 경우
                                             else if isMoveLastHeader {
-                                                //fLog("idpil::: 헤더 마지막번째")
                                                 headerTabIndex = viewModel.categoryList.count-1
                                             }
                                             else {
                                                 // 카드배너 왼족으로 이동
                                                 if oldValue > newValue {
-                                                    if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
-                                                        headerTabIndex -= 1
+                                                    // 앱 죽으면 안 되니까 필수!
+                                                    if let _ = viewModel.sentenceList[newValue].isEndPointCategory {
+                                                        fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
+                                                        if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
+                                                            headerTabIndex -= 1
+                                                        }
                                                     }
                                                 }
                                                 // 카드배너 오른쪽으로 이동
                                                 else if oldValue < newValue {
-                                                    if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
-                                                        
-                                                        headerTabIndex += 1
+                                                    // 앱 죽으면 안 되니까 필수!
+                                                    if let _ = viewModel.sentenceList[newValue].isStartPointCategory {
+                                                        fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
+                                                        if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
+                                                            
+                                                            headerTabIndex += 1
+                                                        }
                                                     }
                                                 }
                                             }
@@ -391,10 +396,10 @@ extension TabHomePage: View {
                     self.isMoveFirstHeader = isMoveFirst
                     self.isMoveLastHeader = isMoveLast
 //                    if isMoveFirst {
-//                        fLog("idpil::: 무한루트 시작점")
+//                        fLog("idpil::: 무한루프 시작점")
 //                    }
 //                    else if isMoveLast {
-//                        fLog("idpil::: 무한루트 끝점")
+//                        fLog("idpil::: 무한루프 끝점")
 //                    }
                     
                     /**

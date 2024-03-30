@@ -66,13 +66,13 @@ struct SwipeView: View {
                 .onEnded { gesture in
                     if isLastCard {
                         if offset.width > 100 {
-                            fLog("idpil::: 오른쪽")
+                            //fLog("idpil::: 오른쪽")
                             onRemove(.like)
                         } else if offset.width < -100 {
-                            fLog("idpil::: 왼쪽")
+                            //fLog("idpil::: 왼쪽")
                             onRemove(.dislike)
                         } else if offset.height < -100 {
-                            fLog("idpil::: 위쪽")
+                            //fLog("idpil::: 위쪽")
                             //onRemove(.superlike)
                             withAnimation(.spring()) {
                                 offset = .zero
@@ -80,7 +80,7 @@ struct SwipeView: View {
                                 isTapLikeBtn(card.idx ?? 0, true)
                             }
                         } else if offset.height > 100 {
-                            fLog("idpil::: 아래쪽")
+                            //fLog("idpil::: 아래쪽")
                             withAnimation(.spring()) {
                                 offset = .zero
                                 

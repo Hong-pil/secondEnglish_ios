@@ -224,6 +224,70 @@ extension TabSwipeCardPage: View {
                 .opacity(viewModel.swipeList.count>0 ? 1 : 0)
                 
                 HStack(spacing: 15) {
+                    Button(action: {
+                        bottomSheetManager.show.swipeCardCut = true
+                    }, label: {
+                        Image(systemName: "scissors")
+                            .resizable()
+                            .renderingMode(.template)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 20)
+                            .foregroundColor(.primaryDefault)
+                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                    })
+                    
+                    Button(action: {
+                        
+                        if viewModel.swipeList.count < 4 {
+                            UserManager.shared.showCardShuffleError = true
+                        }
+                        
+                        if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
+                            
+                            // 랜덤카드 데이터 세팅
+                            self.setRandomCardList() {
+                                
+                                self.isShowRandomCardShuffle = true
+                                
+                                viewModel.shuffleSwipeList()
+                                
+                                self.doShuffleRandomCard()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    self.doShuffleRandomCard()
+                                    
+                                    // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        self.isShowRandomCardShuffle = false
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }, label: {
+                        Image(systemName: "shuffle")
+                            .resizable()
+                            .renderingMode(.template)
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.primaryDefault)
+                            .frame(height: 20)
+                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                    })
+                    
+                    Button(action: {
+                        self.resetPage()
+                    }, label: {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .resizable()
+                            .renderingMode(.template)
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.primaryDefault)
+                            .frame(height: 20)
+                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                    })
+                    
+                    Spacer()
+                    
+                    
                     Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
                         .font(.buttons1420Medium)
                         .foregroundColor(Color.gray850)
@@ -236,27 +300,18 @@ extension TabSwipeCardPage: View {
                         percent: $curPercent
                     )
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.vertical, 20)
-                .padding(.trailing, 20)
+                .padding(.horizontal, 20)
             }
             
             if self.isShowMainCategoryListView {
                 mainCategoryListView
             }
         }
-        .task {
-            if viewModel.mainCategoryList.count>0 && viewModel.subCategoryList.count>0 {
-                // 카테고리별 영어문장 조회
-                viewModel.requestSwipeListByCategory(
-                    main_category: self.selectedMainCategoryItem,
-                    sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
-                    sortType: .Latest,
-                    isSuccess: { success in
-                        //
-                    }
-                )
-            } else {
+        .onAppear {
+            if !viewModel.isFirst {
+                viewModel.isFirst = true
+                
                 viewModel.requestMainCategory() { isSuccess in
                     if isSuccess {
                         if viewModel.mainCategoryList.count > 0 {
@@ -436,58 +491,6 @@ extension TabSwipeCardPage: View {
                     .frame(width: 40, height: 40)
             })
             
-            Spacer()
-            
-            Button(action: {
-                bottomSheetManager.show.swipeCardCut = true
-            }, label: {
-                Image(systemName: "scissors")
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 20)
-                    .foregroundColor(.primaryDefault)
-                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
-            })
-            
-            Button(action: {
-                
-                if viewModel.swipeList.count < 4 {
-                    UserManager.shared.showCardShuffleError = true
-                }
-                
-                if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
-                    
-                    // 랜덤카드 데이터 세팅
-                    self.setRandomCardList() {
-                        
-                        self.isShowRandomCardShuffle = true
-                        
-                        viewModel.shuffleSwipeList()
-                        
-                        self.doShuffleRandomCard()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            self.doShuffleRandomCard()
-                            
-                            // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                self.isShowRandomCardShuffle = false
-                            }
-                        }
-                        
-                    }
-                }
-            }, label: {
-                Image(systemName: "shuffle")
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit)
-                    .foregroundColor(.primaryDefault)
-                    .frame(height: 20)
-                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
-            })
-            .padding(.leading, 5)
-            .padding(.trailing, 20)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -871,6 +874,48 @@ extension TabSwipeCardPage {
         // 0.1초 뒤에 애니메이션 실행하면 이 문제가 없어졌기 때문에 넣은 것. 정확한 이유는 모르겠음.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             result()
+        }
+    }
+    
+    private func resetPage() {
+        
+        // 변수 초기화
+        currentCardIndex = 0
+        curPercent = 0.0
+        
+        
+        // api call
+        viewModel.requestMainCategory() { isSuccess in
+            if isSuccess {
+                if viewModel.mainCategoryList.count > 0 {
+                    
+                    if self.selectedMainCategoryItem.isEmpty {
+                        self.selectedMainCategoryItem = viewModel.mainCategoryList[0]
+                    }
+                    
+                    viewModel.requestCategory(
+                        isInit: false,
+                        category: self.selectedMainCategoryItem
+                    ) { isSuccess in
+                        if isSuccess {
+                            
+                            // 카테고리별 영어문장 데이터
+                            if viewModel.subCategoryList.count > 0 {
+                                // 카테고리별 영어문장 조회
+                                viewModel.requestSwipeListByCategory(
+                                    main_category: self.selectedMainCategoryItem,
+                                    sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                                    sortType: .Latest,
+                                    isSuccess: { success in
+                                        //
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    
+                }
+            }
         }
     }
 }

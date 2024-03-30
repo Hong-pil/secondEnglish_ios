@@ -12,6 +12,7 @@ struct MyProgressCellView: View {
     var sub_category: String
     var main_category: String
     var like_number: Int
+    var today_new_count: Int
     var category_sentence_count: Int
     
     var body: some View {
@@ -24,15 +25,20 @@ struct MyProgressCellView: View {
                     
                 Spacer()
                 
-                Text("\(String(like_number)) / \(String(category_sentence_count))")
+                Text((String(like_number)))
+                    .font(.buttons1420Medium)
+                    .fontWeight(like_number==0 ? .medium : .heavy)
+                    .foregroundColor(like_number==0 ? .gray700 : .primaryDefault)
+                
+                Text(" / \(String(category_sentence_count))")
                     .font(.buttons1420Medium)
                     .foregroundColor(.gray700)
                 
                 Image(systemName: "chevron.right")
                     .resizable()
                     .renderingMode(.template)
-                    .frame(width: 10, height: 10)
-                    .foregroundColor(.gray400)
+                    .aspectRatio(contentMode: .fit).frame(height: 10) //.aspectRatio().frame() 순서이여야, 높이 기준으로 비율을 유지할 수 있음.
+                    .foregroundColor(.gray300)
                     .padding(.leading, 20)
                     .padding(.top, 2)
                 
@@ -53,23 +59,25 @@ struct MyProgressCellView: View {
              * [오늘 추가된 문장 개수 알림]
              * '서브 카테고리' 글자 끝에서 조금 위에 위치하기 위해 '보이지 않는 Text()' 사용
              */
-            Text(sub_category)
-                .font(.buttons1420Medium)
-                .foregroundColor(.gray700)
-                .opacity(0)
-                .padding(.leading, 20)
-                .padding(.trailing, 17)
-                .background(
-                    Text("7")
-                        .font(.caption31013Regular)
-                        .fontWeight(.bold)
-                        .foregroundColor(.gray25)
-                        .padding(5)
-                        .background(Circle().fill(Color.red.opacity(0.8)))
-                        .padding(.bottom, 15)
-                        .frame(maxWidth: .infinity, alignment: .topTrailing)
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
+            if today_new_count > 0 {
+                Text(sub_category)
+                    .font(.buttons1420Medium)
+                    .foregroundColor(.gray700)
+                    .opacity(0)
+                    .padding(.leading, 20)
+                    .padding(.trailing, 17)
+                    .background(
+                        Text(String(today_new_count))
+                            .font(.caption31013Regular)
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray25)
+                            .padding(EdgeInsets(top: 5, leading: 5, bottom: 7, trailing: 5)) // bottom 값이 더 커야 숫자가 중앙에 위치하는 거 같음.
+                            .background(Circle().fill(Color.red.opacity(0.8)))
+                            .padding(.bottom, 15)
+                            .frame(maxWidth: .infinity, alignment: .topTrailing)
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
     }
     

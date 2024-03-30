@@ -142,3 +142,9 @@ struct UserInfoResponseData: Codable {
     var nickname: String? = ""
     var mdate: String? = ""
 }
+
+struct UserCheckResponse: Codable {
+    var code: Int? = 0
+    var isUser: Bool? = false
+    var userNickname: String? = ""
+}

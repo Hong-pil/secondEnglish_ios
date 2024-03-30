@@ -81,24 +81,72 @@ class LoginViewModel: NSObject ,ObservableObject {
             
             
             
-            
-            /**
-             * 기존 회원은 별명을 등록할 필요 없음. 이거 분기처리 해야됨.
-             * 일단은, 별명등록하는 화면으로 무조건 넘어감
-             */
-            self.authSuccessedLoginId = idx
-            self.authSuccessedLoginType = type
-            self.showAddUserNamePage = true
-            
-            
-            
-            
+            // 기존 회원 유무 확인
+            // 기존 회원 -> 로그인 뷰 내리고 홈 화면 로딩
+            // 새 회원 -> 별명 설정 화면으로 이동
+            self.requestCheckUser(loginId: idx, loginType: type) { isUser, nickname in
+                fLog("idpil::: isUser : \(isUser)")
+                fLog("idpil::: nickname : \(nickname)")
+                if isUser {
+                    StatusManager.shared.loadingStatus = .ShowWithTouchable
+                    
+                    self.requestAddSnsUser(
+                        loginId: idx,
+                        loginType: type,
+                        user_nickname: nickname) { isSuccess in
+                            fLog("idpil::: isSuccess : \(isSuccess)")
+                            if isSuccess {
+                                // 로딩되는거 보여주려고 딜레이시킴
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    fLog("idpil::: isSuccess 0.5")
+                                    StatusManager.shared.loadingStatus = .Close
+                                    UserManager.shared.showLoginView = false
+                                }
+                            }
+                        }
+                } else {
+                    self.authSuccessedLoginId = idx
+                    self.authSuccessedLoginType = type
+                    self.showAddUserNamePage = true
+                }
+            }
         }
         else {
             self.alertTitle = ""
             self.alertMessage = ErrorHandler.getCommonMessage()
             self.showAlert = true
         }
+    }
+    
+    // 회원 유무 확인
+    func requestCheckUser(loginId: String, loginType: LoginUserType, isUser: @escaping(Bool, String)->Void) {
+        loadingStatus = .ShowWithTouchable
+        ApiControl.userCheck(login_id: loginId, login_type: loginType.rawValue)
+            .sink { error in
+                
+                self.loadingStatus = .Close
+                
+                guard case let .failure(error) = error else { return }
+                fLog("login error : \(error)")
+                
+                self.alertTitle = ""
+                self.alertMessage = error.message
+                self.showAlert = true
+            } receiveValue: { value in
+                self.loadingStatus = .Close
+                
+                if value.code == 200 && (value.isUser ?? false) {
+                    isUser(true, (value.userNickname ?? ""))
+                } else {
+                    // Error
+                    self.alertTitle = ""
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    self.showAlert = true
+                    
+                    isUser(false, "")
+                }
+            }
+            .store(in: &cancellable)
     }
     
     // 로그인 성공 요청
@@ -159,38 +207,37 @@ class LoginViewModel: NSObject ,ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - Reqeust
-    func requestCheckJoin(idx: String, type:LoginType) {
-        loadingStatus = .ShowWithTouchable
-        ApiControl.joinCheck(loginId: idx, loginType: type.rawValue)
-            .sink { error in
-                
-                self.loadingStatus = .Close
-                
-                guard case let .failure(error) = error else { return }
-                fLog("login error : \(error)")
-                
-                self.alertTitle = ""
-                self.alertMessage = error.message
-                self.showAlert = true
-            } receiveValue: { value in
-                self.loadingStatus = .Close
-                
-                let isUser = value.isUser
-                
-                //이미 있는 계정이다. 로그인하자.
-                if isUser {
-                    self.requestSnsLogin(idx: idx, type: type.rawValue)
-                }
-                //없는 계정이다. 회원가입으로 가자.
-                else {
-                    self.joinIdx = idx
-                    self.joinType = type
-                    self.showJoinPage = true
-                }
-            }
-            .store(in: &cancellable)
-    }
+//    func requestCheckJoin(idx: String, type:LoginType) {
+//        loadingStatus = .ShowWithTouchable
+//        ApiControl.joinCheck(loginId: idx, loginType: type.rawValue)
+//            .sink { error in
+//                
+//                self.loadingStatus = .Close
+//                
+//                guard case let .failure(error) = error else { return }
+//                fLog("login error : \(error)")
+//                
+//                self.alertTitle = ""
+//                self.alertMessage = error.message
+//                self.showAlert = true
+//            } receiveValue: { value in
+//                self.loadingStatus = .Close
+//                
+//                let isUser = value.isUser
+//                
+//                //이미 있는 계정이다. 로그인하자.
+//                if isUser {
+//                    self.requestSnsLogin(idx: idx, type: type.rawValue)
+//                }
+//                //없는 계정이다. 회원가입으로 가자.
+//                else {
+//                    self.joinIdx = idx
+//                    self.joinType = type
+//                    self.showJoinPage = true
+//                }
+//            }
+//            .store(in: &cancellable)
+//    }
     
     func requestSnsLogin(idx: String, type: String) {
         loadingStatus = .ShowWithTouchable

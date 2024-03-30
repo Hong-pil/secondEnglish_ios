@@ -12,13 +12,13 @@ class SwipeCardViewModel: ObservableObject {
     var cancellable = Set<AnyCancellable>()
     static let shared = SwipeCardViewModel()
     
+    @Published var isFirst: Bool = false
+    
     //alert
     @Published var showAlert: Bool = false
     @Published var alertMessage: String = ""
     
     @Published var loadingStatus: LoadingStatus = .Close
-    
-    @Published var isFirstLoad = false
     
     // Category TabBar
     @Published var categoryTabIndex: Int = 0
@@ -580,9 +580,6 @@ class SwipeCardViewModel: ObservableObject {
     
     
     //MARK: - 함수 모음
-    func setIsFirstLoadFalse() {
-        self.isFirstLoad = false
-    }
     
     func shuffleSwipeList() {
         var dummyArr = self.swipeList

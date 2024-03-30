@@ -12,6 +12,8 @@ class TabHomeViewModel: ObservableObject {
     var cancellable = Set<AnyCancellable>()
     static let shared = TabHomeViewModel()
     
+    @Published var isFirst: Bool = false
+    
     //alert
     @Published var showAlert: Bool = false
     @Published var alertMessage: String = ""
@@ -19,6 +21,7 @@ class TabHomeViewModel: ObservableObject {
     @Published var sentenceList: [SwipeDataList] = []
     @Published var categoryList: [String] = []
     @Published var myLearningProgressList: [MyLearningProgressMainCategory] = []
+    
     
     //MARK: - 내가 좋아요한 카드 리스트 조회
     func requestMyCardList(isSuccess: @escaping(Bool) -> Void) {
@@ -189,7 +192,8 @@ class TabHomeViewModel: ObservableObject {
                 MyLearningProgressSubCategory(
                     sub_category: $0.sub_category ?? "",
                     category_sentence_count: $0.category_sentence_count ?? 0,
-                    like_number: $0.like_number ?? 0
+                    like_number: $0.like_number ?? 0,
+                    today_new_count: $0.today_new_count ?? 0
                 )
             }
             let mainCat = MyLearningProgressMainCategory(

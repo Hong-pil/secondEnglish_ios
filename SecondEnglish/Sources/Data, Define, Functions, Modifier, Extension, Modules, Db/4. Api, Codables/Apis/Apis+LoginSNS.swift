@@ -10,6 +10,7 @@ import Alamofire
 import Foundation
 
 enum ApisLoginSNS {
+    case userCheck(login_id: String, login_type: String) // 회원 유무 확인
     case addSnsUser(login_id: String, login_type: String, user_nickname: String)
 }
 
@@ -23,6 +24,8 @@ extension ApisLoginSNS: TargetType {
     
     var path: String {
         switch self {
+        case .userCheck:
+            return "api/user/byidandtype"
         case .addSnsUser:
             return "api/users/sns/register"
         }
@@ -31,6 +34,8 @@ extension ApisLoginSNS: TargetType {
     // moya의 장점 : 각 메소드가 get인지 post인지 설정가능
     var method: Moya.Method {
         switch self {
+        case .userCheck:
+            return .get
         case .addSnsUser:
             return .post
         }
@@ -42,6 +47,15 @@ extension ApisLoginSNS: TargetType {
     
     var task: Task {
         switch self {
+        case .userCheck(let login_id, let login_type):
+            var params = defaultParams
+
+            params["login_id"] = login_id
+            params["login_type"] = login_type
+
+            log(params: params)
+            
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
         case .addSnsUser(let login_id, let login_type, let user_nickname):
             var params = defaultParams
             params["login_id"] = login_id

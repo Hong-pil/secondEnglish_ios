@@ -132,8 +132,13 @@ struct UserBlockData: Codable, Hashable {
 
 struct PopularCardTop10Response: Codable {
     var code: Int = 0
-    var data: [SwipeDataList] = []
+    var data: PopularCardTop10Data? = nil
     var message: String? = ""
+}
+struct PopularCardTop10Data: Codable, Hashable {
+    var startDay: String? = "" // 이번주 첫 날짜 : 20240324
+    var endDay: String? = "" // 이번주 끝 날짜 : 20240330
+    var list: [SwipeDataList] = []
 }
 
 struct MyLearningProgressResponse: Codable {
@@ -146,6 +151,7 @@ struct MyLearningProgressData: Codable, Hashable {
     var sub_category: String? = ""
     var category_sentence_count: Int? = 0
     var like_number: Int? = 0
+    var today_new_count: Int? = 0
 }
 
 // 변환된 데이터 모델
@@ -159,6 +165,7 @@ struct MyLearningProgressSubCategory: Codable {
     let sub_category: String
     let category_sentence_count: Int
     let like_number: Int
+    let today_new_count: Int
 }
 
 struct ReportListResponse: Codable {

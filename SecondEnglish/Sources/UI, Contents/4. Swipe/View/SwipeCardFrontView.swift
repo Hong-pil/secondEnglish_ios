@@ -101,7 +101,7 @@ struct SwipeCardFrontView: View {
                 
                 Spacer()
                 
-                HStack(spacing: 20) {
+                HStack(spacing: 15) {
                     Image("icon_fill_bookmark")
                         .resizable()
                         .renderingMode(.template)
@@ -115,11 +115,10 @@ struct SwipeCardFrontView: View {
                             isTapLikeBtn(card.idx ?? 0, (card.isLike ?? false) ? false : true)
                         }
                     
-                    Image(systemName: "figure.highintensity.intervaltraining")
+                    Image(systemName: "figure.run.circle.fill")
                         .resizable()
                         .renderingMode(.template)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 25)
+                        .frame(width: 25, height: 25)
                         .foregroundColor(visibleHintText.count>0 ? Color.primaryDefault : Color.stateDisabledGray200)
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장

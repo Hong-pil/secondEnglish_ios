@@ -24,7 +24,6 @@ extension MenuCommonSubPage: View {
                 // 작성한 글
                 sentenceView
                     .task {
-                        fLog("idpil::: 1")
                         naviTitle = "j_wrote_post".localized
                         viewModel.getMySentence()
                     }
@@ -32,7 +31,6 @@ extension MenuCommonSubPage: View {
                 // 누른 좋아요
                 postLikeView
                     .task {
-                        fLog("idpil::: 2")
                         naviTitle = "l_like_do".localized
                         viewModel.getMyPostLike()
                     }
@@ -40,7 +38,6 @@ extension MenuCommonSubPage: View {
                 // 받은 좋아요
                 getLikeView
                     .task {
-                        fLog("idpil::: 3")
                         naviTitle = "l_like_get".localized
                         viewModel.getMyGetLike()
                     }
@@ -48,7 +45,6 @@ extension MenuCommonSubPage: View {
                 // 차단한 글
                 cardBlockView
                     .task {
-                        fLog("idpil::: 4")
                         naviTitle = "b_block_post".localized
                         viewModel.getMyCardBlock()
                     }
@@ -56,7 +52,6 @@ extension MenuCommonSubPage: View {
                 // 차단한 사용자
                 userBlockView
                     .task {
-                        fLog("idpil::: 5")
                         naviTitle = "b_block_user".localized
                         viewModel.getMyUserBlock()
                     }
@@ -64,7 +59,6 @@ extension MenuCommonSubPage: View {
                 // 주간 인기글
                 popularTop10View
                     .task {
-                        fLog("idpil::: 6")
                         naviTitle = "top10_card_week".localized
                         viewModel.getPopularCardTop10(isWeek: true)
                     }
@@ -72,7 +66,6 @@ extension MenuCommonSubPage: View {
                 // 월간 인기글
                 popularTop10View
                     .task {
-                        fLog("idpil::: 7")
                         naviTitle = "top10_card_month".localized
                         viewModel.getPopularCardTop10(isWeek: false)
                     }
@@ -122,28 +115,36 @@ extension MenuCommonSubPage: View {
     
     var cardBlockView: some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(Array((viewModel.cardBlockData?.sentence_list ?? []).enumerated()), id: \.offset) { index, item in
-                    
-                    MenuSubPageCellFlipView(
-                        item: item,
-                        isDoItemDelete: true
-                    )
+            if (viewModel.cardBlockData?.sentence_list.count ?? 0) > 0 {
+                LazyVStack(spacing: 0) {
+                    ForEach(Array((viewModel.cardBlockData?.sentence_list ?? []).enumerated()), id: \.offset) { index, item in
+                        
+                        MenuSubPageCellFlipView(
+                            item: item,
+                            isDoItemDelete: true
+                        )
+                    }
                 }
+            } else {
+                emptyView
             }
         }
     }
     
     var userBlockView: some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(Array((viewModel.userBlockData ?? []).enumerated()), id: \.offset) { index, item in
-                    
-                    MenuSubPageCellBasicView(
-                        target_nickname: item.target_nickname ?? "",
-                        target_uid: item.target_uid ?? ""
-                    )
+            if (viewModel.userBlockData?.count ?? 0) > 0 {
+                LazyVStack(spacing: 0) {
+                    ForEach(Array((viewModel.userBlockData ?? []).enumerated()), id: \.offset) { index, item in
+                        
+                        MenuSubPageCellBasicView(
+                            target_nickname: item.target_nickname ?? "",
+                            target_uid: item.target_uid ?? ""
+                        )
+                    }
                 }
+            } else {
+                emptyView
             }
         }
     }
@@ -151,7 +152,17 @@ extension MenuCommonSubPage: View {
     var popularTop10View: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                ForEach(Array((viewModel.popularCardTop10Data ?? []).enumerated()), id: \.offset) { index, item in
+                
+                if let startDay = viewModel.StringToDate(timeString: viewModel.popularCardTop10Data?.startDay ?? ""),
+                   let endDay = viewModel.StringToDate(timeString: viewModel.popularCardTop10Data?.endDay ?? "") {
+                    Text("\(startDay) ~ \(endDay)")
+                        .font(.buttons1420Medium)
+                        .foregroundColor(.gray300)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(EdgeInsets(top: 20, leading: 0, bottom: 15, trailing: 20))
+                }
+                
+                ForEach(Array((viewModel.popularCardTop10Data?.list ?? []).enumerated()), id: \.offset) { index, item in
                     
                     ZStack {
                         MenuSubPageCellFlipPopularView(
@@ -185,6 +196,21 @@ extension MenuCommonSubPage: View {
                 }
             }
         }
+    }
+    
+    var emptyView: some View {
+        VStack(spacing: 0) {
+            Image("like_empty")
+                .resizable()
+                .frame(width: 200, height: 200)
+            
+            
+            Text("차단한 이력이 없습니다.")
+                .font(.title51622Medium)
+                .foregroundColor(.gray800)
+                .padding(.top, 5)
+        }
+        .padding(.top, 100)
     }
     
 }

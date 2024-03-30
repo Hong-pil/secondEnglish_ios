@@ -207,9 +207,19 @@ public struct InfiniteCarousel<Content: View, T: Any>: View {
             }
         }
         .onAppear {
+            // 다른 탭으로 이동하는 것 뿐만 아니라 동일한 화면에서 스크롤 오르/내릴 때에도 onAppear/onDisappear 호출됨.
+            
+            if isAutoPlay {
+                startTimer()
+            }
             isScaleEnabled = true
         }
         .onDisappear {
+            // 다른 탭으로 이동하는 것 뿐만 아니라 동일한 화면에서 스크롤 오르/내릴 때에도 onAppear/onDisappear 호출됨.
+            
+            if isAutoPlay {
+                stopTimer()
+            }
             isScaleEnabled = false
         }
         .onReceive(timer) { _ in
