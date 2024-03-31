@@ -24,6 +24,12 @@ struct ContentView: View {
 //            PermissionPage()
 //                .opacity(userManager.isFirstLaunching ? 1.0 : 0.0)
         }
+        .task {
+            if userManager.isFirstLaunching {
+                userManager.isFirstLaunching = false
+                userManager.showLoginView = true
+            }
+        }
         .modifier(ContentViewAlert())
         .modifier(ContentViewPopup())
         

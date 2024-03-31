@@ -85,25 +85,23 @@ class LoginViewModel: NSObject ,ObservableObject {
             // 기존 회원 -> 로그인 뷰 내리고 홈 화면 로딩
             // 새 회원 -> 별명 설정 화면으로 이동
             self.requestCheckUser(loginId: idx, loginType: type) { isUser, nickname in
-                fLog("idpil::: isUser : \(isUser)")
-                fLog("idpil::: nickname : \(nickname)")
                 if isUser {
                     StatusManager.shared.loadingStatus = .ShowWithTouchable
                     
                     self.requestAddSnsUser(
                         loginId: idx,
                         loginType: type,
-                        user_nickname: nickname) { isSuccess in
-                            fLog("idpil::: isSuccess : \(isSuccess)")
-                            if isSuccess {
-                                // 로딩되는거 보여주려고 딜레이시킴
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    fLog("idpil::: isSuccess 0.5")
-                                    StatusManager.shared.loadingStatus = .Close
-                                    UserManager.shared.showLoginView = false
-                                }
+                        user_nickname: nickname
+                    ) { isSuccess in
+                        if isSuccess {
+                            // 로딩되는거 보여주려고 딜레이시킴
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                StatusManager.shared.loadingStatus = .Close
+                                UserManager.shared.showLoginView = false
                             }
                         }
+                    }
+                    
                 } else {
                     self.authSuccessedLoginId = idx
                     self.authSuccessedLoginType = type
@@ -166,8 +164,8 @@ class LoginViewModel: NSObject ,ObservableObject {
             } receiveValue: { value in
                 self.loadingStatus = .Close
                 
-                //fLog("로그::: verifySMSCode successed :>")
-                //fLog("로그::: value : \(value)")
+//                fLog("로그::: verifySMSCode successed :>")
+//                fLog("로그::: value : \(value)")
                 if value.code == 200 && value.success {
                     // 로그인 성공!
                     let uid = value.uid ?? ""

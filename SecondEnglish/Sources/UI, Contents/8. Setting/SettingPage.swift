@@ -193,6 +193,9 @@ struct SettingPage: View {
             }
         }
         //.background(Color.bgLightGray50)
+        .navigationDestination(isPresented: $showAccontPage) {
+            AccountInfoPage()
+        }
     }
 }
 

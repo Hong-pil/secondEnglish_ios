@@ -168,75 +168,73 @@ extension TabHomePage: View {
     var categoryListView: some View {
         ScrollViewReader { scrollviewReader in
             ScrollView(.horizontal, showsIndicators: false) {
-                if viewModel.categoryList.count>0 {
-                    HStack(spacing: 0) {
-                        ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                HStack(spacing: 0) {
+                    ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                        
+                        VStack(spacing: 0) {
+                            Text(element)
+                                .font(headerTabIndex==index ? .title51622Medium : .caption11218Regular)
+                                .foregroundColor(headerTabIndex==index ? Color.gray25 : Color.gray50)
+                                //.frame(minWidth: 70)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 5)
+                            // sub 카테고리 배너가 움직일 때, 시작점 또는 끝점에서 main 카테고리 버튼 움직이게 만듬
+                                .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
+                                    // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
                             
-                            VStack(spacing: 0) {
-                                Text(element)
-                                    .font(headerTabIndex==index ? .title51622Medium : .caption11218Regular)
-                                    .foregroundColor(headerTabIndex==index ? Color.gray25 : Color.gray50)
-                                    //.frame(minWidth: 70)
-                                    .padding(.vertical, 5)
-                                    .padding(.horizontal, 5)
-                                // sub 카테고리 배너가 움직일 때, 시작점 또는 끝점에서 main 카테고리 버튼 움직이게 만듬
-                                    .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
-                                        // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
-                                
-                                        // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
-                                        // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
-                                        if isNotMainCategoryButtonClick {
-                                            //fLog("idpil::: isMoveFirstHeader : \(isMoveFirstHeader)")
-                                            //fLog("idpil::: isMoveLastHeader : \(isMoveLastHeader)")
-                                            
-                                            // 마지막 번째 카드에서, 우측으로 넘겨서 첫 번째 카드로 이동하는 경우
-                                            if isMoveFirstHeader {
-                                                headerTabIndex = 0
-                                            }
-                                            // 첫 번째 카드에서, 좌측으로 넘겨서 마지막 번째 카드로 이동하는 경우
-                                            else if isMoveLastHeader {
-                                                headerTabIndex = viewModel.categoryList.count-1
-                                            }
-                                            else {
-                                                // 카드배너 왼족으로 이동
-                                                if oldValue > newValue {
-                                                    // 앱 죽으면 안 되니까 필수!
-                                                    if let _ = viewModel.sentenceList[newValue].isEndPointCategory {
-                                                        fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
-                                                        if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
-                                                            headerTabIndex -= 1
-                                                        }
-                                                    }
-                                                }
-                                                // 카드배너 오른쪽으로 이동
-                                                else if oldValue < newValue {
-                                                    // 앱 죽으면 안 되니까 필수!
-                                                    if let _ = viewModel.sentenceList[newValue].isStartPointCategory {
-                                                        fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
-                                                        if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
-                                                            
-                                                            headerTabIndex += 1
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            
-                                            withAnimation {
-                                                scrollviewReader.scrollTo(headerTabIndex, anchor: .top)
-                                            }
-                                            
-                                            isNotMainCategoryButtonClick = false // 초기화
+                                    // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
+                                    // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
+                                    if isNotMainCategoryButtonClick {
+                                        //fLog("idpil::: isMoveFirstHeader : \(isMoveFirstHeader)")
+                                        //fLog("idpil::: isMoveLastHeader : \(isMoveLastHeader)")
+                                        
+                                        // 마지막 번째 카드에서, 우측으로 넘겨서 첫 번째 카드로 이동하는 경우
+                                        if isMoveFirstHeader {
+                                            headerTabIndex = 0
                                         }
+                                        // 첫 번째 카드에서, 좌측으로 넘겨서 마지막 번째 카드로 이동하는 경우
+                                        else if isMoveLastHeader {
+                                            headerTabIndex = viewModel.categoryList.count-1
+                                        }
+                                        else {
+                                            // 카드배너 왼족으로 이동
+                                            if oldValue > newValue {
+                                                // 앱 죽으면 안 되니까 필수!
+                                                if let _ = viewModel.sentenceList[newValue].isEndPointCategory {
+                                                    fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
+                                                    if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
+                                                        headerTabIndex -= 1
+                                                    }
+                                                }
+                                            }
+                                            // 카드배너 오른쪽으로 이동
+                                            else if oldValue < newValue {
+                                                // 앱 죽으면 안 되니까 필수!
+                                                if let _ = viewModel.sentenceList[newValue].isStartPointCategory {
+                                                    fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
+                                                    if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
+                                                        
+                                                        headerTabIndex += 1
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                        withAnimation {
+                                            scrollviewReader.scrollTo(headerTabIndex, anchor: .top)
+                                        }
+                                        
+                                        isNotMainCategoryButtonClick = false // 초기화
                                     }
-                                    //.id(index)
-                            }
-                            .padding(EdgeInsets(
-                                top: 10,
-                                leading: index==0 ? 20 : 10,
-                                bottom: 0,
-                                trailing: (index==viewModel.categoryList.count-1) ? 20 : 0
-                            ))
+                                }
+                                //.id(index)
                         }
+                        .padding(EdgeInsets(
+                            top: 10,
+                            leading: index==0 ? 20 : 10,
+                            bottom: 0,
+                            trailing: (index==viewModel.categoryList.count-1) ? 20 : 0
+                        ))
                     }
                 }
             }
