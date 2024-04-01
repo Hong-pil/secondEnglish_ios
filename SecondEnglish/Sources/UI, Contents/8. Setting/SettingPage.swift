@@ -40,6 +40,8 @@ struct SettingPage: View {
     
     @State private var checkMap:[String:Any] = [:]
     
+    @Binding var showLoginPage: Bool
+    
     private struct sizeInfo {
         static let padding: CGFloat = 10.0
         static let cellHeight: CGFloat = 50.0
@@ -194,7 +196,7 @@ struct SettingPage: View {
         }
         //.background(Color.bgLightGray50)
         .navigationDestination(isPresented: $showAccontPage) {
-            AccountInfoPage()
+            AccountInfoPage(showLoginPage: $showLoginPage)
         }
     }
 }

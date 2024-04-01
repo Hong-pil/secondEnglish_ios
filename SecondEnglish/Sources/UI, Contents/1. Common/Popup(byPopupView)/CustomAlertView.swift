@@ -348,26 +348,45 @@ struct CustomAlertModifier: ViewModifier {
     let onClick: (Int) -> Void
     
     func body(content: Content) -> some View {
-        content
-            .fullScreenCover(isPresented: $isPresented) {
+        /**
+         * 주의!
+         * .fullScreenCover() 사용하면 뷰가 아래에서 위로 올라오기 때문에 부자연스러움.
+         * 그래서 .transaction() 으로 애니메이션 효과를 없애 뷰가 아래에서 못 올라오게 만들면, 코드 전체 애니메이션 효과도 없어지는 문제가 있음. (SwipePage 에서 카드 섞기 애니메이션 없어짐)
+         * 그래서 ZStack 사용한 것.
+         * 주석처리한 이유는 참고용.
+         */
+        ZStack {
+            content
+            
+            if isPresented {
                 CustomAlert(isPresented: $isPresented, buttonIndex: $buttonIndex, type: type, title: title, message: message, detailMessage: detailMessage, fanitMessage: fanitMessage, buttons: buttons)
-                 
             }
-            .transaction({ transaction in
-                //transaction.disablesAnimations = false    // Alert 뷰 아래에서 나타남
-                
-                
-                /**
-                 * 원래 아래 코드 적용되어 있었는데 왜 이런거임? ㅡㅡ;;
-                 * 전체 코드에 영향을 미치기 때문에,
-                 * 홈탭에서 카드 배너 넘겨질 때 애니메이션 효과 없어짐 ㅡㅡ;;
-                 */
-                //transaction.disablesAnimations = true   // Alert 뷰 아래에서 나타나지 않음
-                
-                
-                
-                //transaction.animation = .linear(duration: 0.5)
-            })
+        }
+//        content
+//            .fullScreenCover(isPresented: $isPresented) {
+//                CustomAlert(isPresented: $isPresented, buttonIndex: $buttonIndex, type: type, title: title, message: message, detailMessage: detailMessage, fanitMessage: fanitMessage, buttons: buttons)
+//                 
+//            }
+//            .transaction({ transaction in
+//                //transaction.disablesAnimations = false    // Alert 뷰 아래에서 나타남
+//                
+//                
+//                /**
+//                 * 원래 아래 코드 적용되어 있었는데 왜 이런거임? ㅡㅡ;;
+//                 * 전체 코드에 영향을 미치기 때문에,
+//                 * 홈탭에서 카드 배너 넘겨질 때 애니메이션 효과 없어짐 ㅡㅡ;;
+//                 */
+//                //transaction.disablesAnimations = true   // Alert 뷰 아래에서 나타나지 않음
+//                
+//                
+//                
+//                //transaction.animation = .linear(duration: 0.5)
+//            })
+//            .transaction({ transaction in
+//                //transaction.disablesAnimations = false    // Alert 뷰 아래에서 나타남
+//                transaction.disablesAnimations = true   // Alert 뷰 아래에서 나타나지 않음
+//                //transaction.animation = .linear(duration: 0.5)
+//            })
             .onChange(of: isPresented) {
                 if !isPresented {
                     fLog("\n--- close alert -------------------\nbuttonIndex : \(buttonIndex)\n")

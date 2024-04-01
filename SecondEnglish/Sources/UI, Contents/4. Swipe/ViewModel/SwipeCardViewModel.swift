@@ -305,6 +305,7 @@ class SwipeCardViewModel: ObservableObject {
                     
                     guard var arr = value.data?.list else { return }
                     guard let grammar = value.data?.grammar else { return }
+                    printPrettyJSON(keyWord: "idpil grammar :::\n", from: grammar)
                     BottomSheetManager.shared.grammarInfo = grammar
                     
                     

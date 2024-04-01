@@ -6,6 +6,13 @@
 //
 
 import SwiftUI
+import AVKit
+
+public extension View {
+    func implementPopupView() -> some View {
+        overlay(PopupView())
+    }
+}
 
 // MARK: -Alignments
 extension View {
@@ -68,5 +75,21 @@ extension View {
             // 혹은 높이를 변경한다던지 여러가지 설정들이 가능하다.
             tabBar.isHidden = isHidden
         })
+    }
+    
+    func setTabBarItemNaviBarHidden() -> some View {
+        background(TabBarItemAccessor())
+    }
+}
+
+
+extension View {
+    func setSoundOnInMannerMode() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print(error)
+        }
     }
 }

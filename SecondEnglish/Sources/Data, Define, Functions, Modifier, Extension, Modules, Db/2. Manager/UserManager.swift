@@ -158,13 +158,15 @@ class UserManager: ObservableObject {
         isLogin = checkValidateSSO()
     }
     
-    func setLoginData(uid:String,
+    func setLoginData(uid: String,
+                      account: String,
                       user_nickname: String,
-                      loginUserType:String,
-                      accessToken:String,
-                      refreshToken:String)
+                      loginUserType: String,
+                      accessToken: String,
+                      refreshToken: String)
     {
         self.uid = uid
+        self.account = account
         self.userNick = user_nickname
         self.loginUserType = loginUserType
         self.accessToken = accessToken

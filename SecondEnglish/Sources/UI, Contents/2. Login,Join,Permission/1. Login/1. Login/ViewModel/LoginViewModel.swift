@@ -169,6 +169,7 @@ class LoginViewModel: NSObject ,ObservableObject {
                 if value.code == 200 && value.success {
                     // 로그인 성공!
                     let uid = value.uid ?? ""
+                    let account = loginId
                     let access_token = value.access_token ?? ""
                     let refresh_token = value.refresh_token ?? ""
                     
@@ -179,6 +180,7 @@ class LoginViewModel: NSObject ,ObservableObject {
                         fLog("\n--- Login Result ---------------------------------\nuid : \(uid)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\n")
                         UserManager.shared.setLoginData(
                             uid: uid,
+                            account: account,
                             user_nickname: user_nickname,
                             loginUserType: loginType.rawValue,
                             accessToken: access_token,

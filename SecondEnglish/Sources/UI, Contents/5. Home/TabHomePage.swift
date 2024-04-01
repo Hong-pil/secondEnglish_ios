@@ -18,12 +18,18 @@ struct TabHomePage {
     @State private var isNotMainCategoryButtonClick: Bool = false
     @State private var isAutoPlay: Bool = false
     
+    // Pull To Refresh
+    @Environment(\.refresh) private var refresh
+    @State private var isCurrentlyRefreshing = false
+    let amountToPullBeforeRefreshing: CGFloat = 180
+    
     private struct sizeInfo {
         static let CarouselViewHeight: CGFloat = 300
     }
 }
 
 extension TabHomePage: View {
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -38,6 +44,9 @@ extension TabHomePage: View {
             
             ScrollViewReader { scrollviewReader in
                 ScrollView {
+                    if isCurrentlyRefreshing {
+                        ProgressView()
+                    }
                     
                     VStack(spacing: 0) {
                         if viewModel.categoryList.count > 0 {
@@ -94,7 +103,30 @@ extension TabHomePage: View {
                             }
                         }
                     }
+                    // the geometry proxy allows us to detect how far on the list we have scrolled
+                    // and will update the ViewOffsetKey once the "if" conditions are met
+                    .overlay(GeometryReader { geo in
+                        let currentScrollViewPosition = -geo.frame(in: .global).origin.y
+                        
+                        if currentScrollViewPosition < -amountToPullBeforeRefreshing && !isCurrentlyRefreshing {
+                            Color.clear.preference(key: HomePageViewOffsetKey.self, value: -geo.frame(in: .global).origin.y)
+                        }
+                    })
                 }
+                // onPreferenceChange :
+                // 'Pull To Refresh Method' 실행할 시기를 알기 위해, ViewOffsetKey 변경 감지.
+                .onPreferenceChange(HomePageViewOffsetKey.self) { scrollPosition in
+                    if scrollPosition < -amountToPullBeforeRefreshing && !isCurrentlyRefreshing {
+                        isCurrentlyRefreshing = true
+                        Task {
+                            await refreshData()
+                            await MainActor.run {
+                                isCurrentlyRefreshing = false
+                            }
+                        }
+                    }
+                }
+                
             }
             .padding(.top, viewModel.categoryList.count==0 ? 20 : 0)
 //            .onAppear(perform: {
@@ -108,7 +140,6 @@ extension TabHomePage: View {
         }
         .background(Color.bgLightGray50)
         .onAppear {
-            fLog("idpil::: called tabhomepage onappear")
             if !viewModel.isFirst {
                 viewModel.isFirst = true
                 
@@ -120,7 +151,7 @@ extension TabHomePage: View {
             }
         }
         .onChange(of: UserManager.shared.isLogin) {
-            fLog("idpil::: called tabhomepage onchange isLogin : \(UserManager.shared.isLogin)")
+            fLog("idpil::: UserManager.shared.isLogin : \(UserManager.shared.isLogin)")
             // 여기 뷰 띄워놓고 로그인뷰를 팝업으로 띄운 다음 로그인 진행을 하기 때문에, 로그인 성공한 경우 데이터 다시 요청
             if UserManager.shared.isLogin {
                 viewModel.requestMyCardList(isSuccess: { success in
@@ -464,6 +495,14 @@ extension TabHomePage: View {
                 .aspectRatio(contentMode: .fill)
                 .overlay(Color.primaryDefault.opacity(0.6))
         )
+    }
+}
+
+extension TabHomePage {
+    // Pull To Refresh
+    func refreshData() async {
+        // do work to asyncronously refresh your data here
+        try? await Task.sleep(nanoseconds: 3_000_000_000)
     }
 }
 

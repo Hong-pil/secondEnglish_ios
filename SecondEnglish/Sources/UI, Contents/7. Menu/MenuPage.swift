@@ -152,7 +152,7 @@ extension MenuPage: View {
         }
         .background(Color.bgLightGray50)
         .navigationDestination(isPresented: $isShowSettingPage) {
-            SettingPage()
+            SettingPage(showLoginPage: $isShowSettingPage)
         }
         .navigationDestination(isPresented: $isShowAlarmPage) {
             AlertPage()

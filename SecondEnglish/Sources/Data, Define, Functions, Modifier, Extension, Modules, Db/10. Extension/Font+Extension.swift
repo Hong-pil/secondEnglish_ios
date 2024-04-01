@@ -31,4 +31,5 @@ extension Font {
 extension Font {
     static let title32028Medium = Font.custom("NotoSansKR-Medium", size: 22)
     static let buttons1620Medium = Font.custom("NotoSansKR-Medium", size: 16)
+    static let caption11317Regular = Font.custom("NotoSansKR-Regular", size: 13)
 }

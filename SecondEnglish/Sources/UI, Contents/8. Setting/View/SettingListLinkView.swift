@@ -115,7 +115,7 @@ struct SettingListLinkView: View {
                     .buttonStyle(.borderless)
 //                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     if type == .ClickAccount {
-                        Image("btn_logo_\(UserManager.shared.loginType)")
+                        Image("btn_logo_\(UserManager.shared.loginUserType)")
                             .resizable()
                             .frame(width: sizeInfo.idIconSize.width, height: sizeInfo.idIconSize.height, alignment: .leading)
                     }
@@ -228,7 +228,9 @@ struct SettingListLinkView: View {
     }
     
     var accountText: String {
-        (UserManager.shared.loginType == DefineKey.email || UserManager.shared.loginType == DefineKey.phone) ? UserManager.shared.userEmail.isEmpty ? UserManager.shared.account : UserManager.shared.userEmail : UserManager.shared.account
+//        (UserManager.shared.loginType == DefineKey.email || UserManager.shared.loginType == DefineKey.phone) ? UserManager.shared.userEmail.isEmpty ? UserManager.shared.account : UserManager.shared.userEmail : UserManager.shared.account
+        
+        UserManager.shared.account
     }
 }
 

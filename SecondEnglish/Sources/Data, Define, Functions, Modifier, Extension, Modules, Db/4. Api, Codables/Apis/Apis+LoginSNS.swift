@@ -12,6 +12,8 @@ import Foundation
 enum ApisLoginSNS {
     case userCheck(login_id: String, login_type: String) // 회원 유무 확인
     case addSnsUser(login_id: String, login_type: String, user_nickname: String)
+    case logout
+    case withdrawal
 }
 
 extension ApisLoginSNS: TargetType {
@@ -28,6 +30,10 @@ extension ApisLoginSNS: TargetType {
             return "api/user/byidandtype"
         case .addSnsUser:
             return "api/users/sns/register"
+        case .logout:
+            return "api/users/logout"
+        case .withdrawal:
+            return "api/user/delete"
         }
     }
     
@@ -37,6 +43,10 @@ extension ApisLoginSNS: TargetType {
         case .userCheck:
             return .get
         case .addSnsUser:
+            return .post
+        case .logout:
+            return .post
+        case .withdrawal:
             return .post
         }
     }
@@ -61,6 +71,20 @@ extension ApisLoginSNS: TargetType {
             params["login_id"] = login_id
             params["login_type"] = login_type
             params["user_nickname"] = user_nickname
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .logout:
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .withdrawal:
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
