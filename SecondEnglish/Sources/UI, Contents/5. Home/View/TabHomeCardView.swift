@@ -90,15 +90,16 @@ struct TabHomeCardViewRow: View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 //.fill(Color.stateActivePrimaryDefault)
-                .fill(Color.primaryDefault)
-                //.stroke(Color.primaryDefault, lineWidth: 0.5)
-                .shadow(color: .gray25.opacity(0.5), radius: 5, x: 0, y: 0)
+                .fill(Color.gray25)
+                //.stroke(Color.stateActivePrimaryDefault, lineWidth: 0.01)
+                //.shadow(color: .gray25.opacity(0.5), radius: 5, x: 0, y: 0)
+                .shadow(color: .gray700.opacity(0.1), radius: 3, x: 0, y: 0)
                 
             VStack(spacing: 30) {
                 
                 Text(sentence)
                     .font(.title5Roboto1622Medium)
-                    .foregroundColor(.gray25)
+                    .foregroundColor(.black)
                 
                 
                 

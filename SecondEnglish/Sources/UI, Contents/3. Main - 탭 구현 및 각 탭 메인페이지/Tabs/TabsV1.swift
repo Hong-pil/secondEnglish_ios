@@ -13,7 +13,7 @@ struct BackgroundView_first_0: View {
         Image("slicing_top_tab_first")
             .resizable(capInsets: EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 30))
             .renderingMode(.template)
-            .foregroundColor(.gray25)
+            .foregroundColor(.bgLightGray50)
             .background(Color.stateActivePrimaryDefault)
     }
 }
@@ -22,7 +22,7 @@ struct BackgroundView_choice_0: View {
         Image("slicing_top_tab_choice")
             .resizable(capInsets: EdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30))
             .renderingMode(.template)
-            .foregroundColor(.gray25)
+            .foregroundColor(.bgLightGray50)
             .background(Color.stateActivePrimaryDefault)
     }
 }
@@ -31,7 +31,7 @@ struct BackgroundView_bg_0: View {
         Image("slicing_top_tab_bg")
             .resizable(capInsets: EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
             .renderingMode(.template)
-            .foregroundColor(.gray25)
+            .foregroundColor(.bgLightGray50)
             .background(Color.stateActivePrimaryDefault)
     }
 }
@@ -77,11 +77,15 @@ struct TabsV1: View {
     }
     
     var selectedTextWidth : (CGFloat, Int) -> CGFloat = { geoWidth, selectedItemIndex in
+        // 탭 개수가 2개인데, 각각 크기는 '스크린 가로 길이에서 1/3'이다.
+        // 그래서 탭 개수가 3개라면, 'geoWidth / CGFloat(3.0)'이 되어야 하기 때문에,
+        // 탭 개수가 2개이니, CGFloat(3.0)+CGFloat(3.0) = 6.0이 되어야 한다.
+        // 두 번째 탭 길이를 더 길게 하기 위해 2.8로 설정했음.
         if selectedItemIndex == 0 {
-            return geoWidth / CGFloat(4.0)
+            return geoWidth / CGFloat(3.2)
         }
         else {
-            return geoWidth / CGFloat(2.5)
+            return geoWidth / CGFloat(2.8)
         }
     }
     
@@ -98,11 +102,14 @@ struct TabsV1: View {
                             Text(tabs[row].title)
                                 .font(.title5Roboto1622Medium)
                                 .foregroundColor(selectedText(row, selectedTab))
-                                .padding(.leading, row == 0 ? 30 : 45)
-                                .padding(.trailing, row == 0 ? 45 : 45)
+                                .padding(.trailing, row == 0 ? 10 : 0)
+//                                .padding(.leading, row == 0 ? 25 : 45)
+//                                .padding(.trailing, row == 0 ? 35 : 45)
                         })
-                        .frame(height: tabHeight)
-                        .frame(maxWidth: .infinity)
+//                        .frame(height: tabHeight)
+//                        .frame(maxWidth: .infinity)
+//                        .background(BackgroundView_basic_0(currentItemIndex: row, selectedItemIndex: selectedTab))
+                        .frame(width: selectedTextWidth(geoWidth, row), height: tabHeight)
                         .background(BackgroundView_basic_0(currentItemIndex: row, selectedItemIndex: selectedTab))
                     }
                 }
@@ -127,6 +134,7 @@ struct TabsV1: View {
          * 물론 Tab 메뉴 안의 다른 ScrollView 에도 UIScrollView.appearance().bounces = true 를 적용하면 움직이긴 하지만
          * 다른 메뉴 이동 후 다시 오면 다시 고정되는 등의 다른 문제가 있었음.
          * 그래서 SwiftUI-Introspect 라이브러리를 사용해서 해결함 !
+         * [Ref] https://github.com/siteline/swiftui-introspect
          */
         .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { scrollView in
             scrollView.alwaysBounceVertical = false

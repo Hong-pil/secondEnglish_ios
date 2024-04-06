@@ -128,6 +128,7 @@ struct TabsV2: View {
          * 물론 Tab 메뉴 안의 다른 ScrollView 에도 UIScrollView.appearance().bounces = true 를 적용하면 움직이긴 하지만
          * 다른 메뉴 이동 후 다시 오면 다시 고정되는 등의 다른 문제가 있었음.
          * 그래서 SwiftUI-Introspect 라이브러리를 사용해서 해결함 !
+         * [Ref] https://github.com/siteline/swiftui-introspect
          */
         .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { scrollView in
             scrollView.alwaysBounceVertical = false

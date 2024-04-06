@@ -166,10 +166,10 @@ extension EditorPage: View {
                                 
                             }
                         }
-                        .onAppear {
-                            // TabHomePage 에서 ScrollView bounces false로 설정했기 때문에, 여기서 다시 true로 설정해줘야 됨
-                            UIScrollView.appearance().bounces = true
-                        }
+//                        .onAppear {
+//                            // TabHomePage 에서 ScrollView bounces false로 설정했기 때문에, 여기서 다시 true로 설정해줘야 됨
+//                            UIScrollView.appearance().bounces = true
+//                        }
                     }
                     
                     footerView

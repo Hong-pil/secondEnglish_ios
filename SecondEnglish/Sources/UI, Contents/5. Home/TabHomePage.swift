@@ -466,8 +466,7 @@ extension TabHomePage: View {
         }
         .frame(maxWidth: .infinity)
         //.background(RoundedRectangle(cornerRadius: 20).fill(Color.gray25))
-        .background(Color.gray25)
-        .padding(.bottom, 15)
+        .background(Color.bgLightGray50)
     }
     
     var myFavoriteCardList: some View {
@@ -517,7 +516,7 @@ extension TabHomePage: View {
                     // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
                     if isAutoPlay {
                         RoundedRectangle(cornerRadius: 5)
-                            .fill(Color.gray25.opacity(0.1111111111111111111))
+                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
                             .frame(maxWidth: .infinity)
                             .frame(height: 150)
                             .padding(40)
@@ -548,14 +547,13 @@ extension TabHomePage: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                     .padding(.bottom, 10)
                 }
-                .background(Color.gray25)
+                .background(Color.bgLightGray50)
 //                .background(
 //                    Image("home_bg_02")
 //                        .resizable()
 //                        .frame(height: sizeInfo.CarouselViewHeight).aspectRatio(contentMode: .fill) // 높이 크기에 맞게 이미지 꽉 채움
 //                        //.overlay(Color.primaryDefault.opacity(0.6))
 //                )
-                .padding(.bottom, 20)
             } else {
                 emptyView
             }
