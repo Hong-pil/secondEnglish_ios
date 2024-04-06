@@ -66,6 +66,11 @@
 		E050FAF12BA95ED900390420 /* MenuInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E050FAF02BA95ED900390420 /* MenuInfoView.swift */; };
 		E050FAF32BA9624300390420 /* MenuLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E050FAF22BA9624200390420 /* MenuLinkView.swift */; };
 		E050FAF72BA9B27300390420 /* SettingListLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E050FAF62BA9B27300390420 /* SettingListLinkView.swift */; };
+		E058AF042BC0FBCC00B214B0 /* TabMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E058AF032BC0FBCC00B214B0 /* TabMain.swift */; };
+		E058AF062BC0FBD600B214B0 /* TabMainType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E058AF052BC0FBD600B214B0 /* TabMainType.swift */; };
+		E058AF082BC0FBE100B214B0 /* TabsV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E058AF072BC0FBE100B214B0 /* TabsV1.swift */; };
+		E058AF0A2BC0FBEB00B214B0 /* TabsV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E058AF092BC0FBEB00B214B0 /* TabsV2.swift */; };
+		E058AF0D2BC0FC7E00B214B0 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = E058AF0C2BC0FC7E00B214B0 /* SwiftUIIntrospect */; };
 		E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */; };
 		E063922C2B82DAC5003D0428 /* CommonButton2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063922B2B82DAC5003D0428 /* CommonButton2.swift */; };
 		E063922E2B82DAEF003D0428 /* CustomButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063922D2B82DAEF003D0428 /* CustomButtonStyle.swift */; };
@@ -311,6 +316,10 @@
 		E050FAF02BA95ED900390420 /* MenuInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuInfoView.swift; sourceTree = "<group>"; };
 		E050FAF22BA9624200390420 /* MenuLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuLinkView.swift; sourceTree = "<group>"; };
 		E050FAF62BA9B27300390420 /* SettingListLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListLinkView.swift; sourceTree = "<group>"; };
+		E058AF032BC0FBCC00B214B0 /* TabMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMain.swift; sourceTree = "<group>"; };
+		E058AF052BC0FBD600B214B0 /* TabMainType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMainType.swift; sourceTree = "<group>"; };
+		E058AF072BC0FBE100B214B0 /* TabsV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsV1.swift; sourceTree = "<group>"; };
+		E058AF092BC0FBEB00B214B0 /* TabsV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsV2.swift; sourceTree = "<group>"; };
 		E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeViewModel.swift; sourceTree = "<group>"; };
 		E063922B2B82DAC5003D0428 /* CommonButton2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton2.swift; sourceTree = "<group>"; };
 		E063922D2B82DAEF003D0428 /* CustomButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonStyle.swift; sourceTree = "<group>"; };
@@ -491,6 +500,7 @@
 				E0C0D7BC2B4FE98600A7C01B /* Alamofire in Frameworks */,
 				E0C0D7B92B4FE93000A7C01B /* RxMoya in Frameworks */,
 				E0C0D7CB2B4FE9B900A7C01B /* BottomSheet in Frameworks */,
+				E058AF0D2BC0FC7E00B214B0 /* SwiftUIIntrospect in Frameworks */,
 				E0BA02562B5EA05300AA11A5 /* KakaoSDKAuth in Frameworks */,
 				E0C0D7B52B4FE93000A7C01B /* Moya in Frameworks */,
 				E0BA024E2B5DD86200AA11A5 /* JWTDecode in Frameworks */,
@@ -765,6 +775,17 @@
 				E050FAF62BA9B27300390420 /* SettingListLinkView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		E058AF022BC0FBBC00B214B0 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				E058AF032BC0FBCC00B214B0 /* TabMain.swift */,
+				E058AF052BC0FBD600B214B0 /* TabMainType.swift */,
+				E058AF072BC0FBE100B214B0 /* TabsV1.swift */,
+				E058AF092BC0FBEB00B214B0 /* TabsV2.swift */,
+			);
+			path = Tabs;
 			sourceTree = "<group>";
 		};
 		E05A341D2B6E4B0B00EC07CA /* 5. Home */ = {
@@ -1143,6 +1164,7 @@
 		E0DBDD352B4FB7D4007615A8 /* 3. Main - 탭 구현 및 각 탭 메인페이지 */ = {
 			isa = PBXGroup;
 			children = (
+				E058AF022BC0FBBC00B214B0 /* Tabs */,
 				E0DBDE4F2B4FD22C007615A8 /* Main.swift */,
 				E050FAD32BA9373D00390420 /* MainViewModel.swift */,
 			);
@@ -1516,6 +1538,7 @@
 				E00FDAFE2B5FE17C0080761B /* AttributedText */,
 				E0C41EDB2BA8448F00EB276A /* SwiftUINavigationBarColor */,
 				E050FAEE2BA9550F00390420 /* SwipeCellSUI */,
+				E058AF0C2BC0FC7E00B214B0 /* SwiftUIIntrospect */,
 			);
 			productName = SecondEnglish;
 			productReference = E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */;
@@ -1605,6 +1628,7 @@
 				E00FDAFD2B5FE17C0080761B /* XCRemoteSwiftPackageReference "AttributedText" */,
 				E0C41EDA2BA8448F00EB276A /* XCRemoteSwiftPackageReference "SwiftUI-Navigation-Bar-Color" */,
 				E050FAED2BA9550F00390420 /* XCRemoteSwiftPackageReference "SwipeCellSUI" */,
+				E058AF0B2BC0FC7E00B214B0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
 			);
 			productRefGroup = E0DBDCF82B4FB60F007615A8 /* Products */;
 			projectDirPath = "";
@@ -1661,6 +1685,7 @@
 				E0DBDD8A2B4FC9F1007615A8 /* SliderModel.swift in Sources */,
 				E063922C2B82DAC5003D0428 /* CommonButton2.swift in Sources */,
 				E0DBDD392B4FB7F9007615A8 /* DefineKey.swift in Sources */,
+				E058AF082BC0FBE100B214B0 /* TabsV1.swift in Sources */,
 				E0DBDE462B4FD1F5007615A8 /* TabHomePage.swift in Sources */,
 				E0DBDD6D2B4FC928007615A8 /* ConfigManager.swift in Sources */,
 				E0DBDD862B4FC9D9007615A8 /* CommonModel.swift in Sources */,
@@ -1685,6 +1710,7 @@
 				E002E1822B56E91400F64CA4 /* FlipView.swift in Sources */,
 				E0DBDDB02B4FCDA4007615A8 /* Shape+Extension.swift in Sources */,
 				E0DBDDF82B4FCF88007615A8 /* LoadingViewContainer.swift in Sources */,
+				E058AF062BC0FBD600B214B0 /* TabMainType.swift in Sources */,
 				E0DBDD6B2B4FC91D007615A8 /* PermissionManager.swift in Sources */,
 				E0DBDD9E2B4FCD3A007615A8 /* Bool+Extension.swift in Sources */,
 				E07BE6222BA916DD008DDEB7 /* MyProgressCellView.swift in Sources */,
@@ -1805,6 +1831,7 @@
 				E0F11E9E2B7F3C5D0014F503 /* EditorCategoryView.swift in Sources */,
 				E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */,
 				E01678522B62584B00943945 /* Check.swift in Sources */,
+				E058AF0A2BC0FBEB00B214B0 /* TabsV2.swift in Sources */,
 				E003BA9A2B8605B300C55590 /* NetworkMonitorManager.swift in Sources */,
 				E0DBDD7C2B4FC99B007615A8 /* Apis.swift in Sources */,
 				E0DBDD3F2B4FC643007615A8 /* DefineEnum.swift in Sources */,
@@ -1849,6 +1876,7 @@
 				E0DBDE392B4FD172007615A8 /* PermissionViewModel.swift in Sources */,
 				E0DBDDDC2B4FCEC4007615A8 /* PrimaryButton01.swift in Sources */,
 				E0DBDD5B2B4FC8A9007615A8 /* LanguageManager.swift in Sources */,
+				E058AF042BC0FBCC00B214B0 /* TabMain.swift in Sources */,
 				E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */,
 				E063923A2B82FB14003D0428 /* PopupManager.swift in Sources */,
 				E002E1842B56E92600F64CA4 /* SwipeCardBackView.swift in Sources */,
@@ -2266,6 +2294,14 @@
 				minimumVersion = 2.1.3;
 			};
 		};
+		E058AF0B2BC0FC7E00B214B0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/swiftui-introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.3;
+			};
+		};
 		E0BA024C2B5DD86200AA11A5 /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
@@ -2378,6 +2414,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E050FAED2BA9550F00390420 /* XCRemoteSwiftPackageReference "SwipeCellSUI" */;
 			productName = SwipeCellSUI;
+		};
+		E058AF0C2BC0FC7E00B214B0 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E058AF0B2BC0FC7E00B214B0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = SwiftUIIntrospect;
 		};
 		E0BA024D2B5DD86200AA11A5 /* JWTDecode */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -87,7 +87,7 @@ public struct InfiniteCarousel<Content: View, T: Any>: View {
                     let positionMinX = proxy.frame(in: .global).minX
                     
                     content(item)
-                        .cornerRadius(cornerRadius)
+                        //.cornerRadius(cornerRadius)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .rotation3DEffect(transition == .rotation3D ? getRotation(positionMinX) : .degrees(0), axis: (x: 0, y: 1, z: 0))
                         .opacity(transition == .opacity ? getValue(positionMinX) : 1)

@@ -9,6 +9,24 @@ import SwiftUI
 import SwiftUINavigationBarColor
 
 struct Main {
+    /**
+     * Main Tab 결정하는 부분
+     */
+    // Version 1
+    var tabtype_1: TabMainType = .vOne
+    let tabs_1: [TabMain] = [
+        .init(title: "en_my_post".localized),
+        .init(title: "en_my_like".localized)
+    ]
+    
+    // Version 2
+    var tabtype_2: TabMainType = .vTwo
+    let tabs_2: [TabMain] = [
+        .init(title: "en_for_you".localized),
+        .init(title: "en_popular".localized),
+        .init(title: "en_community".localized)
+    ]
+    
     @StateObject var userManager = UserManager.shared
     @StateObject var landingManager = LandingManager.shared
     @StateObject var tabStateHandler: TabStateHandlerManager = TabStateHandlerManager()
@@ -17,7 +35,7 @@ struct Main {
     
     @State private var isFirstLoaded: Bool = true
     @State private var isShowEditorView: Bool = false
-    @State private var navigationBarColor: Color = .bgLightGray50
+    @State private var navigationBarColor: Color = .stateActivePrimaryDefault
     
     private struct sizeInfo {
         static let numberOfTabs: CGFloat = 3.0
@@ -81,7 +99,7 @@ extension Main: View {
     var contentTabView: some View {
         TabView(selection: $tabStateHandler.selection) {
             Group {
-                TabHomePage()
+                TabHomePage(tabtype: tabtype_1, tabs: tabs_1, moveToTopIndicator: $tabStateHandler.moveFirstTabToTop)
                     .tag(bTab.my)
                 
                 TabSwipeCardPage()
@@ -104,7 +122,8 @@ extension Main: View {
                 Group {
                     Button {
                         tabStateHandler.selection = .my
-                        navigationBarColor = Color.bgLightGray50
+                        //navigationBarColor = Color.bgLightGray50
+                        navigationBarColor = Color.stateActivePrimaryDefault
                     } label: {
                         VStack(spacing: 8) {
                             Image(systemName: "bookmark.square")
@@ -185,8 +204,6 @@ extension Main: View {
     }
 }
 
-struct Main_Previews: PreviewProvider {
-    static var previews: some View {
-        Main()
-    }
+#Preview {
+    Main()
 }

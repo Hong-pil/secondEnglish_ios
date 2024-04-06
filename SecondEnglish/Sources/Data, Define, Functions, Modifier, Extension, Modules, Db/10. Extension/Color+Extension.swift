@@ -36,7 +36,7 @@ extension Color {
     static let stateActiveGray25 = Color(red: 255/255.0, green: 255/255.0, blue: 255/255.0, opacity: 1)
     
     //static let stateActivePrimaryDefault = Color(red: 134/255.0, green: 126/255.0, blue: 255/255.0, opacity: 1)
-    static let stateActivePrimaryDefault = Color(red: 56/255.0, green: 111/255.0, blue: 182/255.0, opacity: 1)
+    static let stateActivePrimaryDefault = Color(red: 102/255.0, green: 128/255.0, blue: 255/255.0, opacity: 1)
     
     static let stateActiveSecondaryDefault = Color(red: 254/255.0, green: 158/255.0, blue: 158/255.0, opacity: 1)
     static let stateDisabledGray200 = Color(red: 208/255.0, green: 209/255.0, blue: 217/255.0, opacity: 1)

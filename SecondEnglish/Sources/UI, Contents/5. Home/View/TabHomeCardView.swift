@@ -88,8 +88,9 @@ struct TabHomeCardViewRow: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 5)
-                .fill(Color.gray25)
+            RoundedRectangle(cornerRadius: 10)
+                //.fill(Color.stateActivePrimaryDefault)
+                .fill(Color.primaryDefault)
                 //.stroke(Color.primaryDefault, lineWidth: 0.5)
                 .shadow(color: .gray25.opacity(0.5), radius: 5, x: 0, y: 0)
                 
@@ -97,7 +98,7 @@ struct TabHomeCardViewRow: View {
                 
                 Text(sentence)
                     .font(.title5Roboto1622Medium)
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray25)
                 
                 
                 
@@ -125,8 +126,8 @@ struct TabHomeCardViewRow_NoFlip: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 5)
-                .fill(Color.gray25)
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.stateActivePrimaryDefault)
                 //.stroke(Color.primaryDefault, lineWidth: 0.5)
                 .shadow(color: .gray25.opacity(0.5), radius: 5, x: 0, y: 0)
                 
@@ -134,11 +135,11 @@ struct TabHomeCardViewRow_NoFlip: View {
                 
                 Text(korean)
                     .font(.title5Roboto1622Medium)
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray25)
                 
                 Text(english)
                     .font(.title5Roboto1622Medium)
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray25)
                 
                 
                 
