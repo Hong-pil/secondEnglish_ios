@@ -537,21 +537,20 @@ extension TabSwipeCardPage: View {
                             
                             VStack(spacing: 0) {
                                 Text(element)
-                                    .font(viewModel.categoryTabIndex==index ? .buttons1420Medium : .body21420Regular)
-                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.gray25 : Color.gray850)
-                                    .frame(minWidth: 70)
-                                    .frame(height: 40)
-                                    .padding(.horizontal, 15)
-                                    .clipShape(Capsule())
-                                    .overlay(Capsule().stroke(isSelected
-                                                                                      ? Color.gray850
-                                                                                      : Color.gray199.opacity(1), lineWidth: 1))
-                                    .background(Capsule().fill(isSelected
-                                                                                       ? Color.gray850
-                                                                                       : Color.gray25))
-                                    .padding(.vertical, 10)
-                                    //.shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
-                                    // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
+                                    .font(.title5Roboto1622Medium).fontWeight(.semibold)
+                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.stateActivePrimaryDefault : Color.gray500)
+                                    .background(
+                                        VStack(spacing: 0) {
+                                            Spacer()
+                                            Rectangle()
+                                                .offset(y: 10) // 텍스트 세로 길이 맨 아래에서, 10만큼 더 내려가서 보이기 위해 설정.
+                                                .fill(Color.stateActivePrimaryDefault)
+                                                .frame(height: 3)
+                                                .opacity(isSelected ? 1.0 : 0.0)
+                                        }
+                                    )
+                                    // (주의!) 클릭 감도 올리는 핵심 설정은 'frame(height: 40)'이다. 공간을 먼저 차지하는 게 중요한 것 같다.
+                                    .frame(height: 40).padding(10).background(Color.gray25) // 클릭 감도 올림
                                     .onTapGesture {
                                         
                                         /**
@@ -623,6 +622,104 @@ extension TabSwipeCardPage: View {
             }
         }
     }
+    // 디자인 구버전
+//    var subCategoryTabView: some View {
+//        ScrollViewReader { proxy in
+//            ScrollView(.horizontal, showsIndicators: false) {
+//                HStack(spacing: 0) {
+//                    
+//                    if viewModel.subCategoryList.count > 0 {
+//                        ForEach(Array(viewModel.subCategoryList.enumerated()), id: \.offset) { index, element in
+//                            let isSelected = viewModel.categoryTabIndex == index
+//                            
+//                            VStack(spacing: 0) {
+//                                Text(element)
+//                                    .font(viewModel.categoryTabIndex==index ? .buttons1420Medium : .body21420Regular)
+//                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.gray25 : Color.gray850)
+//                                    .frame(minWidth: 70)
+//                                    .frame(height: 40)
+//                                    .padding(.horizontal, 15)
+//                                    .clipShape(Capsule())
+//                                    .overlay(Capsule().stroke(isSelected
+//                                                                                      ? Color.stateActivePrimaryDefault
+//                                                                                      : Color.gray199.opacity(1), lineWidth: 1))
+//                                    .background(Capsule().fill(isSelected
+//                                                                                       ? Color.stateActivePrimaryDefault
+//                                                                                       : Color.gray25))
+//                                    .padding(.vertical, 10)
+//                                    //.shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
+//                                    // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
+//                                    .onTapGesture {
+//                                        
+//                                        /**
+//                                         * 카테고리 버튼 클릭했을 때,
+//                                         * 왜 -1 을 해줘야 제대로 동작하는거지?????
+//                                         *
+//                                         */
+//                                        viewModel.categoryTabIndex = index
+//                                        
+//                                        scrollToElement(with: proxy)
+////                                        withAnimation {
+////                                            proxy.scrollTo(index, anchor: .top)
+////                                        }
+//                                        
+//                                        
+//                                        viewModel.requestSwipeListByCategory(
+//                                            main_category: self.selectedMainCategoryItem,
+//                                            sub_category: element,
+//                                            sortType: .Latest,
+//                                            isSuccess: { success in
+//                                                //
+//                                            }
+//                                        )
+//                                        
+//                                        
+//                                        
+//        //                                    scrollToTopAimated.toggle()
+//        //                                    moveToTopIndicator.toggle()
+//        //                                    callRemoteData()
+//                                        
+//                                        
+//                                        
+//                                        //viewModel.resetSwipeList(category: element)
+//                                        
+//                                    }
+//                                    .onChange(of: viewModel.moveCategoryTab) {
+//                                        if viewModel.moveCategoryTab {
+//                                            
+//                                            scrollToElement(with: proxy)
+//                                            
+////                                            withAnimation {
+////                                                proxy.scrollTo(viewModel.categoryTabIndex, anchor: .top)
+////                                            }
+//                                            
+//                                            //viewModel.resetSwipeList(category: viewModel.topTabBarList[clickedSubTabIndex])
+//                                            
+//                                            
+//                                            viewModel.requestSwipeListByCategory(
+//                                                main_category: self.selectedMainCategoryItem,
+//                                                sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+//                                                sortType: .Latest,
+//                                                isSuccess: { success in
+//                                                }
+//                                            )
+//                                            
+//                                            viewModel.moveCategoryTab = false // 초기화
+//                                        }
+//                                        
+//                                        
+//                                    }
+//                                    .id(index)
+//                            }
+//                            .padding(.leading, index==0 ? 20 : 10)
+//                            .padding(.trailing, (index==viewModel.subCategoryList.count-1) ? 20 : 0)
+//                            
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     var emptyBubbleShapeView: some View {
         CustomBubbleShape(

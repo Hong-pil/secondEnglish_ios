@@ -24,17 +24,10 @@ struct SwipeCardBackView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Spacer()
                 
-                HStack(spacing: 5) {
-                    Image(systemName: "heart")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(.pink)
-                    
-                    Text(card.english ?? "Empty")
-                        .multilineTextAlignment(.leading)
-                        .font(.title32028Bold)
-                        .foregroundColor(.gray850)
-                }
+                Text(card.english ?? "Empty")
+                    .multilineTextAlignment(.leading)
+                    .font(.title32028Bold)
+                    .foregroundColor(.gray850)
                 
                 Spacer()
                 
@@ -54,7 +47,7 @@ struct SwipeCardBackView: View {
             .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
             .background(Color.gray25)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.blue))
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.stateActivePrimaryDefault))
         }
         .onChange(of: isTtsBtnClick) {
             languageRecognizer.processString(ttsText)

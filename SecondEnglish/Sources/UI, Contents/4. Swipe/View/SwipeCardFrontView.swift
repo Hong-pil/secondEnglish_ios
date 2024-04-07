@@ -36,9 +36,16 @@ struct SwipeCardFrontView: View {
             VStack(spacing: 0) {
                 
                 HStack(spacing: 0) {
-                    Text("made by \(card.user_name ?? "")")
-                        .font(.caption21116Regular)
-                        .foregroundColor(.green)
+                    (
+                        Text("made by ")
+                            .font(.caption21116Regular)
+                            .foregroundColor(.gray300)
+                        +
+                        Text("\(card.user_name ?? "")")
+                            .font(.caption21116Regular)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primaryDefault)
+                    )
                     
                     Spacer()
                     
@@ -168,7 +175,7 @@ struct SwipeCardFrontView: View {
             .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
             .background(Color.gray25)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.green))
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.stateActivePrimaryDefault.opacity(0.5)))
         }
 //        .onChange(of: isTtsBtnClick) {
 //            languageRecognizer.processString(ttsText)

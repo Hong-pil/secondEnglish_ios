@@ -33,25 +33,25 @@ struct SwipeView: View {
             )
             
             // Stamps for like/dislike/superlike that fade in as you swipe
-            Group {
-                StampView(label: "외웠음 O.O", color: .green)
-                    .rotationEffect(.degrees(-15))
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .opacity(Double(offset.width / 50))
-
-                StampView(label: "외울것 ㅠ.ㅠ", color: .red)
-                    .rotationEffect(.degrees(15))
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                    .opacity(abs(min(Double(offset.width / 50), 0)))
-
-                StampView(label: "Key card", color: .blue)
-                    .rotationEffect(.degrees(-15))
-                    .padding(.bottom, 80)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .opacity(abs(min(Double(offset.height / 100), 0)))
-            }
+//            Group {
+//                StampView(label: "외웠음 O.O", color: .green)
+//                    .rotationEffect(.degrees(-15))
+//                    .padding()
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+//                    .opacity(Double(offset.width / 50))
+//
+//                StampView(label: "외울것 ㅠ.ㅠ", color: .red)
+//                    .rotationEffect(.degrees(15))
+//                    .padding()
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+//                    .opacity(abs(min(Double(offset.width / 50), 0)))
+//
+//                StampView(label: "Key card", color: .blue)
+//                    .rotationEffect(.degrees(-15))
+//                    .padding(.bottom, 80)
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+//                    .opacity(abs(min(Double(offset.height / 100), 0)))
+//            }
         }
         .rotationEffect(.degrees(Double(offset.width / 5)))
         .offset(x: offset.width * 2, y: offset.height)
