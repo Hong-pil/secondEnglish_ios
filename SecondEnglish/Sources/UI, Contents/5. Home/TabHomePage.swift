@@ -17,9 +17,13 @@ struct TabHomePage {
     @Binding var moveToTopIndicator: Bool
     @State private var selectedTab: Int = 0
     
-    @State private var headerTabIndex: Int = 0
-    @State private var cardBannerCurrentIndex: Int = 0
-    @State private var isAutoPlay: Bool = false
+    @State private var myLikeTabHeaderIndex: Int = 0
+    @State private var myLikeCardIndex: Int = 0
+    @State private var myLikeIsAutoPlay: Bool = false
+    
+    @State private var myPostTabHeaderIndex: Int = 0
+    @State private var myPostCardIndex: Int = 0
+    @State private var myPostIsAutoPlay: Bool = false
     
     // Pull To Refresh
     @Environment(\.refresh) private var refresh
@@ -49,6 +53,7 @@ extension TabHomePage: View {
                     ScrollView {
                         if isCurrentlyRefreshing {
                             ProgressView()
+                                .padding(.vertical, 5)
                         }
                         
                         VStack(spacing: 0) {
@@ -58,10 +63,11 @@ extension TabHomePage: View {
                                 
                                 if selectedTab == 0 {
                                     // 여기를 LazyVStack으로 감싸면, 스크롤 내렸다가 다시 올렸을 때 이전 위치 보장이 안 됨. 그래서 VStack으로 감싸야 됨.
-                                    myFavoriteCardList
+                                    myPostCardList
                                 }
                                 else if selectedTab == 1 {
-                                    emptyView
+                                    // 여기를 LazyVStack으로 감싸면, 스크롤 내렸다가 다시 올렸을 때 이전 위치 보장이 안 됨. 그래서 VStack으로 감싸야 됨.
+                                    myLikeCardList
                                 }
 
                                 // Views
@@ -171,7 +177,6 @@ extension TabHomePage: View {
                     }
                     
                 }
-                .padding(.top, viewModel.categoryList.count==0 ? 20 : 0)
     //            .onAppear(perform: {
     //                //UIScrollView.appearance().backgroundColor = UIColor(Color.blue)
     //                /**
@@ -187,18 +192,23 @@ extension TabHomePage: View {
             if !viewModel.isFirst {
                 viewModel.isFirst = true
                 
-                viewModel.requestMyCardList(isSuccess: { success in
+                viewModel.requestMyLikeCardList(isSuccess: { success in
                     //
                 })
                 
+                viewModel.requestMyPostCardList(isSuccess: { success in
+                    //
+                })
+                
+                // 카테고리별 진도확인 리스트 조회
                 viewModel.requestMyCategoryProgress()
             }
         }
         .onChange(of: UserManager.shared.isLogin) {
-            fLog("idpil::: UserManager.shared.isLogin : \(UserManager.shared.isLogin)")
+            //fLog("idpil::: UserManager.shared.isLogin : \(UserManager.shared.isLogin)")
             // 여기 뷰 띄워놓고 로그인뷰를 팝업으로 띄운 다음 로그인 진행을 하기 때문에, 로그인 성공한 경우 데이터 다시 요청
             if UserManager.shared.isLogin {
-                viewModel.requestMyCardList(isSuccess: { success in
+                viewModel.requestMyLikeCardList(isSuccess: { success in
                     //
                 })
                 
@@ -240,23 +250,24 @@ extension TabHomePage: View {
             }
         }
         .padding(.horizontal, 20)
+        .padding(.bottom, 10)
         .background(Color.stateActivePrimaryDefault)
     }
     
-    var categoryListView: some View {
+    var myLikeCategoryListView: some View {
         ScrollViewReader { scrollviewReader in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
-                    ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
+                    ForEach(Array(viewModel.myLikeCardCategoryList.enumerated()), id: \.offset) { index, element in
                         
                         VStack(spacing: 0) {
                             Text(element)
-                                .font(headerTabIndex==index ? .title51622Medium : .caption11218Regular)
-                                .foregroundColor(headerTabIndex==index ? Color.primaryDefault : Color.primaryDefault.opacity(0.5))
+                                .font(myLikeTabHeaderIndex==index ? .title51622Medium : .caption11218Regular)
+                                .foregroundColor(myLikeTabHeaderIndex==index ? Color.primaryDefault : Color.primaryDefault.opacity(0.5))
                                 //.frame(minWidth: 70)
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 5)
-                                .onChange(of: cardBannerCurrentIndex) {
+                                .onChange(of: myLikeCardIndex) {
                                     
                                     /**
                                      * "Index out of range"에러 방지
@@ -264,8 +275,8 @@ extension TabHomePage: View {
                                      * 1. cardBannerCurrentIndex 값이 -1로 오면 발생함
                                      * 2. 'viewModel.sentenceList.count-1'값이 24일 때, cardBannerCurrentIndex 값이 25로 오면 발생함
                                      */
-                                    if cardBannerCurrentIndex != -1 &&
-                                        cardBannerCurrentIndex != viewModel.sentenceList.count {
+                                    if myLikeCardIndex != -1 &&
+                                        myLikeCardIndex != viewModel.myLikeCardList.count {
 //                                        fLog("idpil::: viewModel.sentenceList.count : \(viewModel.sentenceList.count)")
 //                                        fLog("idpil::: viewModel.sentenceList.count-1 : \(viewModel.sentenceList.count-1)")
 //                                        fLog("idpil::: cardBannerCurrentIndex : \(cardBannerCurrentIndex)")
@@ -275,8 +286,8 @@ extension TabHomePage: View {
 //                                        fLog("idpil::: type3 : \(viewModel.sentenceList[cardBannerCurrentIndex].type3 ?? "")")
 //                                        fLog("idpil::: element : \(element)")
                                         
-                                        if element == (viewModel.sentenceList[cardBannerCurrentIndex].type3 ?? "") {
-                                            headerTabIndex = index
+                                        if element == (viewModel.myLikeCardList[myLikeCardIndex].type3 ?? "") {
+                                            myLikeTabHeaderIndex = index
                                             withAnimation {
                                                 scrollviewReader.scrollTo(index, anchor: .top)
                                             }
@@ -289,7 +300,63 @@ extension TabHomePage: View {
                             top: 10,
                             leading: index==0 ? 20 : 10,
                             bottom: 0,
-                            trailing: (index==viewModel.categoryList.count-1) ? 20 : 0
+                            trailing: (index==viewModel.myLikeCardCategoryList.count-1) ? 20 : 0
+                        ))
+                    }
+                }
+            }
+            .scrollDisabled(true)
+
+        }
+    }
+    
+    var myPostCategoryListView: some View {
+        ScrollViewReader { scrollviewReader in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(Array(viewModel.myPostCardCategoryList.enumerated()), id: \.offset) { index, element in
+                        
+                        VStack(spacing: 0) {
+                            Text(element)
+                                .font(myPostTabHeaderIndex==index ? .title51622Medium : .caption11218Regular)
+                                .foregroundColor(myPostTabHeaderIndex==index ? Color.primaryDefault : Color.primaryDefault.opacity(0.5))
+                                //.frame(minWidth: 70)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 5)
+                                .onChange(of: myPostCardIndex) {
+                                    
+                                    /**
+                                     * "Index out of range"에러 방지
+                                     * 에러 발생하는 경우 (무한 회전기능 예외처리를 안 해주면 발생함)
+                                     * 1. cardBannerCurrentIndex 값이 -1로 오면 발생함
+                                     * 2. 'viewModel.sentenceList.count-1'값이 24일 때, cardBannerCurrentIndex 값이 25로 오면 발생함
+                                     */
+                                    if myPostCardIndex != -1 &&
+                                        myPostCardIndex != viewModel.myPostCardList.count {
+//                                        fLog("idpil::: viewModel.sentenceList.count : \(viewModel.sentenceList.count)")
+//                                        fLog("idpil::: viewModel.sentenceList.count-1 : \(viewModel.sentenceList.count-1)")
+//                                        fLog("idpil::: cardBannerCurrentIndex : \(cardBannerCurrentIndex)")
+//                                        fLog("idpil::: index : \(index)")
+                                        
+//                                        fLog("idpil::: 카드 korean : \(viewModel.sentenceList[cardBannerCurrentIndex].korean ?? "")")
+//                                        fLog("idpil::: type3 : \(viewModel.sentenceList[cardBannerCurrentIndex].type3 ?? "")")
+//                                        fLog("idpil::: element : \(element)")
+                                        
+                                        if element == (viewModel.myPostCardList[myPostCardIndex].type3 ?? "") {
+                                            myPostTabHeaderIndex = index
+                                            withAnimation {
+                                                scrollviewReader.scrollTo(index, anchor: .top)
+                                            }
+                                        }
+                                    }
+                                }
+                                //.id(index)
+                        }
+                        .padding(EdgeInsets(
+                            top: 10,
+                            leading: index==0 ? 20 : 10,
+                            bottom: 0,
+                            trailing: (index==viewModel.myPostCardCategoryList.count-1) ? 20 : 0
                         ))
                     }
                 }
@@ -300,7 +367,7 @@ extension TabHomePage: View {
     }
     
     
-    var emptyView: some View {
+    var myLikeEmptyView: some View {
         VStack(spacing: 0) {
             Image("like_empty")
                 .resizable()
@@ -337,13 +404,50 @@ extension TabHomePage: View {
         .background(Color.bgLightGray50)
     }
     
-    var myFavoriteCardList: some View {
+    var myPostEmptyView: some View {
         VStack(spacing: 0) {
-            if viewModel.categoryList.count > 0 {
+            Image("like_empty")
+                .resizable()
+                .frame(width: 200, height: 200)
+            
+            
+            Text("작성한 이력이 없습니다.")
+                .font(.title32028Bold)
+                .foregroundColor(.gray800)
+                .padding(.top, 5)
+            
+            Text("더하기를 눌러 나만의 공간을 만들어보세요 :)")
+                .font(.caption11218Regular)
+                .foregroundColor(.gray500)
+                .padding(.top, 7)
+            
+            
+            Button(action: {
+                // Swipe Tab 으로 이동
+                LandingManager.shared.showSwipePage = true
+            }, label: {
+                Text("글 작성하러 가기")
+                    .font(.title5Roboto1622Medium)
+                    .foregroundColor(Color.gray25)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Capsule().fill(Color.stateActivePrimaryDefault))
+            })
+            .buttonStyle(PlainButtonStyle()) // 버튼 깜빡임 방지
+            .padding(.vertical, 30)
+        }
+        .frame(maxWidth: .infinity)
+        //.background(RoundedRectangle(cornerRadius: 20).fill(Color.gray25))
+        .background(Color.bgLightGray50)
+    }
+    
+    var myPostCardList: some View {
+        VStack(spacing: 0) {
+            if viewModel.myPostCardCategoryList.count > 0 {
                 //tabBarView
                 ZStack {
                     InfiniteCarousel(
-                        data: viewModel.sentenceList,
+                        data: viewModel.myPostCardList,
                         height: sizeInfo.CarouselViewHeight,
                         cornerRadius: 0,
                         transition: .scale,
@@ -360,15 +464,15 @@ extension TabHomePage: View {
                              * InfiniteCarousel() 에서 '무한루프'를 위해 인덱스는 1부터 시작한다.
                              * 그래서 -1을 해준 뒤 저장해준다.
                              */
-                            self.cardBannerCurrentIndex = index-1
+                            self.myPostCardIndex = index-1
                         },
-                        isAutoPlay: isAutoPlay,
+                        isAutoPlay: myPostIsAutoPlay,
                         content: { item in
                             TabHomeCardView(
                                 item: item,
                                 cardWidth: .infinity,
                                 cardHeight: 150,
-                                isAutoPlay: isAutoPlay
+                                isAutoPlay: myPostIsAutoPlay
                             )
                         }
                     )
@@ -386,19 +490,19 @@ extension TabHomePage: View {
 //                    }
                     
                     
-                    categoryListView
+                    myPostCategoryListView
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     
                     ZStack {
-                        Text("\(cardBannerCurrentIndex+1) / \(viewModel.sentenceList.count)")
+                        Text("\(myPostCardIndex+1) / \(viewModel.myPostCardList.count)")
                             .font(.caption11218Regular)
                             .foregroundColor(.gray500)
                             .frame(maxWidth: .infinity, alignment: .center)
                         
                         Button(action: {
-                            self.isAutoPlay.toggle()
+                            self.myPostIsAutoPlay.toggle()
                         }, label: {
-                            Image(systemName: self.isAutoPlay ? "autostartstop.slash" : "autostartstop")
+                            Image(systemName: self.myPostIsAutoPlay ? "autostartstop.slash" : "autostartstop")
                                 .resizable()
                                 .renderingMode(.template)
                                 .frame(width: 25, height: 25)
@@ -418,7 +522,93 @@ extension TabHomePage: View {
 //                        //.overlay(Color.primaryDefault.opacity(0.6))
 //                )
             } else {
-                emptyView
+                myPostEmptyView
+            }
+        }
+    }
+    
+    var myLikeCardList: some View {
+        VStack(spacing: 0) {
+            if viewModel.myLikeCardCategoryList.count > 0 {
+                //tabBarView
+                ZStack {
+                    InfiniteCarousel(
+                        data: viewModel.myLikeCardList,
+                        height: sizeInfo.CarouselViewHeight,
+                        cornerRadius: 0,
+                        transition: .scale,
+                        returnIndex: { index, isMoveFirst, isMoveLast in
+                            //fLog("idpil::: isMoveFirst : \(isMoveFirst) / isMoveLast : \(isMoveLast)")
+        //                    if isMoveFirst {
+        //                        fLog("idpil::: 무한루프 시작점")
+        //                    }
+        //                    else if isMoveLast {
+        //                        fLog("idpil::: 무한루프 끝점")
+        //                    }
+                            
+                            /**
+                             * InfiniteCarousel() 에서 '무한루프'를 위해 인덱스는 1부터 시작한다.
+                             * 그래서 -1을 해준 뒤 저장해준다.
+                             */
+                            self.myLikeCardIndex = index-1
+                        },
+                        isAutoPlay: myLikeIsAutoPlay,
+                        content: { item in
+                            TabHomeCardView(
+                                item: item,
+                                cardWidth: .infinity,
+                                cardHeight: 150,
+                                isAutoPlay: myLikeIsAutoPlay
+                            )
+                        }
+                    )
+                    
+                    
+                    // 오토모드에서는 TabView 스크롤 제스처 안 되도록 막는다.
+                    // TabView 스크롤 엄청 빨리 했을 때, categoryList 이랑 싱크 안 맞는 경우가 생긴다.
+                    // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
+//                    if isAutoPlay {
+//                        RoundedRectangle(cornerRadius: 5)
+//                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
+//                            .frame(maxWidth: .infinity)
+//                            .frame(height: 150)
+//                            .padding(40)
+//                    }
+                    
+                    
+                    myLikeCategoryListView
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    
+                    ZStack {
+                        Text("\(myLikeCardIndex+1) / \(viewModel.myLikeCardList.count)")
+                            .font(.caption11218Regular)
+                            .foregroundColor(.gray500)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Button(action: {
+                            self.myLikeIsAutoPlay.toggle()
+                        }, label: {
+                            Image(systemName: self.myLikeIsAutoPlay ? "autostartstop.slash" : "autostartstop")
+                                .resizable()
+                                .renderingMode(.template)
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.primaryDefault)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding(.trailing, 25)
+                        })
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                    .padding(.bottom, 10)
+                }
+                .background(Color.bgLightGray50)
+//                .background(
+//                    Image("home_bg_02")
+//                        .resizable()
+//                        .frame(height: sizeInfo.CarouselViewHeight).aspectRatio(contentMode: .fill) // 높이 크기에 맞게 이미지 꽉 채움
+//                        //.overlay(Color.primaryDefault.opacity(0.6))
+//                )
+            } else {
+                myLikeEmptyView
             }
         }
     }

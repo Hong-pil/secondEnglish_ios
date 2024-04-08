@@ -17,8 +17,8 @@ enum ApisSwipe {
     case swipeListByCategory(main_category: String, sub_category: String)
     case myCategoryProgress
     case likeCard(cardIdx: Int, isLike: Int)
-    case myLikeCardList(uid: String)
-    case myCardList
+    case myLikeCardList
+    case myPostCardList
     case addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>])
     case getReportList
     case doReportCard(targetUid: String, targetCardIdx: Int, reportCode: Int)
@@ -49,9 +49,9 @@ extension ApisSwipe: TargetType {
         case .likeCard:
             return "api/card/like"
         case .myLikeCardList:
-            return "api/card/my"
-        case .myCardList:
-            return "api/card/my/list"
+            return "api/card/my/like_list"
+        case .myPostCardList:
+            return "api/card/my/post_list"
         case .addCardList:
             return "api/beginner_sentence/add/sentence_list"
         case .getReportList:
@@ -82,7 +82,7 @@ extension ApisSwipe: TargetType {
             return .post
         case .myLikeCardList:
             return .get
-        case .myCardList:
+        case .myPostCardList:
             return .get
         case .addCardList:
             return .post
@@ -154,14 +154,14 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
             
-        case .myLikeCardList(let uid):
+        case .myLikeCardList:
             var params = defaultParams
-            params["uid"] = uid
+            params["uid"] = UserManager.shared.uid
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: URLEncoding.default)
             
-        case .myCardList:
+        case .myPostCardList:
             var params = defaultParams
             params["uid"] = UserManager.shared.uid
             

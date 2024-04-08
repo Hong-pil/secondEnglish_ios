@@ -18,14 +18,16 @@ class TabHomeViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var alertMessage: String = ""
     
-    @Published var sentenceList: [SwipeDataList] = []
-    @Published var categoryList: [String] = []
+    @Published var myLikeCardList: [SwipeDataList] = []
+    @Published var myLikeCardCategoryList: [String] = []
+    @Published var myPostCardList: [SwipeDataList] = []
+    @Published var myPostCardCategoryList: [String] = []
     @Published var myLearningProgressList: [MyLearningProgressMainCategory] = []
     
     
     //MARK: - 내가 좋아요한 카드 리스트 조회
-    func requestMyCardList(isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getMyCardList()
+    func requestMyLikeCardList(isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getMyLikeCardList()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
@@ -37,8 +39,37 @@ class TabHomeViewModel: ObservableObject {
                 isSuccess(false)
             } receiveValue: { value in
                 if value.code == 200 {
-                    self.sentenceList = value.data?.sentence_list ?? []
-                    self.categoryList = value.data?.category_list ?? []
+                    self.myLikeCardList = value.data?.sentence_list ?? []
+                    self.myLikeCardCategoryList = value.data?.category_list ?? []
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    //MARK: - 내가 작성한 카드 리스트 조회
+    func requestMyPostCardList(isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getMyPostCardList()
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    self.myPostCardList = value.data?.sentence_list ?? []
+                    self.myPostCardCategoryList = value.data?.category_list ?? []
                     
                     isSuccess(true)
                 }

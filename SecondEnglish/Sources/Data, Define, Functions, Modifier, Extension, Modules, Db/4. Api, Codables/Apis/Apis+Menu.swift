@@ -71,7 +71,7 @@ extension ApisMenu: TargetType {
         case .mySentence:
             var params = defaultParams
 
-            params["user_name"] = UserManager.shared.userNick
+            params["uid"] = UserManager.shared.uid
 
             log(params: params)
             
@@ -87,7 +87,7 @@ extension ApisMenu: TargetType {
         case .likeGet:
             var params = defaultParams
 
-            params["user_name"] = UserManager.shared.userNick
+            params["uid"] = UserManager.shared.uid
 
             log(params: params)
             

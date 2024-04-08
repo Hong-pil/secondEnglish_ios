@@ -34,9 +34,6 @@ class SwipeCardViewModel: ObservableObject {
     @Published var subCategoryList: [String] = []
     @Published var cardPercentArr: [SwipeDataList] = [] // 카드 퍼센트 계산용
     
-    // Card Like
-    @Published var myLikeCardIdxList: [Int] = []
-    
     // NotificationCenter를 통해 탭 이동시키는 변수
     @Published var isNotificationCenter: Bool = false
     @Published var noti_selectedMainCategoryName: String = ""
@@ -380,62 +377,9 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - 불러온 영어카드 리스트에서 좋아요 적용
-    func requestMyLikeCardList(uid: String, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getMyLikeCardList(uid: uid)
-            .sink { error in
-                guard case let .failure(error) = error else { return }
-                fLog("requestSwipeList error : \(error)")
-                
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                isSuccess(false)
-            } receiveValue: { value in
-                if value.code == 200 {
-                    //self.swipeList = value.data ?? []
-                    
-//                    guard let liked_card_arr = value.data else { return }
-//                    fLog("idpil::: 내 좋아요 내역 : \(liked_card_arr)")
-                    self.myLikeCardIdxList = value.data?.liked_card_arr ?? []
-                    
-//                    var dummyArr = arr
-//
-//                    for (index, _) in arr.enumerated() {
-//                        dummyArr[index].id = index + 1
-//                    }
-//                    //fLog("로그확인::: dummyArr : \(dummyArr)")
-//                    self.swipeList = dummyArr
-                    
-                    
-                    
-                    // 좋아요 상태 업데이트
-                    for (index, element) in self.swipeList.enumerated() {
-                        if self.myLikeCardIdxList.contains(element.idx ?? 0) {
-                            self.swipeList[index].isLike = true
-                        }
-                    }
-                    
-                    
-                    
-                    
-                    
-                    isSuccess(true)
-                }
-                else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
-                }
-            }
-            .store(in: &cancellable)
-    }
-    
     //MARK: - 내가 좋아요한 카드 리스트 조회
     func requestMyCardList(isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getMyCardList()
+        ApiControl.getMyLikeCardList()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")

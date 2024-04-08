@@ -824,6 +824,7 @@ extension TabSwipeCardPage: View {
             )
             .padding(5) // 배경 그림자 잘리기 않도록 패딩값 설정
         }
+        .scrollDisabled(true)
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .offset(x: 13, y: 55) // 위 padding으로 뷰 간격 조정하면 안 됨 .background(Color.green.opacity(0.3)) 주석 해제해서 확인해보면, 여전히 화면 공간을 모두 차지하고 있기 때문에, mainCategoryButton 뷰 클릭이 되지 않음. 그래서 offset 으로 뷰 위치를 이동시킨 것.
     }
