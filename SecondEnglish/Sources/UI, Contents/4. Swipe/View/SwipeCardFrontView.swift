@@ -37,14 +37,14 @@ struct SwipeCardFrontView: View {
                 
                 HStack(spacing: 0) {
                     (
-                        Text("made by ")
+                        Text("made by  ")
                             .font(.caption21116Regular)
                             .foregroundColor(.gray300)
                         +
                         Text("\(card.user_name ?? "")")
                             .font(.caption21116Regular)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.primaryDefault)
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray300)
                     )
                     
                     Spacer()
@@ -61,20 +61,24 @@ struct SwipeCardFrontView: View {
                 
                 Spacer()
                 
-                VStack(spacing: 20) {
+                VStack(spacing: 0) {
                     
                     Text(card.korean ?? "Empty")
                         //.multilineTextAlignment(.leading)
-                        .font(.title32028Bold)
+                        .font(.title41824Medium)
                         .foregroundColor(.gray850)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    
-                    Text(visibleHintText)
-                        .font(.title5Roboto1622Medium)
+                    // spacing 값 말고, Text()에서 \n으로 공백 처리한 이유 :
+                    // spacing 값 준 상태에서 힌트버튼 누르면, 한글문장이 약간 위로 움직이는 문제가 있음.
+                    // 힌트 Text()에서 처음부터 공간을 확보하기 위해서는 값이 있어야 하기 때문인 거 같음.
+                    Text("\n\(visibleHintText)")
+                        .font(.body11622Regular)
                         .foregroundColor(.gray600)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .opacity(visibleHintText.isEmpty ? 0.0 : 1.0)
                     
+                    // 힌트 디자인 구버전
 //                    if currentHintWordIndex > -1 {
 //                        // 힌트
 //                        HStack(spacing: 0) {
@@ -169,13 +173,12 @@ struct SwipeCardFrontView: View {
 //                        }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
-                    
             }
             .padding()
             .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
             .background(Color.gray25)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.stateActivePrimaryDefault.opacity(0.5)))
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.stateActivePrimaryDefault.opacity(0.6)))
         }
 //        .onChange(of: isTtsBtnClick) {
 //            languageRecognizer.processString(ttsText)

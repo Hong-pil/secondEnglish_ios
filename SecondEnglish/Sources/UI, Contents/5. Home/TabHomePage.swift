@@ -19,9 +19,6 @@ struct TabHomePage {
     
     @State private var headerTabIndex: Int = 0
     @State private var cardBannerCurrentIndex: Int = 0
-    @State private var isMoveFirstHeader: Bool = false
-    @State private var isMoveLastHeader: Bool = false
-    @State private var isNotMainCategoryButtonClick: Bool = false
     @State private var isAutoPlay: Bool = false
     
     // Pull To Refresh
@@ -47,13 +44,6 @@ extension TabHomePage: View {
             VStack(spacing: 0) {
                 
                 header
-                
-                //MARK: - 내가 좋아요한 문장들
-    //            if viewModel.categoryList.count>0 {
-    //                //tabBarView
-    //
-    //                myFavoriteCardList
-    //            }
                 
                 ScrollViewReader { scrollviewReader in
                     ScrollView {
@@ -266,53 +256,31 @@ extension TabHomePage: View {
                                 //.frame(minWidth: 70)
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 5)
-                            // sub 카테고리 배너가 움직일 때, 시작점 또는 끝점에서 main 카테고리 버튼 움직이게 만듬
-                                .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
-                                    // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
-                            
-                                    // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
-                                    // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
-                                    if isNotMainCategoryButtonClick {
-                                        //fLog("idpil::: isMoveFirstHeader : \(isMoveFirstHeader)")
-                                        //fLog("idpil::: isMoveLastHeader : \(isMoveLastHeader)")
+                                .onChange(of: cardBannerCurrentIndex) {
+                                    
+                                    /**
+                                     * "Index out of range"에러 방지
+                                     * 에러 발생하는 경우 (무한 회전기능 예외처리를 안 해주면 발생함)
+                                     * 1. cardBannerCurrentIndex 값이 -1로 오면 발생함
+                                     * 2. 'viewModel.sentenceList.count-1'값이 24일 때, cardBannerCurrentIndex 값이 25로 오면 발생함
+                                     */
+                                    if cardBannerCurrentIndex != -1 &&
+                                        cardBannerCurrentIndex != viewModel.sentenceList.count {
+//                                        fLog("idpil::: viewModel.sentenceList.count : \(viewModel.sentenceList.count)")
+//                                        fLog("idpil::: viewModel.sentenceList.count-1 : \(viewModel.sentenceList.count-1)")
+//                                        fLog("idpil::: cardBannerCurrentIndex : \(cardBannerCurrentIndex)")
+//                                        fLog("idpil::: index : \(index)")
                                         
-                                        // 마지막 번째 카드에서, 우측으로 넘겨서 첫 번째 카드로 이동하는 경우
-                                        if isMoveFirstHeader {
-                                            headerTabIndex = 0
-                                        }
-                                        // 첫 번째 카드에서, 좌측으로 넘겨서 마지막 번째 카드로 이동하는 경우
-                                        else if isMoveLastHeader {
-                                            headerTabIndex = viewModel.categoryList.count-1
-                                        }
-                                        else {
-                                            // 카드배너 왼족으로 이동
-                                            if oldValue > newValue {
-                                                // 앱 죽으면 안 되니까 필수!
-                                                if let _ = viewModel.sentenceList[newValue].isEndPointCategory {
-                                                    fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
-                                                    if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
-                                                        headerTabIndex -= 1
-                                                    }
-                                                }
-                                            }
-                                            // 카드배너 오른쪽으로 이동
-                                            else if oldValue < newValue {
-                                                // 앱 죽으면 안 되니까 필수!
-                                                if let _ = viewModel.sentenceList[newValue].isStartPointCategory {
-                                                    fLog("에러로그::: \(viewModel.sentenceList[newValue].korean ?? "")")
-                                                    if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
-                                                        
-                                                        headerTabIndex += 1
-                                                    }
-                                                }
+//                                        fLog("idpil::: 카드 korean : \(viewModel.sentenceList[cardBannerCurrentIndex].korean ?? "")")
+//                                        fLog("idpil::: type3 : \(viewModel.sentenceList[cardBannerCurrentIndex].type3 ?? "")")
+//                                        fLog("idpil::: element : \(element)")
+                                        
+                                        if element == (viewModel.sentenceList[cardBannerCurrentIndex].type3 ?? "") {
+                                            headerTabIndex = index
+                                            withAnimation {
+                                                scrollviewReader.scrollTo(index, anchor: .top)
                                             }
                                         }
-                                        
-                                        withAnimation {
-                                            scrollviewReader.scrollTo(headerTabIndex, anchor: .top)
-                                        }
-                                        
-                                        isNotMainCategoryButtonClick = false // 초기화
                                     }
                                 }
                                 //.id(index)
@@ -331,106 +299,6 @@ extension TabHomePage: View {
         }
     }
     
-    // 사용 안 함
-    var tabBarView: some View {
-        ScrollViewReader { scrollviewReader in
-            ScrollView(.horizontal, showsIndicators: false) {
-                if viewModel.categoryList.count>0 {
-                    HStack(spacing: 0) {
-                        ForEach(Array(viewModel.categoryList.enumerated()), id: \.offset) { index, element in
-                            let isSelected = headerTabIndex == index
-                            
-                            VStack(spacing: 0) {
-                                Text(element)
-                                    .font(headerTabIndex==index ? .buttons1420Medium : .body21420Regular)
-                                    .foregroundColor(headerTabIndex==index ? Color.gray25 : Color.gray850)
-                                    .frame(minWidth: 70)
-                                    .padding(.vertical, 7)
-                                    .padding(.horizontal, 10)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(isSelected
-                                                                                      ? Color.gray850
-                                                                                      : Color.gray199.opacity(1), lineWidth: 1))
-                                    .background(RoundedRectangle(cornerRadius: 8).fill(isSelected
-                                                                                       ? Color.gray850
-                                                                                       : Color.gray25))
-                                    .shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
-                                    .onTapGesture {
-                                        
-                                        // 카테고리 리스트 이동
-                                        headerTabIndex = index
-                                        withAnimation {
-                                            scrollviewReader.scrollTo(index, anchor: .top)
-                                        }
-                                        
-                                        
-                                        // 클릭한 헤더 버튼의 카드 위치로 이동
-                                        for (sentenceIndex, sentenceItem) in viewModel.sentenceList.enumerated() {
-                                            
-                                            if viewModel.categoryList[index] == (sentenceItem.type3 ?? "") {
-                                                if sentenceItem.isStartPointCategory ?? false {
-                                                    withAnimation {
-                                                        cardBannerCurrentIndex = sentenceIndex
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                // sub 카테고리 배너가 움직일 때, 시작점 또는 끝점에서 main 카테고리 버튼 움직이게 만듬
-                                    .onChange(of: cardBannerCurrentIndex, initial: false) { oldValue, newValue in
-                                        // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
-                                
-                                        // 아래 기능은 '메인 카테고리 버튼'을 움직이는 기능이기 때문에,
-                                        // '메인 카테고리 버튼 클릭했을 때' 호출되면 안 됨.
-                                        if isNotMainCategoryButtonClick {
-                                            //fLog("idpil::: isMoveFirstHeader : \(isMoveFirstHeader)")
-                                            //fLog("idpil::: isMoveLastHeader : \(isMoveLastHeader)")
-                                            
-                                            if isMoveFirstHeader {
-                                                //fLog("idpil::: 헤더 첫번째")
-                                                headerTabIndex = 0
-                                            }
-                                            else if isMoveLastHeader {
-                                                //fLog("idpil::: 헤더 마지막번째")
-                                                headerTabIndex = viewModel.categoryList.count-1
-                                            }
-                                            else {
-                                                // 카드배너 왼족으로 이동
-                                                if oldValue > newValue {
-                                                    if viewModel.sentenceList[newValue].isEndPointCategory ?? false {
-                                                        headerTabIndex -= 1
-                                                    }
-                                                }
-                                                // 카드배너 오른쪽으로 이동
-                                                else if oldValue < newValue {
-                                                    if viewModel.sentenceList[newValue].isStartPointCategory ?? false {
-                                                        
-                                                        headerTabIndex += 1
-                                                    }
-                                                }
-                                            }
-                                            
-                                            withAnimation {
-                                                scrollviewReader.scrollTo(headerTabIndex, anchor: .top)
-                                            }
-                                            
-                                            isNotMainCategoryButtonClick = false // 초기화
-                                        }
-                                    }
-                                    //.id(index)
-                            }
-                            .padding(EdgeInsets(
-                                top: 15, 
-                                leading: index==0 ? 20 : 10,
-                                bottom: 10,
-                                trailing: (index==viewModel.categoryList.count-1) ? 20 : 0
-                            ))
-                        }
-                    }
-                }
-            }
-        }
-    }
     
     var emptyView: some View {
         VStack(spacing: 0) {
@@ -481,8 +349,6 @@ extension TabHomePage: View {
                         transition: .scale,
                         returnIndex: { index, isMoveFirst, isMoveLast in
                             //fLog("idpil::: isMoveFirst : \(isMoveFirst) / isMoveLast : \(isMoveLast)")
-                            self.isMoveFirstHeader = isMoveFirst
-                            self.isMoveLastHeader = isMoveLast
         //                    if isMoveFirst {
         //                        fLog("idpil::: 무한루프 시작점")
         //                    }
@@ -495,9 +361,6 @@ extension TabHomePage: View {
                              * 그래서 -1을 해준 뒤 저장해준다.
                              */
                             self.cardBannerCurrentIndex = index-1
-                            
-                            isNotMainCategoryButtonClick = true
-                            
                         },
                         isAutoPlay: isAutoPlay,
                         content: { item in
@@ -514,13 +377,13 @@ extension TabHomePage: View {
                     // 오토모드에서는 TabView 스크롤 제스처 안 되도록 막는다.
                     // TabView 스크롤 엄청 빨리 했을 때, categoryList 이랑 싱크 안 맞는 경우가 생긴다.
                     // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
-                    if isAutoPlay {
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 150)
-                            .padding(40)
-                    }
+//                    if isAutoPlay {
+//                        RoundedRectangle(cornerRadius: 5)
+//                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
+//                            .frame(maxWidth: .infinity)
+//                            .frame(height: 150)
+//                            .padding(40)
+//                    }
                     
                     
                     categoryListView

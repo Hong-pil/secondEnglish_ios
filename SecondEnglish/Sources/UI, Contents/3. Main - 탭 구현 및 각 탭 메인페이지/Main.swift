@@ -64,7 +64,7 @@ extension Main: View {
                 tabStateHandler.selection = .swipe_card // move to Swipe Tab
                 landingManager.showSwipePage = false
                 
-                navigationBarColor = Color.gray25
+                navigationBarColor = Color.primaryDefault
             }
         }
         .fullScreenCover(isPresented: $isShowEditorView) {
@@ -160,7 +160,7 @@ extension Main: View {
                     
                     Button {
                         tabStateHandler.selection = .swipe_card
-                        navigationBarColor = Color.gray25
+                        navigationBarColor = Color.primaryDefault
                     } label: {
                         VStack(spacing: 8) {
                             Image(systemName: "arrow.left.and.right.righttriangle.left.righttriangle.right")

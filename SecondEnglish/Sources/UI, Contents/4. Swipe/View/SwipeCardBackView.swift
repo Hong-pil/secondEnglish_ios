@@ -26,7 +26,7 @@ struct SwipeCardBackView: View {
                 
                 Text(card.english ?? "Empty")
                     .multilineTextAlignment(.leading)
-                    .font(.title32028Bold)
+                    .font(.title41824Medium)
                     .foregroundColor(.gray850)
                 
                 Spacer()

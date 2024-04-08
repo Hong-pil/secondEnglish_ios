@@ -63,10 +63,20 @@ extension TabSwipeCardPage: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                
-                header
-                
-                subCategoryTabView
+                VStack(spacing: 0) {
+                    header
+                    
+                    subCategoryTabView
+                }
+                .background(Color.primaryDefault)
+                .onTapGesture {
+                    if isShowMainCategoryListView {
+                        isShowMainCategoryListView = false
+                        withAnimation {
+                            isShowMainCategoryButtonAnimation = false
+                        }
+                    }
+                }
                 
     //            ZStack {
     //                VStack(spacing: 0) {
@@ -81,227 +91,237 @@ extension TabSwipeCardPage: View {
     //                }
     //            }
                 
-                
-                ZStack {
-                    GeometryReader { geometry in
-                        DoneView {
-                            withAnimation {
-                                //self.users = self.setList()
-                                viewModel.requestSwipeList(sortType: .Latest) { success in
-                                    if success {
-                                        //
+                VStack(spacing: 0) {
+                    ZStack {
+                        GeometryReader { geometry in
+                            DoneView {
+                                withAnimation {
+                                    //self.users = self.setList()
+                                    viewModel.requestSwipeList(sortType: .Latest) { success in
+                                        if success {
+                                            //
+                                        }
                                     }
                                 }
                             }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        
-                        
-                        
-                        ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                             
-                            // Range Operator
-                            if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
-                                //let _ = fLog("로그확인::: maxID : \(maxID)")
-                                //let _ = fLog("로그확인::: minID : \(minID)")
-                                //let _ = fLog("로그확인::: index : \(index)")
-                                //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
+                            
+                            
+                            ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
                                 
+                                // Range Operator
+                                if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
+                                    //let _ = fLog("로그확인::: maxID : \(maxID)")
+                                    //let _ = fLog("로그확인::: minID : \(minID)")
+                                    //let _ = fLog("로그확인::: index : \(index)")
+                                    //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
+                                    
+                                    SwipeView(
+                                        card: card,
+                                        speechSynthesizer: speechSynthesizer,
+                                        onRemove: { likeType in
+                                            withAnimation { removeProfile(card)
+                                            }
+                                            
+                                            onLike(card, type: likeType)
+                                        },
+                                        isTapLikeBtn: { cardIdx, isLike in
+                                            //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                            
+                                            // 좋아요 취소 요청 -> false -> 0
+                                            // 좋아요 요청 -> true -> 1
+                                            viewModel.likeCard(
+                                                cardIdx: cardIdx,
+                                                isLike: isLike ? 1 : 0,
+                                                clickIndex: index,
+                                                isSuccess: { isSuccess in
+                                                    if isSuccess {
+                                                        //fLog("idpil::: 좋아요 성공!!!")
+                                                    } else {
+                                                        //fLog("idpil::: 좋아요 실패!!!")
+                                                    }
+                                                    
+                                                })
+                                        },
+                                        isTapMoreBtn: {
+                                            DefineBottomSheet.commonMore(
+                                                type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
+                                            )
+                                            
+                                            bottomSheetManager.show.swipeCardMore = true
+                                            
+                                            self.clickCardItem = card
+                                        },
+                                        isLastCard: index==(maxID-1) ? true : false
+                                    )
+                                    //MARK: 책 쌓아놓은 것 같은 효과
+                                    //.animation(.spring())
+                                    .frame(
+                                        width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
+                                        height: geometry.size.height * 0.7
+                                    )
+                                    .offset(
+                                        x: 0,
+                                        y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                    )
+                                }
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                            .opacity(self.isShowRandomCardShuffle ? 0 : 1)
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+    //                        randomCardShuffleView
+    //                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    //                            //.opacity(self.isShowRandomCardShuffle ? 1 : 0)
+                            
+                            
+                            ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
                                 SwipeView(
                                     card: card,
                                     speechSynthesizer: speechSynthesizer,
-                                    onRemove: { likeType in
-                                        withAnimation { removeProfile(card)
-                                        }
-                                        
-                                        onLike(card, type: likeType)
-                                    },
-                                    isTapLikeBtn: { cardIdx, isLike in
-                                        //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
-                                        
-                                        // 좋아요 취소 요청 -> false -> 0
-                                        // 좋아요 요청 -> true -> 1
-                                        viewModel.likeCard(
-                                            cardIdx: cardIdx,
-                                            isLike: isLike ? 1 : 0,
-                                            clickIndex: index,
-                                            isSuccess: { isSuccess in
-                                                if isSuccess {
-                                                    //fLog("idpil::: 좋아요 성공!!!")
-                                                } else {
-                                                    //fLog("idpil::: 좋아요 실패!!!")
-                                                }
-                                                
-                                            })
-                                    },
-                                    isTapMoreBtn: {
-                                        DefineBottomSheet.commonMore(
-                                            type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
-                                        )
-                                        
-                                        bottomSheetManager.show.swipeCardMore = true
-                                        
-                                        self.clickCardItem = card
-                                    },
-                                    isLastCard: index==(maxID-1) ? true : false
+                                    onRemove: { _ in},
+                                    isTapLikeBtn: { _, _ in},
+                                    isTapMoreBtn: {},
+                                    isLastCard: false
                                 )
-                                //MARK: 책 쌓아놓은 것 같은 효과
-                                //.animation(.spring())
                                 .frame(
-                                    width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
                                     height: geometry.size.height * 0.7
                                 )
-                                .offset(
-                                    x: 0,
-                                    y: self.getCardOffset(geometry, id: (card.customId ?? 0))
-                                )
+                                .padding(.horizontal, self.randomCardPadding(index: index))
+                                //                                        .offset(
+                                //                                            x: 0,
+                                //                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                //                                        )
+                                .rotationEffect(.degrees(randomCardRotationDegrees[index]))
+                                .offset(randomCardOffsets[index])
+                                .animation(.easeInOut(duration: 0.3), value: randomCardRotationDegrees[index])
+                                .animation(.easeInOut(duration: 0.3), value: randomCardOffsets[index])
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 40)
+                            .opacity(self.isShowRandomCardShuffle ? 1 : 0)
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        .opacity(self.isShowRandomCardShuffle ? 0 : 1)
+                    }
+                    .opacity(viewModel.swipeList.count>0 ? 1 : 0)
+                    
+                    HStack(spacing: 15) {
+                        Button(action: {
+                            bottomSheetManager.show.swipeCardCut = true
+                        }, label: {
+                            Image(systemName: "scissors")
+                                .resizable()
+                                .renderingMode(.template)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 20)
+                                .foregroundColor(.primaryDefault)
+                                .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                        })
+                        
+                        Button(action: {
+                            
+                            if viewModel.swipeList.count < 4 {
+                                UserManager.shared.showCardShuffleError = true
+                            }
+                            
+                            if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
+                                
+                                // 랜덤카드 데이터 세팅
+                                self.setRandomCardList() {
+                                    
+                                    self.isShowRandomCardShuffle = true
+                                    
+                                    viewModel.shuffleSwipeList()
+                                    
+                                    self.doShuffleRandomCard()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        self.doShuffleRandomCard()
+                                        
+                                        // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                            self.isShowRandomCardShuffle = false
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                        }, label: {
+                            Image(systemName: "shuffle")
+                                .resizable()
+                                .renderingMode(.template)
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.primaryDefault)
+                                .frame(height: 20)
+                                .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                        })
+                        
+                        Button(action: {
+                            self.resetPage()
+                        }, label: {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .resizable()
+                                .renderingMode(.template)
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.primaryDefault)
+                                .frame(height: 20)
+                                .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                        })
+                        
+                        Spacer()
                         
                         
+                        Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
+                            .font(.buttons1420Medium)
+                            .foregroundColor(Color.gray850)
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-//                        randomCardShuffleView
-//                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-//                            //.opacity(self.isShowRandomCardShuffle ? 1 : 0)
-                        
-                        
-                        ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
-                            SwipeView(
-                                card: card,
-                                speechSynthesizer: speechSynthesizer,
-                                onRemove: { _ in},
-                                isTapLikeBtn: { _, _ in},
-                                isTapMoreBtn: {},
-                                isLastCard: false
-                            )
-                            .frame(
-                                height: geometry.size.height * 0.7
-                            )
-                            .padding(.horizontal, self.randomCardPadding(index: index))
-                            //                                        .offset(
-                            //                                            x: 0,
-                            //                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
-                            //                                        )
-                            .rotationEffect(.degrees(randomCardRotationDegrees[index]))
-                            .offset(randomCardOffsets[index])
-                            .animation(.easeInOut(duration: 0.3), value: randomCardRotationDegrees[index])
-                            .animation(.easeInOut(duration: 0.3), value: randomCardOffsets[index])
+                        CircleProgressBarView(
+                            width: 50,
+                            height: 50,
+                            color1: Color.blue,
+                            color2: Color.blue.opacity(0.3),
+                            percent: $curPercent
+                        )
+                    }
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 20)
+                }
+                .overlay(Color.gray25.opacity(isShowMainCategoryListView ? 0.111111111111111111111111111 : 0.0))
+                .onTapGesture {
+                    if isShowMainCategoryListView {
+                        isShowMainCategoryListView = false
+                        withAnimation {
+                            isShowMainCategoryButtonAnimation = false
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 40)
-                        .opacity(self.isShowRandomCardShuffle ? 1 : 0)
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
                     }
                 }
-                .opacity(viewModel.swipeList.count>0 ? 1 : 0)
-                
-                HStack(spacing: 15) {
-                    Button(action: {
-                        bottomSheetManager.show.swipeCardCut = true
-                    }, label: {
-                        Image(systemName: "scissors")
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 20)
-                            .foregroundColor(.primaryDefault)
-                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                    })
-                    
-                    Button(action: {
-                        
-                        if viewModel.swipeList.count < 4 {
-                            UserManager.shared.showCardShuffleError = true
-                        }
-                        
-                        if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
-                            
-                            // 랜덤카드 데이터 세팅
-                            self.setRandomCardList() {
-                                
-                                self.isShowRandomCardShuffle = true
-                                
-                                viewModel.shuffleSwipeList()
-                                
-                                self.doShuffleRandomCard()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    self.doShuffleRandomCard()
-                                    
-                                    // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                        self.isShowRandomCardShuffle = false
-                                    }
-                                }
-                                
-                            }
-                        }
-                    }, label: {
-                        Image(systemName: "shuffle")
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.primaryDefault)
-                            .frame(height: 20)
-                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                    })
-                    
-                    Button(action: {
-                        self.resetPage()
-                    }, label: {
-                        Image(systemName: "arrow.triangle.2.circlepath")
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.primaryDefault)
-                            .frame(height: 20)
-                            .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                    })
-                    
-                    Spacer()
-                    
-                    
-                    Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
-                        .font(.buttons1420Medium)
-                        .foregroundColor(Color.gray850)
-                    
-                    CircleProgressBarView(
-                        width: 50,
-                        height: 50,
-                        color1: Color.blue,
-                        color2: Color.blue.opacity(0.3),
-                        percent: $curPercent
-                    )
-                }
-                .padding(.vertical, 20)
-                .padding(.horizontal, 20)
             }
             
             if self.isShowMainCategoryListView {
@@ -482,13 +502,23 @@ extension TabSwipeCardPage: View {
             mainCategoryButton
             
             Button(action: {
-                withAnimation {
-                    bottomSheetManager.show.grammarInfo = true
+                if isMainCategoryListViewClose() {
+                    withAnimation {
+                        bottomSheetManager.show.grammarInfo = true
+                    }
                 }
             }, label: {
                 Image("icon_help")
                     .resizable()
+                    .renderingMode(.template)
                     .frame(width: 40, height: 40)
+                    .foregroundColor(.gray25)
+                    .overlay(
+                        Text("Help")
+                            .font(.caption31013Regular).fontWeight(.semibold)
+                            .foregroundColor(.primaryDefault)
+                            .padding(.bottom, 5)
+                    )
             })
             
         }
@@ -499,13 +529,13 @@ extension TabSwipeCardPage: View {
         HStack(spacing: 0) {
             Text(self.selectedMainCategoryItem)
                 .font(.buttons1420Medium)
-                .foregroundColor(.gray800)
+                .foregroundColor(.gray25)
             
             Image("icon_outline_dropdown")
                 .resizable()
                 .renderingMode(.template)
                 .frame(width: 13, height: 13)
-                .foregroundColor(.gray800)
+                .foregroundColor(.gray25)
                 .rotationEffect(.degrees(self.isShowMainCategoryButtonAnimation ? 360 : 270), anchor: .center)
                 .padding(.leading, 5)
         }
@@ -513,8 +543,8 @@ extension TabSwipeCardPage: View {
         .frame(height: 40)
         .padding(.horizontal, 15)
         .clipShape(Capsule())
-        .overlay(Capsule().stroke(Color.gray850.opacity(1), lineWidth: 1))
-        .background(Capsule().fill(Color.gray25))
+        .overlay(Capsule().stroke(Color.gray25.opacity(1), lineWidth: 1))
+        .background(Capsule().fill(Color.primaryDefault))
         .padding(.vertical, 10)
         .padding(.leading, 20)
         .padding(.trailing, 5)
@@ -533,58 +563,58 @@ extension TabSwipeCardPage: View {
                     
                     if viewModel.subCategoryList.count > 0 {
                         ForEach(Array(viewModel.subCategoryList.enumerated()), id: \.offset) { index, element in
+                            
                             let isSelected = viewModel.categoryTabIndex == index
                             
                             VStack(spacing: 0) {
                                 Text(element)
                                     .font(.title5Roboto1622Medium).fontWeight(.semibold)
-                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.stateActivePrimaryDefault : Color.gray500)
-                                    .background(
-                                        VStack(spacing: 0) {
-                                            Spacer()
-                                            Rectangle()
-                                                .offset(y: 10) // 텍스트 세로 길이 맨 아래에서, 10만큼 더 내려가서 보이기 위해 설정.
-                                                .fill(Color.stateActivePrimaryDefault)
-                                                .frame(height: 3)
-                                                .opacity(isSelected ? 1.0 : 0.0)
-                                        }
-                                    )
-                                    // (주의!) 클릭 감도 올리는 핵심 설정은 'frame(height: 40)'이다. 공간을 먼저 차지하는 게 중요한 것 같다.
-                                    .frame(height: 40).padding(10).background(Color.gray25) // 클릭 감도 올림
-                                    .onTapGesture {
-                                        
-                                        /**
-                                         * 카테고리 버튼 클릭했을 때,
-                                         * 왜 -1 을 해줘야 제대로 동작하는거지?????
-                                         *
-                                         */
-                                        viewModel.categoryTabIndex = index
-                                        
-                                        scrollToElement(with: proxy)
-//                                        withAnimation {
-//                                            proxy.scrollTo(index, anchor: .top)
+                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.gray25 : Color.gray300)
+//                                    .background(
+//                                        VStack(spacing: 0) {
+//                                            Spacer()
+//                                            Rectangle()
+//                                                .offset(y: 10) // 텍스트 세로 길이 맨 아래에서, 10만큼 더 내려가서 보이기 위해 설정.
+//                                                .fill(Color.gray25)
+//                                                .frame(height: 3)
+//                                                .opacity(isSelected ? 1.0 : 0.0)
 //                                        }
-                                        
-                                        
-                                        viewModel.requestSwipeListByCategory(
-                                            main_category: self.selectedMainCategoryItem,
-                                            sub_category: element,
-                                            sortType: .Latest,
-                                            isSuccess: { success in
-                                                //
-                                            }
-                                        )
-                                        
-                                        
-                                        
-        //                                    scrollToTopAimated.toggle()
-        //                                    moveToTopIndicator.toggle()
-        //                                    callRemoteData()
-                                        
-                                        
-                                        
-                                        //viewModel.resetSwipeList(category: element)
-                                        
+//                                    )
+                                    .padding(EdgeInsets(top: 20, leading: 5, bottom: 15, trailing: 5)).background(Color.primaryDefault) // 클릭 감도 올림
+                                    .onTapGesture {
+                                        if isMainCategoryListViewClose() {
+                                            /**
+                                             * 카테고리 버튼 클릭했을 때,
+                                             * 왜 -1 을 해줘야 제대로 동작하는거지?????
+                                             *
+                                             */
+                                            viewModel.categoryTabIndex = index
+                                            
+                                            scrollToElement(with: proxy)
+    //                                        withAnimation {
+    //                                            proxy.scrollTo(index, anchor: .top)
+    //                                        }
+                                            
+                                            
+                                            viewModel.requestSwipeListByCategory(
+                                                main_category: self.selectedMainCategoryItem,
+                                                sub_category: element,
+                                                sortType: .Latest,
+                                                isSuccess: { success in
+                                                    //
+                                                }
+                                            )
+                                            
+                                            
+                                            
+            //                                    scrollToTopAimated.toggle()
+            //                                    moveToTopIndicator.toggle()
+            //                                    callRemoteData()
+                                            
+                                            
+                                            
+                                            //viewModel.resetSwipeList(category: element)
+                                        }
                                     }
                                     .onChange(of: viewModel.moveCategoryTab) {
                                         if viewModel.moveCategoryTab {
@@ -612,8 +642,14 @@ extension TabSwipeCardPage: View {
                                         
                                     }
                                     .id(index)
+                                
+                                Rectangle()
+                                    //.offset(y: 10) // 텍스트 세로 길이 맨 아래에서, 10만큼 더 내려가서 보이기 위해 설정.
+                                    .fill(Color.gray25)
+                                    .frame(height: 3)
+                                    .opacity(isSelected ? 1.0 : 0.0)
                             }
-                            .padding(.leading, index==0 ? 20 : 10)
+                            .padding(.leading, index==0 ? 20 : 15)
                             .padding(.trailing, (index==viewModel.subCategoryList.count-1) ? 20 : 0)
                             
                         }
@@ -766,11 +802,11 @@ extension TabSwipeCardPage: View {
                             .font(.buttons1420Medium)
                             .foregroundColor(.gray700)
                     }
-                    .frame(maxWidth: 150, alignment: .leading)
+                    .frame(width: 150, alignment: .leading)
                     .background(Color.gray25) // 빈 공간 클릭 가능하게 함
                     .padding(.top, (index == 0) ? 20 : 10)
                     .padding(.bottom, (index == viewModel.mainCategoryList.count-1) ? 20 : 0)
-                    .padding(.leading, 20)
+                    .padding(.leading, 10)
                     .onTapGesture {
                         self.selectedMainCategoryItem = element
                         
@@ -784,23 +820,11 @@ extension TabSwipeCardPage: View {
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .background(
                 RoundedRectangle(cornerRadius: 20).fill(Color.gray25)
-                    .padding(5)
-                    .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 0)
-                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 0)
+                    .shadow(color: .gray500.opacity(0.5), radius: 3, x: 0, y: 0)
             )
-            //.padding(EdgeInsets(top: 60, leading: 20, bottom: 0, trailing: 0))
-            
-            
+            .padding(5) // 배경 그림자 잘리기 않도록 패딩값 설정
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
-        //.background(Color.green.opacity(0.3))
-        .background(Color.gray25.opacity(0.1111111111111111)) // 배경 클릭을 위해 설정 (화면에는 안 보임)
-        .onTapGesture {
-            self.isShowMainCategoryListView.toggle()
-            withAnimation {
-                self.isShowMainCategoryButtonAnimation.toggle()
-            }
-        }
         .offset(x: 13, y: 55) // 위 padding으로 뷰 간격 조정하면 안 됨 .background(Color.green.opacity(0.3)) 주석 해제해서 확인해보면, 여전히 화면 공간을 모두 차지하고 있기 때문에, mainCategoryButton 뷰 클릭이 되지 않음. 그래서 offset 으로 뷰 위치를 이동시킨 것.
     }
     
@@ -866,11 +890,11 @@ extension TabSwipeCardPage {
     func onLike(_ card: SwipeDataList, type likeType: LikeType) {
         switch likeType {
         case .like:
-            print("You liked \(card.korean)")
+            fLog("You liked \(card.korean ?? "")")
         case .dislike:
-            print("You disliked \(card.korean)")
+            fLog("You disliked \(card.korean ?? "")")
         case .superlike:
-            print("You super-liked \(card.korean)")
+            fLog("You super-liked \(card.korean ?? "")")
         }
     }
     
@@ -1013,6 +1037,22 @@ extension TabSwipeCardPage {
                     
                 }
             }
+        }
+    }
+    
+    // 메인 카테고리 리스트 뷰가 띄워져 있으면 닫는다.
+    private func isMainCategoryListViewClose() -> Bool {
+        if isShowMainCategoryListView {
+           
+            isShowMainCategoryListView = false
+            withAnimation {
+                isShowMainCategoryButtonAnimation = false
+            }
+            
+            return false
+        } else {
+            
+            return true
         }
     }
 }

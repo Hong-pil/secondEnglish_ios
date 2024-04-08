@@ -27,8 +27,6 @@ extension TabHomeCardView: View {
                     korean: item.korean ?? "",
                     english: item.english ?? "",
                     category: item.type3 ?? "",
-                    isStartPointCategory: item.isStartPointCategory ?? false,
-                    isEndPointCategory: item.isEndPointCategory ?? false,
                     isFlipped: isFlipped,
                     cardWidth: cardWidth,
                     cardHeight: cardHeight
@@ -41,8 +39,6 @@ extension TabHomeCardView: View {
                     TabHomeCardViewRow(
                         sentence: item.english ?? "",
                         category: item.type3 ?? "",
-                        isStartPointCategory: item.isStartPointCategory ?? false,
-                        isEndPointCategory: item.isEndPointCategory ?? false,
                         isFlipped: isFlipped,
                         cardWidth: cardWidth,
                         cardHeight: cardHeight
@@ -55,8 +51,6 @@ extension TabHomeCardView: View {
                     TabHomeCardViewRow(
                         sentence: item.korean ?? "",
                         category: item.type3 ?? "",
-                        isStartPointCategory: item.isStartPointCategory ?? false,
-                        isEndPointCategory: item.isEndPointCategory ?? false,
                         isFlipped: isFlipped,
                         cardWidth: cardWidth,
                         cardHeight: 150
@@ -80,8 +74,6 @@ extension TabHomeCardView: View {
 struct TabHomeCardViewRow: View {
     let sentence: String
     let category: String
-    let isStartPointCategory: Bool
-    let isEndPointCategory: Bool
     let isFlipped: Bool
     let cardWidth: CGFloat
     let cardHeight: CGFloat
@@ -119,8 +111,6 @@ struct TabHomeCardViewRow_NoFlip: View {
     let korean: String
     let english: String
     let category: String
-    let isStartPointCategory: Bool
-    let isEndPointCategory: Bool
     let isFlipped: Bool
     let cardWidth: CGFloat
     let cardHeight: CGFloat

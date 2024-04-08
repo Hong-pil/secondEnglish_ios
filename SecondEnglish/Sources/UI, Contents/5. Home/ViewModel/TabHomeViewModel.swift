@@ -40,13 +40,7 @@ class TabHomeViewModel: ObservableObject {
                     self.sentenceList = value.data?.sentence_list ?? []
                     self.categoryList = value.data?.category_list ?? []
                     
-                    /**
-                     * 각 카테고리 시작점과 마지막점 유무 저장
-                     * (홈탭에서 카드배너 넘겨질 때 카테고리 버튼 이동하는데 사용함)
-                     */
-                    self.setStartAndEndPoint() {
-                        isSuccess(true)
-                    }
+                    isSuccess(true)
                 }
                 else {
                     self.alertMessage = ErrorHandler.getCommonMessage()
@@ -56,31 +50,6 @@ class TabHomeViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellable)
-    }
-    private func setStartAndEndPoint(result: (() -> Void)) {
-        //printPrettyJSON(keyWord: "idpil printPrettyJSON:::\n", from: self.sentenceList)
-        
-        for categoryItem in self.categoryList {
-            for (index, sentenceItem) in self.sentenceList.enumerated() {
-                
-                // sub 카테고리 일치하는 시작점(index)
-                if categoryItem == (sentenceItem.type3 ?? "") {
-                    // 각 카테고리 시작점 설정
-                    self.sentenceList[index].isStartPointCategory = true
-                    
-                    // 각 카테고리 마지막점 설정
-                    // index가 시작점 카드이기 때문에 '시작점의 이전(index-1) 카드'는 마지막점이 됨
-                    if index > 0 {
-                        self.sentenceList[index-1].isEndPointCategory = true
-                    }
-                    
-                    
-                    break // 다음 카테고리로 이동하기 위해 반복문 빠져나감
-                }
-            }
-        }
-        
-        result()
     }
     
     //MARK: - 카테고리별 진도확인 리스트 조회
