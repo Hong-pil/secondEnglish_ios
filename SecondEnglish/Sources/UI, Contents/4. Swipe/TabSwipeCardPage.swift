@@ -8,6 +8,7 @@
 import SwiftUI
 import AVFoundation
 import AVKit
+import Combine
 
 struct TabSwipeCardPage {
     @StateObject var viewModel = SwipeCardViewModel.shared
@@ -27,6 +28,15 @@ struct TabSwipeCardPage {
      * 그래서 전역변수 하나만 생성해서, 자식뷰로 넘겨주는 방식으로 해결했음.
      */
     let speechSynthesizer = AVSpeechSynthesizer() // TTS
+    
+    // 자동 모드
+    @State private var isAutoPlay: Bool = false
+    @State private var isTopViewSwipe: Bool = false
+    // 자동 모드 타이머
+    @Environment(\.scenePhase) var scenePhase
+    @State private var timer: Timer.TimerPublisher
+    @State private var cancellable: Cancellable?
+    private let seconds: Double = 3.0
     
     
     /**
@@ -56,6 +66,11 @@ struct TabSwipeCardPage {
         static let index1RandomCardOffset: CGSize = CGSize(width: 0, height: -10)
         static let index2RandomCardOffset: CGSize = CGSize(width: 0, height: -20)
         static let index3RandomCardOffset: CGSize = CGSize(width: 0, height: -30)
+    }
+    
+    init() {
+        // 자동 모드일 때, 3초 마다 카드 넘김
+        self._timer = .init(initialValue: Timer.publish(every: seconds, on: .main, in: .common))
     }
 }
 
@@ -117,53 +132,123 @@ extension TabSwipeCardPage: View {
                                     //let _ = fLog("로그확인::: index : \(index)")
                                     //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
                                     
-                                    SwipeView(
-                                        card: card,
-                                        speechSynthesizer: speechSynthesizer,
-                                        onRemove: { likeType in
-                                            withAnimation { removeProfile(card)
+                                    // 자동모드에서 offset 설정해야 하는데, SwipeView()에서 이미 offset 설정을 하고 있기 때문에 VStack으로 감싸준다.
+                                    VStack(spacing: 0) {
+                                        SwipeView(
+                                            card: card,
+                                            speechSynthesizer: speechSynthesizer,
+                                            onRemove: { likeType in
+                                                withAnimation {
+                                                    removeProfile(card)
+                                                }
+                                                
+                                                onLike(card, type: likeType)
+                                            },
+                                            isTapLikeBtn: { cardIdx, isLike in
+                                                //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                                
+                                                // 좋아요 취소 요청 -> false -> 0
+                                                // 좋아요 요청 -> true -> 1
+                                                viewModel.likeCard(
+                                                    cardIdx: cardIdx,
+                                                    isLike: isLike ? 1 : 0,
+                                                    clickIndex: index,
+                                                    isSuccess: { isSuccess in
+                                                        if isSuccess {
+                                                            //fLog("idpil::: 좋아요 성공!!!")
+                                                        } else {
+                                                            //fLog("idpil::: 좋아요 실패!!!")
+                                                        }
+                                                        
+                                                    })
+                                            },
+                                            isTapMoreBtn: {
+                                                DefineBottomSheet.commonMore(
+                                                    type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
+                                                )
+                                                
+                                                bottomSheetManager.show.swipeCardMore = true
+                                                
+                                                self.clickCardItem = card
+                                            },
+                                            isLastCard: index==(maxID-1) ? true : false
+                                        )
+                                        //MARK: 책 쌓아놓은 것 같은 효과
+                                        //.animation(.spring())
+                                        .frame(
+                                            width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
+                                            height: geometry.size.height * 0.7
+                                        )
+                                        .offset(
+                                            x: 0,
+                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                        )
+                                    }
+                                    // 자동 모드
+                                    .onChange(of: isAutoPlay) {
+                                        if isAutoPlay {
+                                            startTimer()
+                                        } else {
+                                            stopTimer()
+                                        }
+                                    }
+                                    .onReceive(timer) { _ in
+                                        if isAutoPlay {
+                                            isTopViewSwipe = true
+                                            
+                                            // 애니메이션 0.3초 동안 진행되기 때문에, 0.3초 후에 실행
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                                
+                                                // 맨 위에 있는 카드 제거
+                                                removeProfile(card)
+                                                
+                                                isTopViewSwipe = false
                                             }
-                                            
-                                            onLike(card, type: likeType)
-                                        },
-                                        isTapLikeBtn: { cardIdx, isLike in
-                                            //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
-                                            
-                                            // 좋아요 취소 요청 -> false -> 0
-                                            // 좋아요 요청 -> true -> 1
-                                            viewModel.likeCard(
-                                                cardIdx: cardIdx,
-                                                isLike: isLike ? 1 : 0,
-                                                clickIndex: index,
-                                                isSuccess: { isSuccess in
-                                                    if isSuccess {
-                                                        //fLog("idpil::: 좋아요 성공!!!")
-                                                    } else {
-                                                        //fLog("idpil::: 좋아요 실패!!!")
-                                                    }
-                                                    
-                                                })
-                                        },
-                                        isTapMoreBtn: {
-                                            DefineBottomSheet.commonMore(
-                                                type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
-                                            )
-                                            
-                                            bottomSheetManager.show.swipeCardMore = true
-                                            
-                                            self.clickCardItem = card
-                                        },
-                                        isLastCard: index==(maxID-1) ? true : false
-                                    )
-                                    //MARK: 책 쌓아놓은 것 같은 효과
-                                    //.animation(.spring())
-                                    .frame(
-                                        width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
-                                        height: geometry.size.height * 0.7
+                                        }
+                                    }
+                                    .rotationEffect(
+                                        isTopViewSwipe
+                                        ?
+                                        (
+                                            // 맨 위 카드만 적용
+                                            index==(maxID-1)
+                                            ?
+                                            .degrees(-180)
+                                            :
+                                            .degrees(0)
+                                        )
+                                        :
+                                        .degrees(0)
                                     )
                                     .offset(
-                                        x: 0,
-                                        y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                        isTopViewSwipe
+                                        ?
+                                        (
+                                            // 맨 위 카드만 적용
+                                            index==(maxID-1)
+                                            ?
+                                            CGSize(width: -DefineSize.Screen.Width, height: 100)
+                                            :
+                                            CGSize(width: 0, height: 0)
+                                        )
+                                        :
+                                        CGSize(width: 0, height: 0)
+                                    )
+                                    .animation(
+                                        .easeInOut(duration: 0.3),
+                                        value:
+                                            isTopViewSwipe
+                                            ?
+                                            (
+                                                // 맨 위 카드만 적용
+                                                index==(maxID-1)
+                                                ?
+                                                -180
+                                                :
+                                                0
+                                            )
+                                            :
+                                            0
                                     )
                                 }
                             }
@@ -181,12 +266,10 @@ extension TabSwipeCardPage: View {
                             
                             
                             
-                            
+                            //MARK: - 카드 랜덤 섞기 뷰
     //                        randomCardShuffleView
     //                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     //                            //.opacity(self.isShowRandomCardShuffle ? 1 : 0)
-                            
-                            
                             ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
                                 SwipeView(
                                     card: card,
@@ -495,6 +578,7 @@ extension TabSwipeCardPage: View {
                 }
             }
         }
+        
     }
 
     var header: some View {
@@ -519,6 +603,20 @@ extension TabSwipeCardPage: View {
                             .foregroundColor(.primaryDefault)
                             .padding(.bottom, 5)
                     )
+            })
+            
+            Spacer()
+            
+            Button(action: {
+                isAutoPlay.toggle()
+            }, label: {
+                Image(systemName: isAutoPlay ? "autostartstop.slash" : "autostartstop")
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit).frame(height: 22)
+                    .foregroundColor(.gray25)
+                    .padding(7).background(Color.primaryDefault) // 클릭 잘 되도록
+                    .padding(.trailing, 20)
             })
             
         }
@@ -658,104 +756,6 @@ extension TabSwipeCardPage: View {
             }
         }
     }
-    // 디자인 구버전
-//    var subCategoryTabView: some View {
-//        ScrollViewReader { proxy in
-//            ScrollView(.horizontal, showsIndicators: false) {
-//                HStack(spacing: 0) {
-//                    
-//                    if viewModel.subCategoryList.count > 0 {
-//                        ForEach(Array(viewModel.subCategoryList.enumerated()), id: \.offset) { index, element in
-//                            let isSelected = viewModel.categoryTabIndex == index
-//                            
-//                            VStack(spacing: 0) {
-//                                Text(element)
-//                                    .font(viewModel.categoryTabIndex==index ? .buttons1420Medium : .body21420Regular)
-//                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.gray25 : Color.gray850)
-//                                    .frame(minWidth: 70)
-//                                    .frame(height: 40)
-//                                    .padding(.horizontal, 15)
-//                                    .clipShape(Capsule())
-//                                    .overlay(Capsule().stroke(isSelected
-//                                                                                      ? Color.stateActivePrimaryDefault
-//                                                                                      : Color.gray199.opacity(1), lineWidth: 1))
-//                                    .background(Capsule().fill(isSelected
-//                                                                                       ? Color.stateActivePrimaryDefault
-//                                                                                       : Color.gray25))
-//                                    .padding(.vertical, 10)
-//                                    //.shadow(color: Color.shadowColor, radius: 3, x: 0, y: 1)
-//                                    // (주의!).onTapGesture 호출하는 위치에 따라서 클릭 감도 차이남
-//                                    .onTapGesture {
-//                                        
-//                                        /**
-//                                         * 카테고리 버튼 클릭했을 때,
-//                                         * 왜 -1 을 해줘야 제대로 동작하는거지?????
-//                                         *
-//                                         */
-//                                        viewModel.categoryTabIndex = index
-//                                        
-//                                        scrollToElement(with: proxy)
-////                                        withAnimation {
-////                                            proxy.scrollTo(index, anchor: .top)
-////                                        }
-//                                        
-//                                        
-//                                        viewModel.requestSwipeListByCategory(
-//                                            main_category: self.selectedMainCategoryItem,
-//                                            sub_category: element,
-//                                            sortType: .Latest,
-//                                            isSuccess: { success in
-//                                                //
-//                                            }
-//                                        )
-//                                        
-//                                        
-//                                        
-//        //                                    scrollToTopAimated.toggle()
-//        //                                    moveToTopIndicator.toggle()
-//        //                                    callRemoteData()
-//                                        
-//                                        
-//                                        
-//                                        //viewModel.resetSwipeList(category: element)
-//                                        
-//                                    }
-//                                    .onChange(of: viewModel.moveCategoryTab) {
-//                                        if viewModel.moveCategoryTab {
-//                                            
-//                                            scrollToElement(with: proxy)
-//                                            
-////                                            withAnimation {
-////                                                proxy.scrollTo(viewModel.categoryTabIndex, anchor: .top)
-////                                            }
-//                                            
-//                                            //viewModel.resetSwipeList(category: viewModel.topTabBarList[clickedSubTabIndex])
-//                                            
-//                                            
-//                                            viewModel.requestSwipeListByCategory(
-//                                                main_category: self.selectedMainCategoryItem,
-//                                                sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
-//                                                sortType: .Latest,
-//                                                isSuccess: { success in
-//                                                }
-//                                            )
-//                                            
-//                                            viewModel.moveCategoryTab = false // 초기화
-//                                        }
-//                                        
-//                                        
-//                                    }
-//                                    .id(index)
-//                            }
-//                            .padding(.leading, index==0 ? 20 : 10)
-//                            .padding(.trailing, (index==viewModel.subCategoryList.count-1) ? 20 : 0)
-//                            
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     var emptyBubbleShapeView: some View {
         CustomBubbleShape(
@@ -837,7 +837,7 @@ extension TabSwipeCardPage: View {
                     .stroke(Color.yellow, lineWidth: 2.0)
                     .padding(100)
                     //.frame(width: 200, height: 300)
-                // 회전과 위치 이동을 적용합니다.
+                    // 회전과 위치 이동을 적용합니다.
                     .rotationEffect(.degrees(randomCardRotationDegrees[index]))
                     .offset(randomCardOffsets[index])
                     .animation(.easeInOut(duration: 0.5), value: randomCardRotationDegrees[index])
@@ -888,7 +888,7 @@ extension TabSwipeCardPage {
         return viewModel.swipeList.map { ($0.customId ?? 0) }.min() ?? 0
     }
     
-    func onLike(_ card: SwipeDataList, type likeType: LikeType) {
+    private func onLike(_ card: SwipeDataList, type likeType: LikeType) {
         switch likeType {
         case .like:
             fLog("You liked \(card.korean ?? "")")
@@ -900,13 +900,13 @@ extension TabSwipeCardPage {
     }
     
     //Calucate percentage based on given values
-    public func calculatePercentage(value:Double,percentageVal:Double)->Double{
+    private func calculatePercentage(value:Double,percentageVal:Double)->Double{
         // 300의 4는 몇 %?  == (100 * 4) / 300
         let val = 100.0 * value
         return val / percentageVal
     }
     
-    public func getCurrentIndexOfList(_maxID: Int) -> Int {
+    private func getCurrentIndexOfList(_maxID: Int) -> Int {
         //fLog("idpil::: 111 : \(viewModel.fixedSwipeList.count)")
         //fLog("idpil::: 1111 : \(viewModel.swipeList.count)")
         
@@ -932,14 +932,11 @@ extension TabSwipeCardPage {
         return resultArr.firstIndex(of: true) ?? -1
     }
     
-    func removeProfile(_ card: SwipeDataList) {
+    private func removeProfile(_ card: SwipeDataList) {
         guard let index = viewModel.swipeList.firstIndex(of: card) else { return }
 
         viewModel.swipeList.remove(at: index)
     }
-    
-    
-    
     
     // 네 개의 Rectangle 뷰가 각기 다른 방향으로 이동하고 회전하는 애니메이션 기능
     private func doShuffleRandomCard() {
@@ -1055,6 +1052,22 @@ extension TabSwipeCardPage {
             
             return true
         }
+    }
+    
+    private func startTimer() {
+        guard cancellable == nil else {
+            return
+        }
+        timer = Timer.publish(every: seconds, on: .main, in: .common)
+        cancellable = timer.connect()
+    }
+    
+    private func stopTimer() {
+        guard cancellable != nil else {
+            return
+        }
+        cancellable?.cancel()
+        cancellable = nil
     }
 }
 

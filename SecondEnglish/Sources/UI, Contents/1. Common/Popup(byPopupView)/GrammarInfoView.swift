@@ -13,7 +13,7 @@ struct GrammarInfoView: View {
     private struct sizeInfo {
         static let grammarTextFont_title: Font = Font.title32028Bold
         static let grammarTextFont_content: Font = Font.caption11317Regular
-        static let grammarTextFontColor_title: Color = Color.orange
+        static let grammarTextFontColor_title: Color = Color.primaryDefault
         static let grammarTextFontColor_content: Color = Color.gray850
         static let grammarTextPaddingTop_title: CGFloat = 20.0
         static let grammarTextPaddingTop_content: CGFloat = 10.0

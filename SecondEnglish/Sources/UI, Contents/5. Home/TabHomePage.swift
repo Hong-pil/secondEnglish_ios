@@ -168,9 +168,21 @@ extension TabHomePage: View {
                         if scrollPosition < -amountToPullBeforeRefreshing && !isCurrentlyRefreshing {
                             isCurrentlyRefreshing = true
                             Task {
-                                await refreshData()
+                                //await refreshData()
                                 await MainActor.run {
-                                    isCurrentlyRefreshing = false
+                                    // 카테고리별 진도확인 리스트 조회
+                                    viewModel.requestMyCategoryProgress()
+                                    
+                                    if selectedTab == 0 {
+                                        viewModel.requestMyPostCardList(isSuccess: { success in
+                                            isCurrentlyRefreshing = false
+                                        })
+                                    }
+                                    else if selectedTab == 1 {
+                                        viewModel.requestMyLikeCardList(isSuccess: { success in
+                                            isCurrentlyRefreshing = false
+                                        })
+                                    }
                                 }
                             }
                         }
@@ -192,14 +204,6 @@ extension TabHomePage: View {
             if !viewModel.isFirst {
                 viewModel.isFirst = true
                 
-                viewModel.requestMyLikeCardList(isSuccess: { success in
-                    //
-                })
-                
-                viewModel.requestMyPostCardList(isSuccess: { success in
-                    //
-                })
-                
                 // 카테고리별 진도확인 리스트 조회
                 viewModel.requestMyCategoryProgress()
             }
@@ -208,10 +212,18 @@ extension TabHomePage: View {
             //fLog("idpil::: UserManager.shared.isLogin : \(UserManager.shared.isLogin)")
             // 여기 뷰 띄워놓고 로그인뷰를 팝업으로 띄운 다음 로그인 진행을 하기 때문에, 로그인 성공한 경우 데이터 다시 요청
             if UserManager.shared.isLogin {
-                viewModel.requestMyLikeCardList(isSuccess: { success in
-                    //
-                })
+                if selectedTab == 0 {
+                    viewModel.requestMyPostCardList(isSuccess: { success in
+                        //
+                    })
+                }
+                else if selectedTab == 1 {
+                    viewModel.requestMyLikeCardList(isSuccess: { success in
+                        //
+                    })
+                }
                 
+                // 카테고리별 진도확인 리스트 조회
                 viewModel.requestMyCategoryProgress()
             }
         }
@@ -525,6 +537,13 @@ extension TabHomePage: View {
                 myPostEmptyView
             }
         }
+        .onAppear {
+            if viewModel.myPostCardCategoryList.isEmpty {
+                viewModel.requestMyPostCardList(isSuccess: { success in
+                    //
+                })
+            }
+        }
     }
     
     var myLikeCardList: some View {
@@ -611,6 +630,13 @@ extension TabHomePage: View {
                 myLikeEmptyView
             }
         }
+        .onAppear {
+            if viewModel.myLikeCardCategoryList.isEmpty {
+                viewModel.requestMyLikeCardList(isSuccess: { success in
+                    //
+                })
+            }
+        }
     }
 }
 
@@ -618,7 +644,8 @@ extension TabHomePage {
     // Pull To Refresh
     func refreshData() async {
         // do work to asyncronously refresh your data here
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        //try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
     }
 }
 
