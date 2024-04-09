@@ -7,15 +7,16 @@
 
 import SwiftUI
 import AVFoundation
-import NaturalLanguage
 
 struct SwipeCardBackView: View {
+    @StateObject private var speechManager = SpeechSynthesizerManager()
+    
     let card: SwipeDataList
     
     // TTS
     @State var ttsText: String = ""
     @State var isTtsBtnClick: Bool = false
-    let languageRecognizer = NLLanguageRecognizer() // 언어 감지 (아웃풋 : en, ko, ..)
+    
     var speechSynthesizer: AVSpeechSynthesizer // TTS
     
 
@@ -30,6 +31,8 @@ struct SwipeCardBackView: View {
                     .foregroundColor(.gray850)
                 
                 Spacer()
+                
+                Text(speechManager.isSpeaking ? "Speaking..." : "Speak")
                 
                 Image(systemName: "speaker.wave.2")
                     .foregroundColor(.gray850)
@@ -50,20 +53,8 @@ struct SwipeCardBackView: View {
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.stateActivePrimaryDefault))
         }
         .onChange(of: isTtsBtnClick) {
-            languageRecognizer.processString(ttsText)
-            
-            if let dominantLanguage = languageRecognizer.dominantLanguage {
-                fLog("로그::: 감지된 언어 : \(dominantLanguage.rawValue)")
-                
-                
-                let utterance = AVSpeechUtterance(string: ttsText)
-                utterance.pitchMultiplier = 1.0 // 목소리의 높낮이
-                utterance.rate = 0.5 // 읽는 속도
-                //utterance.volume = 1.0 // 음성 볼륨
-                //utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                utterance.voice = AVSpeechSynthesisVoice(language: dominantLanguage.rawValue)
-                 
-                speechSynthesizer.speak(utterance)
+            if !speechManager.isSpeaking {
+                speechManager.speak(card.english ?? "")
             }
         }
         .onDisappear {

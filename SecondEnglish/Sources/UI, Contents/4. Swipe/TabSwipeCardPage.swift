@@ -37,6 +37,7 @@ struct TabSwipeCardPage {
     @State private var timer: Timer.TimerPublisher
     @State private var cancellable: Cancellable?
     private let seconds: Double = 3.0
+    @State private var topCard: SwipeDataList? = nil
     
     
     /**
@@ -109,21 +110,25 @@ extension TabSwipeCardPage: View {
                 VStack(spacing: 0) {
                     ZStack {
                         GeometryReader { geometry in
-                            DoneView {
-                                withAnimation {
-                                    //self.users = self.setList()
-                                    viewModel.requestSwipeList(sortType: .Latest) { success in
-                                        if success {
-                                            //
+                            
+                            // 서브 카테고리 마지막인 경우, 결과 View 보여주기
+                            if viewModel.categoryTabIndex == viewModel.subCategoryList.count-1 {
+                                DoneView {
+                                    withAnimation {
+                                        //self.users = self.setList()
+                                        viewModel.requestSwipeList(sortType: .Latest) { success in
+                                            if success {
+                                                //
+                                            }
                                         }
                                     }
                                 }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                            
-                            
                             
                             ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
+                                
+                                self.setTopCard(index: index, card: card)
                                 
                                 // Range Operator
                                 if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
@@ -131,6 +136,8 @@ extension TabSwipeCardPage: View {
                                     //let _ = fLog("로그확인::: minID : \(minID)")
                                     //let _ = fLog("로그확인::: index : \(index)")
                                     //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
+                                    
+                                    
                                     
                                     // 자동모드에서 offset 설정해야 하는데, SwipeView()에서 이미 offset 설정을 하고 있기 때문에 VStack으로 감싸준다.
                                     VStack(spacing: 0) {
@@ -183,28 +190,6 @@ extension TabSwipeCardPage: View {
                                             x: 0,
                                             y: self.getCardOffset(geometry, id: (card.customId ?? 0))
                                         )
-                                    }
-                                    // 자동 모드
-                                    .onChange(of: isAutoPlay) {
-                                        if isAutoPlay {
-                                            startTimer()
-                                        } else {
-                                            stopTimer()
-                                        }
-                                    }
-                                    .onReceive(timer) { _ in
-                                        if isAutoPlay {
-                                            isTopViewSwipe = true
-                                            
-                                            // 애니메이션 0.3초 동안 진행되기 때문에, 0.3초 후에 실행
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                                
-                                                // 맨 위에 있는 카드 제거
-                                                removeProfile(card)
-                                                
-                                                isTopViewSwipe = false
-                                            }
-                                        }
                                     }
                                     .rotationEffect(
                                         isTopViewSwipe
@@ -449,6 +434,11 @@ extension TabSwipeCardPage: View {
                 }
             }
         }
+        .onDisappear {
+            if isAutoPlay {
+                stopTimer()
+            }
+        }
         .onChange(of: maxID) {
             //fLog("idpil::: currentID : \(currentID)")
             //fLog("idpil::: 현재:\(viewModel.swipeList[currentID-1].korean ?? "")")
@@ -575,6 +565,45 @@ extension TabSwipeCardPage: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     viewModel.cutSwipeList(percent: bottomSheetManager.pressedCardCutPercent)
                     StatusManager.shared.loadingStatus = .Close
+                }
+            }
+        }
+        .onChange(of: scenePhase) {
+            switch scenePhase {
+            case .active:
+                if isAutoPlay {
+                    startTimer()
+                }
+            case .background, .inactive:
+                stopTimer()
+            default:
+                break
+            }
+        }
+        // 자동 모드
+        .onChange(of: isAutoPlay) {
+            if isAutoPlay {
+                startTimer()
+            } else {
+                stopTimer()
+            }
+        }
+        .onReceive(timer) { _ in
+            //fLog("idpil::: timer 호출")
+            
+            if isAutoPlay {
+                if let card = self.topCard {
+                    isTopViewSwipe = true
+                    
+                    // 애니메이션 0.3초 동안 진행되기 때문에, 0.3초 후에 실행
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        // 맨 위에 있는 카드 제거
+                        removeProfile(card) { isDone in
+                            if isDone {
+                                isTopViewSwipe = false
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -858,6 +887,15 @@ extension TabSwipeCardPage: View {
         }
     }
     
+    private func setTopCard(index: Int, card: SwipeDataList) -> some View {
+        if index==(maxID-1) {
+            //fLog("idpil::: topCard : \(card.korean ?? "")")
+            self.topCard = card
+        }
+        
+        return EmptyView()
+    }
+    
 }
 
 extension TabSwipeCardPage {
@@ -932,10 +970,12 @@ extension TabSwipeCardPage {
         return resultArr.firstIndex(of: true) ?? -1
     }
     
-    private func removeProfile(_ card: SwipeDataList) {
+    private func removeProfile(_ card: SwipeDataList, isDone: (Bool)->Void = {_ in}) {
         guard let index = viewModel.swipeList.firstIndex(of: card) else { return }
 
         viewModel.swipeList.remove(at: index)
+        
+        isDone(true)
     }
     
     // 네 개의 Rectangle 뷰가 각기 다른 방향으로 이동하고 회전하는 애니메이션 기능
