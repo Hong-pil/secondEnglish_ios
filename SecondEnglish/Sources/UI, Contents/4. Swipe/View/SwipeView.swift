@@ -11,11 +11,13 @@ import AVFoundation
 struct SwipeView: View {
     //let profile: Profile
     let card: SwipeDataList
-    var speechSynthesizer: AVSpeechSynthesizer // TTS
     let onRemove: (LikeType) -> Void
     let isTapLikeBtn: (Int, Bool) -> Void
     let isTapMoreBtn: () -> Void
     let isLastCard: Bool // 맨 위에 보이는 카드만 Drag Gesture 가능
+    //@State var isFlipped: Bool = false
+    var isRootViewFlipped: Bool = false
+    @Binding var isCardFlipped: Bool
     @State private var offset = CGSize.zero
     
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
@@ -26,9 +28,10 @@ struct SwipeView: View {
             
             FlipView(
                 item: card,
+                isRootViewFlipped: isRootViewFlipped,
+                isCardFlipped: $isCardFlipped,
                 isTapLikeBtn: isTapLikeBtn,
                 isTapMoreBtn: isTapMoreBtn,
-                speechSynthesizer: speechSynthesizer,
                 isLastCard: isLastCard
             )
             

@@ -13,6 +13,7 @@ import Combine
 struct TabSwipeCardPage {
     @StateObject var viewModel = SwipeCardViewModel.shared
     @StateObject var bottomSheetManager = BottomSheetManager.shared
+    @StateObject private var speechManager = SpeechSynthesizerManager()
     
     @State private var isShowMainCategoryButtonAnimation = false
     @State private var isShowMainCategoryListView = false
@@ -20,14 +21,6 @@ struct TabSwipeCardPage {
     @State private var curPercent: Double = 0.0
     @State private var clickCardItem: SwipeDataList?
     @AppStorage(DefineKey.mainCategoryName) var selectedMainCategoryItem: String = ""
-    
-    /**
-     * [주의사항]
-     * 자식뷰에서 변수 선언하면 기능 작동은 하는데, 로딩시간이 엄청 길어지는 문제가 있음.
-     * 그리고 'Unable to list voice folder'라는 경고 문구가 뜸.
-     * 그래서 전역변수 하나만 생성해서, 자식뷰로 넘겨주는 방식으로 해결했음.
-     */
-    let speechSynthesizer = AVSpeechSynthesizer() // TTS
     
     // 자동 모드
     @State private var isAutoPlay: Bool = false
@@ -38,6 +31,9 @@ struct TabSwipeCardPage {
     @State private var cancellable: Cancellable?
     private let seconds: Double = 3.0
     @State private var topCard: SwipeDataList? = nil
+    @State var isRootViewFlipped: Bool = false
+    @State var isCardFlipped: Bool = false
+    
     
     
     /**
@@ -143,7 +139,6 @@ extension TabSwipeCardPage: View {
                                     VStack(spacing: 0) {
                                         SwipeView(
                                             card: card,
-                                            speechSynthesizer: speechSynthesizer,
                                             onRemove: { likeType in
                                                 withAnimation {
                                                     removeProfile(card)
@@ -178,7 +173,9 @@ extension TabSwipeCardPage: View {
                                                 
                                                 self.clickCardItem = card
                                             },
-                                            isLastCard: index==(maxID-1) ? true : false
+                                            isLastCard: index==(maxID-1) ? true : false,
+                                            isRootViewFlipped: isRootViewFlipped,
+                                            isCardFlipped: $isCardFlipped
                                         )
                                         //MARK: 책 쌓아놓은 것 같은 효과
                                         //.animation(.spring())
@@ -258,11 +255,11 @@ extension TabSwipeCardPage: View {
                             ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
                                 SwipeView(
                                     card: card,
-                                    speechSynthesizer: speechSynthesizer,
                                     onRemove: { _ in},
                                     isTapLikeBtn: { _, _ in},
                                     isTapMoreBtn: {},
-                                    isLastCard: false
+                                    isLastCard: false,
+                                    isCardFlipped: $isCardFlipped
                                 )
                                 .frame(
                                     height: geometry.size.height * 0.7
@@ -582,10 +579,24 @@ extension TabSwipeCardPage: View {
         }
         // 자동 모드
         .onChange(of: isAutoPlay) {
+            
+            /**
+             * 자동 모드 후보 1 (타이머 작동시켜 3초 간격으로 넘어가게 하는 방식)
+             */
+//            if isAutoPlay {
+//                startTimer()
+//            } else {
+//                stopTimer()
+//            }
+            
+            
+            /**
+             * 자동 모드 후보 2
+             */
             if isAutoPlay {
-                startTimer()
+                startAutoMode()
             } else {
-                stopTimer()
+                stopAutoMode()
             }
         }
         .onReceive(timer) { _ in
@@ -601,6 +612,47 @@ extension TabSwipeCardPage: View {
                         removeProfile(card) { isDone in
                             if isDone {
                                 isTopViewSwipe = false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .onChange(of: speechManager.isSpeaking) {
+            
+            // TTS 중
+            if speechManager.isSpeaking {
+                fLog("idpil::: speaking")
+            } 
+            // TTS 완료
+            else {
+                fLog("idpil::: speaked")
+                
+                // 한글 카드가 보이고 있는 상태 (한글 문장 읽어 주기 완료)
+                if !isCardFlipped {
+                    
+                    // 카드 뒤집어서 영어 문장 보여주기
+                    withAnimation(.easeIn(duration: 0.2)) {
+                        isRootViewFlipped = true
+                    }
+                    
+                    // 영어 문장 읽어주기
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if !speechManager.isSpeaking {
+                            if let card = self.topCard {
+                                speechManager.speak(card.english ?? "")
+                            }
+                        }
+                    }
+                    
+                }
+                // 영어 카드가 보이고 있는 상태 (영어 문장 읽어 주기 완료)
+                else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.swipeTopCard() {
+                            // 카드 넘겨짐 -> 자동모드인 경우 반복 실행
+                            if isAutoPlay {
+                                startAutoMode()
                             }
                         }
                     }
@@ -647,6 +699,18 @@ extension TabSwipeCardPage: View {
                     .padding(7).background(Color.primaryDefault) // 클릭 잘 되도록
                     .padding(.trailing, 20)
             })
+            //.disabled(speechManager.isSpeaking && !speechManager.isPaused)
+            
+            
+            Button("Pause") {
+                speechManager.pauseSpeaking()
+            }
+            .disabled(!speechManager.isSpeaking || speechManager.isPaused)
+            
+            Button("Stop") {
+                speechManager.stopSpeaking()
+            }
+            .disabled(!speechManager.isSpeaking)
             
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -972,7 +1036,7 @@ extension TabSwipeCardPage {
     
     private func removeProfile(_ card: SwipeDataList, isDone: (Bool)->Void = {_ in}) {
         guard let index = viewModel.swipeList.firstIndex(of: card) else { return }
-
+        
         viewModel.swipeList.remove(at: index)
         
         isDone(true)
@@ -1081,7 +1145,7 @@ extension TabSwipeCardPage {
     // 메인 카테고리 리스트 뷰가 띄워져 있으면 닫는다.
     private func isMainCategoryListViewClose() -> Bool {
         if isShowMainCategoryListView {
-           
+            
             isShowMainCategoryListView = false
             withAnimation {
                 isShowMainCategoryButtonAnimation = false
@@ -1108,6 +1172,64 @@ extension TabSwipeCardPage {
         }
         cancellable?.cancel()
         cancellable = nil
+    }
+    
+    private func startAutoMode() {
+        // 영어 카드가 보이고 있는 상태
+        // 1. 영어 문장 읽어주기
+        // 2. 카드 넘김
+        if isCardFlipped {
+            // 영어 문장 읽어주기
+            if !speechManager.isSpeaking {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if let card = self.topCard {
+                        speechManager.speak(card.english ?? "")
+                    }
+                }
+            }
+        }
+        // 한글 카드가 보이고 있는 상태
+        // 1. 한글 문장 읽어주기
+        // 2. 카드 뒤집어서 영어 문장 보여주기
+        // 3. 영어 문장 읽어주기
+        // 4. 카드 넘김
+        else {
+            // 한글 문장 읽어주기
+            if !speechManager.isSpeaking {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if let card = self.topCard {
+                        speechManager.speak(card.korean ?? "")
+                    }
+                }
+            }
+        }
+    }
+    
+    private func stopAutoMode() {
+        speechManager.stopSpeaking()
+    }
+    
+    private func swipeTopCard(isFinish: @escaping()->Void={}) {
+        if let card = self.topCard {
+            // Swipe 왼쪽으로 애니메이션 시작
+            isTopViewSwipe = true
+            
+            // Swipe 애니메이션 시작과 동시에 맨 위에 있는 카드를 뒤집어야,
+            // 아래 맨 위에 있는 카드를 제거했을 때 보이는 다음 카드가 한글로 보임.
+            isRootViewFlipped = false
+            
+            // 애니메이션 0.3초 동안 진행되기 때문에, 0.3초 후에 실행
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                // 맨 위에 있는 카드 제거
+                removeProfile(card) { isDone in
+                    if isDone {
+                        isTopViewSwipe = false
+                        
+                        isFinish()
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -73,6 +73,7 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
     private var didFinishSpeech = PassthroughSubject<Void, Never>()
     
     @Published var isSpeaking: Bool = false
+    @Published var isPaused: Bool = false
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -98,6 +99,10 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
         
         
         
+        if speechSynthesizer.isSpeaking {
+            return // 이미 말하고 있다면, 새로운 말하기 요청을 무시합니다.
+        }
+        
         languageRecognizer.processString(text)
         
         if let dominantLanguage = languageRecognizer.dominantLanguage {
@@ -107,7 +112,7 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
              * 설정
              */
             let utterance = AVSpeechUtterance(string: text)
-            utterance.pitchMultiplier = 1.3 // 목소리의 높낮이
+            utterance.pitchMultiplier = 1.1 // 목소리의 높낮이
             utterance.rate = 0.5 // 읽는 속도
             //utterance.volume = 1.0 // 음성 볼륨
             //utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
@@ -117,13 +122,34 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
              * 실행
              */
             isSpeaking = true
+            isPaused = false
             speechSynthesizer.speak(utterance)
-            
         }
     }
     
+    func pauseSpeaking() {
+        let wasPaused = speechSynthesizer.pauseSpeaking(at: .immediate)
+        isPaused = wasPaused
+    }
+    
+    func stopSpeaking() {
+        let wasStopped = speechSynthesizer.stopSpeaking(at: .immediate)
+        if wasStopped {
+            isSpeaking = false
+            isPaused = false
+        }
+    }
+    
+    
+    // AVSpeechSynthesizerDelegate 메서드 구현
+//    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+//        didFinishSpeech.send(())
+//    }
+    
     // AVSpeechSynthesizerDelegate 메서드 구현
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        isSpeaking = false
+        isPaused = false
         didFinishSpeech.send(())
     }
 }

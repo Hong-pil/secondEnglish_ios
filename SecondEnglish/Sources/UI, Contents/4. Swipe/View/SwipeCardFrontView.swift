@@ -16,6 +16,8 @@ import NaturalLanguage
  * 3. swiftui에서 [String] 타입의 Text를 보여줄 때, 단어 길이만큼 밑줄을 표시하는 기능을 알려줘.
  */
 struct SwipeCardFrontView: View {
+    @StateObject private var speechManager = SpeechSynthesizerManager()
+    
     let card: SwipeDataList
     var hintTxt: [String]
     let isTapLikeBtn: (Int, Bool) -> Void
@@ -25,12 +27,8 @@ struct SwipeCardFrontView: View {
     // 사용자가 보게 될 텍스트를 관리할 상태 변수
     @State private var visibleHintText = ""
     
-    // TTS
-    //@State var ttsText: String = ""
-    //@State var isTtsBtnClick: Bool = false
-    //let languageRecognizer = NLLanguageRecognizer() // 언어 감지 (아웃풋 : en, ko, ..)
-    //let speechSynthesizer = AVSpeechSynthesizer() // TTS
-
+    @Binding var isCardFlipped: Bool
+    
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
@@ -163,44 +161,29 @@ struct SwipeCardFrontView: View {
                             
                         }
                     
-//                    Image(systemName: "speaker.wave.2")
-//                        .foregroundColor(.gray850)
-//                        .padding(10) // 클릭 범위 확장
-//                        .background(Color.gray25) // 클릭 범위 확장
-//                        .onTapGesture {
-//                            isTtsBtnClick.toggle()
-//                            ttsText = card.korean ?? ""
-//                        }
+                    Image(systemName: "speaker.wave.2.circle.fill")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 25, height: 25)
+                        .foregroundColor(speechManager.isSpeaking ? Color.primaryDefault : Color.stateDisabledGray200)
+                        .padding(10) // 클릭 범위 확장
+                        .background(Color.gray25) // 클릭 범위 확장
+                        .onTapGesture {
+                            if !speechManager.isSpeaking {
+                                speechManager.speak(card.korean ?? "")
+                            }
+                        }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            .onAppear {
+                isCardFlipped = false
             }
             .padding()
             .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
             .background(Color.gray25)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.stateActivePrimaryDefault.opacity(0.6)))
-        }
-//        .onChange(of: isTtsBtnClick) {
-//            languageRecognizer.processString(ttsText)
-//            
-//            if let dominantLanguage = languageRecognizer.dominantLanguage {
-//                fLog("로그::: 감지된 언어 : \(dominantLanguage.rawValue)")
-//                
-//                
-//                let utterance = AVSpeechUtterance(string: ttsText)
-//                utterance.pitchMultiplier = 1.0 // 목소리의 높낮이
-//                utterance.rate = 0.5 // 읽는 속도
-//                //utterance.volume = 1.0 // 음성 볼륨
-//                //utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-//                utterance.voice = AVSpeechSynthesisVoice(language: dominantLanguage.rawValue)
-//                 
-//                speechSynthesizer.speak(utterance)
-//            }
-//        }
-        .onDisappear {
-            //fLog("onDisappear 호출 !!!!!!!!!!!!!!!!")
-            // 아래 코드 적용 안 됨
-            //speechSynthesizer.stopSpeaking(at: .immediate)
         }
     }
 }
