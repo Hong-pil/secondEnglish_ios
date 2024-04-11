@@ -92,8 +92,13 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
     
     func speak(_ text: String) {
         // ChatGPT 원래 코드
+//        if speechSynthesizer.isSpeaking {
+//            return // 이미 말하고 있다면, 새로운 말하기 요청을 무시합니다.
+//        }
+//        
 //        let utterance = AVSpeechUtterance(string: text)
 //        isSpeaking = true
+//        isPaused = false
 //        speechSynthesizer.speak(utterance)
         
         
@@ -112,10 +117,11 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
              * 설정
              */
             let utterance = AVSpeechUtterance(string: text)
-            utterance.pitchMultiplier = 1.1 // 목소리의 높낮이
+            utterance.pitchMultiplier = 1.0 // 목소리의 높낮이
             utterance.rate = 0.5 // 읽는 속도
             //utterance.volume = 1.0 // 음성 볼륨
             //utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+            //fLog("idpil::: speechVoices: \(AVSpeechSynthesisVoice.speechVoices())")
             utterance.voice = AVSpeechSynthesisVoice(language: dominantLanguage.rawValue)
             
             /**

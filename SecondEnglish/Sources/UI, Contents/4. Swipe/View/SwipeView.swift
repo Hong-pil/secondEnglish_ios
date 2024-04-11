@@ -15,6 +15,12 @@ struct SwipeView: View {
     let isTapLikeBtn: (Int, Bool) -> Void
     let isTapMoreBtn: () -> Void
     let isLastCard: Bool // 맨 위에 보이는 카드만 Drag Gesture 가능
+    let isTapFrontSpeakBtn: () -> Void
+    let isTapBackSpeakBtn: () -> Void
+    let isFrontSpeaking: Bool
+    let isBackSpeaking: Bool
+    let isAutoPlay: Bool
+    
     //@State var isFlipped: Bool = false
     var isRootViewFlipped: Bool = false
     @Binding var isCardFlipped: Bool
@@ -32,7 +38,12 @@ struct SwipeView: View {
                 isCardFlipped: $isCardFlipped,
                 isTapLikeBtn: isTapLikeBtn,
                 isTapMoreBtn: isTapMoreBtn,
-                isLastCard: isLastCard
+                isLastCard: isLastCard,
+                isTapFrontSpeakBtn: isTapFrontSpeakBtn,
+                isTapBackSpeakBtn: isTapBackSpeakBtn,
+                isFrontSpeaking: isFrontSpeaking,
+                isBackSpeaking: isBackSpeaking,
+                isAutoPlay: isAutoPlay
             )
             
             // Stamps for like/dislike/superlike that fade in as you swipe
@@ -62,8 +73,12 @@ struct SwipeView: View {
         .gesture(
             DragGesture()
                 .onChanged { gesture in
-                    if isLastCard {
-                        offset = gesture.translation
+                    if isAutoPlay {
+                        UserManager.shared.showCardAutoModeError = true
+                    } else {
+                        if isLastCard {
+                            offset = gesture.translation
+                        }
                     }
                 }
                 .onEnded { gesture in

@@ -21,6 +21,7 @@
 "se_a_disconnected_network" = "네트워크 상태를 확인해 주세요.";
 "card_shuffle_error" = "더이상 랜덤정렬은 불가능해요.";
 "card_cut_error" = "더이상 자르기는 불가능해요.";
+"card_auto_error" = "자동모드를 해제해주세요.";
 "m_read_alam" = "모든 알림 읽기";
 "m_view_alam" = "모든 알림 보기";
 "a_previous_alam_check" = "이전 알림 확인하기";

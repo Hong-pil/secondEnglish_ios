@@ -16,12 +16,15 @@ import NaturalLanguage
  * 3. swiftui에서 [String] 타입의 Text를 보여줄 때, 단어 길이만큼 밑줄을 표시하는 기능을 알려줘.
  */
 struct SwipeCardFrontView: View {
-    @StateObject private var speechManager = SpeechSynthesizerManager()
+    //@StateObject private var speechManager = SpeechSynthesizerManager()
     
     let card: SwipeDataList
     var hintTxt: [String]
     let isTapLikeBtn: (Int, Bool) -> Void
     let isTapMoreBtn: () -> Void
+    let isTapSpeakBtn: () -> Void
+    let isSpeaking: Bool
+    let isAutoPlay: Bool
     
     @State private var currentHintWordIndex = 0
     // 사용자가 보게 될 텍스트를 관리할 상태 변수
@@ -132,46 +135,44 @@ struct SwipeCardFrontView: View {
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장
                         .onTapGesture {
-                            
-//                            fLog("currentHintWordIndex : \(currentHintWordIndex)")
-//                            fLog("hintTxt.count : \(hintTxt.count)")
-//                            fLog((currentHintWordIndex > -1) ? hintTxt[currentHintWordIndex] : "")
-                            
-//                            if currentHintWordIndex < hintTxt.count-1 {
-//                                currentHintWordIndex = (currentHintWordIndex + 1) % hintTxt.count
-//                            }
-                            
-                            
-                            
-                            // 모든 단어를 다 보여줬다면 더 이상 업데이트하지 않음
-                            guard currentHintWordIndex < hintTxt.count else { return }
-                            
-                            // 다음 단어를 추가
-                            visibleHintText += (currentHintWordIndex > 0 ? " " : "") + hintTxt[currentHintWordIndex]
-                            
-                            // 보여줄 단어 수를 업데이트
-                            currentHintWordIndex += 1
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
+                            if isAutoPlay {
+                                UserManager.shared.showCardAutoModeError = true
+                            }
+                            else {
+//                                fLog("currentHintWordIndex : \(currentHintWordIndex)")
+//                                fLog("hintTxt.count : \(hintTxt.count)")
+//                                fLog((currentHintWordIndex > -1) ? hintTxt[currentHintWordIndex] : "")
+//                                
+//                                if currentHintWordIndex < hintTxt.count-1 {
+//                                    currentHintWordIndex = (currentHintWordIndex + 1) % hintTxt.count
+//                                }
+                                
+                                
+                                
+                                // 모든 단어를 다 보여줬다면 더 이상 업데이트하지 않음
+                                guard currentHintWordIndex < hintTxt.count else { return }
+                                
+                                // 다음 단어를 추가
+                                visibleHintText += (currentHintWordIndex > 0 ? " " : "") + hintTxt[currentHintWordIndex]
+                                
+                                // 보여줄 단어 수를 업데이트
+                                currentHintWordIndex += 1
+                            }
                         }
                     
                     Image(systemName: "speaker.wave.2.circle.fill")
                         .resizable()
                         .renderingMode(.template)
                         .frame(width: 25, height: 25)
-                        .foregroundColor(speechManager.isSpeaking ? Color.primaryDefault : Color.stateDisabledGray200)
+                        //.foregroundColor(speechManager.isSpeaking ? Color.primaryDefault : Color.stateDisabledGray200)
+                        .foregroundColor(isSpeaking ? Color.primaryDefault : Color.stateDisabledGray200)
                         .padding(10) // 클릭 범위 확장
                         .background(Color.gray25) // 클릭 범위 확장
                         .onTapGesture {
-                            if !speechManager.isSpeaking {
-                                speechManager.speak(card.korean ?? "")
-                            }
+//                            if !speechManager.isSpeaking {
+//                                speechManager.speak(card.korean ?? "")
+//                            }
+                            isTapSpeakBtn()
                         }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)

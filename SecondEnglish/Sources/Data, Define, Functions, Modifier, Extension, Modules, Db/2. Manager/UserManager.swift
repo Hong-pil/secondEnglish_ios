@@ -25,6 +25,7 @@ class UserManager: ObservableObject {
     @Published var showAlertNetworkError = false
     @Published var showCardShuffleError = false
     @Published var showCardCutError = false
+    @Published var showCardAutoModeError = false
     @Published var showSettingAuth = false
     @Published var showClubJoinAlert = false
     @Published var deletePostAlert = false

@@ -9,9 +9,11 @@ import SwiftUI
 import AVFoundation
 
 struct SwipeCardBackView: View {
-    @StateObject private var speechManager = SpeechSynthesizerManager()
+    //@StateObject private var speechManager = SpeechSynthesizerManager()
     
     let card: SwipeDataList
+    let isTapSpeakBtn: () -> Void
+    let isSpeaking: Bool
     @Binding var isCardFlipped: Bool
     
     var body: some View {
@@ -30,13 +32,15 @@ struct SwipeCardBackView: View {
                     .resizable()
                     .renderingMode(.template)
                     .frame(width: 25, height: 25)
-                    .foregroundColor(speechManager.isSpeaking ? Color.primaryDefault : Color.stateDisabledGray200)
+                    //.foregroundColor(speechManager.isSpeaking ? Color.primaryDefault : Color.stateDisabledGray200)
+                    .foregroundColor(isSpeaking ? Color.primaryDefault : Color.stateDisabledGray200)
                     .padding(10) // 클릭 범위 확장
                     .background(Color.gray25) // 클릭 범위 확장
                     .onTapGesture {
-                        if !speechManager.isSpeaking {
-                            speechManager.speak(card.english ?? "")
-                        }
+//                        if !speechManager.isSpeaking {
+//                            speechManager.speak(card.english ?? "")
+//                        }
+                        isTapSpeakBtn()
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }

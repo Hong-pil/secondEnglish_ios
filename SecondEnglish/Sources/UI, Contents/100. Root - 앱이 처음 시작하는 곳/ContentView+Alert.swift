@@ -45,6 +45,14 @@ struct ContentViewAlert: ViewModifier {
                    popup:
                     CommonPopupView(text: "card_cut_error".localized)
             )
+        // SwipePage 자동모드시 버튼 클릭 불가
+            .popup(isPresenting: $userManager.showCardAutoModeError,
+                   cornerRadius: 5,
+                   locationType: .bottom,
+                   autoDismiss: .after(2),
+                   popup:
+                    CommonPopupView(text: "card_auto_error".localized)
+            )
         // Config Alert
         /*
          긴급공지, 업데이트 강제/권장
