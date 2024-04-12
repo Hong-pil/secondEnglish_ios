@@ -119,11 +119,11 @@ extension TabSwipeCardPage: View {
                                 DoneView {
                                     withAnimation {
                                         //self.users = self.setList()
-                                        viewModel.requestSwipeList(sortType: .Latest) { success in
-                                            if success {
-                                                //
-                                            }
-                                        }
+//                                        viewModel.requestSwipeList(sortType: .Latest) { success in
+//                                            if success {
+//                                                //
+//                                            }
+//                                        }
                                     }
                                 }
                             }
@@ -341,42 +341,52 @@ extension TabSwipeCardPage: View {
                     if !isShowDoneView {
                         HStack(spacing: 15) {
                             Button(action: {
-                                bottomSheetManager.show.swipeCardCut = true
+                                if isAutoPlay {
+                                    userManager.showCardAutoModeError = true
+                                }
+                                else {
+                                    bottomSheetManager.show.swipeCardCut = true
+                                }
                             }, label: {
                                 Image(systemName: "scissors")
                                     .resizable()
                                     .renderingMode(.template)
                                     .aspectRatio(contentMode: .fit)
                                     .frame(height: 20)
-                                    .foregroundColor(.primaryDefault)
+                                    .foregroundColor(isAutoPlay ? Color.stateDisabledGray200 : Color.primaryDefault)
                                     .padding(7).background(Color.gray25) // 클릭 잘 되도록
                             })
                             
                             Button(action: {
-                                
-                                if viewModel.swipeList.count < 4 {
-                                    userManager.showCardShuffleError = true
+                                if isAutoPlay {
+                                    userManager.showCardAutoModeError = true
                                 }
-                                
-                                if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
+                                else {
+                                    if viewModel.swipeList.count < 4 {
+                                        userManager.showCardShuffleError = true
+                                    }
                                     
-                                    // 랜덤카드 데이터 세팅
-                                    self.setRandomCardList() {
+                                    if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
                                         
-                                        self.isShowRandomCardShuffle = true
-                                        
-                                        viewModel.shuffleSwipeList()
-                                        
-                                        self.doShuffleRandomCard()
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                            self.doShuffleRandomCard()
+                                        // 랜덤카드 데이터 세팅
+                                        self.setRandomCardList() {
                                             
-                                            // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                                self.isShowRandomCardShuffle = false
+                                            self.isShowRandomCardShuffle = true
+                                            
+                                            viewModel.shuffleSwipeList()
+                                            
+                                            self.doShuffleRandomCard()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                                self.doShuffleRandomCard()
+                                                
+                                                // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                                    self.isShowRandomCardShuffle = false
+                                                    
+                                                    startAutoMode()
+                                                }
                                             }
                                         }
-                                        
                                     }
                                 }
                             }, label: {
@@ -384,19 +394,31 @@ extension TabSwipeCardPage: View {
                                     .resizable()
                                     .renderingMode(.template)
                                     .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.primaryDefault)
+                                    .foregroundColor(isAutoPlay ? Color.stateDisabledGray200 : Color.primaryDefault)
                                     .frame(height: 20)
                                     .padding(7).background(Color.gray25) // 클릭 잘 되도록
                             })
                             
                             Button(action: {
-                                self.resetPage()
+                                if isAutoPlay {
+                                    userManager.showCardAutoModeError = true
+                                }
+                                else {
+                                    // 카드를 하나라도 넘긴 경우에만 호출함
+                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
+                                        StatusManager.shared.loadingStatus = .ShowWithTouchable
+                                        
+                                        self.resetPage() {
+                                            StatusManager.shared.loadingStatus = .Close
+                                        }
+                                    }
+                                }
                             }, label: {
                                 Image(systemName: "arrow.triangle.2.circlepath")
                                     .resizable()
                                     .renderingMode(.template)
                                     .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.primaryDefault)
+                                    .foregroundColor(isAutoPlay ? Color.stateDisabledGray200 : Color.primaryDefault)
                                     .frame(height: 20)
                                     .padding(7).background(Color.gray25) // 클릭 잘 되도록
                             })
@@ -612,7 +634,7 @@ extension TabSwipeCardPage: View {
                 switch bottomSheetManager.pressedCardCutItem {
                 case SwipeCardCutType.Front_30:
                     // 30% 앞에서부터 자르기
-                    percent = 0.3
+                    percent = 0.7
                     sortType = .FrontCut
                 case SwipeCardCutType.Front_50:
                     // 50% 앞에서부터 자르기
@@ -620,11 +642,11 @@ extension TabSwipeCardPage: View {
                     sortType = .FrontCut
                 case SwipeCardCutType.Front_70:
                     // 70% 앞에서부터 자르기
-                    percent = 0.7
+                    percent = 0.3
                     sortType = .FrontCut
                 case SwipeCardCutType.Back_30:
                     // 30% 뒤에서부터 자르기
-                    percent = 0.3
+                    percent = 0.7
                     sortType = .BackCut
                 case SwipeCardCutType.Back_50:
                     // 50% 뒤에서부터 자르기
@@ -632,11 +654,11 @@ extension TabSwipeCardPage: View {
                     sortType = .BackCut
                 case SwipeCardCutType.Back_70:
                     // 70% 뒤에서부터 자르기
-                    percent = 0.7
+                    percent = 0.3
                     sortType = .BackCut
                 case SwipeCardCutType.Random_30:
                     // 30% 랜덤 자르기
-                    percent = 0.3
+                    percent = 0.7
                     sortType = .RandomCut
                 case SwipeCardCutType.Random_50:
                     // 50% 랜덤 자르기
@@ -644,7 +666,7 @@ extension TabSwipeCardPage: View {
                     sortType = .RandomCut
                 case SwipeCardCutType.Random_70:
                     // 70% 랜덤 자르기
-                    percent = 0.7
+                    percent = 0.3
                     sortType = .RandomCut
                 default:
                     fLog("")
@@ -1216,7 +1238,7 @@ extension TabSwipeCardPage {
         }
     }
     
-    private func resetPage() {
+    private func resetPage(isDone: @escaping() -> Void = {}) {
         
         // 변수 초기화
         currentCardIndex = 0
@@ -1246,7 +1268,9 @@ extension TabSwipeCardPage {
                                     sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
                                     sortType: .Latest,
                                     isSuccess: { success in
-                                        //
+                                        if success {
+                                            isDone()
+                                        }
                                     }
                                 )
                             }
