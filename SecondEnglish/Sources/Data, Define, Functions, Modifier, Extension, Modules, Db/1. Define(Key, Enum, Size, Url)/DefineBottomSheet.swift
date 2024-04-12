@@ -20,9 +20,26 @@ struct DefineBottomSheet {
     ]
     
     static var swipeCardCutPercentItems = [
-        CustomBottomSheetModel(SEQ: 1, title: "30% 자르기"),
-        CustomBottomSheetModel(SEQ: 2, title: "50% 자르기"),
-        CustomBottomSheetModel(SEQ: 3, title: "70% 자르기")
+        [
+            SwipeCutBottomSheetModel(SEQ: 1, percent: 30, caption: "30% 앞에서부터 자르기"),
+            SwipeCutBottomSheetModel(SEQ: 2, percent: 50, caption: "50% 앞에서부터 자르기"),
+            SwipeCutBottomSheetModel(SEQ: 3, percent: 70, caption: "70% 앞에서부터 자르기")
+        ],
+        [
+            SwipeCutBottomSheetModel(SEQ: 4, percent: 30, caption: "30% 뒤에서부터 자르기"),
+            SwipeCutBottomSheetModel(SEQ: 5, percent: 50, caption: "50% 뒤에서부터 자르기"),
+            SwipeCutBottomSheetModel(SEQ: 6, percent: 70, caption: "70% 뒤에서부터 자르기")
+        ],
+        [
+            SwipeCutBottomSheetModel(SEQ: 7, percent: 30, caption: "30% 랜덤 자르기"),
+            SwipeCutBottomSheetModel(SEQ: 8, percent: 50, caption: "50% 랜덤 자르기"),
+            SwipeCutBottomSheetModel(SEQ: 9, percent: 70, caption: "70% 랜덤 자르기")
+        ]
+    ]
+    static var swipeCardCutTypeItems = [
+        CustomBottomSheetModel(SEQ: 0, title: "앞에서부터 자르기"),
+        CustomBottomSheetModel(SEQ: 1, title: "뒤에서부터 자르기"),
+        CustomBottomSheetModel(SEQ: 2, title: "랜덤 자르기")
     ]
     
     static var globalLanItems: [CustomBottomSheetModel] = []

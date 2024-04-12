@@ -31,3 +31,9 @@ struct BottomSheetBoardReportModel {
     let message: String
     let reportMessageId: Int
 }
+
+struct SwipeCutBottomSheetModel {
+    let SEQ: Int
+    let percent: Double
+    let caption: String
+}

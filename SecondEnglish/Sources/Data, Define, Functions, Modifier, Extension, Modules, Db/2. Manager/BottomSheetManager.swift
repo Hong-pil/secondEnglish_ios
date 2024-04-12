@@ -34,10 +34,23 @@ enum MoreButtonType: Int {
     case Delete
 }
 
-enum SwipeCardCutType: CGFloat {
-    case Percent_70 = 0.3 // 70% 자르기
-    case Percent_50 = 0.5 // 50% 자르기
-    case Percent_30 = 0.7 // 30% 자르기
+enum SwipeCardCutType {
+    case None
+    case Front_30   // 30% 앞에서부터 자르기
+    case Front_50   // 50% 앞에서부터 자르기
+    case Front_70   // 70% 앞에서부터 자르기
+    case Back_30    // 30% 뒤에서부터 자르기
+    case Back_50    // 50% 뒤에서부터 자르기
+    case Back_70    // 70% 뒤에서부터 자르기
+    case Random_30  // 30% 랜덤 자르기
+    case Random_50  // 50% 랜덤 자르기
+    case Random_70  // 70% 랜덤 자르기
+}
+enum SwipeCardCutSortType {
+    case None
+    case FrontCut
+    case BackCut
+    case RandomCut
 }
 
 // (공통) 목록, 글/댓글 더보기
@@ -166,7 +179,7 @@ class BottomSheetManager: ObservableObject {
     // 카드 신고하기 팝업에서 클릭한 아이템
     @Published var pressedCardReportCode: Int = -1
     // 선택한 카드 자르기 퍼센트
-    @Published var pressedCardCutPercent: CGFloat = 0.0
+    @Published var pressedCardCutItem: SwipeCardCutType = .None
     
     @Published var grammarInfo: SwipeDataGrammar?
     

@@ -62,15 +62,15 @@ struct ContentViewPopup: ViewModifier {
             // Swipe Tab -> 카드 자르기
             .bottomSheet(
                 isPresented: $bottomSheetManager.show.swipeCardCut,
-                height: self.getPopupHeight(type: CustomBottomSheetClickType.SwipeCardCut),
+                height: 420,
                 topBarCornerRadius: DefineSize.CornerRadius.BottomSheet,
                 content: {
                     CustomBottomView(
                         title: "", // 제목없는 팝업뷰
                         type: CustomBottomSheetClickType.SwipeCardCut,
-                        onPressItemCutPercent: { percent in
-                            fLog("\n--- \(percent) ---\n")
-                            bottomSheetManager.pressedCardCutPercent = percent
+                        onPressSwipeCutItem: { item in
+                            fLog("\n--- \(item) ---\n")
+                            bottomSheetManager.pressedCardCutItem = item
                         },
                         isShow: $bottomSheetManager.show.swipeCardCut
                     )

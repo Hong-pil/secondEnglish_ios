@@ -29,6 +29,7 @@
 		E003BA9A2B8605B300C55590 /* NetworkMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */; };
 		E003BA9C2B86200D00C55590 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9B2B86200D00C55590 /* Authenticator.swift */; };
 		E003BA9F2B863B1700C55590 /* UserNamePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9E2B863B1700C55590 /* UserNamePage.swift */; };
+		E00956202BC83B3500DEB8EC /* DoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E009561F2BC83B3500DEB8EC /* DoneView.swift */; };
 		E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */; };
 		E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF12B5FDF660080761B /* CommonButton.swift */; };
 		E00FDAF42B5FDF9B0080761B /* Button+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */; };
@@ -282,6 +283,7 @@
 		E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitorManager.swift; sourceTree = "<group>"; };
 		E003BA9B2B86200D00C55590 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		E003BA9E2B863B1700C55590 /* UserNamePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNamePage.swift; sourceTree = "<group>"; };
+		E009561F2BC83B3500DEB8EC /* DoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneView.swift; sourceTree = "<group>"; };
 		E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginPage.swift; sourceTree = "<group>"; };
 		E00FDAF12B5FDF660080761B /* CommonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton.swift; sourceTree = "<group>"; };
 		E00FDAF32B5FDF9B0080761B /* Button+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Modifier.swift"; sourceTree = "<group>"; };
@@ -1428,6 +1430,7 @@
 				E002E1832B56E92600F64CA4 /* SwipeCardBackView.swift */,
 				E002E1852B56E93600F64CA4 /* CircleProgressBarView.swift */,
 				E002E1872B56E94700F64CA4 /* StampView.swift */,
+				E009561F2BC83B3500DEB8EC /* DoneView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1881,6 +1884,7 @@
 				E0DBDDDC2B4FCEC4007615A8 /* PrimaryButton01.swift in Sources */,
 				E0DBDD5B2B4FC8A9007615A8 /* LanguageManager.swift in Sources */,
 				E058AF042BC0FBCC00B214B0 /* TabMain.swift in Sources */,
+				E00956202BC83B3500DEB8EC /* DoneView.swift in Sources */,
 				E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */,
 				E063923A2B82FB14003D0428 /* PopupManager.swift in Sources */,
 				E002E1842B56E92600F64CA4 /* SwipeCardBackView.swift in Sources */,

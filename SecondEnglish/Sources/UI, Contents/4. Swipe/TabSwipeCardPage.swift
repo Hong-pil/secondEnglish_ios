@@ -21,6 +21,7 @@ struct TabSwipeCardPage {
     @State private var currentCardIndex: Int = 0
     @State private var curPercent: Double = 0.0
     @State private var clickCardItem: SwipeDataList?
+    @State private var isShowDoneView: Bool = false
     @AppStorage(DefineKey.mainCategoryName) var selectedMainCategoryItem: String = ""
     
     // TTS
@@ -84,19 +85,6 @@ extension TabSwipeCardPage: View {
                 VStack(spacing: 0) {
                     header
                     
-                    // for test
-                    Group {
-                        Button("Pause") {
-                            speechManager.pauseSpeaking()
-                        }
-                        .disabled(!speechManager.isSpeaking || speechManager.isPaused)
-                        
-                        Button("Stop") {
-                            speechManager.stopSpeaking()
-                        }
-                        .disabled(!speechManager.isSpeaking)
-                    }
-                    
                     subCategoryTabView
                 }
                 .background(Color.primaryDefault)
@@ -126,8 +114,8 @@ extension TabSwipeCardPage: View {
                     ZStack {
                         GeometryReader { geometry in
                             
-                            // 서브 카테고리 마지막인 경우, 결과 View 보여주기
-                            if viewModel.categoryTabIndex == viewModel.subCategoryList.count-1 {
+                            // 각 메인 카테고리 끝가지 학습한 경우, 결과 View 보여주기
+                            if isShowDoneView {
                                 DoneView {
                                     withAnimation {
                                         //self.users = self.setList()
@@ -138,309 +126,298 @@ extension TabSwipeCardPage: View {
                                         }
                                     }
                                 }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                             }
                             
-                            ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
-                                
-                                self.setTopCard(index: index, card: card)
-                                
-                                // Range Operator
-                                if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
-                                    //let _ = fLog("로그확인::: maxID : \(maxID)")
-                                    //let _ = fLog("로그확인::: minID : \(minID)")
-                                    //let _ = fLog("로그확인::: index : \(index)")
-                                    //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
+                            
+                            if viewModel.swipeList.count > 0 {
+                                ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
                                     
+                                    self.setTopCard(index: index, card: card)
                                     
-                                    
-                                    // 자동모드에서 offset 설정해야 하는데, SwipeView()에서 이미 offset 설정을 하고 있기 때문에 VStack으로 감싸준다.
-                                    VStack(spacing: 0) {
-                                        SwipeView(
-                                            card: card,
-                                            onRemove: { likeType in
-                                                withAnimation {
-                                                    removeProfile(card)
-                                                }
-                                                
-                                                onLike(card, type: likeType)
-                                            },
-                                            isTapLikeBtn: { cardIdx, isLike in
-                                                if isAutoPlay {
-                                                    userManager.showCardAutoModeError = true
-                                                }
-                                                else {
-                                                    //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                    // Range Operator
+                                    if (self.maxID - 3)...self.maxID ~= (card.customId ?? 0) {
+                                        //let _ = fLog("로그확인::: maxID : \(maxID)")
+                                        //let _ = fLog("로그확인::: minID : \(minID)")
+                                        //let _ = fLog("로그확인::: index : \(index)")
+                                        //let _ = fLog("로그확인::: item : \(viewModel.swipeList[index].KOREAN ?? "Empty")")
+                                        
+                                        
+                                        
+                                        // 자동모드에서 offset 설정해야 하는데, SwipeView()에서 이미 offset 설정을 하고 있기 때문에 VStack으로 감싸준다.
+                                        VStack(spacing: 0) {
+                                            SwipeView(
+                                                card: card,
+                                                onRemove: { likeType in
+                                                    withAnimation {
+                                                        removeProfile(card)
+                                                    }
                                                     
-                                                    // 좋아요 취소 요청 -> false -> 0
-                                                    // 좋아요 요청 -> true -> 1
-                                                    viewModel.likeCard(
-                                                        cardIdx: cardIdx,
-                                                        isLike: isLike ? 1 : 0,
-                                                        clickIndex: index,
-                                                        isSuccess: { isSuccess in
-                                                            if isSuccess {
-                                                                //fLog("idpil::: 좋아요 성공!!!")
-                                                            } else {
-                                                                //fLog("idpil::: 좋아요 실패!!!")
+                                                    onLike(card, type: likeType)
+                                                },
+                                                isTapLikeBtn: { cardIdx, isLike in
+                                                    if isAutoPlay {
+                                                        userManager.showCardAutoModeError = true
+                                                    }
+                                                    else {
+                                                        //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                                        
+                                                        // 좋아요 취소 요청 -> false -> 0
+                                                        // 좋아요 요청 -> true -> 1
+                                                        viewModel.likeCard(
+                                                            cardIdx: cardIdx,
+                                                            isLike: isLike ? 1 : 0,
+                                                            clickIndex: index,
+                                                            isSuccess: { isSuccess in
+                                                                if isSuccess {
+                                                                    //fLog("idpil::: 좋아요 성공!!!")
+                                                                } else {
+                                                                    //fLog("idpil::: 좋아요 실패!!!")
+                                                                }
+                                                                
+                                                            })
+                                                    }
+                                                },
+                                                isTapMoreBtn: {
+                                                    if isAutoPlay {
+                                                        userManager.showCardAutoModeError = true
+                                                    }
+                                                    else {
+                                                        DefineBottomSheet.commonMore(
+                                                            type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
+                                                        )
+                                                        
+                                                        bottomSheetManager.show.swipeCardMore = true
+                                                        
+                                                        self.clickCardItem = card
+                                                    }
+                                                },
+                                                isLastCard: index==(maxID-1) ? true : false,
+                                                isTapFrontSpeakBtn: {
+                                                    if isAutoPlay {
+                                                        userManager.showCardAutoModeError = true
+                                                    }
+                                                    else {
+                                                        if !speechManager.isSpeaking {
+                                                            if let card = self.topCard {
+                                                                speechManager.speak(card.korean ?? "")
                                                             }
-                                                            
-                                                        })
-                                                }
-                                            },
-                                            isTapMoreBtn: {
-                                                if isAutoPlay {
-                                                    userManager.showCardAutoModeError = true
-                                                }
-                                                else {
-                                                    DefineBottomSheet.commonMore(
-                                                        type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
-                                                    )
-                                                    
-                                                    bottomSheetManager.show.swipeCardMore = true
-                                                    
-                                                    self.clickCardItem = card
-                                                }
-                                            },
-                                            isLastCard: index==(maxID-1) ? true : false,
-                                            isTapFrontSpeakBtn: {
-                                                if isAutoPlay {
-                                                    userManager.showCardAutoModeError = true
-                                                }
-                                                else {
-                                                    if !speechManager.isSpeaking {
-                                                        if let card = self.topCard {
-                                                            speechManager.speak(card.korean ?? "")
                                                         }
                                                     }
-                                                }
-                                            },
-                                            isTapBackSpeakBtn: {
-                                                if isAutoPlay {
-                                                    userManager.showCardAutoModeError = true
-                                                }
-                                                else {
-                                                    if !speechManager.isSpeaking {
-                                                        if let card = self.topCard {
-                                                            speechManager.speak(card.english ?? "")
+                                                },
+                                                isTapBackSpeakBtn: {
+                                                    if isAutoPlay {
+                                                        userManager.showCardAutoModeError = true
+                                                    }
+                                                    else {
+                                                        if !speechManager.isSpeaking {
+                                                            if let card = self.topCard {
+                                                                speechManager.speak(card.english ?? "")
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            },
-                                            isFrontSpeaking: isFrontSpeaking,
-                                            isBackSpeaking: isBackSpeaking,
-                                            isAutoPlay: isAutoPlay,
-                                            isRootViewFlipped: isRootViewFlipped,
-                                            isCardFlipped: $isCardFlipped
-                                        )
-                                        //MARK: 책 쌓아놓은 것 같은 효과
-                                        //.animation(.spring())
-                                        .frame(
-                                            width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
-                                            height: geometry.size.height * 0.7
-                                        )
-                                        .offset(
-                                            x: 0,
-                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
-                                        )
-                                    }
-                                    .rotationEffect(
-                                        isTopViewSwipe
-                                        ?
-                                        (
-                                            // 맨 위 카드만 적용
-                                            index==(maxID-1)
-                                            ?
-                                            .degrees(-180)
-                                            :
-                                            .degrees(0)
-                                        )
-                                        :
-                                        .degrees(0)
-                                    )
-                                    .offset(
-                                        isTopViewSwipe
-                                        ?
-                                        (
-                                            // 맨 위 카드만 적용
-                                            index==(maxID-1)
-                                            ?
-                                            CGSize(width: -DefineSize.Screen.Width, height: 100)
-                                            :
-                                            CGSize(width: 0, height: 0)
-                                        )
-                                        :
-                                        CGSize(width: 0, height: 0)
-                                    )
-                                    .animation(
-                                        .easeInOut(duration: 0.3),
-                                        value:
+                                                },
+                                                isFrontSpeaking: isFrontSpeaking,
+                                                isBackSpeaking: isBackSpeaking,
+                                                isAutoPlay: isAutoPlay,
+                                                isRootViewFlipped: isRootViewFlipped,
+                                                isCardFlipped: $isCardFlipped
+                                            )
+                                            //MARK: 책 쌓아놓은 것 같은 효과
+                                            //.animation(.spring())
+                                            .frame(
+                                                width: self.getCardWidth(geometry, id: (card.customId ?? 0)) - 50, // 50: 좌-우 여백
+                                                height: geometry.size.height * 0.7
+                                            )
+                                            .offset(
+                                                x: 0,
+                                                y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                            )
+                                        }
+                                        .rotationEffect(
                                             isTopViewSwipe
                                             ?
                                             (
                                                 // 맨 위 카드만 적용
                                                 index==(maxID-1)
                                                 ?
-                                                -180
+                                                .degrees(-180)
                                                 :
-                                                0
+                                                .degrees(0)
                                             )
                                             :
-                                            0
-                                    )
+                                            .degrees(0)
+                                        )
+                                        .offset(
+                                            isTopViewSwipe
+                                            ?
+                                            (
+                                                // 맨 위 카드만 적용
+                                                index==(maxID-1)
+                                                ?
+                                                CGSize(width: -DefineSize.Screen.Width, height: 100)
+                                                :
+                                                CGSize(width: 0, height: 0)
+                                            )
+                                            :
+                                            CGSize(width: 0, height: 0)
+                                        )
+                                        .animation(
+                                            .easeInOut(duration: 0.3),
+                                            value:
+                                                isTopViewSwipe
+                                                ?
+                                                (
+                                                    // 맨 위 카드만 적용
+                                                    index==(maxID-1)
+                                                    ?
+                                                    -180
+                                                    :
+                                                    0
+                                                )
+                                                :
+                                                0
+                                        )
+                                    }
                                 }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                                .opacity(self.isShowRandomCardShuffle ? 0 : 1)
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                //MARK: - 카드 랜덤 섞기 뷰
+        //                        randomCardShuffleView
+        //                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        //                            //.opacity(self.isShowRandomCardShuffle ? 1 : 0)
+                                ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
+                                    SwipeView(
+                                        card: card,
+                                        onRemove: { _ in},
+                                        isTapLikeBtn: { _, _ in},
+                                        isTapMoreBtn: {},
+                                        isLastCard: false,
+                                        isTapFrontSpeakBtn: {
+                                            //
+                                        },
+                                        isTapBackSpeakBtn: {
+                                            //
+                                        },
+                                        isFrontSpeaking: false,
+                                        isBackSpeaking: false,
+                                        isAutoPlay: false,
+                                        isCardFlipped: $isCardFlipped
+                                    )
+                                    .frame(
+                                        height: geometry.size.height * 0.7
+                                    )
+                                    .padding(.horizontal, self.randomCardPadding(index: index))
+                                    //                                        .offset(
+                                    //                                            x: 0,
+                                    //                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                    //                                        )
+                                    .rotationEffect(.degrees(randomCardRotationDegrees[index]))
+                                    .offset(randomCardOffsets[index])
+                                    .animation(.easeInOut(duration: 0.3), value: randomCardRotationDegrees[index])
+                                    .animation(.easeInOut(duration: 0.3), value: randomCardOffsets[index])
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                                .padding(.horizontal, 20)
+                                .padding(.top, 40)
+                                .opacity(self.isShowRandomCardShuffle ? 1 : 0)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                            .opacity(self.isShowRandomCardShuffle ? 0 : 1)
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            //MARK: - 카드 랜덤 섞기 뷰
-    //                        randomCardShuffleView
-    //                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-    //                            //.opacity(self.isShowRandomCardShuffle ? 1 : 0)
-                            ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
-                                SwipeView(
-                                    card: card,
-                                    onRemove: { _ in},
-                                    isTapLikeBtn: { _, _ in},
-                                    isTapMoreBtn: {},
-                                    isLastCard: false,
-                                    isTapFrontSpeakBtn: {
-                                        //
-                                    },
-                                    isTapBackSpeakBtn: {
-                                        //
-                                    },
-                                    isFrontSpeaking: false,
-                                    isBackSpeaking: false,
-                                    isAutoPlay: false,
-                                    isCardFlipped: $isCardFlipped
-                                )
-                                .frame(
-                                    height: geometry.size.height * 0.7
-                                )
-                                .padding(.horizontal, self.randomCardPadding(index: index))
-                                //                                        .offset(
-                                //                                            x: 0,
-                                //                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
-                                //                                        )
-                                .rotationEffect(.degrees(randomCardRotationDegrees[index]))
-                                .offset(randomCardOffsets[index])
-                                .animation(.easeInOut(duration: 0.3), value: randomCardRotationDegrees[index])
-                                .animation(.easeInOut(duration: 0.3), value: randomCardOffsets[index])
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                            .padding(.horizontal, 20)
-                            .padding(.top, 40)
-                            .opacity(self.isShowRandomCardShuffle ? 1 : 0)
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
                         }
                     }
-                    .opacity(viewModel.swipeList.count>0 ? 1 : 0)
                     
-                    HStack(spacing: 15) {
-                        Button(action: {
-                            bottomSheetManager.show.swipeCardCut = true
-                        }, label: {
-                            Image(systemName: "scissors")
-                                .resizable()
-                                .renderingMode(.template)
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 20)
-                                .foregroundColor(.primaryDefault)
-                                .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                        })
-                        
-                        Button(action: {
+                    //MARK: - 하단 뷰 모음
+                    // 각 메인 카테고리 끝가지 학습한 경우, 더이상 카드가 없기 때문에 보여지지 않음
+                    if !isShowDoneView {
+                        HStack(spacing: 15) {
+                            Button(action: {
+                                bottomSheetManager.show.swipeCardCut = true
+                            }, label: {
+                                Image(systemName: "scissors")
+                                    .resizable()
+                                    .renderingMode(.template)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 20)
+                                    .foregroundColor(.primaryDefault)
+                                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                            })
                             
-                            if viewModel.swipeList.count < 4 {
-                                userManager.showCardShuffleError = true
-                            }
-                            
-                            if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
+                            Button(action: {
                                 
-                                // 랜덤카드 데이터 세팅
-                                self.setRandomCardList() {
-                                    
-                                    self.isShowRandomCardShuffle = true
-                                    
-                                    viewModel.shuffleSwipeList()
-                                    
-                                    self.doShuffleRandomCard()
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                        self.doShuffleRandomCard()
-                                        
-                                        // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                            self.isShowRandomCardShuffle = false
-                                        }
-                                    }
-                                    
+                                if viewModel.swipeList.count < 4 {
+                                    userManager.showCardShuffleError = true
                                 }
-                            }
-                        }, label: {
-                            Image(systemName: "shuffle")
-                                .resizable()
-                                .renderingMode(.template)
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.primaryDefault)
-                                .frame(height: 20)
-                                .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                        })
-                        
-                        Button(action: {
-                            self.resetPage()
-                        }, label: {
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                                .resizable()
-                                .renderingMode(.template)
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.primaryDefault)
-                                .frame(height: 20)
-                                .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                        })
-                        
-                        Spacer()
-                        
-                        Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
-                            .font(.buttons1420Medium)
-                            .foregroundColor(Color.gray850)
-                        
-                        CircleProgressBarView(
-                            width: 50,
-                            height: 50,
-                            color1: Color.blue,
-                            color2: Color.blue.opacity(0.3),
-                            percent: $curPercent
-                        )
+                                
+                                if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
+                                    
+                                    // 랜덤카드 데이터 세팅
+                                    self.setRandomCardList() {
+                                        
+                                        self.isShowRandomCardShuffle = true
+                                        
+                                        viewModel.shuffleSwipeList()
+                                        
+                                        self.doShuffleRandomCard()
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                            self.doShuffleRandomCard()
+                                            
+                                            // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                                self.isShowRandomCardShuffle = false
+                                            }
+                                        }
+                                        
+                                    }
+                                }
+                            }, label: {
+                                Image(systemName: "shuffle")
+                                    .resizable()
+                                    .renderingMode(.template)
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundColor(.primaryDefault)
+                                    .frame(height: 20)
+                                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                            })
+                            
+                            Button(action: {
+                                self.resetPage()
+                            }, label: {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .resizable()
+                                    .renderingMode(.template)
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundColor(.primaryDefault)
+                                    .frame(height: 20)
+                                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                            })
+                            
+                            Spacer()
+                            
+                            Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
+                                .font(.buttons1420Medium)
+                                .foregroundColor(Color.gray850)
+                            
+                            CircleProgressBarView(
+                                width: 50,
+                                height: 50,
+                                color1: Color.blue,
+                                color2: Color.blue.opacity(0.3),
+                                percent: $curPercent
+                            )
+                        }
+                        .padding(.vertical, 20)
+                        .padding(.horizontal, 20)
                     }
-                    .padding(.vertical, 20)
-                    .padding(.horizontal, 20)
                 }
                 .overlay(Color.gray25.opacity(isShowMainCategoryListView ? 0.111111111111111111111111111 : 0.0))
                 .onTapGesture {
@@ -501,8 +478,8 @@ extension TabSwipeCardPage: View {
             }
         }
         .onChange(of: maxID) {
-            //fLog("idpil::: currentID : \(currentID)")
-            //fLog("idpil::: 현재:\(viewModel.swipeList[currentID-1].korean ?? "")")
+//            fLog("idpil::: maxID : \(maxID)")
+//            fLog("idpil::: 현재:\(topCard?.korean ?? "")")
             
             // currentID == 0 -> 카드를 모두 넘긴 경우.
             if maxID == 0 {
@@ -511,8 +488,15 @@ extension TabSwipeCardPage: View {
                 // [예외처리] 서브 카테고리 마지막인 경우, 더이상 넘어갈 스텝이 없음
                 if viewModel.categoryTabIndex != viewModel.subCategoryList.count-1 {
                     // 다음 스탭으로 넘어감
+                    isShowDoneView = false
                     viewModel.categoryTabIndex += 1
                     viewModel.moveCategoryTab = true
+                }
+                // 서브 카테고리 다 넘겼음
+                else if viewModel.categoryTabIndex == viewModel.subCategoryList.count-1 {
+                    withAnimation {
+                        isShowDoneView = true
+                    }
                 }
             }
             // currentID > 0 -> 카드를 넘기고 있는 경우
@@ -592,6 +576,10 @@ extension TabSwipeCardPage: View {
             self.selectedMainCategoryItem = viewModel.noti_selectedMainCategoryName
         }
         .onChange(of: self.selectedMainCategoryItem) {
+            
+            // DoneView 숨김
+            self.hideDoneView()
+            
             viewModel.requestCategory(
                 isInit: true,
                 category: self.selectedMainCategoryItem
@@ -615,17 +603,66 @@ extension TabSwipeCardPage: View {
                 }
             }
         }
-        .onChange(of: bottomSheetManager.pressedCardCutPercent) {
+        .onChange(of: bottomSheetManager.pressedCardCutItem) {
             let tmpArr = viewModel.swipeList
-            if viewModel.sliceArray(tmpArr, by: bottomSheetManager.pressedCardCutPercent).isEmpty {
-                userManager.showCardCutError = true
-            } else {
-                StatusManager.shared.loadingStatus = .ShowWithTouchable
+            var percent: CGFloat = 0.0
+            var sortType: SwipeCardCutSortType = .None
+            
+            if bottomSheetManager.pressedCardCutItem != .None {
+                switch bottomSheetManager.pressedCardCutItem {
+                case SwipeCardCutType.Front_30:
+                    // 30% 앞에서부터 자르기
+                    percent = 0.3
+                    sortType = .FrontCut
+                case SwipeCardCutType.Front_50:
+                    // 50% 앞에서부터 자르기
+                    percent = 0.5
+                    sortType = .FrontCut
+                case SwipeCardCutType.Front_70:
+                    // 70% 앞에서부터 자르기
+                    percent = 0.7
+                    sortType = .FrontCut
+                case SwipeCardCutType.Back_30:
+                    // 30% 뒤에서부터 자르기
+                    percent = 0.3
+                    sortType = .BackCut
+                case SwipeCardCutType.Back_50:
+                    // 50% 뒤에서부터 자르기
+                    percent = 0.5
+                    sortType = .BackCut
+                case SwipeCardCutType.Back_70:
+                    // 70% 뒤에서부터 자르기
+                    percent = 0.7
+                    sortType = .BackCut
+                case SwipeCardCutType.Random_30:
+                    // 30% 랜덤 자르기
+                    percent = 0.3
+                    sortType = .RandomCut
+                case SwipeCardCutType.Random_50:
+                    // 50% 랜덤 자르기
+                    percent = 0.5
+                    sortType = .RandomCut
+                case SwipeCardCutType.Random_70:
+                    // 70% 랜덤 자르기
+                    percent = 0.7
+                    sortType = .RandomCut
+                default:
+                    fLog("")
+                }
                 
-                // 로딩되는거 보여주려고 딜레이시킴
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    viewModel.cutSwipeList(percent: bottomSheetManager.pressedCardCutPercent)
-                    StatusManager.shared.loadingStatus = .Close
+                if viewModel.sliceArray(tmpArr, by: percent, sortType: sortType).isEmpty {
+                    userManager.showCardCutError = true
+                }
+                else {
+                    StatusManager.shared.loadingStatus = .ShowWithTouchable
+                    
+                    // 로딩되는거 보여주려고 딜레이시킴
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.cutSwipeList(percent: percent, sortType: sortType)
+                        StatusManager.shared.loadingStatus = .Close
+                        
+                        bottomSheetManager.pressedCardCutItem = .None // 동일한 아이템 클릭될 수 있도록 초기화
+                    }
                 }
             }
         }
@@ -847,6 +884,11 @@ extension TabSwipeCardPage: View {
 //                                    )
                                     .padding(EdgeInsets(top: 20, leading: 5, bottom: 15, trailing: 5)).background(Color.primaryDefault) // 클릭 감도 올림
                                     .onTapGesture {
+                                        
+                                        // DoneView 숨김
+                                        self.hideDoneView()
+                                        
+                                        
                                         if isMainCategoryListViewClose() {
                                             /**
                                              * 카테고리 버튼 클릭했을 때,
@@ -1305,21 +1347,11 @@ extension TabSwipeCardPage {
             }
         }
     }
-}
-
-private struct DoneView: View {
-    let reload: () -> Void
-    var body: some View {
-        VStack {
-            Text("You've filled in all the cards!")
-
-            Button("Refresh") {
-                reload()
-            }.buttonStyle(.borderedProminent)
+    
+    // DoneView 숨김
+    private func hideDoneView() {
+        if isShowDoneView {
+            isShowDoneView = false
         }
     }
-}
-
-#Preview {
-    TabSwipeCardPage()
 }

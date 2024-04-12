@@ -537,12 +537,12 @@ class SwipeCardViewModel: ObservableObject {
         self.swipeList = dummyArr
     }
     
-    func cutSwipeList(percent: CGFloat) {
+    func cutSwipeList(percent: CGFloat, sortType: SwipeCardCutSortType) {
         
 //        let thirtyPercent = sliceArray(exampleArray, by: 0.3) // 70% 자르기
 //        let fiftyPercent = sliceArray(exampleArray, by: 0.5) // 50% 자르기
 //        let seventyPercent = sliceArray(exampleArray, by: 0.7) // 30% 자르기
-        self.swipeList = sliceArray(self.swipeList, by: percent)
+        self.swipeList = sliceArray(self.swipeList, by: percent, sortType: sortType)
         
         
         var dummyArr = self.swipeList
@@ -565,10 +565,28 @@ class SwipeCardViewModel: ObservableObject {
      
        위 코드의 sliceArray 함수는 제네릭을 사용하여 어떤 타입의 배열이든 처리할 수 있도록 설계되었습니다. guard문을 사용하여 입력된 배열이 비어 있지 않고, 비율이 0보다 큰 경우에만 작업을 수행하도록 합니다. 배열의 길이에 비율을 곱한 후, Int로 변환하여 배열의 시작부터 계산된 인덱스까지의 부분 배열을 반환합니다.
      */
-    func sliceArray<T>(_ array: [T], by percentage: Double) -> [T] {
+    func sliceArray<T>(_ array: [T], by percentage: Double, sortType: SwipeCardCutSortType) -> [T] {
+        
         guard !array.isEmpty, percentage > 0 else { return [] }
         let endIndex = Int(Double(array.count) * percentage)
-        return Array(array.prefix(endIndex))
+        //fLog("idpil::: array.count : \(array.count)")
+        //fLog("idpil::: endIndex : \(endIndex)")
+        
+        if sortType == .FrontCut {
+            // 앞에서부터 자르기
+            return Array(array.prefix(endIndex))
+        }
+        else if sortType == .BackCut {
+            // 뒤에서부터 자르기
+            return Array(array.suffix(endIndex))
+        }
+        else if sortType == .RandomCut {
+            // 랜덤 자르기
+            return Array(array.shuffled().prefix(endIndex))
+        }
+        else {
+            return []
+        }
     }
     
     func resetSwipeList(category: String) {
