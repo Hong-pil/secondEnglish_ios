@@ -17,13 +17,13 @@ struct SwipeView: View {
     let isLastCard: Bool // 맨 위에 보이는 카드만 Drag Gesture 가능
     let isTapFrontSpeakBtn: () -> Void
     let isTapBackSpeakBtn: () -> Void
+    let isTapCard: () -> Void
     let isFrontSpeaking: Bool
     let isBackSpeaking: Bool
     let isAutoPlay: Bool
     
     //@State var isFlipped: Bool = false
-    var isRootViewFlipped: Bool = false
-    @Binding var isCardFlipped: Bool
+    @Binding var isRootViewFlipped: Bool
     @State private var offset = CGSize.zero
     
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
@@ -34,13 +34,13 @@ struct SwipeView: View {
             
             FlipView(
                 item: card,
-                isRootViewFlipped: isRootViewFlipped,
-                isCardFlipped: $isCardFlipped,
+                isRootViewFlipped: $isRootViewFlipped,
                 isTapLikeBtn: isTapLikeBtn,
                 isTapMoreBtn: isTapMoreBtn,
                 isLastCard: isLastCard,
                 isTapFrontSpeakBtn: isTapFrontSpeakBtn,
                 isTapBackSpeakBtn: isTapBackSpeakBtn,
+                isTapCard: isTapCard,
                 isFrontSpeaking: isFrontSpeaking,
                 isBackSpeaking: isBackSpeaking,
                 isAutoPlay: isAutoPlay
@@ -73,12 +73,8 @@ struct SwipeView: View {
         .gesture(
             DragGesture()
                 .onChanged { gesture in
-                    if isAutoPlay {
-                        UserManager.shared.showCardAutoModeError = true
-                    } else {
-                        if isLastCard {
-                            offset = gesture.translation
-                        }
+                    if isLastCard {
+                        offset = gesture.translation
                     }
                 }
                 .onEnded { gesture in

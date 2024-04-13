@@ -111,7 +111,7 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
         languageRecognizer.processString(text)
         
         if let dominantLanguage = languageRecognizer.dominantLanguage {
-            fLog("idpil::: 감지된 언어 : \(dominantLanguage.rawValue)")
+            //fLog("idpil::: 감지된 언어 : \(dominantLanguage.rawValue)")
             
             /**
              * 설정
@@ -133,11 +133,6 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
         }
     }
     
-    func pauseSpeaking() {
-        let wasPaused = speechSynthesizer.pauseSpeaking(at: .immediate)
-        isPaused = wasPaused
-    }
-    
     func stopSpeaking() {
         let wasStopped = speechSynthesizer.stopSpeaking(at: .immediate)
         if wasStopped {
@@ -145,6 +140,20 @@ class SpeechSynthesizerManager: NSObject, ObservableObject, AVSpeechSynthesizerD
             isPaused = false
         }
     }
+    
+    func pauseSpeaking() {
+        let wasPaused = speechSynthesizer.pauseSpeaking(at: .immediate)
+        fLog("idpil::: wasPaused : \(wasPaused)")
+        isPaused = wasPaused
+    }
+    
+    func continueSpeaking() {
+        let wasContinued = speechSynthesizer.continueSpeaking()
+        fLog("idpil::: wasContinued : \(wasContinued)")
+        isPaused = wasContinued
+    }
+    
+    
     
     
     // AVSpeechSynthesizerDelegate 메서드 구현

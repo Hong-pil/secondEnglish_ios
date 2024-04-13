@@ -35,7 +35,7 @@ struct Main {
     
     @State private var isFirstLoaded: Bool = true
     @State private var isShowEditorView: Bool = false
-    @State private var navigationBarColor: Color = .stateActivePrimaryDefault
+    @State var navigationBarColor: Color = .stateActivePrimaryDefault
     
     private struct sizeInfo {
         static let numberOfTabs: CGFloat = 3.0
@@ -102,7 +102,7 @@ extension Main: View {
                 TabHomePage(tabtype: tabtype_1, tabs: tabs_1, moveToTopIndicator: $tabStateHandler.moveFirstTabToTop)
                     .tag(bTab.my)
                 
-                TabSwipeCardPage()
+                TabSwipeCardPage(navigationBarColor: $navigationBarColor)
                     .tag(bTab.swipe_card)
             }
             .setTabBarVisibility(isHidden: true)

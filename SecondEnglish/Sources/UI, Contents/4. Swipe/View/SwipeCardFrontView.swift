@@ -25,12 +25,11 @@ struct SwipeCardFrontView: View {
     let isTapSpeakBtn: () -> Void
     let isSpeaking: Bool
     let isAutoPlay: Bool
+    let isLastCard: Bool
     
     @State private var currentHintWordIndex = 0
     // 사용자가 보게 될 텍스트를 관리할 상태 변수
     @State private var visibleHintText = ""
-    
-    @Binding var isCardFlipped: Bool
     
     var body: some View {
         GeometryReader { geometry in
@@ -50,14 +49,16 @@ struct SwipeCardFrontView: View {
                     
                     Spacer()
                     
-                    Button(action: {
-                        isTapMoreBtn()
-                    }, label: {
-                        Image("icon_more_dark")
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                            .padding(5).background(Color.gray25.opacity(0.3)) // 클릭 범위 확장
-                    })
+                    if !isAutoPlay {
+                        Button(action: {
+                            isTapMoreBtn()
+                        }, label: {
+                            Image("icon_more_dark")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .padding(5).background(Color.gray25.opacity(0.3)) // 클릭 범위 확장
+                        })
+                    }
                 }
                 
                 Spacer()
@@ -114,51 +115,53 @@ struct SwipeCardFrontView: View {
                 Spacer()
                 
                 HStack(spacing: 15) {
-                    Image("icon_fill_bookmark")
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 25, height: 25)
-                        .foregroundColor((card.isLike ?? false) ? Color.primaryDefault : Color.stateDisabledGray200)
-                        .padding(10) // 클릭 범위 확장
-                        .background(Color.gray25) // 클릭 범위 확장
-                        .onTapGesture {
-                            // 좋아요 취소 요청 -> false
-                            // 좋아요 요청 -> true
-                            isTapLikeBtn(card.idx ?? 0, (card.isLike ?? false) ? false : true)
-                        }
-                    
-                    Image(systemName: "figure.run.circle.fill")
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 25, height: 25)
-                        .foregroundColor(visibleHintText.count>0 ? Color.primaryDefault : Color.stateDisabledGray200)
-                        .padding(10) // 클릭 범위 확장
-                        .background(Color.gray25) // 클릭 범위 확장
-                        .onTapGesture {
-                            if isAutoPlay {
-                                UserManager.shared.showCardAutoModeError = true
+                    if !isAutoPlay {
+                        Image("icon_fill_bookmark")
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width: 25, height: 25)
+                            .foregroundColor((card.isLike ?? false) ? Color.primaryDefault : Color.stateDisabledGray200)
+                            .padding(10) // 클릭 범위 확장
+                            .background(Color.gray25) // 클릭 범위 확장
+                            .onTapGesture {
+                                // 좋아요 취소 요청 -> false
+                                // 좋아요 요청 -> true
+                                isTapLikeBtn(card.idx ?? 0, (card.isLike ?? false) ? false : true)
                             }
-                            else {
-//                                fLog("currentHintWordIndex : \(currentHintWordIndex)")
-//                                fLog("hintTxt.count : \(hintTxt.count)")
-//                                fLog((currentHintWordIndex > -1) ? hintTxt[currentHintWordIndex] : "")
-//                                
-//                                if currentHintWordIndex < hintTxt.count-1 {
-//                                    currentHintWordIndex = (currentHintWordIndex + 1) % hintTxt.count
-//                                }
-                                
-                                
-                                
-                                // 모든 단어를 다 보여줬다면 더 이상 업데이트하지 않음
-                                guard currentHintWordIndex < hintTxt.count else { return }
-                                
-                                // 다음 단어를 추가
-                                visibleHintText += (currentHintWordIndex > 0 ? " " : "") + hintTxt[currentHintWordIndex]
-                                
-                                // 보여줄 단어 수를 업데이트
-                                currentHintWordIndex += 1
+                        
+                        Image(systemName: "figure.run.circle.fill")
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width: 25, height: 25)
+                            .foregroundColor(visibleHintText.count>0 ? Color.primaryDefault : Color.stateDisabledGray200)
+                            .padding(10) // 클릭 범위 확장
+                            .background(Color.gray25) // 클릭 범위 확장
+                            .onTapGesture {
+                                if isAutoPlay {
+                                    UserManager.shared.showCardAutoModeError = true
+                                }
+                                else {
+    //                                fLog("currentHintWordIndex : \(currentHintWordIndex)")
+    //                                fLog("hintTxt.count : \(hintTxt.count)")
+    //                                fLog((currentHintWordIndex > -1) ? hintTxt[currentHintWordIndex] : "")
+    //
+    //                                if currentHintWordIndex < hintTxt.count-1 {
+    //                                    currentHintWordIndex = (currentHintWordIndex + 1) % hintTxt.count
+    //                                }
+                                    
+                                    
+                                    
+                                    // 모든 단어를 다 보여줬다면 더 이상 업데이트하지 않음
+                                    guard currentHintWordIndex < hintTxt.count else { return }
+                                    
+                                    // 다음 단어를 추가
+                                    visibleHintText += (currentHintWordIndex > 0 ? " " : "") + hintTxt[currentHintWordIndex]
+                                    
+                                    // 보여줄 단어 수를 업데이트
+                                    currentHintWordIndex += 1
+                                }
                             }
-                        }
+                    }
                     
                     Image(systemName: "speaker.wave.2.circle.fill")
                         .resizable()
@@ -177,9 +180,7 @@ struct SwipeCardFrontView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .onAppear {
-                isCardFlipped = false
-            }
+            .opacity(isLastCard ? 1.0 : 0.0)
             .padding()
             .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
             .background(Color.gray25)

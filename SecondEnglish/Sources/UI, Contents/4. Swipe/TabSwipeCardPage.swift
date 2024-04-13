@@ -39,7 +39,7 @@ struct TabSwipeCardPage {
     private let seconds: Double = 3.0
     @State private var topCard: SwipeDataList? = nil
     @State var isRootViewFlipped: Bool = false
-    @State var isCardFlipped: Bool = false
+    @State private var isForceSwipe: Bool = false // 자동모드 중에 강제로 카드 넘긴 경우
     
     
     
@@ -56,6 +56,7 @@ struct TabSwipeCardPage {
     @State private var randomCardList: [SwipeDataList] = []
     
     
+    @Binding var navigationBarColor: Color
     
     private struct sizeInfo {
         static let grammarTextFont_title: Font = Font.title32028Bold
@@ -72,9 +73,10 @@ struct TabSwipeCardPage {
         static let index3RandomCardOffset: CGSize = CGSize(width: 0, height: -30)
     }
     
-    init() {
+    init(navigationBarColor: Binding<Color>) {
         // 자동 모드일 때, 3초 마다 카드 넘김
         self._timer = .init(initialValue: Timer.publish(every: seconds, on: .main, in: .common))
+        self._navigationBarColor = navigationBarColor
     }
 }
 
@@ -87,7 +89,7 @@ extension TabSwipeCardPage: View {
                     
                     subCategoryTabView
                 }
-                .background(Color.primaryDefault)
+                .background(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault)
                 .onTapGesture {
                     if isShowMainCategoryListView {
                         isShowMainCategoryListView = false
@@ -148,6 +150,20 @@ extension TabSwipeCardPage: View {
                                             SwipeView(
                                                 card: card,
                                                 onRemove: { likeType in
+                                                    /// isRootViewFlipped : 카드 뒤집는 변수
+                                                    ///
+                                                    /// '한글 카드'에서 Swipe하면, 다음 카드도 한글을 보여줘야 하기 때문에 isRootViewFlipped 값을 변경할 필요가 없다.
+                                                    /// 하지만 '영어 카드'에서 Swipe하면, 다음 카드는 한글이 보여야 하기 때문에 isRootViewFlipped 값을 한글이 보이게 false로 만들어줘야 됨.
+                                                    isRootViewFlipped = false
+                                                    
+                                                    // 자동모드 TTS 재생 중에 강제로 카드 넘김
+                                                    if isAutoPlay {
+                                                        if speechManager.isSpeaking {
+                                                            speechManager.stopSpeaking()
+                                                        }
+                                                        isForceSwipe = true
+                                                    }
+                                                    
                                                     withAnimation {
                                                         removeProfile(card)
                                                     }
@@ -155,48 +171,35 @@ extension TabSwipeCardPage: View {
                                                     onLike(card, type: likeType)
                                                 },
                                                 isTapLikeBtn: { cardIdx, isLike in
-                                                    if isAutoPlay {
-                                                        userManager.showCardAutoModeError = true
-                                                    }
-                                                    else {
-                                                        //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
-                                                        
-                                                        // 좋아요 취소 요청 -> false -> 0
-                                                        // 좋아요 요청 -> true -> 1
-                                                        viewModel.likeCard(
-                                                            cardIdx: cardIdx,
-                                                            isLike: isLike ? 1 : 0,
-                                                            clickIndex: index,
-                                                            isSuccess: { isSuccess in
-                                                                if isSuccess {
-                                                                    //fLog("idpil::: 좋아요 성공!!!")
-                                                                } else {
-                                                                    //fLog("idpil::: 좋아요 실패!!!")
-                                                                }
-                                                                
-                                                            })
-                                                    }
+                                                    //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                                    
+                                                    // 좋아요 취소 요청 -> false -> 0
+                                                    // 좋아요 요청 -> true -> 1
+                                                    viewModel.likeCard(
+                                                        cardIdx: cardIdx,
+                                                        isLike: isLike ? 1 : 0,
+                                                        clickIndex: index,
+                                                        isSuccess: { isSuccess in
+                                                            if isSuccess {
+                                                                //fLog("idpil::: 좋아요 성공!!!")
+                                                            } else {
+                                                                //fLog("idpil::: 좋아요 실패!!!")
+                                                            }
+                                                            
+                                                        })
                                                 },
                                                 isTapMoreBtn: {
-                                                    if isAutoPlay {
-                                                        userManager.showCardAutoModeError = true
-                                                    }
-                                                    else {
-                                                        DefineBottomSheet.commonMore(
-                                                            type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
-                                                        )
-                                                        
-                                                        bottomSheetManager.show.swipeCardMore = true
-                                                        
-                                                        self.clickCardItem = card
-                                                    }
+                                                    DefineBottomSheet.commonMore(
+                                                        type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
+                                                    )
+                                                    
+                                                    bottomSheetManager.show.swipeCardMore = true
+                                                    
+                                                    self.clickCardItem = card
                                                 },
                                                 isLastCard: index==(maxID-1) ? true : false,
                                                 isTapFrontSpeakBtn: {
-                                                    if isAutoPlay {
-                                                        userManager.showCardAutoModeError = true
-                                                    }
-                                                    else {
+                                                    if !isAutoPlay {
                                                         if !speechManager.isSpeaking {
                                                             if let card = self.topCard {
                                                                 speechManager.speak(card.korean ?? "")
@@ -205,10 +208,7 @@ extension TabSwipeCardPage: View {
                                                     }
                                                 },
                                                 isTapBackSpeakBtn: {
-                                                    if isAutoPlay {
-                                                        userManager.showCardAutoModeError = true
-                                                    }
-                                                    else {
+                                                    if !isAutoPlay {
                                                         if !speechManager.isSpeaking {
                                                             if let card = self.topCard {
                                                                 speechManager.speak(card.english ?? "")
@@ -216,11 +216,15 @@ extension TabSwipeCardPage: View {
                                                         }
                                                     }
                                                 },
+                                                isTapCard: {
+                                                    withAnimation(.easeIn(duration: 0.2)) {
+                                                        isRootViewFlipped.toggle()
+                                                    }
+                                                },
                                                 isFrontSpeaking: isFrontSpeaking,
                                                 isBackSpeaking: isBackSpeaking,
                                                 isAutoPlay: isAutoPlay,
-                                                isRootViewFlipped: isRootViewFlipped,
-                                                isCardFlipped: $isCardFlipped
+                                                isRootViewFlipped: $isRootViewFlipped
                                             )
                                             //MARK: 책 쌓아놓은 것 같은 효과
                                             //.animation(.spring())
@@ -310,10 +314,13 @@ extension TabSwipeCardPage: View {
                                         isTapBackSpeakBtn: {
                                             //
                                         },
+                                        isTapCard: {
+                                            //
+                                        },
                                         isFrontSpeaking: false,
                                         isBackSpeaking: false,
                                         isAutoPlay: false,
-                                        isCardFlipped: $isCardFlipped
+                                        isRootViewFlipped: .constant(false)
                                     )
                                     .frame(
                                         height: geometry.size.height * 0.7
@@ -340,28 +347,20 @@ extension TabSwipeCardPage: View {
                     // 각 메인 카테고리 끝가지 학습한 경우, 더이상 카드가 없기 때문에 보여지지 않음
                     if !isShowDoneView {
                         HStack(spacing: 15) {
-                            Button(action: {
-                                if isAutoPlay {
-                                    userManager.showCardAutoModeError = true
-                                }
-                                else {
+                            if !isAutoPlay {
+                                Button(action: {
                                     bottomSheetManager.show.swipeCardCut = true
-                                }
-                            }, label: {
-                                Image(systemName: "scissors")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 20)
-                                    .foregroundColor(isAutoPlay ? Color.stateDisabledGray200 : Color.primaryDefault)
-                                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                            })
-                            
-                            Button(action: {
-                                if isAutoPlay {
-                                    userManager.showCardAutoModeError = true
-                                }
-                                else {
+                                }, label: {
+                                    Image(systemName: "scissors")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 20)
+                                        .foregroundColor(Color.primaryDefault)
+                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                                })
+                                
+                                Button(action: {
                                     if viewModel.swipeList.count < 4 {
                                         userManager.showCardShuffleError = true
                                     }
@@ -382,28 +381,21 @@ extension TabSwipeCardPage: View {
                                                 // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
                                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                                     self.isShowRandomCardShuffle = false
-                                                    
-                                                    startAutoMode()
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            }, label: {
-                                Image(systemName: "shuffle")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(isAutoPlay ? Color.stateDisabledGray200 : Color.primaryDefault)
-                                    .frame(height: 20)
-                                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                            })
-                            
-                            Button(action: {
-                                if isAutoPlay {
-                                    userManager.showCardAutoModeError = true
-                                }
-                                else {
+                                }, label: {
+                                    Image(systemName: "shuffle")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor(Color.primaryDefault)
+                                        .frame(height: 20)
+                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                                })
+                                
+                                Button(action: {
                                     // 카드를 하나라도 넘긴 경우에만 호출함
                                     if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
                                         StatusManager.shared.loadingStatus = .ShowWithTouchable
@@ -412,16 +404,16 @@ extension TabSwipeCardPage: View {
                                             StatusManager.shared.loadingStatus = .Close
                                         }
                                     }
-                                }
-                            }, label: {
-                                Image(systemName: "arrow.triangle.2.circlepath")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(isAutoPlay ? Color.stateDisabledGray200 : Color.primaryDefault)
-                                    .frame(height: 20)
-                                    .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                            })
+                                }, label: {
+                                    Image(systemName: "arrow.triangle.2.circlepath")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor(Color.primaryDefault)
+                                        .frame(height: 20)
+                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                                })
+                            }
                             
                             Spacer()
                             
@@ -717,8 +709,10 @@ extension TabSwipeCardPage: View {
              * 자동 모드 후보 2
              */
             if isAutoPlay {
+                navigationBarColor = .stateActivePrimaryDefault
                 startAutoMode()
             } else {
+                navigationBarColor = .primaryDefault
                 stopAutoMode()
             }
         }
@@ -746,7 +740,7 @@ extension TabSwipeCardPage: View {
             // TTS 재생 중
             if speechManager.isSpeaking {
                 // 한글 카드가 보이고 있는 상태 (한글 문장 읽어 주기 완료)
-                if !isCardFlipped {
+                if !isRootViewFlipped {
                     isFrontSpeaking = true
                 }
                 // 영어 카드가 보이고 있는 상태 (영어 문장 읽어 주기 완료)
@@ -757,24 +751,46 @@ extension TabSwipeCardPage: View {
             // TTS 재생 완료
             else {
                 if isAutoPlay {
+                    fLog("idpil::: 자동모드_isRootViewFlipped : \(isRootViewFlipped)")
+                    /// 자동모드 음성 재생 중에, 강제로 카드를 넘긴 경우
+                    /// 1. 다음 카드는 한글이 보여지니 isRootViewFlipped 값은 무조건 false 이다.
+                    /// 2. isForceSwipe 값이 true 이다.
+                    /// 3. 한글 음성 재생한다.
+                    
                     // 한글 카드가 보이고 있는 상태 (한글 문장 읽어 주기 완료)
-                    if !isCardFlipped {
-                        isFrontSpeaking = false
-                        
-                        // 카드 뒤집어서 영어 문장 보여주기
-                        withAnimation(.easeIn(duration: 0.2)) {
-                            isRootViewFlipped = true
+                    if !isRootViewFlipped {
+                        if isForceSwipe {
+                            // 한글 문장 읽어주기
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                if !speechManager.isSpeaking {
+                                    if let card = self.topCard {
+                                        speechManager.speak(card.korean ?? "")
+                                    }
+                                }
+                            }
+                            isFrontSpeaking = true
+                            
+                            
+                            
+                           isForceSwipe = false // 초기화
                         }
-                        
-                        // 영어 문장 읽어주기
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            if !speechManager.isSpeaking {
-                                if let card = self.topCard {
-                                    speechManager.speak(card.english ?? "")
+                        else {
+                            isFrontSpeaking = false
+                            
+                            // 카드 뒤집어서 영어 문장 보여주기
+                            withAnimation(.easeIn(duration: 0.2)) {
+                                isRootViewFlipped = true
+                            }
+                            
+                            // 영어 문장 읽어주기
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                if !speechManager.isSpeaking {
+                                    if let card = self.topCard {
+                                        speechManager.speak(card.english ?? "")
+                                    }
                                 }
                             }
                         }
-                        
                     }
                     // 영어 카드가 보이고 있는 상태 (영어 문장 읽어 주기 완료)
                     else {
@@ -795,7 +811,7 @@ extension TabSwipeCardPage: View {
                 // 2. 자동모드를 중간에 멈춘 경우.
                 else {
                     // 한글 카드가 보이고 있는 상태 (한글 문장 읽어 주기 완료)
-                    if !isCardFlipped {
+                    if !isRootViewFlipped {
                         isFrontSpeaking = false
                     }
                     // 영어 카드가 보이고 있는 상태 (영어 문장 읽어 주기 완료)
@@ -812,25 +828,27 @@ extension TabSwipeCardPage: View {
         HStack(spacing: 10) {
             mainCategoryButton
             
-            Button(action: {
-                if isMainCategoryListViewClose() {
-                    withAnimation {
-                        bottomSheetManager.show.grammarInfo = true
+            if !isAutoPlay {
+                Button(action: {
+                    if isMainCategoryListViewClose() {
+                        withAnimation {
+                            bottomSheetManager.show.grammarInfo = true
+                        }
                     }
-                }
-            }, label: {
-                Image("icon_help")
-                    .resizable()
-                    .renderingMode(.template)
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(.gray25)
-                    .overlay(
-                        Text("Help")
-                            .font(.caption31013Regular).fontWeight(.semibold)
-                            .foregroundColor(.primaryDefault)
-                            .padding(.bottom, 5)
-                    )
-            })
+                }, label: {
+                    Image("icon_help")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.gray25)
+                        .overlay(
+                            Text("Help")
+                                .font(.caption31013Regular).fontWeight(.semibold)
+                                .foregroundColor(.primaryDefault)
+                                .padding(.bottom, 5)
+                        )
+                })
+            }
             
             Spacer()
             
@@ -840,9 +858,9 @@ extension TabSwipeCardPage: View {
                 Image(systemName: isAutoPlay ? "autostartstop.slash" : "autostartstop")
                     .resizable()
                     .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit).frame(height: 22)
+                    .aspectRatio(contentMode: .fit).frame(height: 25)
                     .foregroundColor(.gray25)
-                    .padding(7).background(Color.primaryDefault) // 클릭 잘 되도록
+                    .padding(7).background(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault) // 클릭 잘 되도록
                     .padding(.trailing, 20)
             })
         }
@@ -868,7 +886,7 @@ extension TabSwipeCardPage: View {
         .padding(.horizontal, 15)
         .clipShape(Capsule())
         .overlay(Capsule().stroke(Color.gray25.opacity(1), lineWidth: 1))
-        .background(Capsule().fill(Color.primaryDefault))
+        .background(Capsule().fill(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault))
         .padding(.vertical, 10)
         .padding(.leading, 20)
         .padding(.trailing, 5)
@@ -904,12 +922,11 @@ extension TabSwipeCardPage: View {
 //                                                .opacity(isSelected ? 1.0 : 0.0)
 //                                        }
 //                                    )
-                                    .padding(EdgeInsets(top: 20, leading: 5, bottom: 15, trailing: 5)).background(Color.primaryDefault) // 클릭 감도 올림
+                                    .padding(EdgeInsets(top: 20, leading: 5, bottom: 15, trailing: 5)).background(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault) // 클릭 감도 올림
                                     .onTapGesture {
                                         
                                         // DoneView 숨김
                                         self.hideDoneView()
-                                        
                                         
                                         if isMainCategoryListViewClose() {
                                             /**
@@ -1318,7 +1335,7 @@ extension TabSwipeCardPage {
         // 영어 카드가 보이고 있는 상태
         // 1. 영어 문장 읽어주기
         // 2. 카드 넘김
-        if isCardFlipped {
+        if isRootViewFlipped {
             // 영어 문장 읽어주기
             if !speechManager.isSpeaking {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

@@ -14,7 +14,7 @@ struct SwipeCardBackView: View {
     let card: SwipeDataList
     let isTapSpeakBtn: () -> Void
     let isSpeaking: Bool
-    @Binding var isCardFlipped: Bool
+    let isLastCard: Bool
     
     var body: some View {
         GeometryReader { geometry in
@@ -44,9 +44,7 @@ struct SwipeCardBackView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .onAppear {
-                isCardFlipped = true
-            }
+            .opacity(isLastCard ? 1.0 : 0.0)
             .padding()
             .foregroundColor(.white)
             .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .leading)
