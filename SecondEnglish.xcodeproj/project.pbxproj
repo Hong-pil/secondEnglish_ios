@@ -29,6 +29,7 @@
 		E003BA9A2B8605B300C55590 /* NetworkMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */; };
 		E003BA9C2B86200D00C55590 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9B2B86200D00C55590 /* Authenticator.swift */; };
 		E003BA9F2B863B1700C55590 /* UserNamePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9E2B863B1700C55590 /* UserNamePage.swift */; };
+		E0082BB32BCB3253001E2AC9 /* auto_mode2.gif in Resources */ = {isa = PBXBuildFile; fileRef = E0082BB22BCB3253001E2AC9 /* auto_mode2.gif */; };
 		E00956202BC83B3500DEB8EC /* DoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E009561F2BC83B3500DEB8EC /* DoneView.swift */; };
 		E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */; };
 		E00FDAF22B5FDF660080761B /* CommonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAF12B5FDF660080761B /* CommonButton.swift */; };
@@ -285,6 +286,7 @@
 		E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitorManager.swift; sourceTree = "<group>"; };
 		E003BA9B2B86200D00C55590 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		E003BA9E2B863B1700C55590 /* UserNamePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNamePage.swift; sourceTree = "<group>"; };
+		E0082BB22BCB3253001E2AC9 /* auto_mode2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = auto_mode2.gif; sourceTree = "<group>"; };
 		E009561F2BC83B3500DEB8EC /* DoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneView.swift; sourceTree = "<group>"; };
 		E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginPage.swift; sourceTree = "<group>"; };
 		E00FDAF12B5FDF660080761B /* CommonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton.swift; sourceTree = "<group>"; };
@@ -970,6 +972,7 @@
 		E0DBDD252B4FB714007615A8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E0082BB22BCB3253001E2AC9 /* auto_mode2.gif */,
 				E0F5BC0B2BCAC35A000930D0 /* auto_mode.gif */,
 				E0F5BC072BCABE78000930D0 /* oc0etf3rg6n1x6lk83dw.gif */,
 				E085DDBF2B5113DD00CF44A8 /* secondEnglish_loading.png */,
@@ -1663,6 +1666,7 @@
 				E0F5BC082BCABE79000930D0 /* oc0etf3rg6n1x6lk83dw.gif in Resources */,
 				E0DBDE6D2B4FDFDF007615A8 /* LaunchScreen.storyboard in Resources */,
 				E0DBDE5E2B4FDD8A007615A8 /* Localizable.strings in Resources */,
+				E0082BB32BCB3253001E2AC9 /* auto_mode2.gif in Resources */,
 				E0BA02512B5E875400AA11A5 /* Config.xcconfig in Resources */,
 				E0DBDE682B4FDEB1007615A8 /* NotoSansKR-Medium.otf in Resources */,
 				E0DBDE6A2B4FDEB1007615A8 /* Roboto-Medium.ttf in Resources */,

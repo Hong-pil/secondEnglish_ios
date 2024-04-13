@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct TabHomePage {
     @StateObject var viewModel = TabHomeViewModel.shared
@@ -511,17 +512,27 @@ extension TabHomePage: View {
                             .foregroundColor(.gray500)
                             .frame(maxWidth: .infinity, alignment: .center)
                         
-                        Button(action: {
-                            self.myPostIsAutoPlay.toggle()
-                        }, label: {
-                            Image(systemName: self.myPostIsAutoPlay ? "autostartstop.slash" : "autostartstop")
-                                .resizable()
-                                .renderingMode(.template)
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.primaryDefault)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .padding(.trailing, 25)
-                        })
+                        HStack(spacing: 10) {
+                            if myPostIsAutoPlay {
+                                AnimatedImage(name: "auto_mode2.gif")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit).frame(height: 40)
+                            }
+                            
+                            Button(action: {
+                                myPostIsAutoPlay.toggle()
+                            }, label: {
+                                Image(systemName: myPostIsAutoPlay ? "autostartstop.slash" : "autostartstop")
+                                    .resizable()
+                                    .renderingMode(.template)
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.primaryDefault)
+                                    .padding(5).background(Color.bgLightGray50) // 클릭 잘 되도록
+                            })
+                        }
+                        .frame(height: 40)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.trailing, 20)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                     .padding(.bottom, 10)
@@ -604,17 +615,32 @@ extension TabHomePage: View {
                             .foregroundColor(.gray500)
                             .frame(maxWidth: .infinity, alignment: .center)
                         
-                        Button(action: {
-                            self.myLikeIsAutoPlay.toggle()
-                        }, label: {
-                            Image(systemName: self.myLikeIsAutoPlay ? "autostartstop.slash" : "autostartstop")
-                                .resizable()
-                                .renderingMode(.template)
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.primaryDefault)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .padding(.trailing, 25)
-                        })
+                        HStack(spacing: 10) {
+                            if myLikeIsAutoPlay {
+                                AnimatedImage(name: "auto_mode2.gif")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit).frame(height: 40)
+                            }
+                            
+                            Button(action: {
+                                myLikeIsAutoPlay.toggle()
+                            }, label: {
+                                Image(systemName: myLikeIsAutoPlay ? "autostartstop.slash" : "autostartstop")
+                                    .resizable()
+                                    .renderingMode(.template)
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.primaryDefault)
+                                    .padding(5).background(Color.bgLightGray50) // 클릭 잘 되도록
+                            })
+                        }
+                        .frame(height: 40)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.trailing, 20)
+                        
+                        
+                        
+                        
+                        
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                     .padding(.bottom, 10)
