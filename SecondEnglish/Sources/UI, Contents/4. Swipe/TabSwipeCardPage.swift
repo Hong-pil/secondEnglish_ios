@@ -9,6 +9,7 @@ import SwiftUI
 import AVFoundation
 import AVKit
 import Combine
+import SDWebImageSwiftUI
 
 struct TabSwipeCardPage {
     @StateObject var viewModel = SwipeCardViewModel.shared
@@ -55,8 +56,8 @@ struct TabSwipeCardPage {
     @State private var isShowRandomCardShuffle: Bool = false
     @State private var randomCardList: [SwipeDataList] = []
     
-    
-    @Binding var navigationBarColor: Color
+    // Main.swift에서 자동모드 중지시킴
+    @Binding var isAutoModeStop: Bool
     
     private struct sizeInfo {
         static let grammarTextFont_title: Font = Font.title32028Bold
@@ -73,10 +74,10 @@ struct TabSwipeCardPage {
         static let index3RandomCardOffset: CGSize = CGSize(width: 0, height: -30)
     }
     
-    init(navigationBarColor: Binding<Color>) {
+    init(isAutoModeStop: Binding<Bool>) {
         // 자동 모드일 때, 3초 마다 카드 넘김
         self._timer = .init(initialValue: Timer.publish(every: seconds, on: .main, in: .common))
-        self._navigationBarColor = navigationBarColor
+        self._isAutoModeStop = isAutoModeStop
     }
 }
 
@@ -89,7 +90,7 @@ extension TabSwipeCardPage: View {
                     
                     subCategoryTabView
                 }
-                .background(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault)
+                .background(Color.primaryDefault)
                 .onTapGesture {
                     if isShowMainCategoryListView {
                         isShowMainCategoryListView = false
@@ -150,6 +151,8 @@ extension TabSwipeCardPage: View {
                                             SwipeView(
                                                 card: card,
                                                 onRemove: { likeType in
+                                                    
+                                                    
                                                     /// isRootViewFlipped : 카드 뒤집는 변수
                                                     ///
                                                     /// '한글 카드'에서 Swipe하면, 다음 카드도 한글을 보여줘야 하기 때문에 isRootViewFlipped 값을 변경할 필요가 없다.
@@ -158,6 +161,9 @@ extension TabSwipeCardPage: View {
                                                     
                                                     // 자동모드 TTS 재생 중에 강제로 카드 넘김
                                                     if isAutoPlay {
+                                                        fLog("idpil::: 카드 강제로 넘김")
+                                                        fLog("idpil::: speechManager.isSpeaking : \(speechManager.isSpeaking)")
+                                                        
                                                         if speechManager.isSpeaking {
                                                             speechManager.stopSpeaking()
                                                         }
@@ -488,7 +494,20 @@ extension TabSwipeCardPage: View {
         }
         .onDisappear {
             if isAutoPlay {
-                stopTimer()
+                //stopTimer()
+                stopAutoMode()
+                isAutoPlay = false
+            }
+        }
+        .onChange(of: isAutoModeStop) {
+            if isAutoModeStop {
+                if isAutoPlay {
+                    //stopTimer()
+                    stopAutoMode()
+                    isAutoPlay = false
+                }
+                
+                isAutoModeStop = false // 초기화
             }
         }
         .onChange(of: maxID) {
@@ -591,7 +610,7 @@ extension TabSwipeCardPage: View {
         }
         .onChange(of: self.selectedMainCategoryItem) {
             
-            // DoneView 숨김
+            // DoneView 보이고 있으면 숨김
             self.hideDoneView()
             
             viewModel.requestCategory(
@@ -709,10 +728,8 @@ extension TabSwipeCardPage: View {
              * 자동 모드 후보 2
              */
             if isAutoPlay {
-                navigationBarColor = .stateActivePrimaryDefault
                 startAutoMode()
             } else {
-                navigationBarColor = .primaryDefault
                 stopAutoMode()
             }
         }
@@ -751,7 +768,6 @@ extension TabSwipeCardPage: View {
             // TTS 재생 완료
             else {
                 if isAutoPlay {
-                    fLog("idpil::: 자동모드_isRootViewFlipped : \(isRootViewFlipped)")
                     /// 자동모드 음성 재생 중에, 강제로 카드를 넘긴 경우
                     /// 1. 다음 카드는 한글이 보여지니 isRootViewFlipped 값은 무조건 false 이다.
                     /// 2. isForceSwipe 값이 true 이다.
@@ -830,6 +846,7 @@ extension TabSwipeCardPage: View {
             
             if !isAutoPlay {
                 Button(action: {
+                    // 메인 카테고리 리스트 뷰가 띄워져 있으면 닫는다.
                     if isMainCategoryListViewClose() {
                         withAnimation {
                             bottomSheetManager.show.grammarInfo = true
@@ -852,6 +869,12 @@ extension TabSwipeCardPage: View {
             
             Spacer()
             
+            if isAutoPlay {
+                AnimatedImage(name: "auto_mode.gif")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit).frame(height: 40)
+            }
+            
             Button(action: {
                 isAutoPlay.toggle()
             }, label: {
@@ -860,7 +883,7 @@ extension TabSwipeCardPage: View {
                     .renderingMode(.template)
                     .aspectRatio(contentMode: .fit).frame(height: 25)
                     .foregroundColor(.gray25)
-                    .padding(7).background(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault) // 클릭 잘 되도록
+                    .padding(7).background(Color.primaryDefault) // 클릭 잘 되도록
                     .padding(.trailing, 20)
             })
         }
@@ -886,14 +909,19 @@ extension TabSwipeCardPage: View {
         .padding(.horizontal, 15)
         .clipShape(Capsule())
         .overlay(Capsule().stroke(Color.gray25.opacity(1), lineWidth: 1))
-        .background(Capsule().fill(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault))
+        .background(Capsule().fill(Color.primaryDefault))
         .padding(.vertical, 10)
         .padding(.leading, 20)
         .padding(.trailing, 5)
         .onTapGesture {
-            self.isShowMainCategoryListView.toggle()
-            withAnimation {
-                self.isShowMainCategoryButtonAnimation.toggle()
+            if isAutoPlay {
+                userManager.showCardAutoModeError = true
+            }
+            else {
+                self.isShowMainCategoryListView.toggle()
+                withAnimation {
+                    self.isShowMainCategoryButtonAnimation.toggle()
+                }
             }
         }
     }
@@ -922,18 +950,14 @@ extension TabSwipeCardPage: View {
 //                                                .opacity(isSelected ? 1.0 : 0.0)
 //                                        }
 //                                    )
-                                    .padding(EdgeInsets(top: 20, leading: 5, bottom: 15, trailing: 5)).background(isAutoPlay ? Color.stateActivePrimaryDefault : Color.primaryDefault) // 클릭 감도 올림
+                                    .padding(EdgeInsets(top: 20, leading: 5, bottom: 15, trailing: 5)).background(Color.primaryDefault) // 클릭 감도 올림
                                     .onTapGesture {
-                                        
-                                        // DoneView 숨김
+                                        // DoneView 보이고 있으면 숨김
                                         self.hideDoneView()
                                         
+                                        // 메인 카테고리 리스트 뷰가 띄워져 있으면 닫는다.
                                         if isMainCategoryListViewClose() {
-                                            /**
-                                             * 카테고리 버튼 클릭했을 때,
-                                             * 왜 -1 을 해줘야 제대로 동작하는거지?????
-                                             *
-                                             */
+                                            
                                             viewModel.categoryTabIndex = index
                                             
                                             scrollToElement(with: proxy)
@@ -941,17 +965,27 @@ extension TabSwipeCardPage: View {
     //                                            proxy.scrollTo(index, anchor: .top)
     //                                        }
                                             
-                                            
                                             viewModel.requestSwipeListByCategory(
                                                 main_category: self.selectedMainCategoryItem,
                                                 sub_category: element,
                                                 sortType: .Latest,
                                                 isSuccess: { success in
-                                                    //
+                                                    
+                                                    if isAutoPlay {
+                                                        /// isRootViewFlipped : 카드 뒤집는 변수
+                                                        ///
+                                                        /// 만약 '영어 카드'가 보이고 있는 상태에서 카테고리 탭 누른 경우, 한글 카드가 보여야 하기 때문에 isRootViewFlipped 값을 한글이 보이게 false로 만들어줘야 됨.
+                                                        isRootViewFlipped = false
+                                                        
+                                                        if speechManager.isSpeaking {
+                                                            speechManager.stopSpeaking()
+                                                        }
+                                                        
+                                                        isForceSwipe = true
+                                                    }
+                                                    
                                                 }
                                             )
-                                            
-                                            
                                             
             //                                    scrollToTopAimated.toggle()
             //                                    moveToTopIndicator.toggle()
@@ -1389,7 +1423,7 @@ extension TabSwipeCardPage {
         }
     }
     
-    // DoneView 숨김
+    // DoneView 보이고 있으면 숨김
     private func hideDoneView() {
         if isShowDoneView {
             isShowDoneView = false

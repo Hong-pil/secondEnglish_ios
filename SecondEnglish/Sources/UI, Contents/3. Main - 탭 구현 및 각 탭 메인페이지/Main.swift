@@ -35,7 +35,8 @@ struct Main {
     
     @State private var isFirstLoaded: Bool = true
     @State private var isShowEditorView: Bool = false
-    @State var navigationBarColor: Color = .stateActivePrimaryDefault
+    @State var navigationBarColor: Color = Color.stateActivePrimaryDefault
+    @State var isAutoModeStop: Bool = false
     
     private struct sizeInfo {
         static let numberOfTabs: CGFloat = 3.0
@@ -102,7 +103,7 @@ extension Main: View {
                 TabHomePage(tabtype: tabtype_1, tabs: tabs_1, moveToTopIndicator: $tabStateHandler.moveFirstTabToTop)
                     .tag(bTab.my)
                 
-                TabSwipeCardPage(navigationBarColor: $navigationBarColor)
+                TabSwipeCardPage(isAutoModeStop: $isAutoModeStop)
                     .tag(bTab.swipe_card)
             }
             .setTabBarVisibility(isHidden: true)
@@ -124,6 +125,7 @@ extension Main: View {
                         tabStateHandler.selection = .my
                         //navigationBarColor = Color.bgLightGray50
                         navigationBarColor = Color.stateActivePrimaryDefault
+                        //isAutoModeStop = true
                     } label: {
                         VStack(spacing: 8) {
                             Image(systemName: "bookmark.square")
@@ -147,6 +149,7 @@ extension Main: View {
                     
                     Button {
                         isShowEditorView = true
+                        isAutoModeStop = true
                     } label: {
                         Image(systemName: "plus")
                             .renderingMode(.template)
