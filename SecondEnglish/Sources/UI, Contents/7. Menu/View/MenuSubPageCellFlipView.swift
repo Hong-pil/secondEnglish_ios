@@ -13,6 +13,7 @@ struct MenuSubPageCellFlipView: View {
     
     // [카드뷰 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위한 기능]
     let isDoItemDelete: Bool
+    var isBlockCancel: (() -> Void)
     @State private var swipeLeftOffset = CGSize.zero // Tracks the offset of the swipe gesture
     @State private var isShowingDeleteButton = false // Determines when to show the delete button
     private struct sizeInfo {
@@ -58,17 +59,27 @@ struct MenuSubPageCellFlipView: View {
                 Button(action: {
                     // Action to perform on delete
                     
+                    
+                    
                     // 뷰 원래 자리로 이동 (삭제이기 때문에 withAnimation 효과 줄 필요 없음)
                     self.swipeLeftOffset = CGSize.zero
                     self.isShowingDeleteButton = false
                     
-                    //isItemDelete(true, cardIndex)
+                    isBlockCancel()
                 }) {
-                    Image(systemName: "return")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(8)
+                    VStack(spacing: 3) {
+                        Image(systemName: "trash")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                        
+                        Text("해제")
+                            .font(.caption11218Regular)
+                            .foregroundColor(.gray25)
+                    }
+                    .padding(5)
+                    .frame(width: 50, height: 50)
+                    .background(Color.primaryDefault)
+                    .cornerRadius(8)
                 }
                 //.padding(.leading, 20)
                 /**

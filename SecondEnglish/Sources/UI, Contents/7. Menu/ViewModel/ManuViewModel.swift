@@ -14,6 +14,7 @@ class MenuViewModel: ObservableObject {
     
     @Published var alertMessage: String = ""
     @Published var showAlert: Bool = false
+    @Published var popupMessage: String = ""
     
     @Published var mySentenceNum: Int = 0
     @Published var myPostLikeNum: Int = 0
@@ -180,6 +181,34 @@ class MenuViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    //MARK: - 카드 차단/차단해제
+    func blockCard(cardIdx: Int, isBlock: String, isDone: @escaping() -> Void) {
+        ApiControl.doBlockCard(cardIdx: cardIdx, isBlock: isBlock)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.popupMessage = error.message
+                isDone()
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if let message = value.message {
+                        self.popupMessage = message
+                        isDone()
+                    }
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func removeItem(cardIdx: Int) {
+        self.cardBlockData?.sentence_list.remove(at: cardIdx)
     }
     
     

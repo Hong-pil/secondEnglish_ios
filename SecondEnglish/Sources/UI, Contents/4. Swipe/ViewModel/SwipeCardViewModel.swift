@@ -15,8 +15,7 @@ class SwipeCardViewModel: ObservableObject {
     @Published var isFirst: Bool = false
     
     //alert
-    @Published var showAlert: Bool = false
-    @Published var alertMessage: String = ""
+    @Published var popupMessage: String = ""
     
     @Published var loadingStatus: LoadingStatus = .Close
     
@@ -126,10 +125,7 @@ class SwipeCardViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 
             } receiveValue: { value in
                 if value.code == 200 {
@@ -144,10 +140,7 @@ class SwipeCardViewModel: ObservableObject {
                     isSuccess(true)
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
                 }
             }
             .store(in: &cancellable)
@@ -160,10 +153,7 @@ class SwipeCardViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 
             } receiveValue: { value in
                 if value.code == 200 {
@@ -193,10 +183,7 @@ class SwipeCardViewModel: ObservableObject {
                     isSuccess(true)
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
                 }
             }
             .store(in: &cancellable)
@@ -210,10 +197,7 @@ class SwipeCardViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isSuccess(false)
             } receiveValue: { value in
                 if value.code == 200 {
@@ -245,10 +229,7 @@ class SwipeCardViewModel: ObservableObject {
                     isSuccess(true)
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
                 }
             }
             .store(in: &cancellable)
@@ -261,10 +242,7 @@ class SwipeCardViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isSuccess(false)
             } receiveValue: { value in
                 if value.code == 200 {
@@ -281,10 +259,7 @@ class SwipeCardViewModel: ObservableObject {
                     isSuccess(true)
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
                 }
             }
             .store(in: &cancellable)
@@ -297,10 +272,7 @@ class SwipeCardViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isSuccess(false)
             } receiveValue: { value in
                 if value.code == 200 {
@@ -313,10 +285,7 @@ class SwipeCardViewModel: ObservableObject {
                     isSuccess(true)
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
                 }
             }
             .store(in: &cancellable)
@@ -329,10 +298,7 @@ class SwipeCardViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isSuccess([], false)
             } receiveValue: { value in
                 if value.code == 200 {
@@ -340,64 +306,55 @@ class SwipeCardViewModel: ObservableObject {
                     isSuccess(value.data, true)
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
                 }
             }
             .store(in: &cancellable)
     }
     
     //MARK: - 카드 신고하기
-    func reportCard(targetUid: String, targetCardIdx: Int, reportCode: Int, isSuccess: @escaping(Bool) -> Void) {
+    func reportCard(targetUid: String, targetCardIdx: Int, reportCode: Int, isDone: @escaping() -> Void) {
         ApiControl.doReportCard(targetUid: targetUid, targetCardIdx: targetCardIdx, reportCode: reportCode)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                isSuccess(false)
+                self.popupMessage = error.message
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    
-                    isSuccess(true)
+                    if let message = value.message {
+                        self.popupMessage = message
+                        isDone()
+                    }
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellable)
     }
     
-    //MARK: - 카드 차단하기
-    func blockCard(cardIdx: Int, isBlock: Int, isSuccess: @escaping(Bool) -> Void) {
+    //MARK: - 카드 차단/차단해제
+    func blockCard(cardIdx: Int, isBlock: String, isDone: @escaping() -> Void) {
         ApiControl.doBlockCard(cardIdx: cardIdx, isBlock: isBlock)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                isSuccess(false)
+                self.popupMessage = error.message
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    
-                    isSuccess(true)
+                    if let message = value.message {
+                        self.popupMessage = message
+                        isDone()
+                    }
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellable)
@@ -410,10 +367,7 @@ class SwipeCardViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isSuccess(false)
             } receiveValue: { value in
                 if value.code == 200 {
@@ -421,10 +375,7 @@ class SwipeCardViewModel: ObservableObject {
                     isSuccess(true)
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
                 }
             }
             .store(in: &cancellable)

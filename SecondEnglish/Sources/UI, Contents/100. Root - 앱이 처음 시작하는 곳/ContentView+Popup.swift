@@ -35,7 +35,7 @@ struct ContentViewPopup: ViewModifier {
                         title: "", // 제목없는 팝업뷰
                         type: CustomBottomSheetClickType.SwipeCardMore,
                         onPressItemMore: { buttonType in
-                            //fLog("\n--- \(buttonType) ---\n")
+                            fLog("\n--- \(buttonType) ---\n")
                             bottomSheetManager.pressedCardMorType = buttonType
                         },
                         isShow: $bottomSheetManager.show.swipeCardMore

@@ -17,6 +17,8 @@ struct TabSwipeCardPage {
     @StateObject var bottomSheetManager = BottomSheetManager.shared
     @StateObject private var speechManager = SpeechSynthesizerManager()
     
+    @State private var showAlert: Bool = false
+    
     @State private var isShowMainCategoryButtonAnimation = false
     @State private var isShowMainCategoryListView = false
     @State private var currentCardIndex: Int = 0
@@ -152,7 +154,6 @@ extension TabSwipeCardPage: View {
                                                 card: card,
                                                 onRemove: { likeType in
                                                     
-                                                    
                                                     /// isRootViewFlipped : 카드 뒤집는 변수
                                                     ///
                                                     /// '한글 카드'에서 Swipe하면, 다음 카드도 한글을 보여줘야 하기 때문에 isRootViewFlipped 값을 변경할 필요가 없다.
@@ -161,9 +162,6 @@ extension TabSwipeCardPage: View {
                                                     
                                                     // 자동모드 TTS 재생 중에 강제로 카드 넘김
                                                     if isAutoPlay {
-                                                        fLog("idpil::: 카드 강제로 넘김")
-                                                        fLog("idpil::: speechManager.isSpeaking : \(speechManager.isSpeaking)")
-                                                        
                                                         if speechManager.isSpeaking {
                                                             speechManager.stopSpeaking()
                                                         }
@@ -548,7 +546,7 @@ extension TabSwipeCardPage: View {
         .onChange(of: bottomSheetManager.pressedCardMorType) {
             
             switch bottomSheetManager.pressedCardMorType {
-            case .Report:
+            case .Report: // 신고하기
                 // 한 번 호출했으면 더 이상 가져오지 않음
                 if DefineBottomSheet.reportListItems.count > 0 {
                     bottomSheetManager.show.swipeCardReport = true
@@ -562,13 +560,23 @@ extension TabSwipeCardPage: View {
                         }
                     })
                 }
-            case .BoardBlock:
-                viewModel.blockCard(cardIdx: 5, isBlock: 1) { isSuccess in
-                    if isSuccess {
-                        fLog("idpil::: 카드차단 성공 :)")
+            case .BoardBlock: // 이 글 차단
+                //printPrettyJSON(keyWord: "idpil::: clickCardItem :::\n", from: clickCardItem)
+                
+                if let card = clickCardItem,
+                   let targetCardIdx = card.idx {
+                    // isBlock == false 이면 차단해제 요청
+                    // isBlock == true 이면 차단 요청
+                    // 차단된 글은 SwipePage에서 보이지 않기 때문에 isBlock 변수로 구분할 필요 없음.
+                    viewModel.blockCard(
+                        cardIdx: targetCardIdx,
+                        isBlock: "true"
+                    ) {
+                        self.showAlert = true
+                        self.swipeTopCard()
                     }
                 }
-            case .UserBlock:
+            case .UserBlock: // 사용자 차단하기
                 if let item = self.clickCardItem {
                     viewModel.blockUser(
                         targetUid: item.uid ?? "",
@@ -587,17 +595,20 @@ extension TabSwipeCardPage: View {
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
             bottomSheetManager.pressedCardMorType = .None
         }
+        // 신고하기 선택 완료
         .onChange(of: bottomSheetManager.pressedCardReportCode) {
             if bottomSheetManager.pressedCardReportCode != -1 {
                 //fLog("idpil::: 신고하기 누른 코드값 : \(bottomSheetManager.pressedCardReportCode)")
                 
-                viewModel.reportCard(
-                    targetUid: "qqqqqqq",
-                    targetCardIdx: 100,
-                    reportCode: bottomSheetManager.pressedCardReportCode
-                ) { isSuccess in
-                    if isSuccess {
-                        //
+                if let card = clickCardItem,
+                   let targetUid = card.uid,
+                   let targetCardIdx = card.idx {
+                    viewModel.reportCard(
+                        targetUid: targetUid,
+                        targetCardIdx: targetCardIdx,
+                        reportCode: bottomSheetManager.pressedCardReportCode
+                    ) {
+                        self.showAlert = true
                     }
                 }
             }
@@ -837,7 +848,13 @@ extension TabSwipeCardPage: View {
                 }
             }
         }
-        
+        .popup(isPresenting: $showAlert,
+               cornerRadius: 5,
+               locationType: .bottom,
+               autoDismiss: .after(2),
+               popup:
+                CommonPopupView(text: viewModel.popupMessage)
+        )
     }
 
     var header: some View {

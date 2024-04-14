@@ -14,6 +14,7 @@ struct MenuCommonSubPage {
     let type: MenuButtonType
     
     @State var naviTitle: String = ""
+    @State private var showAlert: Bool = false
 }
 
 extension MenuCommonSubPage: View {
@@ -93,6 +94,13 @@ extension MenuCommonSubPage: View {
                 })
             }
         }
+        .popup(isPresenting: $showAlert,
+               cornerRadius: 5,
+               locationType: .bottom,
+               autoDismiss: .after(2),
+               popup:
+                CommonPopupView(text: viewModel.popupMessage)
+        )
     }
     
     var sentenceView: some View {
@@ -121,7 +129,20 @@ extension MenuCommonSubPage: View {
                         
                         MenuSubPageCellFlipView(
                             item: item,
-                            isDoItemDelete: true
+                            isDoItemDelete: true,
+                            isBlockCancel: {
+                                fLog("idpil::: 차단해제 클릭 : \(item.korean ?? "")")
+                                
+                                // isBlock == false 이면 차단해제 요청
+                                // isBlock == true 이면 차단 요청
+                                viewModel.blockCard(
+                                    cardIdx: item.idx ?? -1,
+                                    isBlock: "false"
+                                ) {
+                                    self.showAlert = true
+                                    viewModel.removeItem(cardIdx: index)
+                                }
+                            }
                         )
                     }
                 }

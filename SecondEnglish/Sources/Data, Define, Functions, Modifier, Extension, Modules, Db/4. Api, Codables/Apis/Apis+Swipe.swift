@@ -22,7 +22,7 @@ enum ApisSwipe {
     case addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>])
     case getReportList
     case doReportCard(targetUid: String, targetCardIdx: Int, reportCode: Int)
-    case doBlockCard(cardIdx: Int, isBlock: Int)
+    case doBlockCard(cardIdx: Int, isBlock: String)
     case doBlockUser(targetUid: String, targetNickname: String, isBlock: Bool)
 }
 
