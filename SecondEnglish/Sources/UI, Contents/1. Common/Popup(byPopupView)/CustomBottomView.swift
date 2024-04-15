@@ -134,6 +134,15 @@ struct CustomBottomItemMoreView: View {
         }
         .background(Color.gray25)
         .onTapGesture {
+            /// 관리자 작성글 : 신고하기 / 이 글 차단
+            /// 내가 작성한 글 : 수정하기 / 삭제하기
+            /// 그 외 모두 : 신고하기 / 이 글 차단하기 / 사용자 차단하기
+            ///
+            /// 신고하기 SEQ : 1
+            /// 이 글 차단하기 SEQ : 2
+            /// 사용자 차단하기 SEQ : 3
+            /// 수정하기 SEQ : 4
+            /// 삭제하기 SEQ : 5
             switch item.SEQ {
             case 1:
                 onPress(MoreButtonType.Report)
@@ -141,6 +150,10 @@ struct CustomBottomItemMoreView: View {
                 onPress(MoreButtonType.BoardBlock)
             case 3:
                 onPress(MoreButtonType.UserBlock)
+            case 4:
+                onPress(MoreButtonType.Edit)
+            case 5:
+                onPress(MoreButtonType.Delete)
             default:
                 fLog("")
             }

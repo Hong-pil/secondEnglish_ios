@@ -194,7 +194,12 @@ extension TabSwipeCardPage: View {
                                                 },
                                                 isTapMoreBtn: {
                                                     DefineBottomSheet.commonMore(
-                                                        type: CommonMore.SwipeCardMore(isUserBlock: (card.isUserBlock ?? false), isCardBlock: (card.isCardBlock ?? false))
+                                                        type: CommonMore.SwipeCardMore(
+                                                            isUserBlock: card.isUserBlock ?? false,
+                                                            isCardBlock: card.isCardBlock ?? false,
+                                                            isAdmin: (card.uid ?? "") == DefineKey.admin ? true : false,
+                                                            isMyPost: (card.uid ?? "") == userManager.uid ? true : false
+                                                        )
                                                     )
                                                     
                                                     bottomSheetManager.show.swipeCardMore = true
@@ -543,9 +548,11 @@ extension TabSwipeCardPage: View {
                 //let _ = fLog("idpil::: 퍼센트 : \(curPercent)")
             }
         }
-        .onChange(of: bottomSheetManager.pressedCardMorType) {
-            
-            switch bottomSheetManager.pressedCardMorType {
+        .onChange(of: bottomSheetManager.pressedCardMoreType) {
+            /// 관리자 작성글 : 신고하기 / 이 글 차단
+            /// 내가 작성한 글 : 수정하기 / 삭제하기
+            /// 그 외 모두 : 신고하기 / 이 글 차단하기 / 사용자 차단하기
+            switch bottomSheetManager.pressedCardMoreType {
             case .Report: // 신고하기
                 // 한 번 호출했으면 더 이상 가져오지 않음
                 if DefineBottomSheet.reportListItems.count > 0 {
@@ -560,7 +567,7 @@ extension TabSwipeCardPage: View {
                         }
                     })
                 }
-            case .BoardBlock: // 이 글 차단
+            case .BoardBlock: // 이 글 차단하기
                 //printPrettyJSON(keyWord: "idpil::: clickCardItem :::\n", from: clickCardItem)
                 
                 if let card = clickCardItem,
@@ -577,23 +584,34 @@ extension TabSwipeCardPage: View {
                     }
                 }
             case .UserBlock: // 사용자 차단하기
-                if let item = self.clickCardItem {
+                printPrettyJSON(keyWord: "idpil::: clickCardItem :::\n", from: clickCardItem)
+                
+                if let item = clickCardItem,
+                   let targetUid = item.uid,
+                   let targetNickname = item.user_name {
+                    // isBlock == false 이면 차단해제 요청
+                    // isBlock == true 이면 차단 요청
+                    // 차단된 글은 SwipePage에서 보이지 않기 때문에 isBlock 변수로 구분할 필요 없음.
                     viewModel.blockUser(
-                        targetUid: item.uid ?? "",
-                        targetNickname: item.user_name ?? "",
-                        isBlock: item.isUserBlock ?? false
-                    ) { isSuccess in
-                        if isSuccess {
-                            fLog("idpil::: 유저차단 성공 :)")
+                        targetUid: targetUid,
+                        targetNickname: targetNickname,
+                        isBlock: "true"
+                    ) {
+                        viewModel.removeUserFromSwipeList(targetUid: targetUid) {
+                            self.showAlert = true
                         }
                     }
                 }
+            case .Edit: // 수정하기
+                fLog("idpil::: 수정하기 클릭")
+            case .Delete: // 삭제하기
+                fLog("idpil::: 삭제하기 클릭")
             default:
                 fLog("")
             }
             
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
-            bottomSheetManager.pressedCardMorType = .None
+            bottomSheetManager.pressedCardMoreType = .None
         }
         // 신고하기 선택 완료
         .onChange(of: bottomSheetManager.pressedCardReportCode) {

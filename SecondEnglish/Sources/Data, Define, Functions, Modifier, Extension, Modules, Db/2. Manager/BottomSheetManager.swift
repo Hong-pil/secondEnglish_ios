@@ -55,7 +55,7 @@ enum SwipeCardCutSortType {
 
 // (공통) 목록, 글/댓글 더보기
 enum CommonMore {
-    case SwipeCardMore(isUserBlock: Bool, isCardBlock: Bool)
+    case SwipeCardMore(isUserBlock: Bool, isCardBlock: Bool, isAdmin: Bool, isMyPost: Bool)
     // 공지(커뮤니티 메인),공지(커뮤니티 각 카테고리) - 회원&&비회원
     case CommunityNotice
     // 커뮤니티 게시글(home/popular 피드에도 공통 적용) - type:1 = 회원(작성자)
@@ -175,7 +175,7 @@ class BottomSheetManager: ObservableObject {
     @Published var show = Show()
     
     // 카드 더보기 팝업에서 클릭한 아이템
-    @Published var pressedCardMorType: MoreButtonType = .None
+    @Published var pressedCardMoreType: MoreButtonType = .None
     // 카드 신고하기 팝업에서 클릭한 아이템
     @Published var pressedCardReportCode: Int = -1
     // 선택한 카드 자르기 퍼센트

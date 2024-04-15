@@ -360,22 +360,25 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - 유저 차단하기
-    func blockUser(targetUid: String, targetNickname: String, isBlock: Bool, isSuccess: @escaping(Bool) -> Void) {
+    //MARK: - 유저 차단/차단해제
+    func blockUser(targetUid: String, targetNickname: String, isBlock: String, isDone: @escaping() -> Void) {
         ApiControl.doBlockUser(targetUid: targetUid, targetNickname: targetNickname, isBlock: isBlock)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
                 self.popupMessage = error.message
-                isSuccess(false)
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    
-                    isSuccess(true)
+                    if let message = value.message {
+                        self.popupMessage = message
+                        isDone()
+                    }
                 }
                 else {
                     self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellable)
@@ -451,6 +454,16 @@ class SwipeCardViewModel: ObservableObject {
         else {
             return []
         }
+    }
+    
+    // 더보기 - 사용자 차단
+    // 카드 리스트에서 차단한 사용자 카드들 모두 제거하기
+    func removeUserFromSwipeList(targetUid: String, isDone: ()->Void) {
+        //printPrettyJSON(keyWord: "idpil::: self.swipeList :::\n", from: self.swipeList)
+        
+        self.swipeList.removeAll(where: { $0.uid == targetUid })
+        
+        isDone()
     }
     
 }

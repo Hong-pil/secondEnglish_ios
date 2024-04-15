@@ -9,6 +9,7 @@ import Foundation
 
 struct DefineKey {
     //MARK: - a
+    static let admin = "admin"
     static let adAgreeChoice = "adAgreeChoice"
     static let ageAgree = "ageAgree"
     static let accessToken = "accessToken"

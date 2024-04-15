@@ -23,7 +23,7 @@ enum ApisSwipe {
     case getReportList
     case doReportCard(targetUid: String, targetCardIdx: Int, reportCode: Int)
     case doBlockCard(cardIdx: Int, isBlock: String)
-    case doBlockUser(targetUid: String, targetNickname: String, isBlock: Bool)
+    case doBlockUser(targetUid: String, targetNickname: String, isBlock: String)
 }
 
 extension ApisSwipe: TargetType {
@@ -210,9 +210,7 @@ extension ApisSwipe: TargetType {
             params["uid"] = UserManager.shared.uid
             params["targetUid"] = targetUid
             params["targetNickname"] = targetNickname
-            // 차단된 상태(isBlock==true)이면 => 차단해제(false)로 요청
-            // 차단 안 된 상태(isBlock==false)이면 => 차단(true)으로 요청
-            params["isBlock"] = isBlock ? "false" : "true"
+            params["isBlock"] = isBlock
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)

@@ -207,8 +207,36 @@ class MenuViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func removeItem(cardIdx: Int) {
-        self.cardBlockData?.sentence_list.remove(at: cardIdx)
+    //MARK: - 유저 차단/차단해제
+    func blockUser(targetUid: String, targetNickname: String, isBlock: String, isDone: @escaping() -> Void) {
+        ApiControl.doBlockUser(targetUid: targetUid, targetNickname: targetNickname, isBlock: isBlock)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.popupMessage = error.message
+                isDone()
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if let message = value.message {
+                        self.popupMessage = message
+                        isDone()
+                    }
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func cancelBlockCard(cardIndex: Int) {
+        self.cardBlockData?.sentence_list.remove(at: cardIndex)
+    }
+    
+    func cancelBlockUser(userIndex: Int) {
+        self.userBlockData?.remove(at: userIndex)
     }
     
     

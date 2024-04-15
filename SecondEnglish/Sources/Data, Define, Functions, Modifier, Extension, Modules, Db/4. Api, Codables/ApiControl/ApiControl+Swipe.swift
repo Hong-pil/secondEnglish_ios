@@ -911,7 +911,7 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
-    static func doBlockUser(targetUid: String, targetNickname: String, isBlock: Bool, isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<ReportCardResponse, ErrorModel> {
+    static func doBlockUser(targetUid: String, targetNickname: String, isBlock: String, isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<ReportCardResponse, ErrorModel> {
         Future<ReportCardResponse, ErrorModel> { promise in
             
             // 토큰 로직 완성해야됨

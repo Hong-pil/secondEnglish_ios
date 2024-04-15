@@ -131,8 +131,6 @@ extension MenuCommonSubPage: View {
                             item: item,
                             isDoItemDelete: true,
                             isBlockCancel: {
-                                fLog("idpil::: 차단해제 클릭 : \(item.korean ?? "")")
-                                
                                 // isBlock == false 이면 차단해제 요청
                                 // isBlock == true 이면 차단 요청
                                 viewModel.blockCard(
@@ -140,7 +138,7 @@ extension MenuCommonSubPage: View {
                                     isBlock: "false"
                                 ) {
                                     self.showAlert = true
-                                    viewModel.removeItem(cardIdx: index)
+                                    viewModel.cancelBlockCard(cardIndex: index)
                                 }
                             }
                         )
@@ -160,7 +158,20 @@ extension MenuCommonSubPage: View {
                         
                         MenuSubPageCellBasicView(
                             target_nickname: item.target_nickname ?? "",
-                            target_uid: item.target_uid ?? ""
+                            target_uid: item.target_uid ?? "",
+                            isBlockCancel: {
+                                // isBlock == false 이면 차단해제 요청
+                                // isBlock == true 이면 차단 요청
+                                viewModel.blockUser(
+                                    targetUid: item.target_uid ?? "",
+                                    targetNickname: item.target_nickname ?? "",
+                                    isBlock: "false",
+                                    isDone: {
+                                        self.showAlert = true
+                                        viewModel.cancelBlockUser(userIndex: index)
+                                    }
+                                )
+                            }
                         )
                     }
                 }

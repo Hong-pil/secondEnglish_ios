@@ -10,6 +10,7 @@ import SwiftUI
 struct MenuSubPageCellBasicView: View {
     let target_nickname: String
     let target_uid: String
+    var isBlockCancel: (() -> Void)
     
     // [카드뷰 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위한 기능]
     // Tracks the offset of the swipe gesture
@@ -36,13 +37,21 @@ struct MenuSubPageCellBasicView: View {
                     self.swipeLeftOffset = CGSize.zero
                     self.isShowingDeleteButton = false
                     
-                    //isItemDelete(true, cardIndex)
+                    isBlockCancel()
                 }) {
-                    Image(systemName: "return")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(8)
+                    VStack(spacing: 3) {
+                        Image(systemName: "trash")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                        
+                        Text("해제")
+                            .font(.caption11218Regular)
+                            .foregroundColor(.gray25)
+                    }
+                    .padding(5)
+                    .frame(width: 50, height: 50)
+                    .background(Color.primaryDefault)
+                    .cornerRadius(8)
                 }
                 //.padding(.leading, 20)
                 /**

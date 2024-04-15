@@ -320,7 +320,7 @@
 "a_delegating_schedule" = "※ 위임 예정 일시 :";
 "a_delegating_target_member" = "위임 대상자";
 "a_cancel_delegating" = "위임 취소";
-"a_block_post" = "이 글 차단";
+"a_block_post" = "이 글 차단하기";
 "a_see_post" = "이 글 보기";
 "a_block_comment" = "이 댓글 차단";
 "a_see_comment" = "이 댓글 보기";

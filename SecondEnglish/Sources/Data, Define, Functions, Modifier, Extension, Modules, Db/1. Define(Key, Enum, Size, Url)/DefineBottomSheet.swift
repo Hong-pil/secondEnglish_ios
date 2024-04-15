@@ -116,21 +116,56 @@ struct DefineBottomSheet {
         var returnArr: [CustomBottomSheetModel] = []
         
         switch type {
-        case .SwipeCardMore(let isUserBlock, let isCardBlock):
-            returnArr =  [
-                CustomBottomSheetModel(
-                    SEQ: 1,
-                    image: "icon_outline_siren",
-                    title: "s_to_report".localized),
-                CustomBottomSheetModel(
-                    SEQ: 2,
-                    image: "icon_outline_hide",
-                    title: isUserBlock ? "a_see_post".localized : "a_block_post".localized),
-                CustomBottomSheetModel(
-                    SEQ: 3,
-                    image: "icon_outline_blockaccount",
-                    title: isCardBlock ? "a_unblock_this_user".localized : "a_block_this_user".localized),
-            ]
+        case .SwipeCardMore(let isUserBlock, let isCardBlock, let isAdmin, let isMyPost):
+            /// 관리자 작성글 : 신고하기 / 이 글 차단
+            /// 내가 작성한 글 : 수정하기 / 삭제하기
+            /// 그 외 모두 : 신고하기 / 이 글 차단하기 / 사용자 차단하기
+            ///
+            /// 신고하기 SEQ : 1
+            /// 이 글 차단하기 SEQ : 2
+            /// 사용자 차단하기 SEQ : 3
+            /// 수정하기 SEQ : 4
+            /// 삭제하기 SEQ : 5
+            if isAdmin {
+                returnArr =  [
+                    CustomBottomSheetModel(
+                        SEQ: 1,
+                        image: "icon_outline_siren",
+                        title: "s_to_report".localized),
+                    CustomBottomSheetModel(
+                        SEQ: 2,
+                        image: "icon_outline_hide",
+                        title: isUserBlock ? "a_see_post".localized : "a_block_post".localized),
+                ]
+            }
+            else if isMyPost {
+                returnArr =  [
+                    CustomBottomSheetModel(
+                        SEQ: 4,
+                        image: "icon_outline_edit",
+                        title: "s_modify".localized),
+                    CustomBottomSheetModel(
+                        SEQ: 5,
+                        image: "icon_outline_trash",
+                        title: "s_do_delete".localized),
+                ]
+            }
+            else {
+                returnArr =  [
+                    CustomBottomSheetModel(
+                        SEQ: 1,
+                        image: "icon_outline_siren",
+                        title: "s_to_report".localized),
+                    CustomBottomSheetModel(
+                        SEQ: 2,
+                        image: "icon_outline_hide",
+                        title: isUserBlock ? "a_see_post".localized : "a_block_post".localized),
+                    CustomBottomSheetModel(
+                        SEQ: 3,
+                        image: "icon_outline_blockaccount",
+                        title: isCardBlock ? "a_unblock_this_user".localized : "a_block_this_user".localized),
+                ]
+            }
         default:
             fLog("")
         }
