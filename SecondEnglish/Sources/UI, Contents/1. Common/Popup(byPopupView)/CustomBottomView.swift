@@ -190,7 +190,7 @@ struct CustomBottomItemSwipeCardCutView: View {
     let width: CGFloat = 50.0
     let height: CGFloat = 50.0
     let lineWidth: CGFloat = 7.0
-    let color: Color = Color.stateActivePrimaryDefault
+    let color: Color = Color.gray100
     
     let onPress: ((SwipeCardCutType) -> Void)
     
@@ -208,7 +208,7 @@ struct CustomBottomItemSwipeCardCutView: View {
         ZStack {
             //배경 원의 stroke 함수를 통해서 원의 외곽선을 그리고 원의 크기 지정
             Circle()
-                .stroke(Color.black.opacity(0.1), style: StrokeStyle(lineWidth: lineWidth * multiplier, lineCap: .round))
+                .stroke(color.opacity(0.2), style: StrokeStyle(lineWidth: lineWidth * multiplier, lineCap: .round))
                 .frame(width: width, height: height)
             
             //trim 함수를 이용해 progress 값만 큼 원의 외곽선을 잘라 냄
@@ -231,7 +231,7 @@ struct CustomBottomItemSwipeCardCutView: View {
                 .font(.buttons1420Medium)
                 //.font(.system(size : 10 * multiplier))
                 .fontWeight(.bold)
-                .foregroundColor(.gray700)
+                .foregroundColor(.gray900)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)

@@ -26,7 +26,6 @@ class SwipeCardViewModel: ObservableObject {
     // View Data
     @Published var typeList: [SwipeCategoryList] = []
     @Published var fixedSwipeList_0: [SwipeDataList] = [] // 처음 한 번만 저장
-    @Published var percentCountSwipeList: [SwipeDataList] = [] // 계산용
     @Published var swipeList: [SwipeDataList] = []
     @Published var countOfSwipeList: Double = 0
     @Published var mainCategoryList: [String] = []
@@ -222,7 +221,6 @@ class SwipeCardViewModel: ObservableObject {
                     }
                     //fLog("로그확인::: arr : \(arr)")
                     self.swipeList = arr
-                    self.percentCountSwipeList = arr
                     self.fixedSwipeList_0 = arr // 처음 한 번만 저장
                     self.countOfSwipeList = Double(arr.count)
                     
@@ -404,13 +402,12 @@ class SwipeCardViewModel: ObservableObject {
         self.swipeList = dummyArr
     }
     
-    func cutSwipeList(percent: CGFloat, sortType: SwipeCardCutSortType) {
+    func cutSwipeList(percent: CGFloat, sortType: SwipeCardCutSortType, isDone: ()->Void) {
         
 //        let thirtyPercent = sliceArray(exampleArray, by: 0.3) // 70% 자르기
 //        let fiftyPercent = sliceArray(exampleArray, by: 0.5) // 50% 자르기
 //        let seventyPercent = sliceArray(exampleArray, by: 0.7) // 30% 자르기
         self.swipeList = sliceArray(self.swipeList, by: percent, sortType: sortType)
-        
         
         var dummyArr = self.swipeList
         
@@ -419,8 +416,13 @@ class SwipeCardViewModel: ObservableObject {
         }
         
         self.swipeList = dummyArr
-        self.percentCountSwipeList = dummyArr
-        self.countOfSwipeList = Double(self.swipeList.count)
+        //self.fixedSwipeList_0 = dummyArr // 처음 한 번만 저장
+        self.countOfSwipeList = Double(self.fixedSwipeList_0.count)
+        
+        //printPrettyJSON(keyWord: "idpil::: self.swipeList :::\n", from: self.swipeList)
+        
+        
+        isDone()
     }
     
     // 배열 자르기

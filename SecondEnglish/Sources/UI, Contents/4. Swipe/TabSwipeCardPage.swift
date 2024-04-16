@@ -116,6 +116,8 @@ extension TabSwipeCardPage: View {
     //            }
                 
                 VStack(spacing: 0) {
+                    
+                    //MARK: - 중간 카드뷰
                     ZStack {
                         GeometryReader { geometry in
                             
@@ -316,16 +318,10 @@ extension TabSwipeCardPage: View {
                                         onRemove: { _ in},
                                         isTapLikeBtn: { _, _ in},
                                         isTapMoreBtn: {},
-                                        isLastCard: false,
-                                        isTapFrontSpeakBtn: {
-                                            //
-                                        },
-                                        isTapBackSpeakBtn: {
-                                            //
-                                        },
-                                        isTapCard: {
-                                            //
-                                        },
+                                        isLastCard: true,
+                                        isTapFrontSpeakBtn: {},
+                                        isTapBackSpeakBtn: {},
+                                        isTapCard: {},
                                         isFrontSpeaking: false,
                                         isBackSpeaking: false,
                                         isAutoPlay: false,
@@ -352,11 +348,46 @@ extension TabSwipeCardPage: View {
                         }
                     }
                     
-                    //MARK: - 하단 뷰 모음
-                    // 각 메인 카테고리 끝가지 학습한 경우, 더이상 카드가 없기 때문에 보여지지 않음
+                    //MARK: - 하단 뷰
                     if !isShowDoneView {
-                        HStack(spacing: 15) {
+                        HStack(spacing: 10) {
                             if !isAutoPlay {
+                                
+                                // 일단 출시하고 추가로 구현하자
+//                                Button(action: {
+//                                    // 카드를 하나라도 넘긴 경우에만 호출함
+//                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
+//                                        
+//                                    }
+//                                }, label: {
+//                                    Image(systemName: "arrowshape.backward")
+//                                        .resizable()
+//                                        .renderingMode(.template)
+//                                        .aspectRatio(contentMode: .fit)
+//                                        .frame(height: 20)
+//                                        .foregroundColor((viewModel.swipeList.count == viewModel.fixedSwipeList_0.count) ? Color.stateDisabledGray200 : Color.primaryDefault)
+//                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+//                                })
+                                
+                                Button(action: {
+                                    // 카드를 하나라도 넘긴 경우에만 호출함
+                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
+                                        StatusManager.shared.loadingStatus = .ShowWithTouchable
+                                        
+                                        self.resetPage() {
+                                            StatusManager.shared.loadingStatus = .Close
+                                        }
+                                    }
+                                }, label: {
+                                    Image(systemName: "arrow.triangle.2.circlepath")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor((viewModel.swipeList.count == viewModel.fixedSwipeList_0.count) ? Color.stateDisabledGray200 : Color.primaryDefault)
+                                        .frame(height: 20)
+                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                                })
+                                
                                 Button(action: {
                                     bottomSheetManager.show.swipeCardCut = true
                                 }, label: {
@@ -396,25 +427,6 @@ extension TabSwipeCardPage: View {
                                     }
                                 }, label: {
                                     Image(systemName: "shuffle")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                        .aspectRatio(contentMode: .fit)
-                                        .foregroundColor(Color.primaryDefault)
-                                        .frame(height: 20)
-                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                                })
-                                
-                                Button(action: {
-                                    // 카드를 하나라도 넘긴 경우에만 호출함
-                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
-                                        StatusManager.shared.loadingStatus = .ShowWithTouchable
-                                        
-                                        self.resetPage() {
-                                            StatusManager.shared.loadingStatus = .Close
-                                        }
-                                    }
-                                }, label: {
-                                    Image(systemName: "arrow.triangle.2.circlepath")
                                         .resizable()
                                         .renderingMode(.template)
                                         .aspectRatio(contentMode: .fit)
@@ -537,15 +549,17 @@ extension TabSwipeCardPage: View {
             }
             // currentID > 0 -> 카드를 넘기고 있는 경우
             else {
-                currentCardIndex = getCurrentIndexOfList(_maxID: maxID)
+//                fLog("idpil::: 카드를 넘기고 있는 경우")
+//                fLog("idpil::: maxID : \(maxID)")
+//                fLog("idpil::: 현재:\(topCard?.korean ?? "")")
+                
+                currentCardIndex = Int(viewModel.countOfSwipeList) - maxID
                 
                 curPercent = calculatePercentage(
                     value: Double(currentCardIndex),
                     percentageVal: viewModel.countOfSwipeList
                 )
-                
-                //let _ = fLog("idpil::: 백분율 : \(getCurrentIndexOfList(_maxID: currentID))")
-                //let _ = fLog("idpil::: 퍼센트 : \(curPercent)")
+                //fLog("idpil::: curPercent : \(curPercent)")
             }
         }
         .onChange(of: bottomSheetManager.pressedCardMoreType) {
@@ -720,10 +734,13 @@ extension TabSwipeCardPage: View {
                     
                     // 로딩되는거 보여주려고 딜레이시킴
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        viewModel.cutSwipeList(percent: percent, sortType: sortType)
-                        StatusManager.shared.loadingStatus = .Close
-                        
-                        bottomSheetManager.pressedCardCutItem = .None // 동일한 아이템 클릭될 수 있도록 초기화
+                        fLog("idpil::: 커트 전")
+                        viewModel.cutSwipeList(percent: percent, sortType: sortType) {
+                            fLog("idpil::: 커트 후")
+                            
+                            StatusManager.shared.loadingStatus = .Close
+                            bottomSheetManager.pressedCardCutItem = .None // 동일한 아이템 클릭될 수 있도록 초기화
+                        }
                     }
                 }
             }
@@ -1226,36 +1243,10 @@ extension TabSwipeCardPage {
     }
     
     //Calucate percentage based on given values
-    private func calculatePercentage(value:Double,percentageVal:Double)->Double{
+    private func calculatePercentage(value:Double, percentageVal:Double)->Double{
         // 300의 4는 몇 %?  == (100 * 4) / 300
         let val = 100.0 * value
         return val / percentageVal
-    }
-    
-    private func getCurrentIndexOfList(_maxID: Int) -> Int {
-        //fLog("idpil::: 111 : \(viewModel.fixedSwipeList.count)")
-        //fLog("idpil::: 1111 : \(viewModel.swipeList.count)")
-        
-        // 처음(fixedSwipeList.count == swipeList.count) 한 번만,
-        // 퍼센트 계산용 배열(cardPercentArr)에 초기화로 저장
-        // swipeList는 카드 넘기면서 하나씩 제거됨. 그래서 사용하면 안 됨.
-        if viewModel.percentCountSwipeList.count == viewModel.swipeList.count {
-            viewModel.cardPercentArr = viewModel.swipeList
-        }
-        
-        var copyArr = viewModel.percentCountSwipeList
-        copyArr = copyArr.reversed()
-        
-        let resultArr = viewModel.cardPercentArr
-            .enumerated() // 배열의 인덱스 가져오기 위해 사용
-            .map { (index, element) -> Bool in
-                //fLog("idpil::: 여기\(index), \(element)")
-                // 참고) _maxID > 0 이여야 됨.
-                return element.korean == copyArr[_maxID-1].korean
-            }
-        //fLog("idpil::: resultArr : \(resultArr)")
-        //fLog("idpil::: 현재 인덱스:\(resultArr.firstIndex(of: true) ?? -1)")
-        return resultArr.firstIndex(of: true) ?? -1
     }
     
     private func removeProfile(_ card: SwipeDataList, isDone: (Bool)->Void = {_ in}) {
