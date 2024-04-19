@@ -133,11 +133,6 @@ enum PostType {
     case Club
 }
 
-enum EditorType {
-    case Write
-    case Modify
-}
-
 enum EditorWriterType {
     case Normal
     case Manager

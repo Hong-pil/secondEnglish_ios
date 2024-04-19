@@ -11,6 +11,7 @@ class DefineNotification: NSObject {
     
     static let moveToSwipeTab = "moveToSwipeTab"
     static let setEditMode = "setEditMode"
+    static let cardEditSuccess = "cardEditSuccess"
     
     //change minute
     static let changeMinuteDetail = "changeMinuteDetail"        //좋아요, 싫어요, 북마크가 변경되었을 때.

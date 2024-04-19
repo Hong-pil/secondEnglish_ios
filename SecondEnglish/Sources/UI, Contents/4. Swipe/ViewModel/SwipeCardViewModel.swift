@@ -48,6 +48,10 @@ class SwipeCardViewModel: ObservableObject {
                                                name: NSNotification.Name(rawValue: DefineNotification.moveToSwipeTab),
                                                object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustCardEditDone(_:)),
+                                               name: NSNotification.Name(rawValue: DefineNotification.cardEditSuccess),
+                                               object: nil)
+        
 //        NotificationCenter.default.addObserver(self, selector: #selector(adjustNewestData(_:)),
 //                                               name: NSNotification.Name(rawValue: DefineNotification.minuteFromNewest),
 //                                               object: nil)
@@ -115,7 +119,21 @@ class SwipeCardViewModel: ObservableObject {
         }
     }
     
-    
+    @objc func adjustCardEditDone(_ notification: Notification) {
+        if let editedCard: [String: Any] = notification.userInfo![DefineKey.cardEditDone] as? [String: Any] {
+            
+            let editedIdx = editedCard["idx"] as? Int ?? -1
+            let korean = editedCard["korean"] as? String ?? ""
+            let english = editedCard["english"] as? String ?? ""
+            
+            for (index, item) in swipeList.enumerated() {
+                if editedIdx == item.idx {
+                    swipeList[index].korean = korean
+                    swipeList[index].english = english
+                }
+            }
+        }
+    }
     
     //MARK: - 메인 카테고리 조회
     func requestMainCategory(isSuccess: @escaping(Bool) -> Void) {

@@ -137,4 +137,62 @@ class EditorViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    //MARK: - 카드 수정
+    func editCard(idx: Int, korean: String, english: String, isDone: @escaping(() -> Void)) {
+        ApiControl.editCard(idx: idx, korean: korean, english: english)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                //isPostComplete(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        fLog("idpil::: 카드 수정 성공 :)")
+                        isDone()
+                    }
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    
+    //MARK: - 카드 삭제
+    func deleteCard(idx: Int) {
+        ApiControl.deleteCard(idx: idx)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                //isPostComplete(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        fLog("idpil::: 카드 삭제 성공 :)")
+                    }
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
 }

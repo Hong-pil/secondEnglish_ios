@@ -45,8 +45,6 @@ struct EditorPage {
     @State private var isScrollToBottom = false
     private let scrollToBottom = "SCROLL_TO_Bottom"
     
-    var type: EditorType = .Write
-    
     private struct sizeInfo {
         static let toolBarCancelButtonSize: CGFloat = 20.0
         static let koreanKey: String = "korean_txt"
@@ -200,52 +198,89 @@ extension EditorPage: View {
                     })
                 }
                 
-                // 등록버튼
+                // 등록/수정 버튼
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        
-                        switch checkPostData() {
-                        case .IsCategoryEmpty:
-                            toastMessage = "se_j_write_category".localized
-                            showToast()
-                        case .IsThereEmptySentence:
-                            toastMessage = "se_j_write_sentence".localized
-                            showToast()
-                        case .CheckOK:
-                            
-                            // 키보드 내리기
-                            UIApplication.shared.endEditing()
-                            
-                            StatusManager.shared.loadingStatus = .ShowWithTouchable
-                            
-                            viewModel.addCardList(
-                                type1: "Basic",
-                                type2: selectedMainCategoryName,
-                                type3: selectedSubCategoryName,
-                                sentence_list: sentenceList
-                            ) { isComplete in
-                                if isComplete {
+                        if viewModel.isEditMode {
+                            if let item = viewModel.editModeItem {
+                                
+                                // 키보드 내리기
+                                UIApplication.shared.endEditing()
+                                
+                                StatusManager.shared.loadingStatus = .ShowWithTouchable
+                                
+                                viewModel.editCard(
+                                    idx: item.idx ?? -1,
+                                    korean: currentKoreanTxt,
+                                    english: currentEnglishTxt
+                                ) {
                                     // 로딩되는거 보여주려고 딜레이시킴
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                         StatusManager.shared.loadingStatus = .Close
+                                        
                                         presentationMode.wrappedValue.dismiss()
                                         
-                                        // 등록한 카테고리의 index 값을 가져온다.
-                                        if let subCategoryIndex = self.getSubCategoryIndex(item: selectedSubCategoryName) {
-                                            
-                                            // Swipe Tab으로 이동 후, 등록한 카테고리의 내용을 갱신해서 보여준다.
-                                            self.moveToSwipeTab(
-                                                subCategoryIdx: subCategoryIndex,
-                                                subCategoryName: selectedSubCategoryName,
-                                                mainCategoryName: selectedMainCategoryName
+                                        let dataDic: [String: Any] = ["idx": item.idx ?? -1, "korean": currentKoreanTxt, "english" : currentEnglishTxt]
+                                        
+                                        
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                            NotificationCenter.default.post(
+                                                name: Notification.Name(DefineNotification.cardEditSuccess),
+                                                object: nil,
+                                                userInfo: [DefineKey.cardEditDone : dataDic] as [String : Any]
                                             )
+                                        }
+                                        
+                                        
+                                        
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            switch checkPostData() {
+                            case .IsCategoryEmpty:
+                                toastMessage = "se_j_write_category".localized
+                                showToast()
+                            case .IsThereEmptySentence:
+                                toastMessage = "se_j_write_sentence".localized
+                                showToast()
+                            case .CheckOK:
+                                
+                                // 키보드 내리기
+                                UIApplication.shared.endEditing()
+                                
+                                StatusManager.shared.loadingStatus = .ShowWithTouchable
+                                
+                                viewModel.addCardList(
+                                    type1: "Basic",
+                                    type2: selectedMainCategoryName,
+                                    type3: selectedSubCategoryName,
+                                    sentence_list: sentenceList
+                                ) { isComplete in
+                                    if isComplete {
+                                        // 로딩되는거 보여주려고 딜레이시킴
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            StatusManager.shared.loadingStatus = .Close
+                                            presentationMode.wrappedValue.dismiss()
+                                            
+                                            // 등록한 카테고리의 index 값을 가져온다.
+                                            if let subCategoryIndex = self.getSubCategoryIndex(item: selectedSubCategoryName) {
+                                                
+                                                // Swipe Tab으로 이동 후, 등록한 카테고리의 내용을 갱신해서 보여준다.
+                                                self.moveToSwipeTab(
+                                                    subCategoryIdx: subCategoryIndex,
+                                                    subCategoryName: selectedSubCategoryName,
+                                                    mainCategoryName: selectedMainCategoryName
+                                                )
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }, label: {
-                        Text(type == .Write ? "d_registration".localized : "s_modifying".localized)
+                        Text(viewModel.isEditMode ? "s_modifying".localized : "d_registration".localized)
                             .foregroundColor(Color.stateEnableGray900)
                             .font(.title41824Medium)
                     })
@@ -343,7 +378,7 @@ extension EditorPage: View {
                 HStack(spacing: 0) {
                     Text(selectedMainCategoryName.count > 0 ? selectedMainCategoryName : "k_select_to_main_category".localized)
                         .font(.body21420Regular)
-                        .foregroundColor(type == .Modify ? .gray200 : .gray900)
+                        .foregroundColor(.gray900)
                     
                     Image("icon_outline_dropdown")
                         .resizable()
@@ -361,7 +396,6 @@ extension EditorPage: View {
                     }
                 }
             })
-            .disabled(type == .Modify)
             
             if viewModel.subCategoryList.count > 0 {
                 Button(action: {
@@ -404,44 +438,43 @@ extension EditorPage: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 20)
                 
-                if !viewModel.isEditMode {
-                    Button {
-                        isPressPlusButton = true
-                        
-                        // 데이터 가공, 목표 형태
-                        // [
-                        //  {"korean_txt": "", "english_txt": ""},
-                        //  {"korean_txt": "", "english_txt": ""},
-                        //  ...
-                        // ]
-                        sentenceList.insert(
-                            [
-                                sizeInfo.koreanKey: currentKoreanTxt,
-                                sizeInfo.englishKey: currentEnglishTxt
-                            ],
-                            at: currentCardIndex
-                        )
-                        //fLog("idpil::: sentenceList : \(sentenceList)")
-                        
-                        
-                        // 리스트 마지막 카드의 한국어 textfield 키보드 올림
-                        // 이거 설정 안 하면 키보드 안 올라감
-                        forceKeyboardUpIndex = sentenceList.count-1
-                        
-            //            currentKoreanTxt = ""
-            //            currentEnglishTxt = ""
-                        
-                    } label: {
-                        Image(systemName: "plus")
-                            .renderingMode(.template)
-                            .resizable()
-                            .foregroundColor(.gray25)
-                            .padding(10)
-                            .background(Circle().fill(Color.primaryDefault))
-                            .frame(width: 40, height: 40)
-                            .padding(10) // 클릭 영역 확장
-                    }
+                Button {
+                    isPressPlusButton = true
+                    
+                    // 데이터 가공, 목표 형태
+                    // [
+                    //  {"korean_txt": "", "english_txt": ""},
+                    //  {"korean_txt": "", "english_txt": ""},
+                    //  ...
+                    // ]
+                    sentenceList.insert(
+                        [
+                            sizeInfo.koreanKey: currentKoreanTxt,
+                            sizeInfo.englishKey: currentEnglishTxt
+                        ],
+                        at: currentCardIndex
+                    )
+                    //fLog("idpil::: sentenceList : \(sentenceList)")
+                    
+                    
+                    // 리스트 마지막 카드의 한국어 textfield 키보드 올림
+                    // 이거 설정 안 하면 키보드 안 올라감
+                    forceKeyboardUpIndex = sentenceList.count-1
+                    
+        //            currentKoreanTxt = ""
+        //            currentEnglishTxt = ""
+                    
+                } label: {
+                    Image(systemName: "plus")
+                        .renderingMode(.template)
+                        .resizable()
+                        .foregroundColor(.gray25)
+                        .padding(10)
+                        .background(Circle().fill(Color.primaryDefault))
+                        .aspectRatio(contentMode: .fit).frame(height: 40) // 높이에 맞춰 비율 유지함
+                        .padding(10) // 클릭 영역 확장
                 }
+                .opacity(viewModel.isEditMode ? 0.0 : 1.0) // 공간은 차지하기 위해 opacity로 설정함
                 
                 Button(action: {
                     // View 탭시, Keyboard dismiss 하기

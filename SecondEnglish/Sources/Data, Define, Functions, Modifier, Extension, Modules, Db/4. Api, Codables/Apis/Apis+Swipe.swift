@@ -24,6 +24,8 @@ enum ApisSwipe {
     case doReportCard(targetUid: String, targetCardIdx: Int, reportCode: Int)
     case doBlockCard(cardIdx: Int, isBlock: String)
     case doBlockUser(targetUid: String, targetNickname: String, isBlock: String)
+    case editCard(idx: Int, korean: String, english: String)
+    case deleteCard(idx: Int)
 }
 
 extension ApisSwipe: TargetType {
@@ -62,6 +64,10 @@ extension ApisSwipe: TargetType {
             return "api/card/block"
         case .doBlockUser:
             return "api/user/block"
+        case .editCard:
+            return "api/card/edit"
+        case .deleteCard:
+            return "api/card/delete"
         }
     }
     
@@ -93,6 +99,10 @@ extension ApisSwipe: TargetType {
         case .doBlockCard:
             return .post
         case .doBlockUser:
+            return .post
+        case .editCard:
+            return .post
+        case .deleteCard:
             return .post
         }
     }
@@ -211,6 +221,22 @@ extension ApisSwipe: TargetType {
             params["targetUid"] = targetUid
             params["targetNickname"] = targetNickname
             params["isBlock"] = isBlock
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .editCard(let idx, let korean, let english):
+            var params = defaultParams
+            params["idx"] = idx
+            params["korean"] = korean
+            params["english"] = english
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .deleteCard(let idx):
+            var params = defaultParams
+            params["idx"] = idx
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)

@@ -34,6 +34,7 @@ struct DefineKey {
     
     
     //MARK: - c
+    static let cardEditDone = "cardEditDone"
     static let subCategoryIndexAndName = "subCategoryIndexAndName"
     static let countryIsoTwo = "countryIsoTwo"
     static let country = "country"
