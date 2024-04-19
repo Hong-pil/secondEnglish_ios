@@ -167,32 +167,4 @@ class EditorViewModel: ObservableObject {
     }
     
     
-    //MARK: - 카드 삭제
-    func deleteCard(idx: Int) {
-        ApiControl.deleteCard(idx: idx)
-            .sink { error in
-                guard case let .failure(error) = error else { return }
-                fLog("requestSliderList error : \(error)")
-                
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                //isPostComplete(false)
-            } receiveValue: { value in
-                if value.code == 200 {
-                    if value.success ?? false {
-                        fLog("idpil::: 카드 삭제 성공 :)")
-                    }
-                }
-                else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
-                }
-            }
-            .store(in: &cancellable)
-    }
-    
 }

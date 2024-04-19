@@ -53,6 +53,26 @@ struct ContentViewAlert: ViewModifier {
                    popup:
                     CommonPopupView(text: "card_auto_error".localized)
             )
+        // 카드 삭제
+            .showCustomAlert(isPresented: $userManager.showCardDeleteAlert,
+                             type: .Default,
+                             title: "s_card_delete_title".localized,
+                             message: "s_card_delete_body".localized,
+                             detailMessage: "",
+                             buttons: ["c_cancel".localized, "s_delete".localized],
+                             onClick: { buttonIndex in
+                if buttonIndex == 1 {
+                    userManager.isCardDelete = true
+                }
+            })
+        // 카드 삭제 완료 알림
+            .popup(isPresenting: $userManager.showCardDeletepopup,
+                   cornerRadius: 5,
+                   locationType: .bottom,
+                   autoDismiss: .after(2),
+                   popup:
+                    CommonPopupView(text: "se_g_post_deleted".localized)
+            )
         // Config Alert
         /*
          긴급공지, 업데이트 강제/권장

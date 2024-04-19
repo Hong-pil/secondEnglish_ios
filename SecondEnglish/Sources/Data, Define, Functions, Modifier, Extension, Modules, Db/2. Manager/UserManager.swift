@@ -64,6 +64,9 @@ class UserManager: ObservableObject {
     @Published var showUploadMinute: Bool = false
     @Published var showPostReportStatue = false
     @Published var showNetworkError = false
+    @Published var showCardDeleteAlert:Bool = false
+    @Published var isCardDelete:Bool = false
+    @Published var showCardDeletepopup:Bool = false
     
     @Published var isCheckingToken = false
     

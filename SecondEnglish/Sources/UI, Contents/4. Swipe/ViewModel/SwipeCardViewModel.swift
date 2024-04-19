@@ -401,6 +401,28 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     
+    //MARK: - 카드 삭제
+    func deleteCard(idx: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.deleteCard(idx: idx)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.popupMessage = error.message
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        isSuccess(true)
+                    }
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isSuccess(false)
+                }
+            }
+            .store(in: &cancellable)
+    }
     
     
     

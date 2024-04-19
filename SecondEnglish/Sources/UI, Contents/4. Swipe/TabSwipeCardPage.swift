@@ -631,7 +631,7 @@ extension TabSwipeCardPage: View {
                     
                 }
             case .Delete: // 삭제하기
-                fLog("idpil::: 삭제하기 클릭")
+                userManager.showCardDeleteAlert = true
             default:
                 fLog("")
             }
@@ -902,6 +902,22 @@ extension TabSwipeCardPage: View {
                popup:
                 CommonPopupView(text: viewModel.popupMessage)
         )
+        // 카드 삭제하기
+        .onChange(of: userManager.isCardDelete) {
+            if userManager.isCardDelete {
+                
+                if let card = topCard {
+                    viewModel.deleteCard(idx: card.idx ?? -1) { isSuccess in
+                        if isSuccess {
+                            userManager.showCardDeletepopup = true
+                            self.swipeTopCard()
+                        }
+                    }
+                }
+                
+                userManager.isCardDelete = false // 초기화
+            }
+        }
     }
 
     var header: some View {
