@@ -59,6 +59,7 @@ struct SwipeCardFrontView: View {
                                 .padding(5).background(Color.gray25.opacity(0.3)) // 클릭 범위 확장
                         })
                     }
+                    
                 }
                 
                 Spacer()
@@ -95,12 +96,12 @@ struct SwipeCardFrontView: View {
 //                                    Text(word)
 //                                        .font(.body21420Regular)
 //                                }
-//                                
+//
 //                                if index < hintTxt.count-1 {
 //                                    Text(" ")
 //                                        .font(.body21420Regular)
 //                                }
-//                                
+//
 ////                                // 밑줄을 글자 길이만큼 표시
 ////                                Text(String(repeating: "_", count: word.count))
 ////                                    .foregroundColor(.clear) // 실제 글자는 보이지 않게 설정

@@ -8,7 +8,7 @@
 import SwiftUI
 import AVFoundation
 
-struct SwipeView: View {
+struct SwipeView {
     //let profile: Profile
     let card: SwipeDataList
     let onRemove: (LikeType) -> Void
@@ -28,7 +28,9 @@ struct SwipeView: View {
     
     // 값이 커지면 커질수록 카드가 사라질 때까지의 시간이 길어짐
     let cardOpacityRange: Double = 100
-    
+}
+
+extension SwipeView: View {
     var body: some View {
         ZStack(alignment: .center) {
             

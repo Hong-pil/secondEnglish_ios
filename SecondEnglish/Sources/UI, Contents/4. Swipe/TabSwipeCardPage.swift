@@ -60,6 +60,8 @@ struct TabSwipeCardPage {
     
     // Main.swift에서 자동모드 중지시킴
     @Binding var isAutoModeStop: Bool
+    // Main.swift에서 EditorPage 보여줌
+    @Binding var isShowEditorView: Bool
     
     private struct sizeInfo {
         static let grammarTextFont_title: Font = Font.title32028Bold
@@ -76,10 +78,14 @@ struct TabSwipeCardPage {
         static let index3RandomCardOffset: CGSize = CGSize(width: 0, height: -30)
     }
     
-    init(isAutoModeStop: Binding<Bool>) {
-        // 자동 모드일 때, 3초 마다 카드 넘김
+    init(
+        isAutoModeStop: Binding<Bool>,
+        isShowEditorView: Binding<Bool>
+    ) {
+        // 자동 모드 설정
         self._timer = .init(initialValue: Timer.publish(every: seconds, on: .main, in: .common))
         self._isAutoModeStop = isAutoModeStop
+        self._isShowEditorView = isShowEditorView
     }
 }
 
@@ -137,6 +143,7 @@ extension TabSwipeCardPage: View {
                             
                             
                             if viewModel.swipeList.count > 0 {
+                                
                                 ForEach(Array(viewModel.swipeList.enumerated()), id: \.offset) { index, card in
                                     
                                     self.setTopCard(index: index, card: card)
@@ -297,53 +304,44 @@ extension TabSwipeCardPage: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                                 .opacity(self.isShowRandomCardShuffle ? 0 : 1)
                                 
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                //MARK: - 카드 랜덤 섞기 뷰
-        //                        randomCardShuffleView
-        //                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        //                            //.opacity(self.isShowRandomCardShuffle ? 1 : 0)
-                                ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
-                                    SwipeView(
-                                        card: card,
-                                        onRemove: { _ in},
-                                        isTapLikeBtn: { _, _ in},
-                                        isTapMoreBtn: {},
-                                        isLastCard: true,
-                                        isTapFrontSpeakBtn: {},
-                                        isTapBackSpeakBtn: {},
-                                        isTapCard: {},
-                                        isFrontSpeaking: false,
-                                        isBackSpeaking: false,
-                                        isAutoPlay: false,
-                                        isRootViewFlipped: .constant(false)
-                                    )
-                                    .frame(
-                                        height: geometry.size.height * 0.7
-                                    )
-                                    .padding(.horizontal, self.randomCardPadding(index: index))
-                                    //                                        .offset(
-                                    //                                            x: 0,
-                                    //                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
-                                    //                                        )
-                                    .rotationEffect(.degrees(randomCardRotationDegrees[index]))
-                                    .offset(randomCardOffsets[index])
-                                    .animation(.easeInOut(duration: 0.3), value: randomCardRotationDegrees[index])
-                                    .animation(.easeInOut(duration: 0.3), value: randomCardOffsets[index])
+                                //MARK: - 카드 랜덤 섞기 카드 뷰 (랜덤 섞기 버튼 클릭시에만 보임)
+                                Group {
+//                                    randomCardShuffleView
+//                                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+//                                    //.opacity(self.isShowRandomCardShuffle ? 1 : 0)
+                                    ForEach(Array(self.randomCardList.enumerated()), id: \.offset) { index, card in
+                                        SwipeView(
+                                            card: card,
+                                            onRemove: { _ in},
+                                            isTapLikeBtn: { _, _ in},
+                                            isTapMoreBtn: {},
+                                            isLastCard: true,
+                                            isTapFrontSpeakBtn: {},
+                                            isTapBackSpeakBtn: {},
+                                            isTapCard: {},
+                                            isFrontSpeaking: false,
+                                            isBackSpeaking: false,
+                                            isAutoPlay: false,
+                                            isRootViewFlipped: .constant(false)
+                                        )
+                                        .frame(
+                                            height: geometry.size.height * 0.7
+                                        )
+                                        .padding(.horizontal, self.randomCardPadding(index: index))
+                                        //                                        .offset(
+                                        //                                            x: 0,
+                                        //                                            y: self.getCardOffset(geometry, id: (card.customId ?? 0))
+                                        //                                        )
+                                        .rotationEffect(.degrees(randomCardRotationDegrees[index]))
+                                        .offset(randomCardOffsets[index])
+                                        .animation(.easeInOut(duration: 0.3), value: randomCardRotationDegrees[index])
+                                        .animation(.easeInOut(duration: 0.3), value: randomCardOffsets[index])
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                                    .padding(.horizontal, 20)
+                                    .padding(.top, 40)
+                                    .opacity(self.isShowRandomCardShuffle ? 1 : 0)
                                 }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                                .padding(.horizontal, 20)
-                                .padding(.top, 40)
-                                .opacity(self.isShowRandomCardShuffle ? 1 : 0)
                             }
                         }
                     }
@@ -617,7 +615,21 @@ extension TabSwipeCardPage: View {
                     }
                 }
             case .Edit: // 수정하기
-                fLog("idpil::: 수정하기 클릭")
+                if let card = topCard {
+                    
+                    let dataDic: [String: Any] = ["isEditMode": true, "editModeItem" : card]
+                    
+                    isShowEditorView = true
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        NotificationCenter.default.post(
+                            name: Notification.Name(DefineNotification.setEditMode),
+                            object: nil,
+                            userInfo: [DefineKey.editModeItems : dataDic] as [String : Any]
+                        )
+                    }
+                    
+                }
             case .Delete: // 삭제하기
                 fLog("idpil::: 삭제하기 클릭")
             default:

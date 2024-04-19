@@ -34,7 +34,7 @@ struct Main {
     @StateObject var viewModel = MainViewModel()
     
     @State private var isFirstLoaded: Bool = true
-    @State private var isShowEditorView: Bool = false
+    @State var isShowEditorView: Bool = false
     @State var navigationBarColor: Color = Color.stateActivePrimaryDefault
     @State var isAutoModeStop: Bool = false
     
@@ -100,11 +100,18 @@ extension Main: View {
     var contentTabView: some View {
         TabView(selection: $tabStateHandler.selection) {
             Group {
-                TabHomePage(tabtype: tabtype_1, tabs: tabs_1, moveToTopIndicator: $tabStateHandler.moveFirstTabToTop)
-                    .tag(bTab.my)
+                TabHomePage(
+                    tabtype: tabtype_1,
+                    tabs: tabs_1,
+                    moveToTopIndicator: $tabStateHandler.moveFirstTabToTop
+                )
+                .tag(bTab.my)
                 
-                TabSwipeCardPage(isAutoModeStop: $isAutoModeStop)
-                    .tag(bTab.swipe_card)
+                TabSwipeCardPage(
+                    isAutoModeStop: $isAutoModeStop,
+                    isShowEditorView: $isShowEditorView
+                )
+                .tag(bTab.swipe_card)
             }
             .setTabBarVisibility(isHidden: true)
         }

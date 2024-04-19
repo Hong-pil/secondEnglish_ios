@@ -14,6 +14,8 @@ struct ContentViewPopup: ViewModifier {
     @StateObject var bottomSheetManager = BottomSheetManager.shared
     @StateObject var languageManager = LanguageManager.shared
     
+    @State private var keyboardHeight: CGFloat = 300 // 키보드 높이
+    
     private struct BottomSheetInfo {
         static let bigHeight: CGFloat = 765
         static let middleHeight: CGFloat = 290

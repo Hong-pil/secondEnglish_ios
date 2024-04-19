@@ -66,6 +66,7 @@ struct DefineKey {
     
     
     //MARK: - e
+    static let editModeItems = "editModeItems"
     static let email = "email"
     static let expiredTime = "expiredTime"
     static let expired = "expired"

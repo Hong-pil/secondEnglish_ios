@@ -61,7 +61,10 @@ extension EditorPage: View {
                 // footerView 키보드 바로 위에 붙을 수 있도록 해줌
                 ZStack(alignment: .bottom) {
                     VStack(spacing: 0) {
-                        categorySelectView
+                        
+                        if !viewModel.isEditMode {
+                            categorySelectView
+                        }
                         
                         ScrollViewReader { proxyReader in
                             
@@ -69,7 +72,6 @@ extension EditorPage: View {
                             gotoScrollBottom(proxyReader: proxyReader)
                             
                             ScrollView(showsIndicators: false) {
-                                
                                 
                                 VStack(alignment: .leading, spacing: 0) {
                                     ForEach(Array(sentenceList.enumerated()), id: \.offset) { index, item in
@@ -251,6 +253,8 @@ extension EditorPage: View {
             }
         }
         .task {
+            viewModel.requestMainCategory()
+            
             sentenceList.insert(
                 [
                     sizeInfo.koreanKey: "",
@@ -258,6 +262,25 @@ extension EditorPage: View {
                 ]
                 , at: currentCardIndex
             )
+        }
+        // TabSwipeCardPage.swift에서 데이터 설정을 위해 0.2초 후에 NotificationCenter를 호출하기 때문에 onChange()에서 받아야 됨.
+        .onChange(of: viewModel.isEditMode) {
+            if viewModel.isEditMode {
+                if let item = viewModel.editModeItem {
+                    
+                    currentKoreanTxt = item.korean ?? ""
+                    currentEnglishTxt = item.english ?? ""
+                    
+                    sentenceList = []
+                    sentenceList.insert(
+                        [
+                            sizeInfo.koreanKey: currentKoreanTxt,
+                            sizeInfo.englishKey: currentEnglishTxt
+                        ]
+                        , at: currentCardIndex
+                    )
+                }
+            }
         }
         // Main Category List BottomSheet
         .bottomSheet(
@@ -381,41 +404,43 @@ extension EditorPage: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 20)
                 
-                Button {
-                    isPressPlusButton = true
-                    
-                    // 데이터 가공, 목표 형태
-                    // [
-                    //  {"korean_txt": "", "english_txt": ""},
-                    //  {"korean_txt": "", "english_txt": ""},
-                    //  ...
-                    // ]
-                    sentenceList.insert(
-                        [
-                            sizeInfo.koreanKey: currentKoreanTxt,
-                            sizeInfo.englishKey: currentEnglishTxt
-                        ],
-                        at: currentCardIndex
-                    )
-                    //fLog("idpil::: sentenceList : \(sentenceList)")
-                    
-                    
-                    // 리스트 마지막 카드의 한국어 textfield 키보드 올림
-                    // 이거 설정 안 하면 키보드 안 올라감
-                    forceKeyboardUpIndex = sentenceList.count-1
-                    
-        //            currentKoreanTxt = ""
-        //            currentEnglishTxt = ""
-                    
-                } label: {
-                    Image(systemName: "plus")
-                        .renderingMode(.template)
-                        .resizable()
-                        .foregroundColor(.gray25)
-                        .padding(10)
-                        .background(Circle().fill(Color.primaryDefault))
-                        .frame(width: 40, height: 40)
-                        .padding(10) // 클릭 영역 확장
+                if !viewModel.isEditMode {
+                    Button {
+                        isPressPlusButton = true
+                        
+                        // 데이터 가공, 목표 형태
+                        // [
+                        //  {"korean_txt": "", "english_txt": ""},
+                        //  {"korean_txt": "", "english_txt": ""},
+                        //  ...
+                        // ]
+                        sentenceList.insert(
+                            [
+                                sizeInfo.koreanKey: currentKoreanTxt,
+                                sizeInfo.englishKey: currentEnglishTxt
+                            ],
+                            at: currentCardIndex
+                        )
+                        //fLog("idpil::: sentenceList : \(sentenceList)")
+                        
+                        
+                        // 리스트 마지막 카드의 한국어 textfield 키보드 올림
+                        // 이거 설정 안 하면 키보드 안 올라감
+                        forceKeyboardUpIndex = sentenceList.count-1
+                        
+            //            currentKoreanTxt = ""
+            //            currentEnglishTxt = ""
+                        
+                    } label: {
+                        Image(systemName: "plus")
+                            .renderingMode(.template)
+                            .resizable()
+                            .foregroundColor(.gray25)
+                            .padding(10)
+                            .background(Circle().fill(Color.primaryDefault))
+                            .frame(width: 40, height: 40)
+                            .padding(10) // 클릭 영역 확장
+                    }
                 }
                 
                 Button(action: {

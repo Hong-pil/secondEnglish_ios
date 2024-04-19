@@ -20,8 +20,21 @@ class EditorViewModel: ObservableObject {
     @Published var mainCategoryList: [String] = []
     @Published var subCategoryList: [String] = []
     
+    @Published var isEditMode: Bool = false
+    @Published var editModeItem: SwipeDataList? = nil
+    
     init() {
-        self.requestMainCategory()
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustSetEditMode(_:)),
+                                               name: NSNotification.Name(rawValue: DefineNotification.setEditMode),
+                                               object: nil)
+    }
+    
+    @objc func adjustSetEditMode(_ notification: Notification) {
+        if let editModeItems: [String: Any] = notification.userInfo![DefineKey.editModeItems] as? [String: Any] {
+            
+            self.isEditMode = editModeItems["isEditMode"] as? Bool ?? false
+            self.editModeItem = editModeItems["editModeItem"] as? SwipeDataList ?? nil
+        }
     }
     
     //MARK: - 메인 카테고리 조회
