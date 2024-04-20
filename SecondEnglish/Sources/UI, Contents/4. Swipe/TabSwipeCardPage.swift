@@ -25,6 +25,7 @@ struct TabSwipeCardPage {
     @State private var curPercent: Double = 0.0
     @State private var clickCardItem: SwipeDataList?
     @State private var isShowDoneView: Bool = false
+    @State private var isShowLastCategoryLoadView: Bool = false
     @AppStorage(DefineKey.mainCategoryName) var selectedMainCategoryItem: String = ""
     
     // TTS
@@ -35,11 +36,7 @@ struct TabSwipeCardPage {
     // 자동 모드
     @State private var isAutoPlay: Bool = false
     @State private var isTopViewSwipe: Bool = false
-    // 자동 모드 타이머
     @Environment(\.scenePhase) var scenePhase
-    @State private var timer: Timer.TimerPublisher
-    @State private var cancellable: Cancellable?
-    private let seconds: Double = 3.0
     @State private var topCard: SwipeDataList? = nil
     @State var isRootViewFlipped: Bool = false
     @State private var isForceSwipe: Bool = false // 자동모드 중에 강제로 카드 넘긴 경우
@@ -82,8 +79,6 @@ struct TabSwipeCardPage {
         isAutoModeStop: Binding<Bool>,
         isShowEditorView: Binding<Bool>
     ) {
-        // 자동 모드 설정
-        self._timer = .init(initialValue: Timer.publish(every: seconds, on: .main, in: .common))
         self._isAutoModeStop = isAutoModeStop
         self._isShowEditorView = isShowEditorView
     }
@@ -108,39 +103,17 @@ extension TabSwipeCardPage: View {
                     }
                 }
                 
-    //            ZStack {
-    //                VStack(spacing: 0) {
-    //                    mainCategoryButton
-    //
-    //                    categoryTabView
-    //                }
-    //                .padding(.top, 20)
-    //
-    //                if self.selectedMainCategoryName.isEmpty {
-    //                    emptyBubbleShapeView
-    //                }
-    //            }
-                
                 VStack(spacing: 0) {
                     
                     //MARK: - 중간 카드뷰
                     ZStack {
                         GeometryReader { geometry in
                             
-                            // 각 메인 카테고리 끝가지 학습한 경우, 결과 View 보여주기
-                            if isShowDoneView {
-                                DoneView {
-                                    withAnimation {
-                                        //self.users = self.setList()
-//                                        viewModel.requestSwipeList(sortType: .Latest) { success in
-//                                            if success {
-//                                                //
-//                                            }
-//                                        }
-                                    }
-                                }
+                            // DoneView() fullScreenCover에서 아무 버튼도 클릭하지 않고 닫기를 눌러서 내린 경우,
+                            // 마지막 카테고리를 다시 시작할 수 있음
+                            if isShowLastCategoryLoadView {
+                                lastCategoryLoadView
                             }
-                            
                             
                             if viewModel.swipeList.count > 0 {
                                 
@@ -515,7 +488,6 @@ extension TabSwipeCardPage: View {
         .onChange(of: isAutoModeStop) {
             if isAutoModeStop {
                 if isAutoPlay {
-                    //stopTimer()
                     stopAutoMode()
                     isAutoPlay = false
                 }
@@ -535,11 +507,20 @@ extension TabSwipeCardPage: View {
                 if viewModel.categoryTabIndex != viewModel.subCategoryList.count-1 {
                     // 다음 스탭으로 넘어감
                     isShowDoneView = false
+                    isShowLastCategoryLoadView = false
                     viewModel.categoryTabIndex += 1
                     viewModel.moveCategoryTab = true
                 }
                 // 서브 카테고리 다 넘겼음
                 else if viewModel.categoryTabIndex == viewModel.subCategoryList.count-1 {
+                    
+                    // 자동모드 재생 중이면 중지
+                    if isAutoPlay {
+                        stopAutoMode()
+                        isAutoPlay = false
+                    }
+                    
+                    // 결과 뷰 보여줌
                     withAnimation {
                         isShowDoneView = true
                     }
@@ -639,8 +620,9 @@ extension TabSwipeCardPage: View {
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
             bottomSheetManager.pressedCardMoreType = .None
         }
-        // 신고하기 선택 완료
         .onChange(of: bottomSheetManager.pressedCardReportCode) {
+            // 신고하기 선택 완료
+            
             if bottomSheetManager.pressedCardReportCode != -1 {
                 //fLog("idpil::: 신고하기 누른 코드값 : \(bottomSheetManager.pressedCardReportCode)")
                 
@@ -761,53 +743,20 @@ extension TabSwipeCardPage: View {
             switch scenePhase {
             case .active:
                 if isAutoPlay {
-                    startTimer()
+                    //
                 }
             case .background, .inactive:
-                stopTimer()
+                fLog("")
             default:
                 break
             }
         }
-        // 자동 모드
         .onChange(of: isAutoPlay) {
-            
-            /**
-             * 자동 모드 후보 1 (타이머 작동시켜 3초 간격으로 넘어가게 하는 방식)
-             */
-//            if isAutoPlay {
-//                startTimer()
-//            } else {
-//                stopTimer()
-//            }
-            
-            
-            /**
-             * 자동 모드 후보 2
-             */
+            // 자동 모드
             if isAutoPlay {
                 startAutoMode()
             } else {
                 stopAutoMode()
-            }
-        }
-        .onReceive(timer) { _ in
-            //fLog("idpil::: timer 호출")
-            
-            if isAutoPlay {
-                if let card = self.topCard {
-                    isTopViewSwipe = true
-                    
-                    // 애니메이션 0.3초 동안 진행되기 때문에, 0.3초 후에 실행
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        // 맨 위에 있는 카드 제거
-                        removeProfile(card) { isDone in
-                            if isDone {
-                                isTopViewSwipe = false
-                            }
-                        }
-                    }
-                }
             }
         }
         .onChange(of: speechManager.isSpeaking) {
@@ -902,10 +851,10 @@ extension TabSwipeCardPage: View {
                popup:
                 CommonPopupView(text: viewModel.popupMessage)
         )
-        // 카드 삭제하기
         .onChange(of: userManager.isCardDelete) {
+            // 카드 삭제하기
+            
             if userManager.isCardDelete {
-                
                 if let card = topCard {
                     viewModel.deleteCard(idx: card.idx ?? -1) { isSuccess in
                         if isSuccess {
@@ -917,6 +866,20 @@ extension TabSwipeCardPage: View {
                 
                 userManager.isCardDelete = false // 초기화
             }
+        }
+        .fullScreenCover(isPresented: $isShowDoneView) {
+            // 각 메인 카테고리 끝가지 학습한 경우, 결과 View 보여주기
+            
+            DoneView(
+                cancle: {
+                    isShowLastCategoryLoadView = true
+                },
+                nextStep: {
+                    //
+                }, reload: {
+                    //
+                }
+            )
         }
     }
 
@@ -1119,35 +1082,6 @@ extension TabSwipeCardPage: View {
         }
     }
     
-    var emptyBubbleShapeView: some View {
-        CustomBubbleShape(
-            tailWidth: 10,
-            tailHeight: 5,
-            tailPosition: 0.2,
-            tailDirection: .up,
-            tailOffset: 0
-        )
-        .fill(Color.red)
-        .frame(width: 195, height: 35)
-        .overlay(
-            HStack(spacing: 5) {
-                Group {
-                    Text("지금 다른 주제도 확인해보세요!")
-                    
-                    Button(action: {
-                        
-                    }, label: {
-                        Image(systemName: "xmark")
-                    })
-                }
-                .font(.caption11218Regular)
-                .foregroundColor(.gray25)
-            }
-        )
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .offset(x: 15, y: 50)
-    }
-    
     var mainCategoryListView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -1206,6 +1140,40 @@ extension TabSwipeCardPage: View {
                     .animation(.easeInOut(duration: 0.5), value: randomCardOffsets[index])
             }
         }
+    }
+    
+    var lastCategoryLoadView: some View {
+        VStack(spacing: 10) {
+            Button(action: {
+                // DoneView 보이고 있으면 숨김
+                self.hideDoneView()
+                
+                // 카테고리별 영어문장 데이터
+                if viewModel.subCategoryList.count > 0 {
+                    // 카테고리별 영어문장 조회
+                    viewModel.requestSwipeListByCategory(
+                        main_category: self.selectedMainCategoryItem,
+                        sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                        sortType: .Latest,
+                        isSuccess: { _ in }
+                    )
+                }
+                
+            }, label: {
+                Image(systemName: "arrow.circlepath")
+                    .resizable()
+                    .foregroundColor(Color.stateActivePrimaryDefault)
+                    .aspectRatio(contentMode: .fit).frame(height: 40)
+            })
+            
+            if viewModel.subCategoryList.count > 0 {
+                let curCategory = viewModel.subCategoryList[viewModel.categoryTabIndex]
+                Text("\"\(curCategory)\" 다시 시작하기")
+                    .font(.body21420Regular)
+                    .foregroundColor(.gray600)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     /**
@@ -1403,22 +1371,6 @@ extension TabSwipeCardPage {
         }
     }
     
-    private func startTimer() {
-        guard cancellable == nil else {
-            return
-        }
-        timer = Timer.publish(every: seconds, on: .main, in: .common)
-        cancellable = timer.connect()
-    }
-    
-    private func stopTimer() {
-        guard cancellable != nil else {
-            return
-        }
-        cancellable?.cancel()
-        cancellable = nil
-    }
-    
     private func startAutoMode() {
         // 영어 카드가 보이고 있는 상태
         // 1. 영어 문장 읽어주기
@@ -1479,8 +1431,9 @@ extension TabSwipeCardPage {
     
     // DoneView 보이고 있으면 숨김
     private func hideDoneView() {
-        if isShowDoneView {
+        if isShowLastCategoryLoadView {
             isShowDoneView = false
+            isShowLastCategoryLoadView = false
         }
     }
 }
