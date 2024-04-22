@@ -181,3 +181,35 @@ struct ReportCardResponse: Codable {
     var success: Bool? = false
     var message: String? = ""
 }
+
+/**
+ * 일단 통신해서 쓰기/읽기 완성했는데,
+ * 생각해보니 처음부터 끝까지 완주하는 유저들이 많이 없을 거 같기 때문에
+ * 일단, 서버에 저장하는 것 보단, 로컬에서 변수에 담아서 보여주는 방향으로 한다.
+ */
+struct KnowCardResponse: Codable {
+    var code: Int = 0
+    var success: Bool? = false
+    var data: [KnowCardListData] = []
+}
+struct KnowCardListData: Codable, Hashable {
+    var idx: Int? = 0
+    var created_at: String? = ""
+    var updated_at: String? = ""
+    var uid: String? = ""
+    var target_card_main_category: String? = ""
+    var target_card_sub_category: String? = ""
+    var target_card_idx: Int? = 0
+}
+
+/**
+ * 일단 통신해서 쓰기/읽기 완성했는데,
+ * 생각해보니 처음부터 끝까지 완주하는 유저들이 많이 없을 거 같기 때문에
+ * 일단, 서버에 저장하는 것 보단, 로컬에서 변수에 담아서 보여주는 방향으로 한다.
+ */
+struct KnowCardLocalInfo: Codable, Hashable {
+    var subCategory: String = ""
+    var totalCount: Int = 0
+    var swipeCount: Int = 0 // 카드 넘긴 개수 (카드 넘길 때마다 무조건 1 더함)
+    var knowCount: Int = 0
+}

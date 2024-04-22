@@ -74,6 +74,7 @@ extension Color {
     static let fanitTextColor = Color(red: 176/255.0, green: 246/255.0, blue: 170/255.0)
     static let fanitBorderColor = Color(red: 215/255.0, green: 216/255.0, blue: 223/255.0)
     static let fanitShadowColor = Color(red: 10/255.0, green: 17/255.0, blue: 51/255.0, opacity: 0.1)
+    static let pinkDefaultColor = Color(red: 255/255.0, green: 140/255.0, blue: 140/255.0, opacity: 1)
 }
 
 

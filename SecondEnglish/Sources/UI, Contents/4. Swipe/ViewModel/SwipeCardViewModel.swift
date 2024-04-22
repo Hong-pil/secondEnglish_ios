@@ -37,6 +37,10 @@ class SwipeCardViewModel: ObservableObject {
     @Published var noti_selectedMainCategoryName: String = ""
     @Published var noti_selectedSubCategoryIndex: Int = 0
     
+    // '알고있음/학습중' 로컬 데이터
+    @Published var allCategoryListInfo: [MyLearningProgressData] = []
+    @Published var knowCardLocalData: [KnowCardLocalInfo] = []
+    
     
     init() {
 //        NotificationCenter.default.addObserver(forName: Notification.Name("workCompleted"), object: nil, queue: nil) { _ in
@@ -424,6 +428,81 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    //MARK: - 알고 있는 카드 추가
+    /**
+     * 일단 통신해서 쓰기/읽기 완성했는데,
+     * 생각해보니 처음부터 끝까지 완주하는 유저들이 많이 없을 거 같기 때문에
+     * 일단, 서버에 저장하는 것 보단, 로컬에서 변수에 담아서 보여주는 방향으로 한다.
+     */
+    func knowCard(targetCardMainCategory: String, targetCardSubCategory: String, targetCardIdx: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.knowCard(targetCardMainCategory: targetCardMainCategory, targetCardSubCategory: targetCardSubCategory, targetCardIdx: targetCardIdx)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.popupMessage = error.message
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        isSuccess(true)
+                    }
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isSuccess(false)
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    //MARK: - 알고 있는 카드 읽기
+    func readKnowCard(targetCardMainCategory: String, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.readKnowCard(targetCardMainCategory: targetCardMainCategory)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.popupMessage = error.message
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        isSuccess(true)
+                        fLog("idpil::: 알고 있는 카드 읽기 : \(value.data)")
+                    }
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isSuccess(false)
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    //MARK: - 카테고리별 진도확인 리스트 조회
+    func requestMyCategoryProgress(isDone: @escaping()->Void) {
+        ApiControl.getMyCategoryProgress()
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.popupMessage = error.message
+                isDone()
+            } receiveValue: { value in
+                if value.code == 200 {
+                    self.allCategoryListInfo = value.data ?? []
+                    //printPrettyJSON(keyWord: "idpil::: self.allCategoryListInfo :::\n", from: self.allCategoryListInfo)
+                    
+                    isDone()
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
+                }
+            }
+            .store(in: &cancellable)
+    }
     
     
     
@@ -506,6 +585,95 @@ class SwipeCardViewModel: ObservableObject {
         self.swipeList.removeAll(where: { $0.uid == targetUid })
         
         isDone()
+    }
+    
+    
+    func setInitKnowCardList(mainCategory: String) {
+        // 해당 메인 카테고리 정보 가져오기
+        let categoryInfo = allCategoryListInfo.filter { $0.main_category == mainCategory }
+        //printPrettyJSON(keyWord: "idpil::: categoryInfo :::\n", from: categoryInfo)
+        
+        knowCardLocalData = []
+        
+        for item in categoryInfo {
+            knowCardLocalData.append(
+                KnowCardLocalInfo(
+                    subCategory: item.sub_category ?? "",
+                    totalCount: item.category_sentence_count ?? 0,
+                    swipeCount: 0,
+                    knowCount: 0
+                )
+            )
+        }
+        fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+    }
+    
+    func addKnowCardList(_ card: SwipeDataList, type swipeType: CardSwipeType, isDone: ()->Void) {
+        var swipeCount: Int = 0
+        var knowCount: Int = 0
+        
+        switch swipeType {
+        case .learning: // 학습 중
+            swipeCount = 1
+            knowCount = 0
+        case .know: // 알고 있음
+            swipeCount = 1
+            knowCount = 1
+        }
+        
+        
+        // 해당 sub 카테고리 정보 가져오기
+        // filter : 컨테이너 내부의 값을 걸러서 새로운 컨테이너로 추출하는 메소드. 반환 타입은 Bool이며, true일 때 값을 포함한다.
+        let categoryInfoList = knowCardLocalData.filter { $0.subCategory == (card.type3 ?? "") }
+        
+        // map : 기존 데이터를 변형하여 새로운 컨테이너를 생성하는 것
+        let categoryInfoItem = categoryInfoList.map {
+            KnowCardLocalInfo(
+                subCategory: $0.subCategory,
+                totalCount: $0.totalCount,
+                swipeCount: $0.swipeCount + swipeCount,
+                knowCount: $0.knowCount + knowCount
+            )
+        }
+        //fLog("idpil::: categoryInfoItem : \(categoryInfoItem)")
+        
+        for (index, item) in knowCardLocalData.enumerated() {
+            if (card.type3 ?? "") == item.subCategory {
+                // categoryInfoItem 은 반환되는 형태가 [KnowCardLocalInfo] 이기 때문에 0번째 인덱스로 가져와야 됨
+                if categoryInfoItem.count == 1 {
+                    knowCardLocalData[index] = categoryInfoItem[0]
+                }
+            }
+        }
+        fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+        
+        
+        
+        
+        
+        
+        /**
+         * 일단 통신해서 쓰기/읽기 완성했는데,
+         * 생각해보니 처음부터 끝까지 완주하는 유저들이 많이 없을 거 같기 때문에
+         * 일단, 서버에 저장하는 것 보단, 로컬에서 변수에 담아서 보여주는 방향으로 한다.
+         */
+//        self.knowCard(
+//            targetCardMainCategory: card.type2 ?? "",
+//            targetCardSubCategory: card.type3 ?? "",
+//            targetCardIdx: card.idx ?? 0,
+//            isSuccess: { isSuccess in
+//                //
+//                
+//                // 읽기 테스트
+//                self.readKnowCard(
+//                    targetCardMainCategory: card.type2 ?? "",
+//                    isSuccess: { isSuccess in
+//                        //
+//                    }
+//                )
+//            }
+//        )
+        
     }
     
 }

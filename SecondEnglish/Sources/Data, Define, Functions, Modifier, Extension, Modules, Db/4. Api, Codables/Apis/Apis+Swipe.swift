@@ -26,6 +26,8 @@ enum ApisSwipe {
     case doBlockUser(targetUid: String, targetNickname: String, isBlock: String)
     case editCard(idx: Int, korean: String, english: String)
     case deleteCard(idx: Int)
+    case knowCard(targetCardMainCategory: String, targetCardSubCategory: String, targetCardIdx: Int)
+    case readKnowCard(targetCardMainCategory: String)
 }
 
 extension ApisSwipe: TargetType {
@@ -68,6 +70,10 @@ extension ApisSwipe: TargetType {
             return "api/card/edit"
         case .deleteCard:
             return "api/card/delete"
+        case .knowCard:
+            return "api/card/know"
+        case .readKnowCard:
+            return "api/card/know/read"
         }
     }
     
@@ -104,6 +110,10 @@ extension ApisSwipe: TargetType {
             return .post
         case .deleteCard:
             return .post
+        case .knowCard:
+            return .post
+        case .readKnowCard:
+            return .get
         }
     }
     
@@ -240,6 +250,24 @@ extension ApisSwipe: TargetType {
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .knowCard(let targetCardMainCategory, let targetCardSubCategory, let targetCardIdx):
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            params["targetCardMainCategory"] = targetCardMainCategory
+            params["targetCardSubCategory"] = targetCardSubCategory
+            params["targetCardIdx"] = targetCardIdx
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
+        case .readKnowCard(let targetCardMainCategory):
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            params["targetCardMainCategory"] = targetCardMainCategory
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: URLEncoding.default)
             
         }
     }

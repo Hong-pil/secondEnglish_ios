@@ -73,6 +73,9 @@ struct TabSwipeCardPage {
         static let index1RandomCardOffset: CGSize = CGSize(width: 0, height: -10)
         static let index2RandomCardOffset: CGSize = CGSize(width: 0, height: -20)
         static let index3RandomCardOffset: CGSize = CGSize(width: 0, height: -30)
+        
+        // 카드를 아래로 Swipe할 때, 하단뷰가 가려지게 하기 위한 설정
+        static let bottomViewHeight: CGFloat = 70.0
     }
     
     init(
@@ -103,7 +106,114 @@ extension TabSwipeCardPage: View {
                     }
                 }
                 
-                VStack(spacing: 0) {
+                ZStack {
+                    //MARK: - 하단뷰
+                    if !isShowDoneView {
+                        HStack(spacing: 10) {
+                            if !isAutoPlay {
+                                
+                                // 일단 출시하고 추가로 구현하자
+//                                Button(action: {
+//                                    // 카드를 하나라도 넘긴 경우에만 호출함
+//                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
+//
+//                                    }
+//                                }, label: {
+//                                    Image(systemName: "arrowshape.backward")
+//                                        .resizable()
+//                                        .renderingMode(.template)
+//                                        .aspectRatio(contentMode: .fit)
+//                                        .frame(height: 20)
+//                                        .foregroundColor((viewModel.swipeList.count == viewModel.fixedSwipeList_0.count) ? Color.stateDisabledGray200 : Color.primaryDefault)
+//                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+//                                })
+                                
+                                Button(action: {
+                                    // 카드를 하나라도 넘긴 경우에만 호출함
+                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
+                                        StatusManager.shared.loadingStatus = .ShowWithTouchable
+                                        
+                                        self.resetPage() {
+                                            StatusManager.shared.loadingStatus = .Close
+                                        }
+                                    }
+                                }, label: {
+                                    Image(systemName: "arrow.triangle.2.circlepath")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor((viewModel.swipeList.count == viewModel.fixedSwipeList_0.count) ? Color.stateDisabledGray200 : Color.primaryDefault)
+                                        .frame(height: 20)
+                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                                })
+                                
+                                Button(action: {
+                                    bottomSheetManager.show.swipeCardCut = true
+                                }, label: {
+                                    Image(systemName: "scissors")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 20)
+                                        .foregroundColor(Color.primaryDefault)
+                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                                })
+                                
+                                Button(action: {
+                                    if viewModel.swipeList.count < 4 {
+                                        userManager.showCardShuffleError = true
+                                    }
+                                    
+                                    if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
+                                        
+                                        // 랜덤카드 데이터 세팅
+                                        self.setRandomCardList() {
+                                            
+                                            self.isShowRandomCardShuffle = true
+                                            
+                                            viewModel.shuffleSwipeList()
+                                            
+                                            self.doShuffleRandomCard()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                                self.doShuffleRandomCard()
+                                                
+                                                // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                                    self.isShowRandomCardShuffle = false
+                                                }
+                                            }
+                                        }
+                                    }
+                                }, label: {
+                                    Image(systemName: "shuffle")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor(Color.primaryDefault)
+                                        .frame(height: 20)
+                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
+                                })
+                            }
+                            
+                            Spacer()
+                            
+                            Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
+                                .font(.buttons1420Medium)
+                                .foregroundColor(Color.gray850)
+                            
+                            CircleProgressBarView(
+                                width: 50,
+                                height: 50,
+                                color1: Color.blue,
+                                color2: Color.blue.opacity(0.3),
+                                percent: $curPercent
+                            )
+                        }
+                        .frame(height: sizeInfo.bottomViewHeight)
+                        .padding(.horizontal, 20)
+                        //.background(Color.green.opacity(0.3))
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                    }
                     
                     //MARK: - 중간 카드뷰
                     ZStack {
@@ -134,7 +244,7 @@ extension TabSwipeCardPage: View {
                                         VStack(spacing: 0) {
                                             SwipeView(
                                                 card: card,
-                                                onRemove: { likeType in
+                                                onRemove: { swipeType in
                                                     
                                                     /// isRootViewFlipped : 카드 뒤집는 변수
                                                     ///
@@ -150,11 +260,14 @@ extension TabSwipeCardPage: View {
                                                         isForceSwipe = true
                                                     }
                                                     
-                                                    withAnimation {
-                                                        removeProfile(card)
-                                                    }
                                                     
-                                                    onLike(card, type: likeType)
+                                                    viewModel.addKnowCardList(card, type: swipeType, isDone: {
+                                                        //
+                                                    })
+                                                    
+                                                    withAnimation {
+                                                        removeCard(card)
+                                                    }
                                                 },
                                                 isTapLikeBtn: { cardIdx, isLike in
                                                     //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
@@ -318,112 +431,8 @@ extension TabSwipeCardPage: View {
                             }
                         }
                     }
-                    
-                    //MARK: - 하단 뷰
-                    if !isShowDoneView {
-                        HStack(spacing: 10) {
-                            if !isAutoPlay {
-                                
-                                // 일단 출시하고 추가로 구현하자
-//                                Button(action: {
-//                                    // 카드를 하나라도 넘긴 경우에만 호출함
-//                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
-//                                        
-//                                    }
-//                                }, label: {
-//                                    Image(systemName: "arrowshape.backward")
-//                                        .resizable()
-//                                        .renderingMode(.template)
-//                                        .aspectRatio(contentMode: .fit)
-//                                        .frame(height: 20)
-//                                        .foregroundColor((viewModel.swipeList.count == viewModel.fixedSwipeList_0.count) ? Color.stateDisabledGray200 : Color.primaryDefault)
-//                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
-//                                })
-                                
-                                Button(action: {
-                                    // 카드를 하나라도 넘긴 경우에만 호출함
-                                    if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
-                                        StatusManager.shared.loadingStatus = .ShowWithTouchable
-                                        
-                                        self.resetPage() {
-                                            StatusManager.shared.loadingStatus = .Close
-                                        }
-                                    }
-                                }, label: {
-                                    Image(systemName: "arrow.triangle.2.circlepath")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                        .aspectRatio(contentMode: .fit)
-                                        .foregroundColor((viewModel.swipeList.count == viewModel.fixedSwipeList_0.count) ? Color.stateDisabledGray200 : Color.primaryDefault)
-                                        .frame(height: 20)
-                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                                })
-                                
-                                Button(action: {
-                                    bottomSheetManager.show.swipeCardCut = true
-                                }, label: {
-                                    Image(systemName: "scissors")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(height: 20)
-                                        .foregroundColor(Color.primaryDefault)
-                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                                })
-                                
-                                Button(action: {
-                                    if viewModel.swipeList.count < 4 {
-                                        userManager.showCardShuffleError = true
-                                    }
-                                    
-                                    if !self.isShowRandomCardShuffle && viewModel.swipeList.count > 3 {
-                                        
-                                        // 랜덤카드 데이터 세팅
-                                        self.setRandomCardList() {
-                                            
-                                            self.isShowRandomCardShuffle = true
-                                            
-                                            viewModel.shuffleSwipeList()
-                                            
-                                            self.doShuffleRandomCard()
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                                self.doShuffleRandomCard()
-                                                
-                                                // 카드 섞는 애니메이션 duration이 0.3초 이기 때문에, 0.3초 뒤에 뷰를 안 보이게 한다.
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                                    self.isShowRandomCardShuffle = false
-                                                }
-                                            }
-                                        }
-                                    }
-                                }, label: {
-                                    Image(systemName: "shuffle")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                        .aspectRatio(contentMode: .fit)
-                                        .foregroundColor(Color.primaryDefault)
-                                        .frame(height: 20)
-                                        .padding(7).background(Color.gray25) // 클릭 잘 되도록
-                                })
-                            }
-                            
-                            Spacer()
-                            
-                            Text("\(maxID) / \(Int(viewModel.countOfSwipeList))")
-                                .font(.buttons1420Medium)
-                                .foregroundColor(Color.gray850)
-                            
-                            CircleProgressBarView(
-                                width: 50,
-                                height: 50,
-                                color1: Color.blue,
-                                color2: Color.blue.opacity(0.3),
-                                percent: $curPercent
-                            )
-                        }
-                        .padding(.vertical, 20)
-                        .padding(.horizontal, 20)
-                    }
+                    // 카드를 아래로 Swipe할 때, 하단뷰가 가려지게 하기 위한 설정
+                    .padding(.bottom, sizeInfo.bottomViewHeight)
                 }
                 .overlay(Color.gray25.opacity(isShowMainCategoryListView ? 0.111111111111111111111111111 : 0.0))
                 .onTapGesture {
@@ -471,6 +480,12 @@ extension TabSwipeCardPage: View {
                                         )
                                     }
                                 }
+                            }
+                         
+                            
+                            // '알고있음/학습중' 관련 데이터 초기 설정
+                            viewModel.requestMyCategoryProgress() {
+                                viewModel.setInitKnowCardList(mainCategory: self.selectedMainCategoryItem)
                             }
                             
                         }
@@ -644,6 +659,9 @@ extension TabSwipeCardPage: View {
         }
         .onChange(of: viewModel.noti_selectedMainCategoryName) {
             self.selectedMainCategoryItem = viewModel.noti_selectedMainCategoryName
+            
+            // '알고있음/학습중' 관련 데이터 초기 설정
+            viewModel.setInitKnowCardList(mainCategory: self.selectedMainCategoryItem)
         }
         .onChange(of: self.selectedMainCategoryItem) {
             
@@ -871,6 +889,7 @@ extension TabSwipeCardPage: View {
             // 각 메인 카테고리 끝가지 학습한 경우, 결과 View 보여주기
             
             DoneView(
+                list: viewModel.knowCardLocalData,
                 cancle: {
                     isShowLastCategoryLoadView = true
                 },
@@ -1106,6 +1125,9 @@ extension TabSwipeCardPage: View {
                     .onTapGesture {
                         self.selectedMainCategoryItem = element
                         
+                        // '알고있음/학습중' 관련 데이터 초기 설정
+                        viewModel.setInitKnowCardList(mainCategory: self.selectedMainCategoryItem)
+                        
                         self.isShowMainCategoryListView.toggle()
                         withAnimation {
                             self.isShowMainCategoryButtonAnimation.toggle()
@@ -1227,16 +1249,6 @@ extension TabSwipeCardPage {
         return viewModel.swipeList.map { ($0.customId ?? 0) }.min() ?? 0
     }
     
-    private func onLike(_ card: SwipeDataList, type likeType: LikeType) {
-        switch likeType {
-        case .like:
-            fLog("You liked \(card.korean ?? "")")
-        case .dislike:
-            fLog("You disliked \(card.korean ?? "")")
-        case .superlike:
-            fLog("You super-liked \(card.korean ?? "")")
-        }
-    }
     
     //Calucate percentage based on given values
     private func calculatePercentage(value:Double, percentageVal:Double)->Double{
@@ -1245,7 +1257,7 @@ extension TabSwipeCardPage {
         return val / percentageVal
     }
     
-    private func removeProfile(_ card: SwipeDataList, isDone: (Bool)->Void = {_ in}) {
+    private func removeCard(_ card: SwipeDataList, isDone: (Bool)->Void = {_ in}) {
         guard let index = viewModel.swipeList.firstIndex(of: card) else { return }
         
         viewModel.swipeList.remove(at: index)
@@ -1418,7 +1430,7 @@ extension TabSwipeCardPage {
             // 애니메이션 0.3초 동안 진행되기 때문에, 0.3초 후에 실행
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 // 맨 위에 있는 카드 제거
-                removeProfile(card) { isDone in
+                removeCard(card) { isDone in
                     if isDone {
                         isTopViewSwipe = false
                         
