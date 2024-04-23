@@ -472,7 +472,7 @@ extension TabSwipeCardPage: View {
                                         // 카테고리별 영어문장 조회
                                         viewModel.requestSwipeListByCategory(
                                             main_category: self.selectedMainCategoryItem,
-                                            sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
                                             sortType: .Latest,
                                             isSuccess: { success in
                                                 //
@@ -484,8 +484,9 @@ extension TabSwipeCardPage: View {
                          
                             
                             // '알고있음/학습중' 관련 데이터 초기 설정
-                            viewModel.requestMyCategoryProgress() {
-                                viewModel.setInitKnowCardList(mainCategory: self.selectedMainCategoryItem)
+                            viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                                
+                                viewModel.setInitKnowCardList()
                             }
                             
                         }
@@ -661,7 +662,10 @@ extension TabSwipeCardPage: View {
             self.selectedMainCategoryItem = viewModel.noti_selectedMainCategoryName
             
             // '알고있음/학습중' 관련 데이터 초기 설정
-            viewModel.setInitKnowCardList(mainCategory: self.selectedMainCategoryItem)
+            viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                
+                viewModel.setInitKnowCardList()
+            }
         }
         .onChange(of: self.selectedMainCategoryItem) {
             
@@ -679,7 +683,7 @@ extension TabSwipeCardPage: View {
                         // 카테고리별 영어문장 조회
                         viewModel.requestSwipeListByCategory(
                             main_category: self.selectedMainCategoryItem,
-                            sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
                             sortType: .Latest,
                             isSuccess: { success in
                                 viewModel.moveCategoryTab = true
@@ -999,7 +1003,7 @@ extension TabSwipeCardPage: View {
                             let isSelected = viewModel.categoryTabIndex == index
                             
                             VStack(spacing: 0) {
-                                Text(element)
+                                Text(element.type3 ?? "")
                                     .font(.title5Roboto1622Medium).fontWeight(.semibold)
                                     .foregroundColor(viewModel.categoryTabIndex==index ? Color.gray25 : Color.gray300)
 //                                    .background(
@@ -1029,7 +1033,7 @@ extension TabSwipeCardPage: View {
                                             
                                             viewModel.requestSwipeListByCategory(
                                                 main_category: self.selectedMainCategoryItem,
-                                                sub_category: element,
+                                                type3_sort_num: element.type3_sort_num ?? 0,
                                                 sortType: .Latest,
                                                 isSuccess: { success in
                                                     
@@ -1072,7 +1076,7 @@ extension TabSwipeCardPage: View {
                                             
                                             viewModel.requestSwipeListByCategory(
                                                 main_category: self.selectedMainCategoryItem,
-                                                sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
                                                 sortType: .Latest,
                                                 isSuccess: { success in
                                                 }
@@ -1126,7 +1130,10 @@ extension TabSwipeCardPage: View {
                         self.selectedMainCategoryItem = element
                         
                         // '알고있음/학습중' 관련 데이터 초기 설정
-                        viewModel.setInitKnowCardList(mainCategory: self.selectedMainCategoryItem)
+                        viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                            
+                            viewModel.setInitKnowCardList()
+                        }
                         
                         self.isShowMainCategoryListView.toggle()
                         withAnimation {
@@ -1175,7 +1182,7 @@ extension TabSwipeCardPage: View {
                     // 카테고리별 영어문장 조회
                     viewModel.requestSwipeListByCategory(
                         main_category: self.selectedMainCategoryItem,
-                        sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                        type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
                         sortType: .Latest,
                         isSuccess: { _ in }
                     )
@@ -1189,7 +1196,7 @@ extension TabSwipeCardPage: View {
             })
             
             if viewModel.subCategoryList.count > 0 {
-                let curCategory = viewModel.subCategoryList[viewModel.categoryTabIndex]
+                let curCategory = viewModel.subCategoryList[viewModel.categoryTabIndex].type3 ?? ""
                 Text("\"\(curCategory)\" 다시 시작하기")
                     .font(.body21420Regular)
                     .foregroundColor(.gray600)
@@ -1350,7 +1357,7 @@ extension TabSwipeCardPage {
                                 // 카테고리별 영어문장 조회
                                 viewModel.requestSwipeListByCategory(
                                     main_category: self.selectedMainCategoryItem,
-                                    sub_category: viewModel.subCategoryList[viewModel.categoryTabIndex],
+                                    type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
                                     sortType: .Latest,
                                     isSuccess: { success in
                                         if success {

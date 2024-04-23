@@ -76,6 +76,8 @@ struct SwipeDataList: Codable, Hashable {
     var isLike: Bool? = false
     var isUserBlock: Bool? = false
     var isCardBlock: Bool? = false
+    var type2_sort_num: Int? = 0
+    var type3_sort_num: Int? = 0
 }
 
 struct SwipeCategory: Codable {
@@ -88,6 +90,12 @@ struct SwipeCategoryList: Codable, Hashable {
     var type1: String? = ""
     var type2: String? = ""
     var type3: String? = ""
+    var type3_sort_num: Int? = 0
+}
+
+struct SubCategoryListModel: Codable, Hashable {
+    var type3: String? = ""
+    var type3_sort_num: Int? = 0
 }
 
 struct LikeCardResponse: Codable {
@@ -212,4 +220,14 @@ struct KnowCardLocalInfo: Codable, Hashable {
     var totalCount: Int = 0
     var swipeCount: Int = 0 // 카드 넘긴 개수 (카드 넘길 때마다 무조건 1 더함)
     var knowCount: Int = 0
+}
+
+struct MyAllMainCategoryResponse: Codable {
+    var code: Int = 0
+    var success: Bool? = false
+    var data: [SwipeDataList]? = nil
+}
+struct MyAllSubCategoryCountModel {
+    var type3: String
+    var count: Int
 }

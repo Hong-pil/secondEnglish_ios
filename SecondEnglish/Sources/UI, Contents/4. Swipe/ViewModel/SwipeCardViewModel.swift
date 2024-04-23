@@ -29,7 +29,7 @@ class SwipeCardViewModel: ObservableObject {
     @Published var swipeList: [SwipeDataList] = []
     @Published var countOfSwipeList: Double = 0
     @Published var mainCategoryList: [String] = []
-    @Published var subCategoryList: [String] = []
+    @Published var subCategoryList: [SubCategoryListModel] = []
     @Published var cardPercentArr: [SwipeDataList] = [] // 카드 퍼센트 계산용
     
     // NotificationCenter를 통해 탭 이동시키는 변수
@@ -38,7 +38,7 @@ class SwipeCardViewModel: ObservableObject {
     @Published var noti_selectedSubCategoryIndex: Int = 0
     
     // '알고있음/학습중' 로컬 데이터
-    @Published var allCategoryListInfo: [MyLearningProgressData] = []
+    @Published var allMyMainCategoryList: [MyAllSubCategoryCountModel] = []
     @Published var knowCardLocalData: [KnowCardLocalInfo] = []
     
     
@@ -195,7 +195,12 @@ class SwipeCardViewModel: ObservableObject {
                     
                     // 카테고리 헤더 데이터
                     for type in value.data ?? [] {
-                        self.subCategoryList.append(type.type3 ?? "")
+                        self.subCategoryList.append(
+                            SubCategoryListModel(
+                                type3: type.type3 ?? "",
+                                type3_sort_num: type.type3_sort_num ?? 0
+                            )
+                        )
                     }
                     
                     // 중복제거
@@ -212,8 +217,8 @@ class SwipeCardViewModel: ObservableObject {
     
     
     //MARK: - 카테고리별 영어문장 조회
-    func requestSwipeListByCategory(main_category: String, sub_category: String, sortType: SwipeCardSortType, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getSwipeListByCategory(main_category: main_category, sub_category: sub_category)
+    func requestSwipeListByCategory(main_category: String, type3_sort_num: Int, sortType: SwipeCardSortType, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getSwipeListByCategory(main_category: main_category, type3_sort_num: type3_sort_num)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
@@ -480,19 +485,25 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - 카테고리별 진도확인 리스트 조회
-    func requestMyCategoryProgress(isDone: @escaping()->Void) {
-        ApiControl.getMyCategoryProgress()
+    //MARK: - 메인 카테고리 기준 내 모든 문장 목록
+    func readMyAllCategories(mainCategory: String, isDone: @escaping() -> Void) {
+        ApiControl.readMyAllCategories(mainCategory: mainCategory)
             .sink { error in
                 guard case let .failure(error) = error else { return }
-                fLog("requestSliderList error : \(error)")
+                fLog("requestSwipeList error : \(error)")
                 
                 self.popupMessage = error.message
                 isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    self.allCategoryListInfo = value.data ?? []
-                    //printPrettyJSON(keyWord: "idpil::: self.allCategoryListInfo :::\n", from: self.allCategoryListInfo)
+                    
+                    guard let arr = value.data else {
+                        isDone()
+                        return
+                    }
+                    
+                    self.allMyMainCategoryList = self.convertToDoneViewModel(from: arr)
+                    //fLog("idpil::: allMyMainCategoryList : \(self.allMyMainCategoryList)")
                     
                     isDone()
                 }
@@ -503,6 +514,19 @@ class SwipeCardViewModel: ObservableObject {
             }
             .store(in: &cancellable)
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -587,19 +611,40 @@ class SwipeCardViewModel: ObservableObject {
         isDone()
     }
     
-    
-    func setInitKnowCardList(mainCategory: String) {
-        // 해당 메인 카테고리 정보 가져오기
-        let categoryInfo = allCategoryListInfo.filter { $0.main_category == mainCategory }
-        //printPrettyJSON(keyWord: "idpil::: categoryInfo :::\n", from: categoryInfo)
+    // 메인 카테고리 기준 내 모든 문장 목록 -> 서브 카테고리별로 개수로 정리
+    func convertToDoneViewModel(from dataList: [SwipeDataList]) -> [MyAllSubCategoryCountModel] {
+        var typeCount = [String: (firstIndex: Int, count: Int)]() // type 값을 키로 하고, (첫 등장 인덱스, 등장 횟수)를 값으로 하는 딕셔너리
+        var order = [String]() // 순서를 기록하기 위한 배열
+
+        // 각 요소의 type에 대해 등장 횟수를 셈
+        for (index, data) in dataList.enumerated() {
+            if let count = typeCount[data.type3 ?? ""] {
+                typeCount[data.type3 ?? ""] = (count.firstIndex, count.count + 1)
+            } else {
+                typeCount[data.type3 ?? ""] = (index, 1)
+                order.append(data.type3 ?? "") // 처음 등장하는 type만 순서 배열에 추가
+            }
+        }
         
+        // 순서 정보를 유지하면서 MyAllSubCategoryCountModel 배열로 변환
+        var result = [MyAllSubCategoryCountModel]()
+        for type3 in order {
+            if let info = typeCount[type3] {
+                result.append(MyAllSubCategoryCountModel(type3: type3, count: info.count))
+            }
+        }
+        
+        return result
+    }
+    
+    func setInitKnowCardList() {
         knowCardLocalData = []
         
-        for item in categoryInfo {
+        for item in allMyMainCategoryList {
             knowCardLocalData.append(
                 KnowCardLocalInfo(
-                    subCategory: item.sub_category ?? "",
-                    totalCount: item.category_sentence_count ?? 0,
+                    subCategory: item.type3,
+                    totalCount: item.count,
                     swipeCount: 0,
                     knowCount: 0
                 )

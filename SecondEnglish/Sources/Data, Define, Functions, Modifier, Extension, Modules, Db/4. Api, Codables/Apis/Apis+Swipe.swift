@@ -14,7 +14,7 @@ enum ApisSwipe {
     case swipeCategory(category: String)
     case swipeMainCategory
     case swipeList
-    case swipeListByCategory(main_category: String, sub_category: String)
+    case swipeListByCategory(main_category: String, type3_sort_num: Int)
     case myCategoryProgress
     case likeCard(cardIdx: Int, isLike: Int)
     case myLikeCardList
@@ -28,6 +28,7 @@ enum ApisSwipe {
     case deleteCard(idx: Int)
     case knowCard(targetCardMainCategory: String, targetCardSubCategory: String, targetCardIdx: Int)
     case readKnowCard(targetCardMainCategory: String)
+    case readMyAllCategories(mainCategory: String)
 }
 
 extension ApisSwipe: TargetType {
@@ -74,6 +75,8 @@ extension ApisSwipe: TargetType {
             return "api/card/know"
         case .readKnowCard:
             return "api/card/know/read"
+        case .readMyAllCategories:
+            return "api/my/category/all/read"
         }
     }
     
@@ -114,6 +117,8 @@ extension ApisSwipe: TargetType {
             return .post
         case .readKnowCard:
             return .get
+        case .readMyAllCategories:
+            return .get
         }
     }
     
@@ -147,12 +152,12 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
             
-        case .swipeListByCategory(let main_category, let sub_category):
+        case .swipeListByCategory(let main_category, let type3_sort_num):
             var params = defaultParams
             
             params["uid"] = UserManager.shared.uid
             params["main_category"] = main_category
-            params["sub_category"] = sub_category
+            params["type3_sort_num"] = String(type3_sort_num)
 
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
@@ -265,6 +270,14 @@ extension ApisSwipe: TargetType {
             var params = defaultParams
             params["uid"] = UserManager.shared.uid
             params["targetCardMainCategory"] = targetCardMainCategory
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .readMyAllCategories(let mainCategory):
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            params["mainCategory"] = mainCategory
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: URLEncoding.default)
