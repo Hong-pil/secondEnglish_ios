@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct CountingNumberAnimationModifier: AnimatableModifier {
-    let subCategory: String
+    let doneViewType: DoneViewType
     var number: CGFloat = 0
+    
+    private struct sizeInfo {
+        static let learnColor: Color = Color(red: 245/255.0, green: 207/255.0, blue: 107/255.0, opacity: 1)
+        static let knowColor: Color = Color(red: 140/255.0, green: 204/255.0, blue: 231/255.0, opacity: 1)
+    }
     
     var animatableData: CGFloat {
         get { number }
@@ -17,27 +22,17 @@ struct CountingNumberAnimationModifier: AnimatableModifier {
     }
     
     func body(content: Content) -> some View {
-        content.overlay(NumberLabelView(subCategory: subCategory, number: number))
+        content.overlay(NumberLabelView(doneViewType: doneViewType, number: number))
     }
     
     struct NumberLabelView: View {
-        let subCategory: String
+        let doneViewType: DoneViewType
         let number: CGFloat
         
         var body: some View {
-            HStack(spacing: 15) {
-                Text(subCategory)
-                    .font(.title5Roboto1622Medium)
-                    .foregroundColor(.gray800)
-                    .padding(.bottom, 7)
-                
-                Text("\(Int(number))%")
-                    .font(.title5Roboto1622Medium)
-                    .foregroundColor(.stateActivePrimaryDefault)
-                    .padding(.bottom, 7)
-                
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            Text("\(doneViewType.rawValue) \(Int(number))%")
+                .font(.buttons1420Medium)
+                .foregroundColor(doneViewType == .know ? sizeInfo.knowColor : sizeInfo.learnColor)
         }
     }
 }

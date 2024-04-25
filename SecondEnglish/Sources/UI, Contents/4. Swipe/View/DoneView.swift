@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import SwiftUINavigationBarColor
 
 struct DoneView {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let list: [KnowCardLocalInfo]
+    let isLastMainCategory: Bool
     let cancle: () -> Void
     let nextStep: () -> Void
     let reload: () -> Void
@@ -58,10 +60,58 @@ struct DoneView {
     @State private var progressWidth_19: CGFloat = 0.0
     
     
+    
+    
+    @State private var progressKnowPercent_0: CGFloat = 0.0
+    @State private var progressKnowPercent_1: CGFloat = 0.0
+    @State private var progressKnowPercent_2: CGFloat = 0.0
+    @State private var progressKnowPercent_3: CGFloat = 0.0
+    @State private var progressKnowPercent_4: CGFloat = 0.0
+    @State private var progressKnowPercent_5: CGFloat = 0.0
+    @State private var progressKnowPercent_6: CGFloat = 0.0
+    @State private var progressKnowPercent_7: CGFloat = 0.0
+    @State private var progressKnowPercent_8: CGFloat = 0.0
+    @State private var progressKnowPercent_9: CGFloat = 0.0
+    @State private var progressKnowPercent_10: CGFloat = 0.0
+    @State private var progressKnowPercent_11: CGFloat = 0.0
+    @State private var progressKnowPercent_12: CGFloat = 0.0
+    @State private var progressKnowPercent_13: CGFloat = 0.0
+    @State private var progressKnowPercent_14: CGFloat = 0.0
+    @State private var progressKnowPercent_15: CGFloat = 0.0
+    @State private var progressKnowPercent_16: CGFloat = 0.0
+    @State private var progressKnowPercent_17: CGFloat = 0.0
+    @State private var progressKnowPercent_18: CGFloat = 0.0
+    @State private var progressKnowPercent_19: CGFloat = 0.0
+    
+    
+    @State private var progressKnowWidth_0: CGFloat = 0.0
+    @State private var progressKnowWidth_1: CGFloat = 0.0
+    @State private var progressKnowWidth_2: CGFloat = 0.0
+    @State private var progressKnowWidth_3: CGFloat = 0.0
+    @State private var progressKnowWidth_4: CGFloat = 0.0
+    @State private var progressKnowWidth_5: CGFloat = 0.0
+    @State private var progressKnowWidth_6: CGFloat = 0.0
+    @State private var progressKnowWidth_7: CGFloat = 0.0
+    @State private var progressKnowWidth_8: CGFloat = 0.0
+    @State private var progressKnowWidth_9: CGFloat = 0.0
+    @State private var progressKnowWidth_10: CGFloat = 0.0
+    @State private var progressKnowWidth_11: CGFloat = 0.0
+    @State private var progressKnowWidth_12: CGFloat = 0.0
+    @State private var progressKnowWidth_13: CGFloat = 0.0
+    @State private var progressKnowWidth_14: CGFloat = 0.0
+    @State private var progressKnowWidth_15: CGFloat = 0.0
+    @State private var progressKnowWidth_16: CGFloat = 0.0
+    @State private var progressKnowWidth_17: CGFloat = 0.0
+    @State private var progressKnowWidth_18: CGFloat = 0.0
+    @State private var progressKnowWidth_19: CGFloat = 0.0
+    
+    
     private struct sizeInfo {
         static let toolBarCancelButtonSize: CGFloat = 20.0
         static let progressBarWidth: CGFloat = UIScreen.main.bounds.width - 40.0 // horizontal padding 값 양쪽 20.0씩 빼줘서 총 40.0 빼줌
         static let horizontalPaddingSize: CGFloat = 20.0
+        static let learnColor: Color = Color(red: 245/255.0, green: 207/255.0, blue: 107/255.0, opacity: 1)
+        static let knowColor: Color = Color(red: 140/255.0, green: 204/255.0, blue: 231/255.0, opacity: 1)
     }
 }
 
@@ -74,31 +124,56 @@ extension DoneView: View {
                     Image("congrats3_icon")
                         .resizable()
                         .aspectRatio(contentMode: .fit).frame(height: 100)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.top, 30)
-                        .padding(.trailing, 20)
+                        .padding(.bottom, 10)
                     
                     ForEach(Array(list.enumerated()), id: \.offset) { index, item in
                         
                         VStack(spacing: 0) {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Color.gray25)
-                                .modifier(
-                                    CountingNumberAnimationModifier(subCategory: item.subCategory, number: self.getProgressPercent(index: index))
-                                )
-                                .padding(.leading, 20)
-                                .padding(.bottom, 10)
+                            
+                            //MARK: - 서브 카테고리 / 퍼센트 글자
+                            HStack(spacing: 0) {
+                                Text(item.subCategory)
+                                    .font(.title5Roboto1622Medium)
+                                    .foregroundColor(.gray800)
+                            
+                                Spacer()
+                                
+                                Text("\(DoneViewType.know.rawValue) \(Int(self.getProgressKnowPercent(index: index)))%")
+                                    .opacity(0.0)
+                                    .modifier(
+                                        CountingNumberAnimationModifier(
+                                            doneViewType: .know,
+                                            number: self.getProgressKnowPercent(index: index)
+                                        )
+                                    )
+                                
+                                Text("\(DoneViewType.learn.rawValue) \(Int(self.getProgressPercent(index: index)))%")
+                                    .opacity(0.0)
+                                    .modifier(
+                                        CountingNumberAnimationModifier(
+                                            doneViewType: .learn,
+                                            number: self.getProgressPercent(index: index)
+                                        )
+                                    )
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 10)
                             
                             
+                            //MARK: - ProgressBar
                             ZStack(alignment: .leading) {
-                                Rectangle()
+                                RoundedRectangle(cornerRadius: 5)
                                     .frame(width: sizeInfo.progressBarWidth)
                                     .foregroundColor(.bgLightGray50)
-                                    .cornerRadius(5)
                                 
-                                Rectangle().frame(width: self.getProgressWidth(index: index))
-                                .foregroundColor(Color.stateActivePrimaryDefault)
-                                .cornerRadius(5)
+                                RoundedRectangle(cornerRadius: 5)
+                                    .frame(width: self.getProgressWidth(index: index))
+                                    .foregroundColor(sizeInfo.learnColor)
+                                
+                                RoundedRectangle(cornerRadius: 5)
+                                    .frame(width: self.getProgressKnowWidth(index: index))
+                                    .foregroundColor(sizeInfo.knowColor)
                             }
                             .frame(height: 30)
                         }
@@ -106,33 +181,22 @@ extension DoneView: View {
                     }
                 }
                 
-                // 버튼
-//                Button("Increase Progress") {
-//                    withAnimation(.easeIn(duration: 0.5)) {
-//                        progressWidth = 0.7 * UIScreen.main.bounds.width // 70% 너비
-//                    }
-//                }
-//                .padding()
-                
-                
-                
-                
-                
-                
                 Spacer()
                 
                 VStack(spacing: 15) {
-                    Button(action: {
-                        nextStep()
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        Text("다음 단계로 넘어가기")
-                            .font(.buttons1420Medium)
-                            .foregroundColor(.gray25)
-                            .padding(.vertical, 15)
-                            .frame(maxWidth: .infinity)
-                            .background(RoundedRectangle(cornerRadius: 5).fill(Color.primaryDefault))
-                    })
+                    if !isLastMainCategory {
+                        Button(action: {
+                            nextStep()
+                            presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            Text("다음 단계로 넘어가기")
+                                .font(.buttons1420Medium)
+                                .foregroundColor(.gray25)
+                                .padding(.vertical, 15)
+                                .frame(maxWidth: .infinity)
+                                .background(RoundedRectangle(cornerRadius: 5).fill(Color.primaryDefault))
+                        })
+                    }
                     
                     Button(action: {
                         reload()
@@ -163,6 +227,7 @@ extension DoneView: View {
                     })
                 }
             }
+            .toolbarBackground(Color.gray25)
         }
         .task {
             
@@ -187,74 +252,158 @@ extension DoneView: View {
             var localPercent_18: CGFloat = 0.0
             var localPercent_19: CGFloat = 0.0
             
+            var localKnowPercent_0: CGFloat = 0.0
+            var localKnowPercent_1: CGFloat = 0.0
+            var localKnowPercent_2: CGFloat = 0.0
+            var localKnowPercent_3: CGFloat = 0.0
+            var localKnowPercent_4: CGFloat = 0.0
+            var localKnowPercent_5: CGFloat = 0.0
+            var localKnowPercent_6: CGFloat = 0.0
+            var localKnowPercent_7: CGFloat = 0.0
+            var localKnowPercent_8: CGFloat = 0.0
+            var localKnowPercent_9: CGFloat = 0.0
+            var localKnowPercent_10: CGFloat = 0.0
+            var localKnowPercent_11: CGFloat = 0.0
+            var localKnowPercent_12: CGFloat = 0.0
+            var localKnowPercent_13: CGFloat = 0.0
+            var localKnowPercent_14: CGFloat = 0.0
+            var localKnowPercent_15: CGFloat = 0.0
+            var localKnowPercent_16: CGFloat = 0.0
+            var localKnowPercent_17: CGFloat = 0.0
+            var localKnowPercent_18: CGFloat = 0.0
+            var localKnowPercent_19: CGFloat = 0.0
+            
             
             for (index, item) in list.enumerated() {
                 
                 let calValue = calculatePercentage(value: Double(item.swipeCount), percentageVal: Double(item.totalCount))
                 let percent = CGFloat(calValue) / 100.0
-                //fLog("idpil::: calValue : \(calValue)")
+                
+                let calValueKnow = calculatePercentage(value: Double(item.knowCount), percentageVal: Double(item.totalCount))
+                let percentKnow = CGFloat(calValueKnow) / 100.0
+                
                 
                 switch index {
                 case 0:
                     localPercent_0 = calValue
                     progressWidth_0 = percent
+                    
+                    localKnowPercent_0 = calValueKnow
+                    progressKnowWidth_0 = percentKnow
                 case 1:
                     localPercent_1 = calValue
                     progressWidth_1 = percent
+                    
+                    localKnowPercent_1 = calValueKnow
+                    progressKnowWidth_1 = percentKnow
                 case 2:
                     localPercent_2 = calValue
                     progressWidth_2 = percent
+                    
+                    localKnowPercent_2 = calValueKnow
+                    progressKnowWidth_2 = percentKnow
                 case 3:
                     localPercent_3 = calValue
                     progressWidth_3 = percent
+                    
+                    localKnowPercent_3 = calValueKnow
+                    progressKnowWidth_3 = percentKnow
                 case 4:
                     localPercent_4 = calValue
                     progressWidth_4 = percent
+                    
+                    localKnowPercent_4 = calValueKnow
+                    progressKnowWidth_4 = percentKnow
                 case 5:
                     localPercent_5 = calValue
                     progressWidth_5 = percent
+                    
+                    localKnowPercent_5 = calValueKnow
+                    progressKnowWidth_5 = percentKnow
                 case 6:
                     localPercent_6 = calValue
                     progressWidth_6 = percent
+                    
+                    localKnowPercent_6 = calValueKnow
+                    progressKnowWidth_6 = percentKnow
                 case 7:
                     localPercent_7 = calValue
                     progressWidth_7 = percent
+                    
+                    localKnowPercent_7 = calValueKnow
+                    progressKnowWidth_7 = percentKnow
                 case 8:
                     localPercent_8 = calValue
                     progressWidth_8 = percent
+                    
+                    localKnowPercent_8 = calValueKnow
+                    progressKnowWidth_8 = percentKnow
                 case 9:
                     localPercent_9 = calValue
                     progressWidth_9 = percent
+                    
+                    localKnowPercent_9 = calValueKnow
+                    progressKnowWidth_9 = percentKnow
                 case 10:
                     localPercent_10 = calValue
                     progressWidth_10 = percent
+                    
+                    localKnowPercent_10 = calValueKnow
+                    progressKnowWidth_10 = percentKnow
                 case 11:
                     localPercent_11 = calValue
                     progressWidth_11 = percent
+                    
+                    localKnowPercent_11 = calValueKnow
+                    progressKnowWidth_11 = percentKnow
                 case 12:
                     localPercent_12 = calValue
                     progressWidth_12 = percent
+                    
+                    localKnowPercent_12 = calValueKnow
+                    progressKnowWidth_12 = percentKnow
                 case 13:
                     localPercent_13 = calValue
                     progressWidth_13 = percent
+                    
+                    localKnowPercent_13 = calValueKnow
+                    progressKnowWidth_13 = percentKnow
                 case 14:
                     localPercent_14 = calValue
                     progressWidth_14 = percent
+                    
+                    localKnowPercent_14 = calValueKnow
+                    progressKnowWidth_14 = percentKnow
                 case 15:
                     localPercent_15 = calValue
                     progressWidth_15 = percent
+                    
+                    localKnowPercent_15 = calValueKnow
+                    progressKnowWidth_15 = percentKnow
                 case 16:
                     localPercent_16 = calValue
                     progressWidth_16 = percent
+                    
+                    localKnowPercent_16 = calValueKnow
+                    progressKnowWidth_16 = percentKnow
                 case 17:
                     localPercent_17 = calValue
                     progressWidth_17 = percent
+                    
+                    localKnowPercent_17 = calValueKnow
+                    progressKnowWidth_17 = percentKnow
                 case 18:
                     localPercent_18 = calValue
                     progressWidth_18 = percent
+                    
+                    localKnowPercent_18 = calValueKnow
+                    progressKnowWidth_18 = percentKnow
                 case 19:
                     localPercent_19 = calValue
                     progressWidth_19 = percent
+                    
+                    localKnowPercent_19 = calValueKnow
+                    progressKnowWidth_19 = percentKnow
                 default:
                     fLog("")
                 }
@@ -328,11 +477,62 @@ extension DoneView: View {
                 progressWidth_19 = progressWidth_19 * sizeInfo.progressBarWidth
             }
             
+            withAnimation(.easeIn(duration: 0.5).delay(1.0)) {
+                progressKnowPercent_0 = localKnowPercent_0
+                progressKnowPercent_1 = localKnowPercent_1
+                progressKnowPercent_2 = localKnowPercent_2
+                progressKnowPercent_3 = localKnowPercent_3
+                progressKnowPercent_4 = localKnowPercent_4
+                progressKnowPercent_5 = localKnowPercent_5
+                progressKnowPercent_6 = localKnowPercent_6
+                progressKnowPercent_7 = localKnowPercent_7
+                progressKnowPercent_8 = localKnowPercent_8
+                progressKnowPercent_9 = localKnowPercent_9
+                progressKnowPercent_10 = localKnowPercent_10
+                progressKnowPercent_11 = localKnowPercent_11
+                progressKnowPercent_12 = localKnowPercent_12
+                progressKnowPercent_13 = localKnowPercent_13
+                progressKnowPercent_14 = localKnowPercent_14
+                progressKnowPercent_15 = localKnowPercent_15
+                progressKnowPercent_16 = localKnowPercent_16
+                progressKnowPercent_17 = localKnowPercent_17
+                progressKnowPercent_18 = localKnowPercent_18
+                progressKnowPercent_19 = localKnowPercent_19
+                
+                
+                progressKnowWidth_0 = progressKnowWidth_0 * sizeInfo.progressBarWidth
+                progressKnowWidth_1 = progressKnowWidth_1 * sizeInfo.progressBarWidth
+                progressKnowWidth_2 = progressKnowWidth_2 * sizeInfo.progressBarWidth
+                progressKnowWidth_3 = progressKnowWidth_3 * sizeInfo.progressBarWidth
+                progressKnowWidth_4 = progressKnowWidth_4 * sizeInfo.progressBarWidth
+                progressKnowWidth_5 = progressKnowWidth_5 * sizeInfo.progressBarWidth
+                progressKnowWidth_6 = progressKnowWidth_6 * sizeInfo.progressBarWidth
+                progressKnowWidth_7 = progressKnowWidth_7 * sizeInfo.progressBarWidth
+                progressKnowWidth_8 = progressKnowWidth_8 * sizeInfo.progressBarWidth
+                progressKnowWidth_9 = progressKnowWidth_9 * sizeInfo.progressBarWidth
+                progressKnowWidth_10 = progressKnowWidth_10 * sizeInfo.progressBarWidth
+                progressKnowWidth_11 = progressKnowWidth_11 * sizeInfo.progressBarWidth
+                progressKnowWidth_12 = progressKnowWidth_12 * sizeInfo.progressBarWidth
+                progressKnowWidth_13 = progressKnowWidth_13 * sizeInfo.progressBarWidth
+                progressKnowWidth_14 = progressKnowWidth_14 * sizeInfo.progressBarWidth
+                progressKnowWidth_15 = progressKnowWidth_15 * sizeInfo.progressBarWidth
+                progressKnowWidth_16 = progressKnowWidth_16 * sizeInfo.progressBarWidth
+                progressKnowWidth_17 = progressKnowWidth_17 * sizeInfo.progressBarWidth
+                progressKnowWidth_18 = progressKnowWidth_18 * sizeInfo.progressBarWidth
+                progressKnowWidth_19 = progressKnowWidth_19 * sizeInfo.progressBarWidth
+            }
+            
         }
+        .navigationBarBackground {
+            // 아래 라이브러리 사용함
+            // https://github.com/haifengkao/SwiftUI-Navigation-Bar-Color
+            Color.gray25.shadow(radius: 0)
+        }
+        
     }
     
     //Calucate percentage based on given values
-    private func calculatePercentage(value:Double, percentageVal:Double)->Double{
+    private func calculatePercentage(value:Double, percentageVal:Double) -> Double {
         // 300의 4는 몇 %?  == (100 * 4) / 300
         let val = 100.0 * value
         //fLog("idpil::: 퍼센트 : \(val / percentageVal)")
@@ -406,6 +606,72 @@ extension DoneView: View {
         }
     }
     
+    private func getProgressKnowPercent(index: Int) -> CGFloat {
+        if index == 0 {
+            return progressKnowPercent_0
+        }
+        else if index == 1 {
+            return progressKnowPercent_1
+        }
+        else if index == 2 {
+            return progressKnowPercent_2
+        }
+        else if index == 3 {
+            return progressKnowPercent_3
+        }
+        else if index == 4 {
+            return progressKnowPercent_4
+        }
+        else if index == 5 {
+            return progressKnowPercent_5
+        }
+        else if index == 6 {
+            return progressKnowPercent_6
+        }
+        else if index == 7 {
+            return progressKnowPercent_7
+        }
+        else if index == 8 {
+            return progressKnowPercent_8
+        }
+        else if index == 9 {
+            return progressKnowPercent_9
+        }
+        else if index == 10 {
+            return progressKnowPercent_10
+        }
+        else if index == 11 {
+            return progressKnowPercent_11
+        }
+        else if index == 12 {
+            return progressKnowPercent_12
+        }
+        else if index == 13 {
+            return progressKnowPercent_13
+        }
+        else if index == 14 {
+            return progressKnowPercent_14
+        }
+        else if index == 15 {
+            return progressKnowPercent_15
+        }
+        else if index == 16 {
+            return progressKnowPercent_16
+        }
+        else if index == 17 {
+            return progressKnowPercent_17
+        }
+        else if index == 18 {
+            return progressKnowPercent_18
+        }
+        else if index == 19 {
+            return progressKnowPercent_19
+        }
+        else {
+            return 0.0
+        }
+    }
+    
     private func getProgressWidth(index: Int) -> CGFloat {
         if index == 0 {
             return progressWidth_0
@@ -471,6 +737,73 @@ extension DoneView: View {
             return 0.0
         }
     }
+    
+    private func getProgressKnowWidth(index: Int) -> CGFloat {
+        if index == 0 {
+            return progressKnowWidth_0
+        }
+        else if index == 1 {
+            return progressKnowWidth_1
+        }
+        else if index == 2 {
+            return progressKnowWidth_2
+        }
+        else if index == 3 {
+            return progressKnowWidth_3
+        }
+        else if index == 4 {
+            return progressKnowWidth_4
+        }
+        else if index == 5 {
+            return progressKnowWidth_5
+        }
+        else if index == 6 {
+            return progressKnowWidth_6
+        }
+        else if index == 7 {
+            return progressKnowWidth_7
+        }
+        else if index == 8 {
+            return progressKnowWidth_8
+        }
+        else if index == 9 {
+            return progressKnowWidth_9
+        }
+        else if index == 10 {
+            return progressKnowWidth_10
+        }
+        else if index == 11 {
+            return progressKnowWidth_11
+        }
+        else if index == 12 {
+            return progressKnowWidth_12
+        }
+        else if index == 13 {
+            return progressKnowWidth_13
+        }
+        else if index == 14 {
+            return progressKnowWidth_14
+        }
+        else if index == 15 {
+            return progressKnowWidth_15
+        }
+        else if index == 16 {
+            return progressKnowWidth_16
+        }
+        else if index == 17 {
+            return progressKnowWidth_17
+        }
+        else if index == 18 {
+            return progressKnowWidth_18
+        }
+        else if index == 19 {
+            return progressKnowWidth_19
+        }
+        else {
+            return 0.0
+        }
+    }
+    
 }
 
 //#Preview {

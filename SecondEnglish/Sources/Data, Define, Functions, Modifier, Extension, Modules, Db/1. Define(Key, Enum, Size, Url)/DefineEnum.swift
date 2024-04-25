@@ -12,6 +12,10 @@ enum LoginUserType: String {
     case Google, Apple, KakaoTalk, Phone
 }
 
+enum DoneViewType: String {
+    case know, learn
+}
+
 enum TokenResponseType: Int {
     case WrongRequestToken
     case ExpiredAccessToken

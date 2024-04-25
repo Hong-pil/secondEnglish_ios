@@ -246,7 +246,7 @@ class SwipeCardViewModel: ObservableObject {
                     for (index, _) in arr.enumerated() {
                         arr[index].customId = index + 1
                     }
-                    //fLog("로그확인::: arr : \(arr)")
+                    //fLog("idpil::: arr : \(arr)")
                     self.swipeList = arr
                     self.fixedSwipeList_0 = arr // 처음 한 번만 저장
                     self.countOfSwipeList = Double(arr.count)
@@ -650,7 +650,7 @@ class SwipeCardViewModel: ObservableObject {
                 )
             )
         }
-        fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+        //fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
     }
     
     func addKnowCardList(_ card: SwipeDataList, type swipeType: CardSwipeType, isDone: ()->Void) {
@@ -690,7 +690,7 @@ class SwipeCardViewModel: ObservableObject {
                 }
             }
         }
-        fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+        //fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
         
         
         

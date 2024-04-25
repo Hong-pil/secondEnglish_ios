@@ -890,17 +890,41 @@ extension TabSwipeCardPage: View {
             }
         }
         .fullScreenCover(isPresented: $isShowDoneView) {
+            
             // 각 메인 카테고리 끝가지 학습한 경우, 결과 View 보여주기
             
             DoneView(
                 list: viewModel.knowCardLocalData,
+                isLastMainCategory: selectedMainCategoryItem == viewModel.mainCategoryList[viewModel.mainCategoryList.count-1] ? true : false,
                 cancle: {
                     isShowLastCategoryLoadView = true
+                    
+                    viewModel.setInitKnowCardList()
                 },
                 nextStep: {
-                    //
+                    
+                    // firstIndex(of:) : 해당 요소가 처음 나타나는 인덱스를 반환하고, 없을 경우 nil을 반환함.
+                    if var index = viewModel.mainCategoryList.firstIndex(of: selectedMainCategoryItem) {
+                        
+                        // 마지막 메인 카테고리인 경우 다음 단계가 없으니 예외처리.
+                        if index != viewModel.mainCategoryList.count-1 {
+                            index += 1
+                            selectedMainCategoryItem = viewModel.mainCategoryList[index]
+                            
+                            // '알고있음/학습중' 관련 데이터 초기 설정
+                            viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                                
+                                viewModel.setInitKnowCardList()
+                            }
+                        }
+                    }
+                    
                 }, reload: {
-                    //
+                    viewModel.setInitKnowCardList()
+                    
+                    viewModel.categoryTabIndex = 0
+                    viewModel.moveCategoryTab = true // .onChange(of: viewModel.moveCategoryTab) {} 에서 첫 번째 서브 카테고리 리스트 호출 됨.
+                    
                 }
             )
         }
