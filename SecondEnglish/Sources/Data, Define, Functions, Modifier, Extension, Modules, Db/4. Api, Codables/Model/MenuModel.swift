@@ -12,3 +12,4 @@ struct MenuResponse: Codable {
     var data: Int? = nil
     var message: String? = nil
 }
+

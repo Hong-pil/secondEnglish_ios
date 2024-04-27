@@ -243,6 +243,8 @@
 		E0DBDE6D2B4FDFDF007615A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DBDE6C2B4FDFDF007615A8 /* LaunchScreen.storyboard */; };
 		E0E9E7962BBA872A007A94FF /* HomePageViewOffsetKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E9E7952BBA872A007A94FF /* HomePageViewOffsetKey.swift */; };
 		E0ED16A02BD634B7002FAD90 /* CountingNumberAnimationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED169F2BD634B7002FAD90 /* CountingNumberAnimationModifier.swift */; };
+		E0F0F4E42BDB91F900B14E00 /* MySentenceEditPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F0F4E32BDB91F900B14E00 /* MySentenceEditPage.swift */; };
+		E0F0F4E62BDBADFE00B14E00 /* MySentenceEditorInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F0F4E52BDBADFE00B14E00 /* MySentenceEditorInputView.swift */; };
 		E0F11E9A2B7EF9CD0014F503 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F11E992B7EF9CD0014F503 /* ToastView.swift */; };
 		E0F11E9E2B7F3C5D0014F503 /* EditorCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F11E9D2B7F3C5D0014F503 /* EditorCategoryView.swift */; };
 		E0F11EA02B7F43F60014F503 /* EditorCategoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F11E9F2B7F43F60014F503 /* EditorCategoryRowView.swift */; };
@@ -488,6 +490,8 @@
 		E0DBDE6C2B4FDFDF007615A8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E0E9E7952BBA872A007A94FF /* HomePageViewOffsetKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewOffsetKey.swift; sourceTree = "<group>"; };
 		E0ED169F2BD634B7002FAD90 /* CountingNumberAnimationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingNumberAnimationModifier.swift; sourceTree = "<group>"; };
+		E0F0F4E32BDB91F900B14E00 /* MySentenceEditPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySentenceEditPage.swift; sourceTree = "<group>"; };
+		E0F0F4E52BDBADFE00B14E00 /* MySentenceEditorInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySentenceEditorInputView.swift; sourceTree = "<group>"; };
 		E0F11E992B7EF9CD0014F503 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		E0F11E9D2B7F3C5D0014F503 /* EditorCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCategoryView.swift; sourceTree = "<group>"; };
 		E0F11E9F2B7F43F60014F503 /* EditorCategoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCategoryRowView.swift; sourceTree = "<group>"; };
@@ -722,6 +726,7 @@
 				E050FAE02BA9538C00390420 /* ViewModel */,
 				E050FAD92BA93ECD00390420 /* MenuPage.swift */,
 				E06588162BAC4BB50084DCA3 /* MenuCommonSubPage.swift */,
+				E0F0F4E32BDB91F900B14E00 /* MySentenceEditPage.swift */,
 			);
 			path = "7. Menu";
 			sourceTree = "<group>";
@@ -745,6 +750,7 @@
 				E0D295062BAD404700A19515 /* MenuSubPageCellFlipView.swift */,
 				E0D295082BAD6D9F00A19515 /* MenuSubPageCellBasicView.swift */,
 				E090ED902BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift */,
+				E0F0F4E52BDBADFE00B14E00 /* MySentenceEditorInputView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1800,6 +1806,7 @@
 				E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */,
 				E0DBDD612B4FC8D2007615A8 /* AlertManager.swift in Sources */,
 				E0F11EA02B7F43F60014F503 /* EditorCategoryRowView.swift in Sources */,
+				E0F0F4E42BDB91F900B14E00 /* MySentenceEditPage.swift in Sources */,
 				E0DBDD742B4FC965007615A8 /* ApiControl.swift in Sources */,
 				E090ED912BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift in Sources */,
 				E06392342B82FAFD003D0428 /* BottomPopupConfig.swift in Sources */,
@@ -1852,6 +1859,7 @@
 				E02CD1812BAB9279006C0D3D /* Apis+Menu.swift in Sources */,
 				E0DBDDA22B4FCD53007615A8 /* Color+Extension.swift in Sources */,
 				E0F11E9E2B7F3C5D0014F503 /* EditorCategoryView.swift in Sources */,
+				E0F0F4E62BDBADFE00B14E00 /* MySentenceEditorInputView.swift in Sources */,
 				E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */,
 				E01678522B62584B00943945 /* Check.swift in Sources */,
 				E058AF0A2BC0FBEB00B214B0 /* TabsV2.swift in Sources */,

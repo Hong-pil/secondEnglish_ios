@@ -17,6 +17,7 @@ enum ApisMenu {
     case cardBlock // 차단한 글
     case userBlock // 차단한 사용자
     case popularCardTop10(isWeek: Bool) // 주간/월간 인기 글 TOP10
+    case editCardList(sentence_list: [Dictionary<String, String>]) // 내 작성글 수정
 }
 
 extension ApisMenu: TargetType {
@@ -41,6 +42,8 @@ extension ApisMenu: TargetType {
             return "api/my/block/user"
         case .popularCardTop10:
             return "api/top10/card"
+        case .editCardList:
+            return "api/beginner_sentence/edit/sentence_list"
         }
     }
     
@@ -59,6 +62,8 @@ extension ApisMenu: TargetType {
             return .get
         case .popularCardTop10:
             return .get
+        case .editCardList:
+            return .post
         }
     }
     
@@ -116,6 +121,15 @@ extension ApisMenu: TargetType {
             log(params: params)
             
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .editCardList(let sentence_list):
+            var params = defaultParams
+            params["uid"] = UserManager.shared.uid
+            params["sentence_list"] = sentence_list
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: JSONEncoding.default)
+            
         }
     }
     

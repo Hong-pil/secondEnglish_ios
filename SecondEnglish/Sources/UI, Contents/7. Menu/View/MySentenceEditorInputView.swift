@@ -1,13 +1,13 @@
 //
-//  EditorInputView.swift
+//  MySentenceEditorInputView.swift
 //  SecondEnglish
 //
-//  Created by kimhongpil on 2/17/24.
+//  Created by kimhongpil on 4/26/24.
 //
 
 import SwiftUI
 
-struct EditorInputView {
+struct MySentenceEditorInputView {
     @Binding var currentKoreanTxt: String
     @Binding var currentEnglishTxt: String
     var cardIndex: Int // 데이터 배열 인덱스
@@ -20,23 +20,9 @@ struct EditorInputView {
     var english_maxlength: Int
     var isShowTxtLengthToast: ((Bool) -> Void)
     var isKeyboardFocused: ((Bool) -> Void)
-    var forceKeyboardUpIndex: Int
-    var isItemDelete: ((Bool, Int) -> Void)
-    var isDisableDelete: Bool
-    
-    
-    // [카드뷰 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위한 기능]
-    // Tracks the offset of the swipe gesture
-    @State private var swipeLeftOffset = CGSize.zero
-    // Determines when to show the delete button
-    @State private var isShowingDeleteButton = false
-    private struct sizeInfo {
-        static let swipeLeftOffsetSize: CGFloat = -50.0 // 왼쪽 Swipe시, 뷰 이동 거리
-    }
 }
 
-extension EditorInputView: View {
-    
+extension MySentenceEditorInputView: View {
     var body: some View {
         
         HStack(spacing: 20) {
@@ -44,7 +30,7 @@ extension EditorInputView: View {
                 
                 // 한글 문장
                 Group {
-                    EditorInputRowView(
+                    MySentenceEditorInputRowView(
                         currentTxt: $currentKoreanTxt,
                         
                         isSameCard: (cardIndex==activeCardIndex) ? true : false,
@@ -62,7 +48,6 @@ extension EditorInputView: View {
                                 isKeyboardFocused(isFocused)
                             }
                         },
-                        forceKeyboardUpIndex: forceKeyboardUpIndex,
                         cardIndex: cardIndex,
                         isKorean: true
                     )
@@ -78,7 +63,7 @@ extension EditorInputView: View {
                 
                 // 영어 문장
                 Group {
-                    EditorInputRowView(
+                    MySentenceEditorInputRowView(
                         currentTxt: $currentEnglishTxt,
                         
                         isSameCard: (cardIndex==activeCardIndex) ? true : false,
@@ -96,7 +81,6 @@ extension EditorInputView: View {
                                 isKeyboardFocused(isFocused)
                             }
                         },
-                        forceKeyboardUpIndex: forceKeyboardUpIndex,
                         cardIndex: cardIndex
                     )
                     .padding(.top, 5)
@@ -116,79 +100,13 @@ extension EditorInputView: View {
             .background(Color.gray25)
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .shadow(radius: 3) // .clipShape 하지 않으면, 안쪽 뷰 요소들에도 그림자가 적용됨
-            
-            
-            // Delete button
-            if isShowingDeleteButton {
-                Button(action: {
-                    // Action to perform on delete
-                    
-                    // 뷰 원래 자리로 이동 (삭제이기 때문에 withAnimation 효과 줄 필요 없음)
-                    self.swipeLeftOffset = CGSize.zero
-                    self.isShowingDeleteButton = false
-                    
-                    isItemDelete(true, cardIndex)
-                }) {
-                    Image(systemName: "trash")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.red)
-                        .cornerRadius(8)
-                }
-                //.padding(.leading, 20)
-                /**
-                 * .transition() 으로 뷰 Swipe시 애니메이션 효과준 건데,
-                 * 일단 HStack spacing 으로 간격을 줬음.
-                 * 그런데 애니메이션 효과를 줬다 보니까, 뷰 오른쪽으로 Swipe 됐을 때 '삭제버튼'이 미묘하게 잠시 남아 있는 문제가 있는 거 같은데, 일단 넘어감.
-                 *
-                 * 나중에 바꾸려면, HStack spacing 0으로 설정하고, .transition() 제거한 다음 위에 주석처리한 padding leading 값 살리면 됨.
-                 *
-                 * 참고) .transition() 공부하자. 유용한 거 같음.
-                 */
-                .transition(.move(edge: .trailing))
-            }
         }
-        .offset(x: swipeLeftOffset.width, y: 0)
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    
-                    /**
-                     * Drag되는 동안 카드가 움직이게 하는 기능인데, 주석처리한 이유 :
-                     * 스크롤 하는 동안, 손 동작이 조금만 옆으로 움직여도 카드뷰가 움직이는 문제가 있음
-                     */
-                    // Only allow dragging to the left
-//                    if gesture.translation.width < 0 {
-//                        self.swipeLeftOffset = gesture.translation
-//                    }
-                }
-                .onEnded { gesture in
-                    /**
-                     * 리스트가 하나 남아 있을 땐, 삭제할 수 없도록 움직이지 않음
-                     */
-                    if !isDisableDelete {
-                        if gesture.translation.width < sizeInfo.swipeLeftOffsetSize {
-                            // Threshold to show delete button
-                            withAnimation {
-                                self.swipeLeftOffset.width = sizeInfo.swipeLeftOffsetSize // Adjust based on your delete button's width
-                                self.isShowingDeleteButton = true
-                            }
-                        } else {
-                            withAnimation {
-                                self.swipeLeftOffset = .zero
-                            }
-                            self.isShowingDeleteButton = false
-                        }
-                    }
-                }
-        )
         //.frame(height: 60) // Adjust based on your content
         //.background(Color.gray.opacity(0.2)) // Background of the swipeable area
     }
-    
 }
 
-struct EditorInputRowView: View {
+struct MySentenceEditorInputRowView: View {
     @Binding var currentTxt: String
     
     /**
@@ -205,7 +123,6 @@ struct EditorInputRowView: View {
     var isShowToast: ((Bool) -> Void)
     @FocusState private var isTextFieldIsFocused: Bool
     var isKeyboardFocused: ((Bool) -> Void) // 키보드 활성 유무
-    var forceKeyboardUpIndex: Int
     var cardIndex: Int // 데이터 배열 인덱스
     var isKorean: Bool?
     
@@ -235,15 +152,7 @@ struct EditorInputRowView: View {
 //                    .constant(arrayItemTxt)
 //            )
             //
-            TextField("", text:
-                        isSameCard ?
-                            $currentTxt :
-                            (
-                                isTextFieldIsFocused ?
-                                    $currentTxt :
-                                    .constant(arrayItemTxt)
-                            )
-            )
+            TextField("", text: isSameCard ? $currentTxt : .constant(arrayItemTxt))
             .font(.body11622Regular)
             .foregroundColor(.gray900)
             .padding(.vertical, 5).background(Color.gray25) // TextField 클릭 감도 높임
@@ -255,19 +164,16 @@ struct EditorInputRowView: View {
                 }
             }
             .focused($isTextFieldIsFocused)
-            .onChange(of: isTextFieldIsFocused) {
-                //isKeyboardFocused(isTextFieldIsFocused)
-            }
             .onAppear {
-                // "문장 추가하기 버튼" 클릭시,마지막 카드의 한국어 textfield 키보드 올림
-                if forceKeyboardUpIndex == cardIndex {
-                    if let _ = isKorean {
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
-                            // 이 TextField에서 키보드 강제로 올리기
-                            self.isTextFieldIsFocused = true
-                        }
-                    }
-                }
+//                // "문장 추가하기 버튼" 클릭시,마지막 카드의 한국어 textfield 키보드 올림
+//                if forceKeyboardUpIndex == cardIndex {
+//                    if let _ = isKorean {
+//                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+//                            // 이 TextField에서 키보드 강제로 올리기
+//                            self.isTextFieldIsFocused = true
+//                        }
+//                    }
+//                }
             }
             
             //MARK: - 키보드 상태 감지 (ChatGTP에게 'swiftui에서 textfield 사용할 때, 키보드가 다 올라왔는지 확인하는 방법을 알려줘.' 물어보면 됨)
@@ -295,12 +201,10 @@ struct EditorInputRowView: View {
                 NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
             }
             
-            
-            
         }
     }
 }
 
 //#Preview {
-//    EditorInputView()
+//    MySentenceEditorInputView()
 //}

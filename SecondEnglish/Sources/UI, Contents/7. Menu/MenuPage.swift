@@ -47,12 +47,12 @@ extension MenuPage: View {
                     .padding(.bottom, sizeInfo.listSpacing)
                 
                 MenuInfoView(
-                    mySentenceNum: viewModel.mySentenceNum,
                     myPostLikeNum: viewModel.myPostLikeNum,
                     myGetLikeNum: viewModel.myGetLikeNum,
                     onPress: { buttonType in
                         if buttonType == .Sentence {
-                            isShowMySentencePage = true
+                            // .Sentence 사용 안 하고 있음
+                            //isShowMySentencePage = true
                         }
                         else if buttonType == .PostLike {
                             isShowPostLikePage = true
@@ -71,6 +71,15 @@ extension MenuPage: View {
                     .padding(EdgeInsets(top: sizeInfo.listSpacing, leading: DefineSize.Contents.HorizontalPadding + 20, bottom: sizeInfo.listSpacing, trailing: 0))
                 
                 VStack(spacing: 0) {
+                    MenuLinkView(text: "j_wrote_post".localized, position: .Top, showLine: true, onPress: {
+                        if userManager.isLogin {
+                            isShowMySentencePage = true
+                        }
+                        else {
+                            AlertManager().showLoginAlert()
+                        }
+                    })
+                    
                     MenuLinkView(text: "b_block_post".localized, position: .Top, showLine: true, onPress: {
                         if userManager.isLogin {
                             isShowCardBlockPage = true
@@ -78,7 +87,6 @@ extension MenuPage: View {
                         else {
                             AlertManager().showLoginAlert()
                         }
-                        
                     })
                     
                     MenuLinkView(text: "b_block_user".localized, position: .Top, showLine: true, onPress: {
@@ -146,7 +154,6 @@ extension MenuPage: View {
             }
         }
         .task {
-            viewModel.getMySentence()
             viewModel.getMyPostLike()
             viewModel.getMyGetLike()
         }

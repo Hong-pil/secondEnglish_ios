@@ -16,7 +16,7 @@ class MenuViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var popupMessage: String = ""
     
-    @Published var mySentenceNum: Int = 0
+    @Published var mySentenceList: [SwipeDataList] = []
     @Published var myPostLikeNum: Int = 0
     @Published var myGetLikeNum: Int = 0
     @Published var cardBlockData: MyCardData?
@@ -24,7 +24,7 @@ class MenuViewModel: ObservableObject {
     @Published var popularCardTop10Data: PopularCardTop10Data?
     
     // 작성한 글
-    func getMySentence() {
+    func getMySentence(isDone: @escaping() -> Void = {}) {
         ApiControl.getMySentence()
             .sink { error in
                 guard case let .failure(error) = error else { return }
@@ -34,10 +34,12 @@ class MenuViewModel: ObservableObject {
                 AlertManager().showAlertMessage(message: self.alertMessage) {
                     self.showAlert = true
                 }
-                
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    self.mySentenceNum = value.data ?? 0
+                    self.mySentenceList = value.data ?? []
+                    
+                    isDone()
                 }
                 else {
                     self.alertMessage = ErrorHandler.getCommonMessage()
@@ -102,7 +104,7 @@ class MenuViewModel: ObservableObject {
     }
     
     // 차단한 글
-    func getMyCardBlock() {
+    func getMyCardBlock(isDone: @escaping() -> Void = {}) {
         ApiControl.getCardBlock()
             .sink { error in
                 guard case let .failure(error) = error else { return }
@@ -112,11 +114,12 @@ class MenuViewModel: ObservableObject {
                 AlertManager().showAlertMessage(message: self.alertMessage) {
                     self.showAlert = true
                 }
-                
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
                     self.cardBlockData = value.data
-                    fLog("idpil::: cardBlockData : \(self.cardBlockData)")
+                    //fLog("idpil::: cardBlockData : \(self.cardBlockData)")
+                    isDone()
                 }
                 else {
                     self.alertMessage = ErrorHandler.getCommonMessage()
@@ -129,7 +132,7 @@ class MenuViewModel: ObservableObject {
     }
     
     // 차단한 사용자
-    func getMyUserBlock() {
+    func getMyUserBlock(isDone: @escaping() -> Void = {}) {
         ApiControl.getUserBlock()
             .sink { error in
                 guard case let .failure(error) = error else { return }
@@ -139,11 +142,12 @@ class MenuViewModel: ObservableObject {
                 AlertManager().showAlertMessage(message: self.alertMessage) {
                     self.showAlert = true
                 }
-                
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
                     self.userBlockData = value.data
-                    fLog("idpil::: userBlockData : \(self.userBlockData)")
+                    //fLog("idpil::: userBlockData : \(self.userBlockData)")
+                    isDone()
                 }
                 else {
                     self.alertMessage = ErrorHandler.getCommonMessage()
@@ -156,7 +160,7 @@ class MenuViewModel: ObservableObject {
     }
     
     // 주간/월간 인기 글 TOP10
-    func getPopularCardTop10(isWeek: Bool) {
+    func getPopularCardTop10(isWeek: Bool, isDone: @escaping() -> Void = {}) {
         ApiControl.getPopularCardTop10(isWeek: isWeek)
             .sink { error in
                 guard case let .failure(error) = error else { return }
@@ -166,11 +170,12 @@ class MenuViewModel: ObservableObject {
                 AlertManager().showAlertMessage(message: self.alertMessage) {
                     self.showAlert = true
                 }
-                
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
                     self.popularCardTop10Data = value.data
                     //fLog("idpil::: popularCardTop10Data : \(self.popularCardTop10Data)")
+                    isDone()
                     
                 }
                 else {
@@ -231,6 +236,58 @@ class MenuViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    //MARK: - 카드 삭제
+    func deleteCard(idx: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.deleteCard(idx: idx)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.popupMessage = error.message
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        self.popupMessage = "se_g_post_deleted".localized
+                        isSuccess(true)
+                    }
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isSuccess(false)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    //MARK: - 카드 수정
+    func editCardList(sentence_list: [Dictionary<String, String>], isPostComplete: @escaping((Bool) -> Void)) {
+        ApiControl.editCardList(sentence_list: sentence_list)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                //isPostComplete(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if value.success ?? false {
+                        isPostComplete(true)
+                    }
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
     func cancelBlockCard(cardIndex: Int) {
         self.cardBlockData?.sentence_list.remove(at: cardIndex)
     }
@@ -239,6 +296,9 @@ class MenuViewModel: ObservableObject {
         self.userBlockData?.remove(at: userIndex)
     }
     
+    func removeDeletedCard(cardIndex: Int) {
+        self.mySentenceList.remove(at: cardIndex)
+    }
     
     // String -> Date (yyyyMMdd 형식)
     func StringToDate(timeString: String) -> String? {

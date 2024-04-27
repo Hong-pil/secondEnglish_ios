@@ -9,11 +9,14 @@ import SwiftUI
 
 struct MenuSubPageCellFlipView: View {
     let item: SwipeDataList
+    let type: MenuButtonType
+    
     @State var isFlipped: Bool = false
     
     // [카드뷰 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위한 기능]
     let isDoItemDelete: Bool
-    var isBlockCancel: (() -> Void)
+    var isBlockCancel: (() -> Void) = {}
+    var isItemDelete: (() -> Void) = {}
     @State private var swipeLeftOffset = CGSize.zero // Tracks the offset of the swipe gesture
     @State private var isShowingDeleteButton = false // Determines when to show the delete button
     private struct sizeInfo {
@@ -65,20 +68,24 @@ struct MenuSubPageCellFlipView: View {
                     self.swipeLeftOffset = CGSize.zero
                     self.isShowingDeleteButton = false
                     
-                    isBlockCancel()
+                    if type == .Sentence {
+                        isItemDelete()
+                    } else {
+                        isBlockCancel()
+                    }
                 }) {
                     VStack(spacing: 3) {
                         Image(systemName: "trash")
                             .renderingMode(.template)
                             .foregroundColor(.white)
                         
-                        Text("해제")
+                        Text(type == .Sentence ? "s_delete".localized : "se_block_remove".localized)
                             .font(.caption11218Regular)
                             .foregroundColor(.gray25)
                     }
                     .padding(5)
                     .frame(width: 50, height: 50)
-                    .background(Color.primaryDefault)
+                    .background(type == .Sentence ? Color.red : Color.primaryDefault)
                     .cornerRadius(8)
                 }
                 //.padding(.leading, 20)
