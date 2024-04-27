@@ -74,6 +74,7 @@
 		E058AF0A2BC0FBEB00B214B0 /* TabsV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E058AF092BC0FBEB00B214B0 /* TabsV2.swift */; };
 		E058AF0D2BC0FC7E00B214B0 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = E058AF0C2BC0FC7E00B214B0 /* SwiftUIIntrospect */; };
 		E05A34222B6E4B6D00EC07CA /* TabHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05A34212B6E4B6D00EC07CA /* TabHomeViewModel.swift */; };
+		E05BD72C2BDCE38100AF3086 /* SPConfetti in Frameworks */ = {isa = PBXBuildFile; productRef = E05BD72B2BDCE38100AF3086 /* SPConfetti */; };
 		E063922C2B82DAC5003D0428 /* CommonButton2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063922B2B82DAC5003D0428 /* CommonButton2.swift */; };
 		E063922E2B82DAEF003D0428 /* CustomButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063922D2B82DAEF003D0428 /* CustomButtonStyle.swift */; };
 		E06392342B82FAFD003D0428 /* BottomPopupConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06392332B82FAFD003D0428 /* BottomPopupConfig.swift */; };
@@ -509,6 +510,7 @@
 				E0BA02542B5EA05300AA11A5 /* KakaoSDK in Frameworks */,
 				E0C0D7C22B4FE99B00A7C01B /* SDWebImageSwiftUI in Frameworks */,
 				E0BA025A2B5EA05300AA11A5 /* KakaoSDKUser in Frameworks */,
+				E05BD72C2BDCE38100AF3086 /* SPConfetti in Frameworks */,
 				E0C0D7BF2B4FE99200A7C01B /* PopupView in Frameworks */,
 				E050FAEF2BA9550F00390420 /* SwipeCellSUI in Frameworks */,
 				E0BA02582B5EA05300AA11A5 /* KakaoSDKCommon in Frameworks */,
@@ -1563,6 +1565,7 @@
 				E0C41EDB2BA8448F00EB276A /* SwiftUINavigationBarColor */,
 				E050FAEE2BA9550F00390420 /* SwipeCellSUI */,
 				E058AF0C2BC0FC7E00B214B0 /* SwiftUIIntrospect */,
+				E05BD72B2BDCE38100AF3086 /* SPConfetti */,
 			);
 			productName = SecondEnglish;
 			productReference = E0DBDCF72B4FB60F007615A8 /* SecondEnglish.app */;
@@ -1653,6 +1656,7 @@
 				E0C41EDA2BA8448F00EB276A /* XCRemoteSwiftPackageReference "SwiftUI-Navigation-Bar-Color" */,
 				E050FAED2BA9550F00390420 /* XCRemoteSwiftPackageReference "SwipeCellSUI" */,
 				E058AF0B2BC0FC7E00B214B0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
+				E05BD72A2BDCE38100AF3086 /* XCRemoteSwiftPackageReference "SPConfetti" */,
 			);
 			productRefGroup = E0DBDCF82B4FB60F007615A8 /* Products */;
 			projectDirPath = "";
@@ -2334,6 +2338,14 @@
 				minimumVersion = 1.1.3;
 			};
 		};
+		E05BD72A2BDCE38100AF3086 /* XCRemoteSwiftPackageReference "SPConfetti" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ivanvorobei/SPConfetti";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.2;
+			};
+		};
 		E0BA024C2B5DD86200AA11A5 /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
@@ -2451,6 +2463,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E058AF0B2BC0FC7E00B214B0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
 			productName = SwiftUIIntrospect;
+		};
+		E05BD72B2BDCE38100AF3086 /* SPConfetti */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E05BD72A2BDCE38100AF3086 /* XCRemoteSwiftPackageReference "SPConfetti" */;
+			productName = SPConfetti;
 		};
 		E0BA024D2B5DD86200AA11A5 /* JWTDecode */ = {
 			isa = XCSwiftPackageProductDependency;

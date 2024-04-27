@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftUINavigationBarColor
+import SPConfetti
 
 struct DoneView {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -105,6 +106,8 @@ struct DoneView {
     @State private var progressKnowWidth_18: CGFloat = 0.0
     @State private var progressKnowWidth_19: CGFloat = 0.0
     
+    @State private var isShowEffectView: Bool = false
+    
     
     private struct sizeInfo {
         static let toolBarCancelButtonSize: CGFloat = 20.0
@@ -187,6 +190,7 @@ extension DoneView: View {
                     if !isLastMainCategory {
                         Button(action: {
                             nextStep()
+                            isShowEffectView = false
                             presentationMode.wrappedValue.dismiss()
                         }, label: {
                             Text("다음 단계로 넘어가기")
@@ -200,6 +204,7 @@ extension DoneView: View {
                     
                     Button(action: {
                         reload()
+                        isShowEffectView = false
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
                         Text("다시 복습하기")
@@ -219,6 +224,7 @@ extension DoneView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         cancle()
+                        isShowEffectView = false
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
                         Image("icon_outline_cancel")
@@ -230,6 +236,8 @@ extension DoneView: View {
             .toolbarBackground(Color.gray25)
         }
         .task {
+            
+            isShowEffectView = true
             
             var localPercent_0: CGFloat = 0.0
             var localPercent_1: CGFloat = 0.0
@@ -528,6 +536,12 @@ extension DoneView: View {
             // https://github.com/haifengkao/SwiftUI-Navigation-Bar-Color
             Color.gray25.shadow(radius: 0)
         }
+        // Animation Effect Library : https://github.com/ivanvorobei/SPConfetti?tab=readme-ov-file#swiftui
+        .confetti(isPresented: $isShowEffectView,
+                  animation: .fullWidthToDown,
+                  particles: [.triangle, .arc],
+                  duration: 1.5)
+        .confettiParticle(\.velocity, 600) // 폭죽 내리는 속도 조절
         
     }
     

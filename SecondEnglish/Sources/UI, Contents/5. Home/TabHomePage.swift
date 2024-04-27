@@ -26,6 +26,9 @@ struct TabHomePage {
     @State private var myPostCardIndex: Int = 0
     @State private var myPostIsAutoPlay: Bool = false
     
+    @State private var isReadyToShowMyPostList: Bool = false
+    @State private var isReadyToShowMyLikeList: Bool = false
+    
     // Pull To Refresh
     @Environment(\.refresh) private var refresh
     @State private var isCurrentlyRefreshing = false
@@ -169,7 +172,10 @@ extension TabHomePage: View {
                         if scrollPosition < -amountToPullBeforeRefreshing && !isCurrentlyRefreshing {
                             isCurrentlyRefreshing = true
                             Task {
-                                //await refreshData()
+                                
+                                // 로딩을 0.5초 동안 보여줌
+                                await refreshData()
+                                
                                 await MainActor.run {
                                     // 카테고리별 진도확인 리스트 조회
                                     viewModel.requestMyCategoryProgress()
@@ -456,102 +462,104 @@ extension TabHomePage: View {
     
     var myPostCardList: some View {
         VStack(spacing: 0) {
-            if viewModel.myPostCardCategoryList.count > 0 {
-                //tabBarView
-                ZStack {
-                    InfiniteCarousel(
-                        data: viewModel.myPostCardList,
-                        height: sizeInfo.CarouselViewHeight,
-                        cornerRadius: 0,
-                        transition: .scale,
-                        returnIndex: { index, isMoveFirst, isMoveLast in
-                            //fLog("idpil::: isMoveFirst : \(isMoveFirst) / isMoveLast : \(isMoveLast)")
-        //                    if isMoveFirst {
-        //                        fLog("idpil::: 무한루프 시작점")
-        //                    }
-        //                    else if isMoveLast {
-        //                        fLog("idpil::: 무한루프 끝점")
-        //                    }
-                            
-                            /**
-                             * InfiniteCarousel() 에서 '무한루프'를 위해 인덱스는 1부터 시작한다.
-                             * 그래서 -1을 해준 뒤 저장해준다.
-                             */
-                            self.myPostCardIndex = index-1
-                        },
-                        isAutoPlay: myPostIsAutoPlay,
-                        content: { item in
-                            TabHomeCardView(
-                                item: item,
-                                cardWidth: .infinity,
-                                cardHeight: 150,
-                                isAutoPlay: myPostIsAutoPlay
-                            )
-                        }
-                    )
-                    
-                    
-                    // 오토모드에서는 TabView 스크롤 제스처 안 되도록 막는다.
-                    // TabView 스크롤 엄청 빨리 했을 때, categoryList 이랑 싱크 안 맞는 경우가 생긴다.
-                    // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
-//                    if isAutoPlay {
-//                        RoundedRectangle(cornerRadius: 5)
-//                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
-//                            .frame(maxWidth: .infinity)
-//                            .frame(height: 150)
-//                            .padding(40)
-//                    }
-                    
-                    
-                    myPostCategoryListView
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    
+            if isReadyToShowMyPostList {
+                if viewModel.myPostCardCategoryList.count > 0 {
+                    //tabBarView
                     ZStack {
-                        Text("\(myPostCardIndex+1) / \(viewModel.myPostCardList.count)")
-                            .font(.caption11218Regular)
-                            .foregroundColor(.gray500)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        HStack(spacing: 10) {
-                            if myPostIsAutoPlay {
-                                AnimatedImage(name: "auto_mode2.gif")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit).frame(height: 40)
+                        InfiniteCarousel(
+                            data: viewModel.myPostCardList,
+                            height: sizeInfo.CarouselViewHeight,
+                            cornerRadius: 0,
+                            transition: .scale,
+                            returnIndex: { index, isMoveFirst, isMoveLast in
+                                //fLog("idpil::: isMoveFirst : \(isMoveFirst) / isMoveLast : \(isMoveLast)")
+            //                    if isMoveFirst {
+            //                        fLog("idpil::: 무한루프 시작점")
+            //                    }
+            //                    else if isMoveLast {
+            //                        fLog("idpil::: 무한루프 끝점")
+            //                    }
+                                
+                                /**
+                                 * InfiniteCarousel() 에서 '무한루프'를 위해 인덱스는 1부터 시작한다.
+                                 * 그래서 -1을 해준 뒤 저장해준다.
+                                 */
+                                self.myPostCardIndex = index-1
+                            },
+                            isAutoPlay: myPostIsAutoPlay,
+                            content: { item in
+                                TabHomeCardView(
+                                    item: item,
+                                    cardWidth: .infinity,
+                                    cardHeight: 150,
+                                    isAutoPlay: myPostIsAutoPlay
+                                )
                             }
+                        )
+                        
+                        
+                        // 오토모드에서는 TabView 스크롤 제스처 안 되도록 막는다.
+                        // TabView 스크롤 엄청 빨리 했을 때, categoryList 이랑 싱크 안 맞는 경우가 생긴다.
+                        // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
+    //                    if isAutoPlay {
+    //                        RoundedRectangle(cornerRadius: 5)
+    //                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
+    //                            .frame(maxWidth: .infinity)
+    //                            .frame(height: 150)
+    //                            .padding(40)
+    //                    }
+                        
+                        
+                        myPostCategoryListView
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                        
+                        ZStack {
+                            Text("\(myPostCardIndex+1) / \(viewModel.myPostCardList.count)")
+                                .font(.caption11218Regular)
+                                .foregroundColor(.gray500)
+                                .frame(maxWidth: .infinity, alignment: .center)
                             
-                            Button(action: {
-                                myPostIsAutoPlay.toggle()
-                            }, label: {
-                                Image(systemName: myPostIsAutoPlay ? "autostartstop.slash" : "autostartstop")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(.primaryDefault)
-                                    .padding(5).background(Color.bgLightGray50) // 클릭 잘 되도록
-                            })
+                            HStack(spacing: 10) {
+                                if myPostIsAutoPlay {
+                                    AnimatedImage(name: "auto_mode2.gif")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit).frame(height: 40)
+                                }
+                                
+                                Button(action: {
+                                    myPostIsAutoPlay.toggle()
+                                }, label: {
+                                    Image(systemName: myPostIsAutoPlay ? "autostartstop.slash" : "autostartstop")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.primaryDefault)
+                                        .padding(5).background(Color.bgLightGray50) // 클릭 잘 되도록
+                                })
+                            }
+                            .frame(height: 40)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .padding(.trailing, 20)
                         }
-                        .frame(height: 40)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.trailing, 20)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                        .padding(.bottom, 10)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .padding(.bottom, 10)
+                    .background(Color.bgLightGray50)
+    //                .background(
+    //                    Image("home_bg_02")
+    //                        .resizable()
+    //                        .frame(height: sizeInfo.CarouselViewHeight).aspectRatio(contentMode: .fill) // 높이 크기에 맞게 이미지 꽉 채움
+    //                        //.overlay(Color.primaryDefault.opacity(0.6))
+    //                )
+                } else {
+                    myPostEmptyView
                 }
-                .background(Color.bgLightGray50)
-//                .background(
-//                    Image("home_bg_02")
-//                        .resizable()
-//                        .frame(height: sizeInfo.CarouselViewHeight).aspectRatio(contentMode: .fill) // 높이 크기에 맞게 이미지 꽉 채움
-//                        //.overlay(Color.primaryDefault.opacity(0.6))
-//                )
-            } else {
-                myPostEmptyView
             }
         }
         .onAppear {
             if viewModel.myPostCardCategoryList.isEmpty {
                 viewModel.requestMyPostCardList(isSuccess: { success in
-                    //
+                    isReadyToShowMyPostList = true
                 })
             }
         }
@@ -559,107 +567,109 @@ extension TabHomePage: View {
     
     var myLikeCardList: some View {
         VStack(spacing: 0) {
-            if viewModel.myLikeCardCategoryList.count > 0 {
-                //tabBarView
-                ZStack {
-                    InfiniteCarousel(
-                        data: viewModel.myLikeCardList,
-                        height: sizeInfo.CarouselViewHeight,
-                        cornerRadius: 0,
-                        transition: .scale,
-                        returnIndex: { index, isMoveFirst, isMoveLast in
-                            //fLog("idpil::: isMoveFirst : \(isMoveFirst) / isMoveLast : \(isMoveLast)")
-        //                    if isMoveFirst {
-        //                        fLog("idpil::: 무한루프 시작점")
-        //                    }
-        //                    else if isMoveLast {
-        //                        fLog("idpil::: 무한루프 끝점")
-        //                    }
-                            
-                            /**
-                             * InfiniteCarousel() 에서 '무한루프'를 위해 인덱스는 1부터 시작한다.
-                             * 그래서 -1을 해준 뒤 저장해준다.
-                             */
-                            self.myLikeCardIndex = index-1
-                        },
-                        isAutoPlay: myLikeIsAutoPlay,
-                        content: { item in
-                            TabHomeCardView(
-                                item: item,
-                                cardWidth: .infinity,
-                                cardHeight: 150,
-                                isAutoPlay: myLikeIsAutoPlay
-                            )
-                        }
-                    )
-                    
-                    
-                    // 오토모드에서는 TabView 스크롤 제스처 안 되도록 막는다.
-                    // TabView 스크롤 엄청 빨리 했을 때, categoryList 이랑 싱크 안 맞는 경우가 생긴다.
-                    // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
-//                    if isAutoPlay {
-//                        RoundedRectangle(cornerRadius: 5)
-//                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
-//                            .frame(maxWidth: .infinity)
-//                            .frame(height: 150)
-//                            .padding(40)
-//                    }
-                    
-                    
-                    myLikeCategoryListView
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    
+            if isReadyToShowMyLikeList {
+                if viewModel.myLikeCardCategoryList.count > 0 {
+                    //tabBarView
                     ZStack {
-                        Text("\(myLikeCardIndex+1) / \(viewModel.myLikeCardList.count)")
-                            .font(.caption11218Regular)
-                            .foregroundColor(.gray500)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        HStack(spacing: 10) {
-                            if myLikeIsAutoPlay {
-                                AnimatedImage(name: "auto_mode2.gif")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit).frame(height: 40)
+                        InfiniteCarousel(
+                            data: viewModel.myLikeCardList,
+                            height: sizeInfo.CarouselViewHeight,
+                            cornerRadius: 0,
+                            transition: .scale,
+                            returnIndex: { index, isMoveFirst, isMoveLast in
+                                //fLog("idpil::: isMoveFirst : \(isMoveFirst) / isMoveLast : \(isMoveLast)")
+            //                    if isMoveFirst {
+            //                        fLog("idpil::: 무한루프 시작점")
+            //                    }
+            //                    else if isMoveLast {
+            //                        fLog("idpil::: 무한루프 끝점")
+            //                    }
+                                
+                                /**
+                                 * InfiniteCarousel() 에서 '무한루프'를 위해 인덱스는 1부터 시작한다.
+                                 * 그래서 -1을 해준 뒤 저장해준다.
+                                 */
+                                self.myLikeCardIndex = index-1
+                            },
+                            isAutoPlay: myLikeIsAutoPlay,
+                            content: { item in
+                                TabHomeCardView(
+                                    item: item,
+                                    cardWidth: .infinity,
+                                    cardHeight: 150,
+                                    isAutoPlay: myLikeIsAutoPlay
+                                )
                             }
+                        )
+                        
+                        
+                        // 오토모드에서는 TabView 스크롤 제스처 안 되도록 막는다.
+                        // TabView 스크롤 엄청 빨리 했을 때, categoryList 이랑 싱크 안 맞는 경우가 생긴다.
+                        // 싱크 안 맞는 현상의 원인은 오토모드에서 TabView 전환할 때 0.3초 뒤에 관련 데이터가 설정되는데, 빨리 넘기면 당연히 싱크가 안 맞을 수 밖에 없음.
+    //                    if isAutoPlay {
+    //                        RoundedRectangle(cornerRadius: 5)
+    //                            .fill(Color.stateActivePrimaryDefault.opacity(0.1111111111111111111))
+    //                            .frame(maxWidth: .infinity)
+    //                            .frame(height: 150)
+    //                            .padding(40)
+    //                    }
+                        
+                        
+                        myLikeCategoryListView
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                        
+                        ZStack {
+                            Text("\(myLikeCardIndex+1) / \(viewModel.myLikeCardList.count)")
+                                .font(.caption11218Regular)
+                                .foregroundColor(.gray500)
+                                .frame(maxWidth: .infinity, alignment: .center)
                             
-                            Button(action: {
-                                myLikeIsAutoPlay.toggle()
-                            }, label: {
-                                Image(systemName: myLikeIsAutoPlay ? "autostartstop.slash" : "autostartstop")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(.primaryDefault)
-                                    .padding(5).background(Color.bgLightGray50) // 클릭 잘 되도록
-                            })
+                            HStack(spacing: 10) {
+                                if myLikeIsAutoPlay {
+                                    AnimatedImage(name: "auto_mode2.gif")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit).frame(height: 40)
+                                }
+                                
+                                Button(action: {
+                                    myLikeIsAutoPlay.toggle()
+                                }, label: {
+                                    Image(systemName: myLikeIsAutoPlay ? "autostartstop.slash" : "autostartstop")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.primaryDefault)
+                                        .padding(5).background(Color.bgLightGray50) // 클릭 잘 되도록
+                                })
+                            }
+                            .frame(height: 40)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .padding(.trailing, 20)
+                            
+                            
+                            
+                            
+                            
                         }
-                        .frame(height: 40)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.trailing, 20)
-                        
-                        
-                        
-                        
-                        
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                        .padding(.bottom, 10)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .padding(.bottom, 10)
+                    .background(Color.bgLightGray50)
+    //                .background(
+    //                    Image("home_bg_02")
+    //                        .resizable()
+    //                        .frame(height: sizeInfo.CarouselViewHeight).aspectRatio(contentMode: .fill) // 높이 크기에 맞게 이미지 꽉 채움
+    //                        //.overlay(Color.primaryDefault.opacity(0.6))
+    //                )
+                } else {
+                    myLikeEmptyView
                 }
-                .background(Color.bgLightGray50)
-//                .background(
-//                    Image("home_bg_02")
-//                        .resizable()
-//                        .frame(height: sizeInfo.CarouselViewHeight).aspectRatio(contentMode: .fill) // 높이 크기에 맞게 이미지 꽉 채움
-//                        //.overlay(Color.primaryDefault.opacity(0.6))
-//                )
-            } else {
-                myLikeEmptyView
             }
         }
         .onAppear {
             if viewModel.myLikeCardCategoryList.isEmpty {
                 viewModel.requestMyLikeCardList(isSuccess: { success in
-                    //
+                    isReadyToShowMyLikeList = true
                 })
             }
         }
@@ -670,7 +680,8 @@ extension TabHomePage {
     // Pull To Refresh
     func refreshData() async {
         // do work to asyncronously refresh your data here
-        //try? await Task.sleep(nanoseconds: 1_000_000_000)
+        //try? await Task.sleep(nanoseconds: 1_000_000_000) // 1초
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5초
         
     }
 }
