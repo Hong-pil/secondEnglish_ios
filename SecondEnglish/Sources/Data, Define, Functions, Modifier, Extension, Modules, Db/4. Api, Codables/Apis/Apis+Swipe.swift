@@ -11,7 +11,7 @@ import Foundation
 
 
 enum ApisSwipe {
-    case swipeCategory(category: String)
+    case swipeCategory(type2: String)
     case swipeMainCategory
     case swipeList
     case swipeListByCategory(main_category: String, type3_sort_num: Int)
@@ -19,7 +19,7 @@ enum ApisSwipe {
     case likeCard(cardIdx: Int, isLike: Int)
     case myLikeCardList
     case myPostCardList
-    case addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>])
+    case addCardList(type1: String, type2: String, type3: String, type2_sort_num: Int, type3_sort_num: Int, sentence_list: [Dictionary<String, String>])
     case getReportList
     case doReportCard(targetUid: String, targetCardIdx: Int, reportCode: Int)
     case doBlockCard(cardIdx: Int, isBlock: String)
@@ -128,10 +128,10 @@ extension ApisSwipe: TargetType {
     
     var task: Task {
         switch self {
-        case .swipeCategory(let category):
+        case .swipeCategory(let type2):
             var params = defaultParams
             
-            params["category"] = category
+            params["type2"] = type2
             
             log(params: params)
             return.requestParameters(parameters: params, encoding: URLEncoding.default)
@@ -193,13 +193,15 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return.requestParameters(parameters: params, encoding: URLEncoding.default)
             
-        case .addCardList(let type1, let type2, let type3, let sentence_list):
+        case .addCardList(let type1, let type2, let type3, let type2_sort_num, let type3_sort_num, let sentence_list):
             var params = defaultParams
             params["uid"] = UserManager.shared.uid
             params["user_name"] = UserManager.shared.userNick
             params["type1"] = type1
             params["type2"] = type2
             params["type3"] = type3
+            params["type2_sort_num"] = type2_sort_num
+            params["type3_sort_num"] = type3_sort_num
             params["sentence_list"] = sentence_list
             
             log(params: params)

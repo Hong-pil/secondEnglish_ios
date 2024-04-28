@@ -26,7 +26,7 @@ struct TabSwipeCardPage {
     @State private var clickCardItem: SwipeDataList?
     @State private var isShowDoneView: Bool = false
     @State private var isShowLastCategoryLoadView: Bool = false
-    @AppStorage(DefineKey.mainCategoryName) var selectedMainCategoryItem: String = ""
+    @AppStorage(DefineKey.mainCategoryItem) var selectedMainCategoryItem: String = ""
     
     // TTS
     @State var isFrontSpeaking: Bool = false
@@ -463,7 +463,7 @@ extension TabSwipeCardPage: View {
                             
                             viewModel.requestCategory(
                                 isInit: true,
-                                category: self.selectedMainCategoryItem
+                                type2: self.selectedMainCategoryItem
                             ) { isSuccess in
                                 if isSuccess {
                                     
@@ -674,7 +674,7 @@ extension TabSwipeCardPage: View {
             
             viewModel.requestCategory(
                 isInit: true,
-                category: self.selectedMainCategoryItem
+                type2: self.selectedMainCategoryItem
             ) { isSuccess in
                 if isSuccess {
                     
@@ -1372,7 +1372,7 @@ extension TabSwipeCardPage {
                     
                     viewModel.requestCategory(
                         isInit: false,
-                        category: self.selectedMainCategoryItem
+                        type2: self.selectedMainCategoryItem
                     ) { isSuccess in
                         if isSuccess {
                             

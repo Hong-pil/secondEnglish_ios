@@ -14,10 +14,10 @@ enum EditorCategoryViewType: Int {
 
 struct EditorCategoryView {
     let viewType: EditorCategoryViewType
-    var mainCategoryList: [String]?
-    var subCategoryList: [String]?
+    var mainCategoryList: [SwipeCategoryList]?
+    var subCategoryList: [SwipeCategoryList]?
     @Binding var isShow: Bool
-    @Binding var selectedCategoryName: String
+    @Binding var selectedCategory: SwipeCategoryList?
     
     private struct sizeInfo {
         static let padding5: CGFloat = 5.0
@@ -45,12 +45,12 @@ extension EditorCategoryView: View {
                             ForEach(Array(list.enumerated()), id: \.offset) { index, item in
                                 EditorCategoryRowView(
                                     viewType: viewType,
-                                    categoryName: item,
-                                    onPressCategory: { categoryName in
-                                        selectedCategoryName = categoryName
+                                    categoryName: item.type2 ?? "",
+                                    onPressCategory: {
+                                        selectedCategory = item
                                         isShow = false
                                     },
-                                    selectedCategoryName: selectedCategoryName
+                                    selectedCategoryName: selectedCategory?.type2 ?? ""
                                 )
                                 .padding(.top, index==0 ? 0 : 15)
                                 .padding(.bottom, index==list.count-1 ? 15 : 0)
@@ -62,12 +62,12 @@ extension EditorCategoryView: View {
                             ForEach(Array(list.enumerated()), id: \.offset) { index, item in
                                 EditorCategoryRowView(
                                     viewType: viewType,
-                                    categoryName: item,
-                                    onPressCategory: { categoryName in
-                                        selectedCategoryName = categoryName
+                                    categoryName: item.type3 ?? "",
+                                    onPressCategory: {
+                                        selectedCategory = item
                                         isShow = false
                                     },
-                                    selectedCategoryName: selectedCategoryName
+                                    selectedCategoryName: selectedCategory?.type3 ?? ""
                                 )
                                 .padding(.top, index==0 ? 0 : 15)
                                 .padding(.bottom, index==list.count-1 ? 15 : 0)

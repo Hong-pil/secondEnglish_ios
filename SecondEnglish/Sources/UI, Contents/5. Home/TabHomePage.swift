@@ -280,7 +280,7 @@ extension TabHomePage: View {
                     ForEach(Array(viewModel.myLikeCardCategoryList.enumerated()), id: \.offset) { index, element in
                         
                         VStack(spacing: 0) {
-                            Text(element)
+                            Text(element.type3 ?? "")
                                 .font(myLikeTabHeaderIndex==index ? .title51622Medium : .caption11218Regular)
                                 .foregroundColor(myLikeTabHeaderIndex==index ? Color.primaryDefault : Color.primaryDefault.opacity(0.5))
                                 //.frame(minWidth: 70)
@@ -305,7 +305,11 @@ extension TabHomePage: View {
 //                                        fLog("idpil::: type3 : \(viewModel.sentenceList[cardBannerCurrentIndex].type3 ?? "")")
 //                                        fLog("idpil::: element : \(element)")
                                         
-                                        if element == (viewModel.myLikeCardList[myLikeCardIndex].type3 ?? "") {
+                                        /**
+                                         * 서브카테고리(type3)는  중복되는 이름이 있기 때문에,
+                                         * type3_sort_num 기준으로 매칭확인을 해야한다.
+                                         */
+                                        if (element.type3_sort_num ?? 0) == (viewModel.myLikeCardList[myLikeCardIndex].type3_sort_num ?? 0) {
                                             myLikeTabHeaderIndex = index
                                             withAnimation {
                                                 scrollviewReader.scrollTo(index, anchor: .top)
@@ -336,7 +340,7 @@ extension TabHomePage: View {
                     ForEach(Array(viewModel.myPostCardCategoryList.enumerated()), id: \.offset) { index, element in
                         
                         VStack(spacing: 0) {
-                            Text(element)
+                            Text(element.type3 ?? "")
                                 .font(myPostTabHeaderIndex==index ? .title51622Medium : .caption11218Regular)
                                 .foregroundColor(myPostTabHeaderIndex==index ? Color.primaryDefault : Color.primaryDefault.opacity(0.5))
                                 //.frame(minWidth: 70)
@@ -361,7 +365,11 @@ extension TabHomePage: View {
 //                                        fLog("idpil::: type3 : \(viewModel.sentenceList[cardBannerCurrentIndex].type3 ?? "")")
 //                                        fLog("idpil::: element : \(element)")
                                         
-                                        if element == (viewModel.myPostCardList[myPostCardIndex].type3 ?? "") {
+                                        /**
+                                         * 서브카테고리(type3)는  중복되는 이름이 있기 때문에,
+                                         * type3_sort_num 기준으로 매칭확인을 해야한다.
+                                         */
+                                        if (element.type3_sort_num ?? 0) == (viewModel.myPostCardList[myPostCardIndex].type3_sort_num ?? 0) {
                                             myPostTabHeaderIndex = index
                                             withAnimation {
                                                 scrollviewReader.scrollTo(index, anchor: .top)

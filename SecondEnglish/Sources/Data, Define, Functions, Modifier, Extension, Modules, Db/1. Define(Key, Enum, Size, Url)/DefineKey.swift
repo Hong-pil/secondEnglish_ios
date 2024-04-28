@@ -142,7 +142,7 @@ struct DefineKey {
     
     
     //MARK: - m
-    static let mainCategoryName = "mainCategoryName"
+    static let mainCategoryItem = "mainCategoryItem"
     static let minuteIdx = "minuteIdx"
     static let minuteDetail = "minuteDetail"
     static let minuteInsert = "minuteInsert"

@@ -16,9 +16,8 @@ class EditorViewModel: ObservableObject {
     @Published var alertMessage: String = ""
     
     // View Data
-    @Published var typeList: [SwipeCategoryList] = []
-    @Published var mainCategoryList: [String] = []
-    @Published var subCategoryList: [String] = []
+    @Published var mainCategoryList: [SwipeCategoryList] = []
+    @Published var subCategoryList: [SwipeCategoryList] = []
     
     @Published var isEditMode: Bool = false
     @Published var editModeItem: SwipeDataList? = nil
@@ -51,14 +50,12 @@ class EditorViewModel: ObservableObject {
                 
             } receiveValue: { value in
                 if value.code == 200 {
-                    printPrettyJSON(keyWord: "idpil editor_category :::\n", from: value.data ?? [])
-                    // 카테고리 헤더 데이터
-                    for type in value.data ?? [] {
-                        self.mainCategoryList.append(type.type2 ?? "")
-                    }
+                    //printPrettyJSON(keyWord: "idpil editor_category :::\n", from: value.data ?? [])
                     
-                    // 중복제거
-                    self.mainCategoryList = self.mainCategoryList.uniqued()
+                    self.mainCategoryList = value.data ?? []
+                    
+                    // 중복제거 (중복되는 데이터 내려오지 않음)
+                    //self.mainCategoryList = self.mainCategoryList.uniqued()
                     
                     isSuccess(true)
                 }
@@ -72,9 +69,9 @@ class EditorViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - 카테고리 조회
-    func requestCategory(category: String, isSuccess: @escaping(Bool) -> Void = {_ in}) {
-        ApiControl.getSwipeCategory(category: category)
+    //MARK: - 서브 카테고리 조회
+    func requestCategory(type2: String, isSuccess: @escaping(Bool) -> Void = {_ in}) {
+        ApiControl.getSwipeCategory(type2: type2)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
@@ -87,15 +84,11 @@ class EditorViewModel: ObservableObject {
             } receiveValue: { value in
                 if value.code == 200 {
                     self.subCategoryList = []
-                    self.typeList = value.data ?? []
+                    self.subCategoryList = value.data ?? []
                     
-                    // 카테고리 헤더 데이터
-                    for type in value.data ?? [] {
-                        self.subCategoryList.append(type.type3 ?? "")
-                    }
-                    
-                    // 중복제거
-                    self.subCategoryList = self.subCategoryList.uniqued()
+                    // 중복제거 (중복되는 데이터가 내려오지 않음)
+                    //self.subCategoryList = self.subCategoryList.uniqued()
+                    //fLog("idpil::: 서브카테고리 : \(self.subCategoryList)")
                     
                     isSuccess(true)
                 }
@@ -110,8 +103,8 @@ class EditorViewModel: ObservableObject {
     }
     
     //MARK: - 내 카드 리스트 등록
-    func addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>], isPostComplete: @escaping((Bool) -> Void)) {
-        ApiControl.addCardList(type1: type1, type2: type2, type3: type3, sentence_list: sentence_list)
+    func addCardList(type1: String, type2: String, type3: String, type2_sort_num: Int, type3_sort_num: Int, sentence_list: [Dictionary<String, String>], isPostComplete: @escaping((Bool) -> Void)) {
+        ApiControl.addCardList(type1: type1, type2: type2, type3: type3, type2_sort_num: type2_sort_num, type3_sort_num: type3_sort_num, sentence_list: sentence_list)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")

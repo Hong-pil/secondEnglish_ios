@@ -60,10 +60,10 @@ extension ApiControl {
     }
     
     
-    static func getSwipeCategory(category: String) -> AnyPublisher<SwipeCategory, ErrorModel> {
+    static func getSwipeCategory(type2: String) -> AnyPublisher<SwipeCategory, ErrorModel> {
         Future<SwipeCategory, ErrorModel> { promise in
             
-            let apis: ApisSwipe = .swipeCategory(category: category)
+            let apis: ApisSwipe = .swipeCategory(type2: type2)
             
             //call
             let provider = MoyaProvider<ApisSwipe>()
@@ -567,10 +567,10 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
-    static func addCardList(type1: String, type2: String, type3: String, sentence_list: [Dictionary<String, String>], isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<LikeCardResponse, ErrorModel> {
+    static func addCardList(type1: String, type2: String, type3: String, type2_sort_num: Int, type3_sort_num: Int, sentence_list: [Dictionary<String, String>], isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<LikeCardResponse, ErrorModel> {
         Future<LikeCardResponse, ErrorModel> { promise in
             
-            let apis: ApisSwipe = .addCardList(type1: type1, type2: type2, type3: type3, sentence_list: sentence_list)
+            let apis: ApisSwipe = .addCardList(type1: type1, type2: type2, type3: type3, type2_sort_num: type2_sort_num, type3_sort_num: type3_sort_num, sentence_list: sentence_list)
             
             //call
             let provider = MoyaProvider<ApisSwipe>()

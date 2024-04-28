@@ -90,6 +90,7 @@ struct SwipeCategoryList: Codable, Hashable {
     var type1: String? = ""
     var type2: String? = ""
     var type3: String? = ""
+    var type2_sort_num: Int? = 0
     var type3_sort_num: Int? = 0
 }
 
@@ -119,7 +120,7 @@ struct MyCardResponse: Codable {
 }
 struct MyCardData: Codable {
     var sentence_list: [SwipeDataList] = []
-    var category_list: [String] = []
+    var category_list: [CategoryListData] = []
 }
 
 struct UserBlockResponse: Codable {
@@ -145,6 +146,10 @@ struct PopularCardTop10Data: Codable, Hashable {
     var startDay: String? = "" // 이번주 첫 날짜 : 20240324
     var endDay: String? = "" // 이번주 끝 날짜 : 20240330
     var list: [SwipeDataList] = []
+}
+struct CategoryListData: Codable, Hashable {
+    var type3: String? = ""
+    var type3_sort_num: Int? = 0
 }
 
 struct MyLearningProgressResponse: Codable {

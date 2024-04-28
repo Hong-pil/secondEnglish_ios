@@ -19,9 +19,9 @@ class TabHomeViewModel: ObservableObject {
     @Published var alertMessage: String = ""
     
     @Published var myLikeCardList: [SwipeDataList] = []
-    @Published var myLikeCardCategoryList: [String] = []
+    @Published var myLikeCardCategoryList: [CategoryListData] = []
     @Published var myPostCardList: [SwipeDataList] = []
-    @Published var myPostCardCategoryList: [String] = []
+    @Published var myPostCardCategoryList: [CategoryListData] = []
     @Published var myLearningProgressList: [MyLearningProgressMainCategory] = []
     
     
@@ -41,6 +41,8 @@ class TabHomeViewModel: ObservableObject {
                 if value.code == 200 {
                     self.myLikeCardList = value.data?.sentence_list ?? []
                     self.myLikeCardCategoryList = value.data?.category_list ?? []
+//                    printPrettyJSON(keyWord: "idpil myLikeCardList :::\n", from: self.myLikeCardList)
+//                    printPrettyJSON(keyWord: "idpil myLikeCardCategoryList :::\n", from: self.myLikeCardCategoryList)
                     
                     isSuccess(true)
                 }
@@ -70,6 +72,8 @@ class TabHomeViewModel: ObservableObject {
                 if value.code == 200 {
                     self.myPostCardList = value.data?.sentence_list ?? []
                     self.myPostCardCategoryList = value.data?.category_list ?? []
+//                    printPrettyJSON(keyWord: "idpil myPostCardList :::\n", from: self.myPostCardList)
+//                    printPrettyJSON(keyWord: "idpil myPostCardCategoryList :::\n", from: self.myPostCardCategoryList)
                     
                     isSuccess(true)
                 }

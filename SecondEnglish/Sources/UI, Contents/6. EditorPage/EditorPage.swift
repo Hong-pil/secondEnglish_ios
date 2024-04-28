@@ -18,8 +18,8 @@ struct EditorPage {
     // ToolbarItem 버튼 클릭 유무
     @State var showWriteCancelView = false
     
-    @State var selectedMainCategoryName: String = ""
-    @State var selectedSubCategoryName: String = ""
+    @State var selectedMainCategory: SwipeCategoryList? = nil
+    @State var selectedSubCategory: SwipeCategoryList? = nil
     @State var categoryBottomSheetHeight: CGFloat = 0.0
     
     @State var currentKoreanTxt: String = ""
@@ -254,8 +254,10 @@ extension EditorPage: View {
                                 
                                 viewModel.addCardList(
                                     type1: "Basic",
-                                    type2: selectedMainCategoryName,
-                                    type3: selectedSubCategoryName,
+                                    type2: selectedMainCategory?.type2 ?? "",
+                                    type3: selectedSubCategory?.type3 ?? "",
+                                    type2_sort_num: selectedMainCategory?.type2_sort_num ?? 0,
+                                    type3_sort_num: selectedSubCategory?.type3_sort_num ?? 0,
                                     sentence_list: sentenceList
                                 ) { isComplete in
                                     if isComplete {
@@ -265,14 +267,16 @@ extension EditorPage: View {
                                             presentationMode.wrappedValue.dismiss()
                                             
                                             // 등록한 카테고리의 index 값을 가져온다.
-                                            if let subCategoryIndex = self.getSubCategoryIndex(item: selectedSubCategoryName) {
-                                                
-                                                // Swipe Tab으로 이동 후, 등록한 카테고리의 내용을 갱신해서 보여준다.
-                                                self.moveToSwipeTab(
-                                                    subCategoryIdx: subCategoryIndex,
-                                                    subCategoryName: selectedSubCategoryName,
-                                                    mainCategoryName: selectedMainCategoryName
-                                                )
+                                            if let subCategory = selectedSubCategory {
+                                                if let subCategoryIndex = self.getSubCategoryIndex(item: subCategory) {
+                                                    
+                                                    // Swipe Tab으로 이동 후, 등록한 카테고리의 내용을 갱신해서 보여준다.
+                                                    self.moveToSwipeTab(
+                                                        subCategoryIdx: subCategoryIndex,
+                                                        subCategoryName: selectedSubCategory?.type3 ?? "",
+                                                        mainCategoryName: selectedMainCategory?.type2 ?? ""
+                                                    )
+                                                }
                                             }
                                         }
                                     }
@@ -326,11 +330,11 @@ extension EditorPage: View {
                     viewType: EditorCategoryViewType.MainCategory,
                     mainCategoryList: viewModel.mainCategoryList,
                     isShow: $isShowMainCategoryListView,
-                    selectedCategoryName: $selectedMainCategoryName
+                    selectedCategory: $selectedMainCategory
                 )
-                .onChange(of: selectedMainCategoryName) {
+                .onChange(of: selectedMainCategory) {
                     if viewModel.mainCategoryList.count > 0 {
-                        viewModel.requestCategory(category: self.selectedMainCategoryName)
+                        viewModel.requestCategory(type2: self.selectedMainCategory?.type2 ?? "")
                     }
                 }
             }
@@ -344,10 +348,10 @@ extension EditorPage: View {
                     viewType: EditorCategoryViewType.SubCategory,
                     subCategoryList: viewModel.subCategoryList,
                     isShow: $isShowSubCategoryListView,
-                    selectedCategoryName: $selectedSubCategoryName
+                    selectedCategory: $selectedSubCategory
                 )
-                .onChange(of: selectedSubCategoryName) {
-                    //fLog("idpil::: 선택된 sub category : \(selectedSubCategoryName)")
+                .onChange(of: selectedSubCategory) {
+                    //fLog("idpil::: 선택된 sub category : \(selectedSubCategory)")
                 }
             }
         )
@@ -376,7 +380,7 @@ extension EditorPage: View {
                 isShowMainCategoryListView.toggle()
             }, label: {
                 HStack(spacing: 0) {
-                    Text(selectedMainCategoryName.count > 0 ? selectedMainCategoryName : "k_select_to_main_category".localized)
+                    Text(selectedMainCategory?.type2 ?? "k_select_to_main_category".localized)
                         .font(.body21420Regular)
                         .foregroundColor(.gray900)
                     
@@ -387,12 +391,12 @@ extension EditorPage: View {
                         .foregroundColor(.stateEnableGray400)
                         .padding(.leading, 8)
                 }
-                .onChange(of: selectedMainCategoryName, initial: false) { oldValue, newValue in
+                .onChange(of: selectedMainCategory, initial: false) { oldValue, newValue in
                     // 주의! initial true로 설정시, 값이 바뀌지 않았는데도 최초 한 번 호출됨.
                     
                     // 메인 카테고리 변경한 경우 -> 서브 카테고리 초기화
                     if oldValue != newValue {
-                        self.selectedSubCategoryName = ""
+                        self.selectedSubCategory = nil
                     }
                 }
             })
@@ -405,7 +409,7 @@ extension EditorPage: View {
                     isShowSubCategoryListView.toggle()
                 }, label: {
                     HStack(spacing: 0) {
-                        Text(selectedSubCategoryName.count > 0 ? selectedSubCategoryName : "k_select_to_sub_category".localized)
+                        Text(selectedSubCategory?.type3 ?? "k_select_to_sub_category".localized)
                             .font(.body21420Regular)
                             .foregroundColor(.gray900)
                             .lineLimit(1)
@@ -624,8 +628,8 @@ extension EditorPage {
     
     // 취소버튼 클릭시 검사
     func checkMinimalData() -> Bool {
-        return selectedMainCategoryName.count>0 ||
-                selectedSubCategoryName.count>0 ||
+        return selectedMainCategory != nil ||
+                selectedSubCategory != nil ||
             (
                 // view load될 때 sentenceList에 빈 문자 저장함
                 sentenceList.count>1 ?
@@ -643,7 +647,7 @@ extension EditorPage {
         sentenceList[currentCardIndex][sizeInfo.englishKey] = currentEnglishTxt
         
         // 2. 선택 안 된 카테고리가 있는지 검사
-        if selectedMainCategoryName.isEmpty || selectedSubCategoryName.isEmpty {
+        if selectedMainCategory==nil || selectedSubCategory==nil {
             return .IsCategoryEmpty
         }
         
@@ -662,7 +666,7 @@ extension EditorPage {
         return .CheckOK
     }
     
-    private func getSubCategoryIndex(item: String) -> Int? {
+    private func getSubCategoryIndex(item: SwipeCategoryList) -> Int? {
         var categoryIndex: Int?
         if let index = viewModel.subCategoryList.firstIndex(of: item) {
             categoryIndex = index

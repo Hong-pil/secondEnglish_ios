@@ -168,8 +168,8 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     //MARK: - 카테고리 조회
-    func requestCategory(isInit: Bool, category: String, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getSwipeCategory(category: category)
+    func requestCategory(isInit: Bool, type2: String, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getSwipeCategory(type2: type2)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")

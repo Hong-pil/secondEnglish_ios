@@ -10,14 +10,14 @@ import SwiftUI
 struct EditorCategoryRowView {
     let viewType: EditorCategoryViewType
     var categoryName: String
-    var onPressCategory: ((String) -> Void)
+    var onPressCategory: (() -> Void)
     var selectedCategoryName: String = "" // 초기엔 선택되지 않음
 }
 
 extension EditorCategoryRowView: View {
     var body: some View {
         Button(action: {
-            onPressCategory(categoryName)
+            onPressCategory()
         }, label: {
             HStack(spacing: 0) {
                 Text(categoryName)
