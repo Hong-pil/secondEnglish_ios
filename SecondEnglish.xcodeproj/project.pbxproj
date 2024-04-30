@@ -104,6 +104,7 @@
 		E090ED9E2BAE855E0096F822 /* InfiniteCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E090ED9D2BAE855E0096F822 /* InfiniteCarousel.swift */; };
 		E093EFB72B89EE7C0043AD43 /* ContentView+Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E093EFB62B89EE7C0043AD43 /* ContentView+Popup.swift */; };
 		E098DE9A2B70760A000059B3 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E098DE992B70760A000059B3 /* CustomScrollView.swift */; };
+		E09AAABC2BDF67A00039C321 /* MenuSubPageCellFlipLikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09AAABB2BDF67A00039C321 /* MenuSubPageCellFlipLikeView.swift */; };
 		E09BCBFC2BB92841009AB5EC /* AccountInfoPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09BCBFB2BB92841009AB5EC /* AccountInfoPage.swift */; };
 		E0A871872B6FD72E009687C5 /* TabHomeControlPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */; };
 		E0A8718D2B701C75009687C5 /* TabHomeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */; };
@@ -361,6 +362,7 @@
 		E090ED9D2BAE855E0096F822 /* InfiniteCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarousel.swift; sourceTree = "<group>"; };
 		E093EFB62B89EE7C0043AD43 /* ContentView+Popup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Popup.swift"; sourceTree = "<group>"; };
 		E098DE992B70760A000059B3 /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
+		E09AAABB2BDF67A00039C321 /* MenuSubPageCellFlipLikeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSubPageCellFlipLikeView.swift; sourceTree = "<group>"; };
 		E09BCBFB2BB92841009AB5EC /* AccountInfoPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoPage.swift; sourceTree = "<group>"; };
 		E0A871862B6FD72E009687C5 /* TabHomeControlPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeControlPanel.swift; sourceTree = "<group>"; };
 		E0A8718C2B701C75009687C5 /* TabHomeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHomeCardView.swift; sourceTree = "<group>"; };
@@ -753,6 +755,7 @@
 				E0D295082BAD6D9F00A19515 /* MenuSubPageCellBasicView.swift */,
 				E090ED902BADDE3C0096F822 /* MenuSubPageCellFlipPopularView.swift */,
 				E0F0F4E52BDBADFE00B14E00 /* MySentenceEditorInputView.swift */,
+				E09AAABB2BDF67A00039C321 /* MenuSubPageCellFlipLikeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1845,6 +1848,7 @@
 				E0DBDE3B2B4FD17D007615A8 /* LoginViewModel.swift in Sources */,
 				E071A0622B636544009E5C9A /* PermissionDetailView.swift in Sources */,
 				E093EFB72B89EE7C0043AD43 /* ContentView+Popup.swift in Sources */,
+				E09AAABC2BDF67A00039C321 /* MenuSubPageCellFlipLikeView.swift in Sources */,
 				E063923C2B82FB1C003D0428 /* PopupBottomStackView.swift in Sources */,
 				E06588172BAC4BB50084DCA3 /* MenuCommonSubPage.swift in Sources */,
 				E0DBDD982B4FCD10007615A8 /* Array+Extension.swift in Sources */,

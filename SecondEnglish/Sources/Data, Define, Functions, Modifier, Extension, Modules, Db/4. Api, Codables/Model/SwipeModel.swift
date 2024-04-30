@@ -78,6 +78,7 @@ struct SwipeDataList: Codable, Hashable {
     var isCardBlock: Bool? = false
     var type2_sort_num: Int? = 0
     var type3_sort_num: Int? = 0
+    var like_count: Int? = 0
 }
 
 struct SwipeCategory: Codable {

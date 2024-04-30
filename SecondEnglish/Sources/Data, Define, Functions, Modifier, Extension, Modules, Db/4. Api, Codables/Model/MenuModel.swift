@@ -9,7 +9,7 @@ import Foundation
 
 struct MenuResponse: Codable {
     var code: Int = 0
-    var data: Int? = nil
+    var data: [SwipeDataList] = []
     var message: String? = nil
 }
 

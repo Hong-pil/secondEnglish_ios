@@ -38,6 +38,9 @@
 "swipe_learning" = "학습 중";
 "swipe_know" = "알고 있음";
 "se_block_remove" = "해제";
+"e_email_alert_title" = "이메일 설정 알림";
+"e_email_alert_content" = "이메일 계정을 먼저 설정해주세요.";
+"e_email_alert_setting" = "설정하기";
 
 
 

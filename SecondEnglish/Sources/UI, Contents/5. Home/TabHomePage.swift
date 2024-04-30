@@ -247,15 +247,15 @@ extension TabHomePage: View {
             
             Spacer()
             
-            Button {
-                //NavigationBarActionManager.shared.buttonActionSubject.send(("", .Menu))
-            } label: {
-                Image("icon_outline_alarm new")
-                    .resizable()
-                    .renderingMode(.template)
-                    .frame(width: 27, height: 27)
-                    .foregroundColor(.gray25)
-            }
+//            Button {
+//                //NavigationBarActionManager.shared.buttonActionSubject.send(("", .Menu))
+//            } label: {
+//                Image("icon_outline_alarm new")
+//                    .resizable()
+//                    .renderingMode(.template)
+//                    .frame(width: 27, height: 27)
+//                    .foregroundColor(.gray25)
+//            }
             
             Button {
                 NavigationBarActionManager.shared.buttonActionSubject.send(("", .Menu))

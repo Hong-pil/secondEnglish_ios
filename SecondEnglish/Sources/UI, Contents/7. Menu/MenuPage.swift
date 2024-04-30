@@ -32,27 +32,28 @@ extension MenuPage: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 
-                MenuAlarmView(alimList: [],
-                              unreadCount: 0) { alimId in
-                    
-//                    vm.alimRead(id: alimId) {
-//                        vm.getAlimUnreadList()
-//                    }
-                    
-                } onShow: {
-                    isShowAlarmPage = true
-                }
+//                MenuAlarmView(alimList: [],
+//                              unreadCount: 0) { alimId in
+//                    
+////                    vm.alimRead(id: alimId) {
+////                        vm.getAlimUnreadList()
+////                    }
+//                    
+//                } onShow: {
+//                    isShowAlarmPage = true
+//                }
                 
                 profileView
+                    .padding(.top, sizeInfo.listSpacing)
                     .padding(.bottom, sizeInfo.listSpacing)
                 
                 MenuInfoView(
-                    myPostLikeNum: viewModel.myPostLikeNum,
-                    myGetLikeNum: viewModel.myGetLikeNum,
+                    mySentenceNum: viewModel.mySentenceList.count,
+                    myPostLikeNum: viewModel.myPostLikeList.count,
+                    myGetLikeNum: viewModel.myGetLikeList.count,
                     onPress: { buttonType in
                         if buttonType == .Sentence {
-                            // .Sentence 사용 안 하고 있음
-                            //isShowMySentencePage = true
+                            isShowMySentencePage = true
                         }
                         else if buttonType == .PostLike {
                             isShowPostLikePage = true
@@ -71,15 +72,6 @@ extension MenuPage: View {
                     .padding(EdgeInsets(top: sizeInfo.listSpacing, leading: DefineSize.Contents.HorizontalPadding + 20, bottom: sizeInfo.listSpacing, trailing: 0))
                 
                 VStack(spacing: 0) {
-                    MenuLinkView(text: "j_wrote_post".localized, position: .Top, showLine: true, onPress: {
-                        if userManager.isLogin {
-                            isShowMySentencePage = true
-                        }
-                        else {
-                            AlertManager().showLoginAlert()
-                        }
-                    })
-                    
                     MenuLinkView(text: "b_block_post".localized, position: .Top, showLine: true, onPress: {
                         if userManager.isLogin {
                             isShowCardBlockPage = true
@@ -154,6 +146,7 @@ extension MenuPage: View {
             }
         }
         .task {
+            viewModel.getMySentence()
             viewModel.getMyPostLike()
             viewModel.getMyGetLike()
         }

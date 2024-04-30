@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MenuCommonSubPage {
     @Environment(\.presentationMode) var presentationMode
+    
     @StateObject var viewModel = MenuViewModel()
     
     let type: MenuButtonType
@@ -37,14 +38,18 @@ extension MenuCommonSubPage: View {
                 postLikeView
                     .task {
                         naviTitle = "l_like_do".localized
-                        viewModel.getMyPostLike()
+                        viewModel.getMyPostLike() {
+                            isReadyToShow = true
+                        }
                     }
             case .GetLike:
                 // 받은 좋아요
                 getLikeView
                     .task {
                         naviTitle = "l_like_get".localized
-                        viewModel.getMyGetLike()
+                        viewModel.getMyGetLike() {
+                            isReadyToShow = true
+                        }
                     }
             case .CardBlock:
                 // 차단한 글
@@ -166,14 +171,59 @@ extension MenuCommonSubPage: View {
     }
     
     var postLikeView: some View {
-        VStack(spacing: 0) {
-            Text("누른 좋아요")
+        ScrollView {
+            if isReadyToShow {
+                if viewModel.myPostLikeList.count > 0 {
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(viewModel.myPostLikeList.enumerated()), id: \.offset) { index, item in
+                            
+                            MenuSubPageCellFlipLikeView(
+                                item: item,
+                                isDisabledLikeButton: false,
+                                isLikeCancel: {
+                                    // 좋아요 취소 요청 -> false -> 0
+                                    // 좋아요 요청 -> true -> 1
+                                    viewModel.likeCard(
+                                        cardIdx: item.idx ?? 0,
+                                        isLike: 0,
+                                        clickIndex: index,
+                                        isSuccess: { isSuccess in
+                                            if isSuccess {
+                                                viewModel.removeLikeCard(cardIndex: index)
+                                            } else {
+                                                // 알럿 띄우기
+                                            }
+                                        })
+                                }
+                            )
+                        }
+                    }
+                }
+                else {
+                    emptyView
+                }
+            }
         }
     }
     
     var getLikeView: some View {
-        VStack(spacing: 0) {
-            Text("받은 좋아요")
+        ScrollView {
+            if isReadyToShow {
+                if viewModel.myGetLikeList.count > 0 {
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(viewModel.myGetLikeList.enumerated()), id: \.offset) { index, item in
+                            
+                            MenuSubPageCellFlipLikeView(
+                                item: item,
+                                isDisabledLikeButton: true
+                            )
+                        }
+                    }
+                }
+                else {
+                    emptyView
+                }
+            }
         }
     }
     

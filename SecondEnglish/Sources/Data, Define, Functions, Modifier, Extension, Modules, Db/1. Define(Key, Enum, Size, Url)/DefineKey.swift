@@ -97,7 +97,7 @@ struct DefineKey {
     static let isLogin = "isLogin"
     static let integUid = "integUid"
     static let interestList = "interestList"
-    static let inquiryEmail = "help.fantoo@fns.ai"
+    static let inquiryEmail = "help.momentenglish@gmail.com"
     
     static let idx = "idx"
     static let isBlock = "isBlock"

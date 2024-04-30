@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import MessageUI
 
 struct SettingPage: View {
     @Environment(\.openURL) private var openURL
     @StateObject var languageManager = LanguageManager.shared
     @StateObject var userManager = UserManager.shared
     @Environment(\.presentationMode) var presentationMode
+    
+    
+    @State private var showingAlert = false
+    
+    // 아래부터 안 쓰는 변수들 정리하기
 
     @State var showList = false
     @State var leftItems: [CustomNavigationBarButtonType] = []
@@ -91,14 +97,14 @@ struct SettingPage: View {
                     })
      
                     
-                    SettingListLinkView(text: "g_notice".localized,
-                                        subText: "",
-                                        lang: "",
-                                        type: .ClickAllWithArrow,
-                                        showLine: true,
-                                        onPress: {
-                        showNoticePage = true
-                    })
+//                    SettingListLinkView(text: "g_notice".localized,
+//                                        subText: "",
+//                                        lang: "",
+//                                        type: .ClickAllWithArrow,
+//                                        showLine: true,
+//                                        onPress: {
+//                        showNoticePage = true
+//                    })
                     
                     SettingListLinkView(text:  "a_inquiry_email".localized,
                                         subText: "",
@@ -106,21 +112,14 @@ struct SettingPage: View {
                                         type: .ClickAllWithArrow,
                                         showLine: true,
                                         onPress: {
-                        if let url = URL(string: "mailto:\(DefineKey.inquiryEmail)") {
-                            openURL(url)
+                        
+                        if MFMailComposeViewController.canSendMail() {
+                            // 유저 이메일 설정되어 있음
+                            self.sendEmail()
+                        } else {
+                            // 유저 이메일 설정되어 있지 않음
+                            self.showingAlert = true
                         }
-                    })
-                    
-                    SettingListLinkView(text: "튜토리얼 다시보기".localized,
-                                        subText: "",
-                                        lang: "",
-                                        type: .ClickAllWithArrow,
-                                        showLine: true,
-                                        onPress: {
-//                        menuPageActive = false
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//                            userManager.showOnboarding = true
-//                        }
                     })
                 }
                 
@@ -197,6 +196,23 @@ struct SettingPage: View {
         //.background(Color.bgLightGray50)
         .navigationDestination(isPresented: $showAccontPage) {
             AccountInfoPage(showLoginPage: $showLoginPage)
+        }
+        .showCustomAlert(isPresented: $showingAlert,
+                         type: .Default,
+                         title: "e_email_alert_title".localized,
+                         message: "e_email_alert_content".localized,
+                         detailMessage: "",
+                         buttons: ["c_cancel".localized, "e_email_alert_setting".localized],
+                         onClick: { buttonIndex in
+            if buttonIndex == 1 {
+                sendEmail()
+            }
+        })
+    }
+    
+    func sendEmail() {
+        if let url = URL(string: "mailto:\(DefineKey.inquiryEmail)") {
+            openURL(url)
         }
     }
 }

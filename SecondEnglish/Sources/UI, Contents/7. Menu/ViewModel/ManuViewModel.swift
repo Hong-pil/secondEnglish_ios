@@ -12,13 +12,11 @@ import Combine
 class MenuViewModel: ObservableObject {
     var cancellables = Set<AnyCancellable>()
     
-    @Published var alertMessage: String = ""
-    @Published var showAlert: Bool = false
     @Published var popupMessage: String = ""
     
     @Published var mySentenceList: [SwipeDataList] = []
-    @Published var myPostLikeNum: Int = 0
-    @Published var myGetLikeNum: Int = 0
+    @Published var myPostLikeList: [SwipeDataList] = []
+    @Published var myGetLikeList: [SwipeDataList] = []
     @Published var cardBlockData: MyCardData?
     @Published var userBlockData: [UserBlockData]?
     @Published var popularCardTop10Data: PopularCardTop10Data?
@@ -30,74 +28,60 @@ class MenuViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isDone()
             } receiveValue: { value in
                 if value.code == 200 {
                     self.mySentenceList = value.data ?? []
-                    
                     isDone()
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellables)
     }
     
     // 누른 좋아요
-    func getMyPostLike() {
+    func getMyPostLike(isDone: @escaping() -> Void = {}) {
         ApiControl.getMyPostLike()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                
+                self.popupMessage = error.message
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    self.myPostLikeNum = value.data ?? 0
+                    self.myPostLikeList = value.data
+                    isDone()
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellables)
     }
     
     // 받은 좋아요
-    func getMyGetLike() {
+    func getMyGetLike(isDone: @escaping() -> Void = {}) {
         ApiControl.getMyGetLike()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                
+                self.popupMessage = error.message
+                isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    self.myGetLikeNum = value.data ?? 0
+                    self.myGetLikeList = value.data
+                    isDone()
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellables)
@@ -110,10 +94,7 @@ class MenuViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isDone()
             } receiveValue: { value in
                 if value.code == 200 {
@@ -122,10 +103,8 @@ class MenuViewModel: ObservableObject {
                     isDone()
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellables)
@@ -138,10 +117,7 @@ class MenuViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isDone()
             } receiveValue: { value in
                 if value.code == 200 {
@@ -150,10 +126,8 @@ class MenuViewModel: ObservableObject {
                     isDone()
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellables)
@@ -166,10 +140,7 @@ class MenuViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
+                self.popupMessage = error.message
                 isDone()
             } receiveValue: { value in
                 if value.code == 200 {
@@ -179,10 +150,8 @@ class MenuViewModel: ObservableObject {
                     
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellables)
@@ -267,11 +236,8 @@ class MenuViewModel: ObservableObject {
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
-                self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                //isPostComplete(false)
+                self.popupMessage = error.message
+                isPostComplete(false)
             } receiveValue: { value in
                 if value.code == 200 {
                     if value.success ?? false {
@@ -279,10 +245,29 @@ class MenuViewModel: ObservableObject {
                     }
                 }
                 else {
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isPostComplete(false)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    //MARK: - 영어카드 좋아요 적용
+    func likeCard(cardIdx: Int, isLike: Int, clickIndex: Int, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.likeCard(cardIdx: cardIdx, isLike: isLike)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.popupMessage = error.message
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    isSuccess(true)
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isSuccess(false)
                 }
             }
             .store(in: &cancellables)
@@ -298,6 +283,10 @@ class MenuViewModel: ObservableObject {
     
     func removeDeletedCard(cardIndex: Int) {
         self.mySentenceList.remove(at: cardIndex)
+    }
+    
+    func removeLikeCard(cardIndex: Int) {
+        self.myPostLikeList.remove(at: cardIndex)
     }
     
     // String -> Date (yyyyMMdd 형식)
