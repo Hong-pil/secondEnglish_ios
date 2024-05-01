@@ -29,6 +29,8 @@
 		E003BA9A2B8605B300C55590 /* NetworkMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */; };
 		E003BA9C2B86200D00C55590 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9B2B86200D00C55590 /* Authenticator.swift */; };
 		E003BA9F2B863B1700C55590 /* UserNamePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E003BA9E2B863B1700C55590 /* UserNamePage.swift */; };
+		E0080BC72BE1030A00CA76AF /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0080BC62BE1030A00CA76AF /* WebView.swift */; };
+		E0080BC92BE1031400CA76AF /* WebPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0080BC82BE1031400CA76AF /* WebPage.swift */; };
 		E0082BB32BCB3253001E2AC9 /* auto_mode2.gif in Resources */ = {isa = PBXBuildFile; fileRef = E0082BB22BCB3253001E2AC9 /* auto_mode2.gif */; };
 		E00956202BC83B3500DEB8EC /* DoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E009561F2BC83B3500DEB8EC /* DoneView.swift */; };
 		E00FDAF02B5FDEFD0080761B /* EmailLoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */; };
@@ -291,6 +293,8 @@
 		E003BA992B8605B300C55590 /* NetworkMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitorManager.swift; sourceTree = "<group>"; };
 		E003BA9B2B86200D00C55590 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		E003BA9E2B863B1700C55590 /* UserNamePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNamePage.swift; sourceTree = "<group>"; };
+		E0080BC62BE1030A00CA76AF /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		E0080BC82BE1031400CA76AF /* WebPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebPage.swift; sourceTree = "<group>"; };
 		E0082BB22BCB3253001E2AC9 /* auto_mode2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = auto_mode2.gif; sourceTree = "<group>"; };
 		E009561F2BC83B3500DEB8EC /* DoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneView.swift; sourceTree = "<group>"; };
 		E00FDAEF2B5FDEFD0080761B /* EmailLoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginPage.swift; sourceTree = "<group>"; };
@@ -644,6 +648,23 @@
 				E003BA9E2B863B1700C55590 /* UserNamePage.swift */,
 			);
 			path = "5. AddUserName";
+			sourceTree = "<group>";
+		};
+		E0080BC42BE102EA00CA76AF /* WebPage */ = {
+			isa = PBXGroup;
+			children = (
+				E0080BC52BE102F300CA76AF /* View */,
+				E0080BC82BE1031400CA76AF /* WebPage.swift */,
+			);
+			path = WebPage;
+			sourceTree = "<group>";
+		};
+		E0080BC52BE102F300CA76AF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E0080BC62BE1030A00CA76AF /* WebView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E00FDAF72B5FE01D0080761B /* 4. Agree - 회원가입 마지막단계 */ = {
@@ -1216,6 +1237,7 @@
 		E0DBDD372B4FB7E2007615A8 /* 1. Common */ = {
 			isa = PBXGroup;
 			children = (
+				E0080BC42BE102EA00CA76AF /* WebPage */,
 				E050FAE72BA9542500390420 /* AlertPage */,
 				E0F11E9B2B7F3C450014F503 /* BottomSheet */,
 				E0DBDDD42B4FCE8F007615A8 /* Custom */,
@@ -1808,6 +1830,7 @@
 				E071A05C2B6364F5009E5C9A /* PermissionPage.swift in Sources */,
 				E0DBDE432B4FD1BF007615A8 /* SamplePermissionAlert.swift in Sources */,
 				E0DBDE042B4FCFCA007615A8 /* RefreshableScrollView.swift in Sources */,
+				E0080BC72BE1030A00CA76AF /* WebView.swift in Sources */,
 				E002E1802B56E90400F64CA4 /* SwipeCardFrontView.swift in Sources */,
 				E050FAF32BA9624300390420 /* MenuLinkView.swift in Sources */,
 				E00FDAF62B5FDFD20080761B /* View+Modifier.swift in Sources */,
@@ -1857,6 +1880,7 @@
 				E050FAEC2BA9544B00390420 /* AlertPageViewModel.swift in Sources */,
 				E0DBDD842B4FC9CE007615A8 /* ConfigModel.swift in Sources */,
 				E0DBDD8E2B4FCA05007615A8 /* RecordingModel.swift in Sources */,
+				E0080BC92BE1031400CA76AF /* WebPage.swift in Sources */,
 				E0B366612BB56790008BD503 /* RoundedCornersShape.swift in Sources */,
 				E0DBDDC22B4FCE0B007615A8 /* UIScreen+Extension.swift in Sources */,
 				E002E17E2B56E8F200F64CA4 /* SwipeView.swift in Sources */,

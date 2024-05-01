@@ -137,10 +137,10 @@ extension ServiceWithdrawPage: View {
                 .font(Font.body21420Regular)
                 .foregroundColor(Color.gray850)
             //                .kerning(0.5)
-            Text("se_t_after_use_withdraw_account".localized)
-                .font(Font.body21420Regular)
-                .foregroundColor(Color.gray850)
-            //                .kerning(0.5)
+//            Text("se_t_after_use_withdraw_account".localized)
+//                .font(Font.body21420Regular)
+//                .foregroundColor(Color.gray850)
+//            //                .kerning(0.5)
         }
     }
     
@@ -156,26 +156,26 @@ extension ServiceWithdrawPage: View {
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
                 
-                Text("g_join_club_leave_process".localized)
+                Text("j_like_post".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
                 
-                Text("b_storage_etc".localized)
+                Text("b_block_post".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
                 
-                Text("c_chatting_list".localized)
+                Text("b_block_user".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
-                
-                Text("\("b_have_fan_it".localized) \(viewModel.fanit == "" ? "0" : viewModel.fanit)")
-                    .font(Font.caption11218Regular)
-                    .foregroundColor(Color.gray700)
-                    .multilineTextAlignment(.leading)
-                    .padding(.bottom, 14)
+//                
+//                Text("\("b_have_fan_it".localized) \(viewModel.fanit == "" ? "0" : viewModel.fanit)")
+//                    .font(Font.caption11218Regular)
+//                    .foregroundColor(Color.gray700)
+//                    .multilineTextAlignment(.leading)
+//                    .padding(.bottom, 14)
                 
                 //                Text("b_have_kdg".localized)
                 //                    .font(Font.caption11218Regular)
@@ -192,7 +192,7 @@ extension ServiceWithdrawPage: View {
                     .font(Font.buttons1420Medium)
                     .multilineTextAlignment(.leading)
                 
-                Text("n_keep_my_post_reply".localized)
+                Text("j_wrote_post".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)

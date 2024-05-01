@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MessageUI
+import WebKit
 
 struct SettingPage: View {
     @Environment(\.openURL) private var openURL
@@ -48,6 +49,7 @@ struct SettingPage: View {
     
     @Binding var showLoginPage: Bool
     
+    
     private struct sizeInfo {
         static let padding: CGFloat = 10.0
         static let cellHeight: CGFloat = 50.0
@@ -60,6 +62,7 @@ struct SettingPage: View {
     
     var body: some View {
         ScrollView {
+            
             LazyVStack(spacing: 0) {
                 SettingListLinkView(text:  "g_account_info".localized,
                                     subText: "",
@@ -85,16 +88,16 @@ struct SettingPage: View {
                     let currentVersion = ConfigManager.shared.configData?.currentVersion ?? "2.0.0"
                     let checkUpdate = currentVersion < appVersion
                     
-                    SettingListLinkView(text: "\("b_version_info".localized) \(appVersion)",
-                                        subText: "",
-                                        lang: "",
-                                        type: .ClickUpdate,
-                                        showLine: true,
-                                        imageToggle: checkUpdate,
-                                        onPress: {
-                        
-                        CommonFunction.goAppStore()
-                    })
+//                    SettingListLinkView(text: "\("b_version_info".localized) \(appVersion)",
+//                                        subText: "",
+//                                        lang: "",
+//                                        type: .ClickUpdate,
+//                                        showLine: true,
+//                                        imageToggle: checkUpdate,
+//                                        onPress: {
+//                        
+//                        CommonFunction.goAppStore()
+//                    })
      
                     
 //                    SettingListLinkView(text: "g_notice".localized,
@@ -142,9 +145,10 @@ struct SettingPage: View {
                                         onPress: {
                         showServiceTermsPage = true
                     })
-//                    .fullScreenCover(isPresented: $showServiceTermsPage) {
-//                        WebPage(url: DefineUrl.Domain.Login + "/document/SERVICEAGREE?lang=\(LanguageManager.shared.getLanguageCode())", title: "")
-//                    }
+                    .fullScreenCover(isPresented: $showServiceTermsPage) {
+                        WebPage(url: DefineUrl.Domain.Api + "/policy/terms", title: "")
+                        //WebPage(url: DefineUrl.Domain.Login + "/document/SERVICEAGREE?lang=\(LanguageManager.shared.getLanguageCode())", title: "")
+                    }
                     
                     SettingListLinkView(text: "g_term_privacy_info".localized,
                                         subText: "",
@@ -154,9 +158,10 @@ struct SettingPage: View {
                                         onPress: {
                         showPersonalTermPage = true
                     })
-//                    .fullScreenCover(isPresented: $showPersonalTermPage) {
-//                        WebPage(url: DefineUrl.Domain.Login + "/document/USERINFOAGREE?lang=\(LanguageManager.shared.getLanguageCode())", title: "")
-//                    }
+                    .fullScreenCover(isPresented: $showPersonalTermPage) {
+                        //WebPage(url: DefineUrl.Domain.Login + "/document/USERINFOAGREE?lang=\(LanguageManager.shared.getLanguageCode())", title: "")
+                        WebPage(url: DefineUrl.Domain.Api + "/policy/privacy", title: "")
+                    }
                     
                     SettingListLinkView(text:  "c_term_youth".localized,
                                         subText: "",
@@ -166,9 +171,10 @@ struct SettingPage: View {
                                         onPress: {
                         showYouthProtectionPage = true
                     })
-//                    .fullScreenCover(isPresented: $showYouthProtectionPage) {
-//                        WebPage(url: DefineUrl.Domain.Login + "/document/TEENAGERAGREE?lang=\(LanguageManager.shared.getLanguageCode())", title: "")
-//                    }
+                    .fullScreenCover(isPresented: $showYouthProtectionPage) {
+                        //WebPage(url: DefineUrl.Domain.Login + "/document/TEENAGERAGREE?lang=\(LanguageManager.shared.getLanguageCode())", title: "")
+                        WebPage(url: DefineUrl.Domain.Api + "/policy/safeguard", title: "")
+                    }
                 }
             }
         }
