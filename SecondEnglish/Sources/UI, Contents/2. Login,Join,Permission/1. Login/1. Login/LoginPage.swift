@@ -93,19 +93,19 @@ struct LoginPage : View {
                     
                     Spacer()
                     
-                    Button {
-                        userManager.isLogin = false
-                        userManager.isLogout = false
-                        userManager.isLookAround = true
-                        self.presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Text("d_look_around".localized)
-                            .font(Font.body21420Regular)
-                            .foregroundColor(Color.gray870)
-                            .frame(height: sizeInfo.dismissHeight, alignment: .center)
-                            .padding(.horizontal, sizeInfo.padding10)
-                            .padding(.bottom, sizeInfo.bottomPadding)
-                    }
+//                    Button {
+//                        userManager.isLogin = false
+//                        userManager.isLogout = false
+//                        userManager.isLookAround = true
+//                        self.presentationMode.wrappedValue.dismiss()
+//                    } label: {
+//                        Text("d_look_around".localized)
+//                            .font(Font.body21420Regular)
+//                            .foregroundColor(Color.gray870)
+//                            .frame(height: sizeInfo.dismissHeight, alignment: .center)
+//                            .padding(.horizontal, sizeInfo.padding10)
+//                            .padding(.bottom, sizeInfo.bottomPadding)
+//                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.bgLightGray50)
@@ -150,7 +150,7 @@ struct LoginPage : View {
         }
         // 외부(카톡)에서 공유링크타고 앱 진입시, 해당 게시글의 메인 화면이여야 됨 (클럽 게시글이면 클럽 메인, 커뮤니티 게시글이면 커뮤니티 메인)
         // 그래서 비회원으로 진입시 로그인 화면이 보여져 있는 경우에는 로그인 화면을 닫음
-        .onChange(of: UserManager.shared.showInitialViewState) { value in
+        .onChange(of: UserManager.shared.showInitialViewState) {
             userManager.isLogin = false
             userManager.isLogout = false
             userManager.isLookAround = true

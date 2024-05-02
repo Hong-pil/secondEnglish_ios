@@ -18,10 +18,27 @@ struct MyProgressCellView: View {
     var body: some View {
         ZStack {
             HStack(spacing: 0) {
-                Text(sub_category)
-                    .font(.buttons1420Medium)
-                    .foregroundColor(.gray700)
-                    .frame(width: DefineSize.Screen.Width/2, alignment: .leading)
+                
+                HStack(spacing: 1) {
+                    Text(sub_category)
+                        .font(.buttons1420Medium)
+                        .foregroundColor(.gray700)
+                    
+                    // 오늘 업로드된 새글
+                    if today_new_count > 0 {
+                        Text(String(today_new_count).insertComma)
+                            .font(.caption31013Regular)
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray25)
+                            .padding(EdgeInsets(top: 0, leading: 5, bottom: 2, trailing: 5)) // bottom 값이 더 커야 숫자가 중앙에 위치하는 거 같음.
+                            .background(
+                                Capsule()
+                                    .fill(Color.red.opacity(0.8))
+                            )
+                            .padding(.bottom, 15)
+                    }
+                }
+                .frame(width: DefineSize.Screen.Width/2, alignment: .leading)
                     
                 Spacer()
                 
@@ -53,30 +70,6 @@ struct MyProgressCellView: View {
                     mainCategoryName: main_category
                 )
                 
-            }
-            
-            /**
-             * [오늘 추가된 문장 개수 알림]
-             * '서브 카테고리' 글자 끝에서 조금 위에 위치하기 위해 '보이지 않는 Text()' 사용
-             */
-            if today_new_count > 0 {
-                Text(sub_category)
-                    .font(.buttons1420Medium)
-                    .foregroundColor(.gray700)
-                    .opacity(0)
-                    .padding(.leading, 20)
-                    .padding(.trailing, 17)
-                    .background(
-                        Text(String(today_new_count))
-                            .font(.caption31013Regular)
-                            .fontWeight(.bold)
-                            .foregroundColor(.gray25)
-                            .padding(EdgeInsets(top: 5, leading: 5, bottom: 7, trailing: 5)) // bottom 값이 더 커야 숫자가 중앙에 위치하는 거 같음.
-                            .background(Circle().fill(Color.red.opacity(0.8)))
-                            .padding(.bottom, 15)
-                            .frame(maxWidth: .infinity, alignment: .topTrailing)
-                    )
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }

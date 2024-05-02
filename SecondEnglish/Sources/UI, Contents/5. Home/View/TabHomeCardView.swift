@@ -21,18 +21,18 @@ struct TabHomeCardView {
 
 extension TabHomeCardView: View {
     var body: some View {
-        ZStack {
-            if isAutoPlay {
-                TabHomeCardViewRow_NoFlip(
-                    korean: item.korean ?? "",
-                    english: item.english ?? "",
-                    category: item.type3 ?? "",
-                    isFlipped: isFlipped,
-                    cardWidth: cardWidth,
-                    cardHeight: cardHeight
-                )
-            }
-            else {
+        if isAutoPlay {
+            TabHomeCardViewRow_NoFlip(
+                korean: item.korean ?? "",
+                english: item.english ?? "",
+                category: item.type3 ?? "",
+                isFlipped: isFlipped,
+                cardWidth: cardWidth,
+                cardHeight: cardHeight
+            )
+        }
+        else {
+            ZStack {
                 // Decide which view to show based on the flip state
                 if isFlipped {
                     // Back View Content
@@ -57,14 +57,14 @@ extension TabHomeCardView: View {
                     )
                 }
             }
-        }
-        // Apply flip animation to the container
-        .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
-        .onTapGesture {
-            // 오토모드에서는 View Flip 안 함
-            if !isAutoPlay {
-                withAnimation(.easeIn(duration: 0.2)) {
-                    isFlipped.toggle()
+            // Apply flip animation to the container
+            .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 1.0, y: 0.0, z: 0.0)) // x:1.0 => 위-아래로 뒤짚힘 / y:1.0 => 좌-우로 뒤짚힘
+            .onTapGesture {
+                // 오토모드에서는 View Flip 안 함
+                if !isAutoPlay {
+                    withAnimation(.easeIn(duration: 0.2)) {
+                        isFlipped.toggle()
+                    }
                 }
             }
         }
@@ -91,7 +91,7 @@ struct TabHomeCardViewRow: View {
                 
                 Text(sentence)
                     .font(.title5Roboto1622Medium)
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray800)
                 
                 
                 
