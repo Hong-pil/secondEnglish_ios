@@ -12,7 +12,8 @@ struct DefineUrl {
     struct Domain {
         #if PROD
             static let Api = "https://dolbwa.duckdns.org"
-//            static let Login = "https://fauth-web.fantoo.co.kr"
+            
+            static let Login = "https://fauth-web.fantoo.co.kr"
 //            static let Api = "https://fapi.fantoo.co.kr"
 //            static let Trans = "http://ntrans.fantoo.co.kr:5000"
 //            static let Upload = "https://api.cloudflare.com"
@@ -25,7 +26,8 @@ struct DefineUrl {
 //            static let Terms = "https://fauth.fantoo.co.kr"
         #else
             static let Api = "https://dolbwa.duckdns.org" // url을 prod,dev 용 두 개 만들어서 관리해야 됨
-//            static let Login = "https://fauth-web-dev.fantoo.co.kr"
+            
+            static let Login = "https://fauth-web-dev.fantoo.co.kr"
 //            static let Api = "https://fapi-dev.fantoo.co.kr"
 //            static let Trans = "http://ntrans.fantoo.co.kr:5000"
 //            static let Upload = "https://api.cloudflare.com"
