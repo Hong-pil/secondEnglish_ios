@@ -114,6 +114,7 @@ struct DoneView {
         static let progressBarWidth: CGFloat = UIScreen.main.bounds.width - 40.0 // horizontal padding 값 양쪽 20.0씩 빼줘서 총 40.0 빼줌
         static let horizontalPaddingSize: CGFloat = 20.0
         static let learnColor: Color = Color(red: 245/255.0, green: 207/255.0, blue: 107/255.0, opacity: 1)
+        //static let learnColor: Color = Color(red: 230/255.0, green: 116/255.0, blue: 132/255.0, opacity: 1)
         static let knowColor: Color = Color(red: 140/255.0, green: 204/255.0, blue: 231/255.0, opacity: 1)
     }
 }
@@ -127,7 +128,10 @@ extension DoneView: View {
                     Image("congrats3_icon")
                         .resizable()
                         .aspectRatio(contentMode: .fit).frame(height: 100)
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 15)
+                        .onTapGesture {
+                            isShowEffectView = true
+                        }
                     
                     ForEach(Array(list.enumerated()), id: \.offset) { index, item in
                         
@@ -193,7 +197,7 @@ extension DoneView: View {
                             isShowEffectView = false
                             presentationMode.wrappedValue.dismiss()
                         }, label: {
-                            Text("다음 단계로 넘어가기")
+                            Text("d_doneview_next".localized)
                                 .font(.buttons1420Medium)
                                 .foregroundColor(.gray25)
                                 .padding(.vertical, 15)
@@ -207,7 +211,7 @@ extension DoneView: View {
                         isShowEffectView = false
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
-                        Text("다시 복습하기")
+                        Text("d_doneview_reload".localized)
                             .font(.buttons1420Medium)
                             .foregroundColor(.gray700)
                             .padding(.vertical, 15)

@@ -10,19 +10,33 @@ import Foundation
 struct DefineUrl {
     
     struct Domain {
-        static let Api = "https://dolbwa.duckdns.org"
-        //static let Api = "https://second-english.duckdns.org"
-        
-        
-        static let Login = "https://fauth.fantoo.co.kr"
-        //static let Api = "https://fapi.fantoo.co.kr:9121"
-//        static let Api = "http://129.154.201.232:9121"
-        static let Trans = "http://ntrans.fantoo.co.kr:5000"
-        static let Upload = "https://api.cloudflare.com"
-        //static let Event = "https://eventapi.fantoo.co.kr"
-        static let Event = "http://193.122.112.32:3000"
-        static let EventVote = "https://fevent.fantoo.co.kr/vote"
-        static let ClubPersonalInfo = "https://fevent.fantoo.co.kr/document/club-policy"
+        #if PROD
+            static let Api = "https://dolbwa.duckdns.org"
+//            static let Login = "https://fauth-web.fantoo.co.kr"
+//            static let Api = "https://fapi.fantoo.co.kr"
+//            static let Trans = "http://ntrans.fantoo.co.kr:5000"
+//            static let Upload = "https://api.cloudflare.com"
+//            static let Chat = "http://146.56.160.93:1145"
+//            static let Minute2 = "https://fapp-api.fantoo.co.kr"
+//            static let Event = "https://fevent.fantoo.co.kr"
+//            static let EventVote = Event + "/vote"
+//            static let EventList = Event + "/event"
+//            static let ClubPersonalInfo = Event + "/document/club-policy"
+//            static let Terms = "https://fauth.fantoo.co.kr"
+        #else
+            static let Api = "https://dolbwa.duckdns.org" // url을 prod,dev 용 두 개 만들어서 관리해야 됨
+//            static let Login = "https://fauth-web-dev.fantoo.co.kr"
+//            static let Api = "https://fapi-dev.fantoo.co.kr"
+//            static let Trans = "http://ntrans.fantoo.co.kr:5000"
+//            static let Upload = "https://api.cloudflare.com"
+//            static let Chat = "http://146.56.160.93:1145"
+//            static let Minute2 = "https://fapp-dev-api.fantoo.co.kr"
+//            static let Event = "https://fevent-dev.fantoo.co.kr"
+//            static let EventVote = Event + "/vote"
+//            static let EventList = Event + "/event"
+//            static let ClubPersonalInfo = Event + "/document/club-policy"
+//            static let Terms = "https://fauth-dev.fantoo.co.kr"
+        #endif
     }
     
     

@@ -28,7 +28,11 @@ struct SecondEnglishApp: App {
         }
         
         
-        
+        #if PROD
+        print("\n---------------------------\nCurrent Target PROD\n\n")
+        #else
+        print("\n---------------------------\nCurrent Target DEV\n\n")
+        #endif
     }
     
     
