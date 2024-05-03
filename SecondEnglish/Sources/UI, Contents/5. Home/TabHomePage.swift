@@ -16,6 +16,7 @@ struct TabHomePage {
     var tabtype: TabMainType
     var tabs: [TabMain]
     @Binding var moveToTopIndicator: Bool
+    @Binding var isShowEditorView: Bool
     @State private var selectedTab: Int = 0
     
     @State private var myLikeTabHeaderIndex: Int = 0
@@ -38,10 +39,11 @@ struct TabHomePage {
         static let CarouselViewHeight: CGFloat = 300
     }
     
-    init(tabtype: TabMainType, tabs: [TabMain], moveToTopIndicator: Binding<Bool>) {
+    init(tabtype: TabMainType, tabs: [TabMain], moveToTopIndicator: Binding<Bool>, isShowEditorView: Binding<Bool>) {
         self.tabtype = tabtype
         self.tabs = tabs
         self._moveToTopIndicator = moveToTopIndicator
+        self._isShowEditorView = isShowEditorView
     }
 }
 
@@ -174,7 +176,7 @@ extension TabHomePage: View {
                             Task {
                                 
                                 // 로딩을 0.5초 동안 보여줌
-                                await refreshData()
+                                //await refreshData()
                                 
                                 await MainActor.run {
                                     // 카테고리별 진도확인 리스트 조회
@@ -186,9 +188,9 @@ extension TabHomePage: View {
                                         })
                                     }
                                     else if selectedTab == 1 {
-                                        viewModel.requestMyLikeCardList(isSuccess: { success in
+                                        viewModel.requestMyLikeCardList() {
                                             isCurrentlyRefreshing = false
-                                        })
+                                        }
                                     }
                                 }
                             }
@@ -225,9 +227,9 @@ extension TabHomePage: View {
                     })
                 }
                 else if selectedTab == 1 {
-                    viewModel.requestMyLikeCardList(isSuccess: { success in
+                    viewModel.requestMyLikeCardList() {
                         //
-                    })
+                    }
                 }
                 
                 // 카테고리별 진도확인 리스트 조회
@@ -450,8 +452,8 @@ extension TabHomePage: View {
             
             
             Button(action: {
-                // Swipe Tab 으로 이동
-                LandingManager.shared.showSwipePage = true
+                // Main.swift에서 EditorPage() 띄움
+                isShowEditorView = true
             }, label: {
                 Text("글 작성하러 가기")
                     .font(.title5Roboto1622Medium)
@@ -676,9 +678,9 @@ extension TabHomePage: View {
         }
         .onAppear {
             if viewModel.myLikeCardCategoryList.isEmpty {
-                viewModel.requestMyLikeCardList(isSuccess: { success in
+                viewModel.requestMyLikeCardList() {
                     isReadyToShowMyLikeList = true
-                })
+                }
             }
         }
     }
@@ -701,6 +703,7 @@ extension TabHomePage {
             .init(title: "h_home".localized),
             .init(title: "Popular")
         ],
-        moveToTopIndicator: .constant(false)
+        moveToTopIndicator: .constant(false),
+        isShowEditorView: .constant(false)
     )
 }

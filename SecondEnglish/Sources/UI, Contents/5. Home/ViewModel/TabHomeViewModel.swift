@@ -26,17 +26,17 @@ class TabHomeViewModel: ObservableObject {
     
     
     //MARK: - 내가 좋아요한 카드 리스트 조회
-    func requestMyLikeCardList(isSuccess: @escaping(Bool) -> Void) {
+    func requestMyLikeCardList(idDone: @escaping() -> Void) {
         ApiControl.getMyLikeCardList()
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")
                 
                 self.alertMessage = error.message
-                AlertManager().showAlertMessage(message: self.alertMessage) {
-                    self.showAlert = true
-                }
-                isSuccess(false)
+//                AlertManager().showAlertMessage(message: self.alertMessage) {
+//                    self.showAlert = true
+//                }
+                idDone()
             } receiveValue: { value in
                 if value.code == 200 {
                     self.myLikeCardList = value.data?.sentence_list ?? []
@@ -44,13 +44,14 @@ class TabHomeViewModel: ObservableObject {
 //                    printPrettyJSON(keyWord: "idpil myLikeCardList :::\n", from: self.myLikeCardList)
 //                    printPrettyJSON(keyWord: "idpil myLikeCardCategoryList :::\n", from: self.myLikeCardCategoryList)
                     
-                    isSuccess(true)
+                    idDone()
                 }
                 else {
                     self.alertMessage = ErrorHandler.getCommonMessage()
-                    AlertManager().showAlertMessage(message: self.alertMessage) {
-                        self.showAlert = true
-                    }
+//                    AlertManager().showAlertMessage(message: self.alertMessage) {
+//                        self.showAlert = true
+//                    }
+                    idDone()
                 }
             }
             .store(in: &cancellable)

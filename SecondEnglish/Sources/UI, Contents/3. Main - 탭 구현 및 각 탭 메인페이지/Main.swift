@@ -103,7 +103,8 @@ extension Main: View {
                 TabHomePage(
                     tabtype: tabtype_1,
                     tabs: tabs_1,
-                    moveToTopIndicator: $tabStateHandler.moveFirstTabToTop
+                    moveToTopIndicator: $tabStateHandler.moveFirstTabToTop,
+                    isShowEditorView: $isShowEditorView
                 )
                 .tag(bTab.my)
                 

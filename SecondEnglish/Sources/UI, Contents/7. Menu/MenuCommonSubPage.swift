@@ -295,49 +295,53 @@ extension MenuCommonSubPage: View {
     var popularTop10View: some View {
         ScrollView {
             if isReadyToShow {
-                LazyVStack(spacing: 0) {
-                    
-                    if let startDay = viewModel.StringToDate(timeString: viewModel.popularCardTop10Data?.startDay ?? ""),
-                       let endDay = viewModel.StringToDate(timeString: viewModel.popularCardTop10Data?.endDay ?? "") {
-                        Text("\(startDay) ~ \(endDay)")
-                            .font(.buttons1420Medium)
-                            .foregroundColor(.gray300)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .padding(EdgeInsets(top: 20, leading: 0, bottom: 15, trailing: 20))
-                    }
-                    
-                    ForEach(Array((viewModel.popularCardTop10Data?.list ?? []).enumerated()), id: \.offset) { index, item in
+                if (viewModel.popularCardTop10Data?.list.count ?? 0) > 0 {
+                    LazyVStack(spacing: 0) {
                         
-                        ZStack {
-                            MenuSubPageCellFlipPopularView(
-                                item: item,
-                                isDoItemDelete: false
-                            )
+                        if let startDay = viewModel.StringToDate(timeString: viewModel.popularCardTop10Data?.startDay ?? ""),
+                           let endDay = viewModel.StringToDate(timeString: viewModel.popularCardTop10Data?.endDay ?? "") {
+                            Text("\(startDay) ~ \(endDay)")
+                                .font(.buttons1420Medium)
+                                .foregroundColor(.gray300)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding(EdgeInsets(top: 20, leading: 0, bottom: 15, trailing: 20))
+                        }
+                        
+                        ForEach(Array((viewModel.popularCardTop10Data?.list ?? []).enumerated()), id: \.offset) { index, item in
                             
                             ZStack {
-                                Image("top10_bookmark")
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 40) // 높이에 맞춰 비율 유지함(.aspectRatio 다음에 위치해야 됨)
-                                    .foregroundColor(
-                                        Color.primaryDefault
-                                            .opacity((index < 3) ? 1.0 : 0.3)
-                                    )
+                                MenuSubPageCellFlipPopularView(
+                                    item: item,
+                                    isDoItemDelete: false
+                                )
                                 
-                                Text("\(index + 1)")
-                                    .font(.title51622Medium.weight(.bold))
-                                    .foregroundColor(
-                                        (index < 3) ? Color.gray25 : Color.primaryDefault
-                                    )
-                                    .padding(.bottom, 10)
+                                ZStack {
+                                    Image("top10_bookmark")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 40) // 높이에 맞춰 비율 유지함(.aspectRatio 다음에 위치해야 됨)
+                                        .foregroundColor(
+                                            Color.primaryDefault
+                                                .opacity((index < 3) ? 1.0 : 0.3)
+                                        )
+                                    
+                                    Text("\(index + 1)")
+                                        .font(.title51622Medium.weight(.bold))
+                                        .foregroundColor(
+                                            (index < 3) ? Color.gray25 : Color.primaryDefault
+                                        )
+                                        .padding(.bottom, 10)
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                                .padding(.trailing, 10)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                            .padding(.trailing, 10)
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+                            //.fixedSize(horizontal: true, vertical: true)
                         }
-                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-                        //.fixedSize(horizontal: true, vertical: true)
                     }
+                } else {
+                    emptyView
                 }
             }
         }
@@ -349,10 +353,27 @@ extension MenuCommonSubPage: View {
                 .resizable()
                 .frame(width: 200, height: 200)
             
-            Text(type == .Sentence ? "작성한 글이 없습니다." : "차단한 이력이 없습니다.")
-                .font(.title51622Medium)
-                .foregroundColor(.gray800)
-                .padding(.top, 5)
+            Group {
+                switch type {
+                case .Sentence:
+                    Text("작성한 글이 없습니다.")
+                case .PostLike:
+                    Text("좋아요한 이력이 없습니다.")
+                case .GetLike:
+                    Text("좋아요 받은 이력이 없습니다.")
+                case .CardBlock:
+                    Text("차단한 이력이 없습니다.")
+                case .UserBlock:
+                    Text("차단한 이력이 없습니다.")
+                case .PopularTop10Week:
+                    Text("인기 글이 없습니다.")
+                case .PopularTop10Month:
+                    Text("인기 글이 없습니다.")
+                }
+            }
+            .font(.title51622Medium)
+            .foregroundColor(.gray800)
+            .padding(.top, 5)
         }
         .padding(.top, 100)
     }
