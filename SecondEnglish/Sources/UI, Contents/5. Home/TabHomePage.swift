@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct TabHomePage {
     @StateObject var viewModel = TabHomeViewModel.shared
     @StateObject var swipeTabViewModel = SwipeCardViewModel.shared
+    @StateObject var userManager = UserManager.shared
     
     // 상단 탭뷰
     var tabtype: TabMainType
@@ -210,17 +211,17 @@ extension TabHomePage: View {
         }
         .background(Color.bgLightGray50)
         .onAppear {
+            // 앱 실행 후 처음 한 번 만 호출함
             if !viewModel.isFirst {
                 viewModel.isFirst = true
-                
-                // 카테고리별 진도확인 리스트 조회
-                viewModel.requestMyCategoryProgress()
+                if userManager.isLogin {
+                    viewModel.requestMyCategoryProgress()
+                }
             }
         }
-        .onChange(of: UserManager.shared.isLogin) {
-            //fLog("idpil::: UserManager.shared.isLogin : \(UserManager.shared.isLogin)")
-            // 여기 뷰 띄워놓고 로그인뷰를 팝업으로 띄운 다음 로그인 진행을 하기 때문에, 로그인 성공한 경우 데이터 다시 요청
-            if UserManager.shared.isLogin {
+        .onChange(of: userManager.isLogin) {
+            // [홈탭 -> 로그인뷰 띄움 -> 로그인 성공(로그인뷰 닫음)]
+            if userManager.isLogin {
                 if selectedTab == 0 {
                     viewModel.requestMyPostCardList(isSuccess: { success in
                         //
@@ -231,11 +232,16 @@ extension TabHomePage: View {
                         //
                     }
                 }
-                
-                // 카테고리별 진도확인 리스트 조회
                 viewModel.requestMyCategoryProgress()
             }
         }
+        .onChange(of: userManager.isLookAround) {
+            // [홈탭 -> 로그인뷰 띄움 -> 둘러보기 선택(로그인뷰 닫음)]
+            if userManager.isLookAround {
+                viewModel.requestGuestCategoryProgress()
+            }
+        }
+        
     }
     
     var header: some View {

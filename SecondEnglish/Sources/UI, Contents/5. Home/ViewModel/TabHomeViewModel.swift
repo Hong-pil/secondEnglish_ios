@@ -88,7 +88,7 @@ class TabHomeViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - 카테고리별 진도확인 리스트 조회
+    //MARK: - 내 카테고리별 진도확인 리스트 조회
     func requestMyCategoryProgress() {
         ApiControl.getMyCategoryProgress()
             .sink { error in
@@ -106,6 +106,37 @@ class TabHomeViewModel: ObservableObject {
                         
                         //self.myLearningProgressList = self.transformCategoriesKeepingOrder(myProgressList)
                         
+                        
+                        self.myLearningProgressList = self.setMainCategoryIsLike(myProgressList)
+                    }
+                }
+                else {
+                    self.alertMessage = ErrorHandler.getCommonMessage()
+                    AlertManager().showAlertMessage(message: self.alertMessage) {
+                        self.showAlert = true
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    //MARK: - 카테고리별 진도확인 리스트 조회 (게스트용)
+    func requestGuestCategoryProgress() {
+        ApiControl.getGuestCategoryProgress()
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSliderList error : \(error)")
+                
+                self.alertMessage = error.message
+                AlertManager().showAlertMessage(message: self.alertMessage) {
+                    self.showAlert = true
+                }
+                
+            } receiveValue: { value in
+                if value.code == 200 {
+                    if let myProgressList = value.data {
+                        
+                        //self.myLearningProgressList = self.transformCategoriesKeepingOrder(myProgressList)
                         
                         self.myLearningProgressList = self.setMainCategoryIsLike(myProgressList)
                     }

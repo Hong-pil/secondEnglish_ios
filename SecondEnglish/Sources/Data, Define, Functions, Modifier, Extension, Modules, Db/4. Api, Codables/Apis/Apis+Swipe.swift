@@ -11,11 +11,13 @@ import Foundation
 
 
 enum ApisSwipe {
-    case swipeCategory(type2: String)
+    case swipeSubCategory(type2: String)
     case swipeMainCategory
     case swipeList
     case swipeListByCategory(main_category: String, type3_sort_num: Int)
+    case swipeListByCategoryForGuest(main_category: String, type3_sort_num: Int)
     case myCategoryProgress
+    case guestCategoryProgress
     case likeCard(cardIdx: Int, isLike: Int)
     case myLikeCardList
     case myPostCardList
@@ -41,7 +43,7 @@ extension ApisSwipe: TargetType {
     
     var path: String {
         switch self {
-        case .swipeCategory:
+        case .swipeSubCategory:
             return "api/beginner_sentence/category"
         case .swipeMainCategory:
             return "api/beginner_sentence/category/main"
@@ -49,8 +51,12 @@ extension ApisSwipe: TargetType {
             return "api/beginner_sentence/all"
         case .swipeListByCategory:
             return "api/beginner_sentence/all/category"
+        case .swipeListByCategoryForGuest:
+            return "api/beginner_sentence/all/category/guest"
         case .myCategoryProgress:
             return "api/beginner_sentence/category/my/progress"
+        case .guestCategoryProgress:
+            return "api/beginner_sentence/category/guest/progress"
         case .likeCard:
             return "api/card/like"
         case .myLikeCardList:
@@ -83,7 +89,7 @@ extension ApisSwipe: TargetType {
     //moya의 장점 각 메소드가 get 인지 post인지 설정가능
     var method: Moya.Method {
         switch self {
-        case .swipeCategory:
+        case .swipeSubCategory:
             return .get
         case .swipeMainCategory:
             return .get
@@ -91,7 +97,11 @@ extension ApisSwipe: TargetType {
             return .get
         case .swipeListByCategory:
             return .get
+        case .swipeListByCategoryForGuest:
+            return .get
         case .myCategoryProgress:
+            return .get
+        case .guestCategoryProgress:
             return .get
         case .likeCard:
             return .post
@@ -128,7 +138,7 @@ extension ApisSwipe: TargetType {
     
     var task: Task {
         switch self {
-        case .swipeCategory(let type2):
+        case .swipeSubCategory(let type2):
             var params = defaultParams
             
             params["type2"] = type2
@@ -162,10 +172,25 @@ extension ApisSwipe: TargetType {
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)
             
+        case .swipeListByCategoryForGuest(let main_category, let type3_sort_num):
+            var params = defaultParams
+            
+            params["main_category"] = main_category
+            params["type3_sort_num"] = String(type3_sort_num)
+
+            log(params: params)
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+            
         case .myCategoryProgress:
             var params = defaultParams
             
             params["uid"] = UserManager.shared.uid
+
+            log(params: params)
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .guestCategoryProgress:
+            let params = defaultParams
 
             log(params: params)
             return .requestParameters(parameters: params, encoding: URLEncoding.default)

@@ -59,11 +59,10 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
-    
-    static func getSwipeCategory(type2: String) -> AnyPublisher<SwipeCategory, ErrorModel> {
+    static func getSwipeSubCategory(type2: String) -> AnyPublisher<SwipeCategory, ErrorModel> {
         Future<SwipeCategory, ErrorModel> { promise in
             
-            let apis: ApisSwipe = .swipeCategory(type2: type2)
+            let apis: ApisSwipe = .swipeSubCategory(type2: type2)
             
             //call
             let provider = MoyaProvider<ApisSwipe>()
@@ -173,6 +172,7 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
+    // 현재 서브 카테고리의 영문 리스트 조회 (회원용)
     static func getSwipeListByCategory(main_category: String, type3_sort_num: Int, isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<SwipeDataResponse, ErrorModel> {
         Future<SwipeDataResponse, ErrorModel> { promise in
             
@@ -239,6 +239,54 @@ extension ApiControl {
         .eraseToAnyPublisher()
     }
     
+    // 현재 서브 카테고리의 영문 리스트 조회 (게스트용)
+    static func getSwipeListByCategoryForGuest(main_category: String, type3_sort_num: Int) -> AnyPublisher<SwipeDataResponse, ErrorModel> {
+        Future<SwipeDataResponse, ErrorModel> { promise in
+            
+            let apis: ApisSwipe = .swipeListByCategoryForGuest(main_category: main_category, type3_sort_num: type3_sort_num)
+            
+            //call
+            let provider = MoyaProvider<ApisSwipe>()
+            provider.requestPublisher(apis)
+                .sink(receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else { return }
+                    fLog(error)
+                    promise(.failure(ErrorModel(code: "error")))
+                }, receiveValue: { response in
+                    
+                    jsonLog(data: response.data, systemCode: response.statusCode, isLogOn: apis.isResponseLog())
+                    
+                    //error check start --------------------------------------------------------------------------------
+                    if ErrorHandler.checkAuthError(code: response.statusCode) {
+                        return
+                    }
+                    
+                    if response.statusCode != 200 {
+                        let result = try? JSONDecoder().decode(ErrorModel.self, from: response.data)
+                        if result != nil {
+                            promise(.failure(result!))
+                        }
+                        else {
+                            promise(.failure(ErrorModel(code: "error")))
+                        }
+                        
+                        return
+                    }
+                    //error check end --------------------------------------------------------------------------------
+                    
+                    let result = try? JSONDecoder().decode(SwipeDataResponse.self, from: response.data)
+                    if result != nil {
+                        promise(.success(result!))
+                    }
+                    else {
+                        promise(.failure(ErrorModel(code: "error")))
+                    }
+                })
+                .store(in: &canclelables)
+        }
+        .eraseToAnyPublisher()
+    }
+    
     static func getMyCategoryProgress(isExpiredAccessToken: @escaping()->Void={}) -> AnyPublisher<MyLearningProgressResponse, ErrorModel> {
         Future<MyLearningProgressResponse, ErrorModel> { promise in
             
@@ -272,6 +320,53 @@ extension ApiControl {
                     
                     isExpiredAccessToken()
                 }, receiveValue: { response in
+                    jsonLog(data: response.data, systemCode: response.statusCode, isLogOn: apis.isResponseLog())
+                    
+                    //error check start --------------------------------------------------------------------------------
+                    if ErrorHandler.checkAuthError(code: response.statusCode) {
+                        return
+                    }
+                    
+                    if response.statusCode != 200 {
+                        let result = try? JSONDecoder().decode(ErrorModel.self, from: response.data)
+                        if result != nil {
+                            promise(.failure(result!))
+                        }
+                        else {
+                            promise(.failure(ErrorModel(code: "error")))
+                        }
+                        
+                        return
+                    }
+                    //error check end --------------------------------------------------------------------------------
+                    
+                    let result = try? JSONDecoder().decode(MyLearningProgressResponse.self, from: response.data)
+                    if result != nil {
+                        promise(.success(result!))
+                    }
+                    else {
+                        promise(.failure(ErrorModel(code: "error")))
+                    }
+                })
+                .store(in: &canclelables)
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    static func getGuestCategoryProgress() -> AnyPublisher<MyLearningProgressResponse, ErrorModel> {
+        Future<MyLearningProgressResponse, ErrorModel> { promise in
+            
+            let apis: ApisSwipe = .guestCategoryProgress
+            
+            //call
+            let provider = MoyaProvider<ApisSwipe>()
+            provider.requestPublisher(apis)
+                .sink(receiveCompletion: { completion in
+                    guard case let .failure(error) = completion else { return }
+                    fLog(error)
+                    promise(.failure(ErrorModel(code: "error")))
+                }, receiveValue: { response in
+                    
                     jsonLog(data: response.data, systemCode: response.statusCode, isLogOn: apis.isResponseLog())
                     
                     //error check start --------------------------------------------------------------------------------

@@ -167,9 +167,9 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - 카테고리 조회
-    func requestCategory(isInit: Bool, type2: String, isSuccess: @escaping(Bool) -> Void) {
-        ApiControl.getSwipeCategory(type2: type2)
+    //MARK: - 현재 메인 카테고리의 '서브 카테고리 리스트' 가져오기
+    func requestSubCategory(isInit: Bool, type2: String, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getSwipeSubCategory(type2: type2)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
@@ -216,9 +216,53 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     
-    //MARK: - 카테고리별 영어문장 조회
+    //MARK: - 현재 서브 카테고리의 영문 리스트 조회 (회원용)
     func requestSwipeListByCategory(main_category: String, type3_sort_num: Int, sortType: SwipeCardSortType, isSuccess: @escaping(Bool) -> Void) {
         ApiControl.getSwipeListByCategory(main_category: main_category, type3_sort_num: type3_sort_num)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.popupMessage = error.message
+                isSuccess(false)
+            } receiveValue: { value in
+                if value.code == 200 {
+                    //self.swipeList = value.data ?? []
+                    //fLog("idpil::: 쌍따옴표 확인 : \(value.data?.grammar)")
+                    
+                    guard var arr = value.data?.list else { return }
+                    guard let grammar = value.data?.grammar else { return }
+                    //printPrettyJSON(keyWord: "idpil grammar :::\n", from: grammar)
+                    BottomSheetManager.shared.grammarInfo = grammar
+                    
+                    
+                    switch(sortType) {
+                    case .Latest:
+                        arr = arr.reversed()
+                    case .Oldest:
+                        arr = arr
+                    }
+                    
+                    for (index, _) in arr.enumerated() {
+                        arr[index].customId = index + 1
+                    }
+                    //fLog("idpil::: arr : \(arr)")
+                    self.swipeList = arr
+                    self.fixedSwipeList_0 = arr // 처음 한 번만 저장
+                    self.countOfSwipeList = Double(arr.count)
+                    
+                    isSuccess(true)
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    //MARK: - 현재 서브 카테고리의 영문 리스트 조회 (게스트용)
+    func requestSwipeListByCategoryForGuest(main_category: String, type3_sort_num: Int, sortType: SwipeCardSortType, isSuccess: @escaping(Bool) -> Void) {
+        ApiControl.getSwipeListByCategoryForGuest(main_category: main_category, type3_sort_num: type3_sort_num)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSwipeList error : \(error)")

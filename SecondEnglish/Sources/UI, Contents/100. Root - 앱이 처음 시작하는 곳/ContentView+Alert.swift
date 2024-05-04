@@ -73,6 +73,19 @@ struct ContentViewAlert: ViewModifier {
                    popup:
                     CommonPopupView(text: "se_g_post_deleted".localized)
             )
+        // 게스트에게 로그인 유도
+            .showCustomAlert(isPresented: $userManager.showLoginAlert,
+                             type: .Default,
+                             title: "",
+                             message: "se_r_need_login".localized,
+                             detailMessage: "",
+                             buttons: ["c_cancel".localized, "r_login".localized],
+                             onClick: { buttonIndex in
+                if buttonIndex == 1 {
+                    PopupManager.dismissAll()
+                    UserManager.shared.logout()
+                }
+            })
         // Config Alert
         /*
          긴급공지, 업데이트 강제/권장

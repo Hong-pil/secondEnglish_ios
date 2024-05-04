@@ -137,9 +137,9 @@ class LoginViewModel: NSObject ,ObservableObject {
                     isUser(true, (value.userNickname ?? ""))
                 } else {
                     // Error
-                    self.alertTitle = ""
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    self.showAlert = true
+//                    self.alertTitle = ""
+//                    self.alertMessage = ErrorHandler.getCommonMessage()
+//                    self.showAlert = true
                     
                     isUser(false, "")
                 }
@@ -172,6 +172,17 @@ class LoginViewModel: NSObject ,ObservableObject {
                     let account = loginId
                     let access_token = value.access_token ?? ""
                     let refresh_token = value.refresh_token ?? ""
+                    
+                    switch loginType {
+                    case .Google:
+                        UserManager.shared.loginUserType = "Google"
+                    case .Apple:
+                        UserManager.shared.loginUserType = "Apple"
+                    case .KakaoTalk:
+                        UserManager.shared.loginUserType = "Kakaotalk"
+                    default:
+                        fLog("")
+                    }
                     
                     
                     // Success

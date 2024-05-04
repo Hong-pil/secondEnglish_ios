@@ -450,40 +450,46 @@ extension TabSwipeCardPage: View {
             }
         }
         .onAppear {
+            // 앱 실행 후 처음 한 번 만 호출함
             if !viewModel.isFirst {
                 viewModel.isFirst = true
                 
+                // 메인 카테고리 리스트 가져오기
                 viewModel.requestMainCategory() { isSuccess in
                     if isSuccess {
                         if viewModel.mainCategoryList.count > 0 {
                             
+                            // 메인 카테고리 첫 번째 아이템을 '현재 메인 카테고리'로 설정
                             if self.selectedMainCategoryItem.isEmpty {
                                 self.selectedMainCategoryItem = viewModel.mainCategoryList[0]
                             }
                             
-                            viewModel.requestCategory(
+                            // 현재 메인 카테고리의 '서브 카테고리 리스트' 가져오기
+                            viewModel.requestSubCategory(
                                 isInit: true,
                                 type2: self.selectedMainCategoryItem
                             ) { isSuccess in
                                 if isSuccess {
                                     
-                                    // 카테고리별 영어문장 데이터
                                     if viewModel.subCategoryList.count > 0 {
-                                        // 카테고리별 영어문장 조회
-                                        viewModel.requestSwipeListByCategory(
-                                            main_category: self.selectedMainCategoryItem,
-                                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
-                                            sortType: .Latest,
-                                            isSuccess: { success in
-                                                //
-                                            }
-                                        )
+                                        
+                                        if userManager.isLogin {
+                                            callMySentenceList(
+                                                main_category: self.selectedMainCategoryItem,
+                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
+                                            )
+                                        }
+                                        else {
+                                            callGuestSentenceList(
+                                                main_category: self.selectedMainCategoryItem,
+                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
+                                            )
+                                        }
                                     }
                                 }
                             }
                          
-                            
-                            // '알고있음/학습중' 관련 데이터 초기 설정
+                            // DoneView() 관련 데이터 초기화 ('알고있음/학습중')
                             viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
                                 
                                 viewModel.setInitKnowCardList()
@@ -499,6 +505,12 @@ extension TabSwipeCardPage: View {
                 //stopTimer()
                 stopAutoMode()
                 isAutoPlay = false
+            }
+        }
+        .onChange(of: userManager.isLookAround) {
+            // [Swipe탭 -> 로그인뷰 띄움 -> 둘러보기 선택(로그인뷰 닫음)]
+            if userManager.isLookAround {
+                
             }
         }
         .onChange(of: isAutoModeStop) {
@@ -672,7 +684,7 @@ extension TabSwipeCardPage: View {
             // DoneView 보이고 있으면 숨김
             self.hideDoneView()
             
-            viewModel.requestCategory(
+            viewModel.requestSubCategory(
                 isInit: true,
                 type2: self.selectedMainCategoryItem
             ) { isSuccess in
@@ -680,17 +692,14 @@ extension TabSwipeCardPage: View {
                     
                     // 카테고리별 영어문장 데이터
                     if viewModel.subCategoryList.count > 0 {
-                        // 카테고리별 영어문장 조회
-                        viewModel.requestSwipeListByCategory(
+                        callMySentenceList(
                             main_category: self.selectedMainCategoryItem,
-                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
-                            sortType: .Latest,
-                            isSuccess: { success in
-                                viewModel.moveCategoryTab = true
-                                
-                                viewModel.isNotificationCenter = false // 초기화
-                            }
-                        )
+                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
+                        ) {
+                            viewModel.moveCategoryTab = true
+                            
+                            viewModel.isNotificationCenter = false // 초기화
+                        }
                     }
                 }
             }
@@ -1051,39 +1060,26 @@ extension TabSwipeCardPage: View {
                                             viewModel.categoryTabIndex = index
                                             
                                             scrollToElement(with: proxy)
-    //                                        withAnimation {
-    //                                            proxy.scrollTo(index, anchor: .top)
-    //                                        }
                                             
-                                            viewModel.requestSwipeListByCategory(
+                                            
+                                            callSentenceList(
                                                 main_category: self.selectedMainCategoryItem,
-                                                type3_sort_num: element.type3_sort_num ?? 0,
-                                                sortType: .Latest,
-                                                isSuccess: { success in
+                                                type3_sort_num: element.type3_sort_num ?? 0
+                                            ) {
+                                                if isAutoPlay {
+                                                    /// isRootViewFlipped : 카드 뒤집는 변수
+                                                    ///
+                                                    /// 만약 '영어 카드'가 보이고 있는 상태에서 카테고리 탭 누른 경우, 한글 카드가 보여야 하기 때문에 isRootViewFlipped 값을 한글이 보이게 false로 만들어줘야 됨.
+                                                    isRootViewFlipped = false
                                                     
-                                                    if isAutoPlay {
-                                                        /// isRootViewFlipped : 카드 뒤집는 변수
-                                                        ///
-                                                        /// 만약 '영어 카드'가 보이고 있는 상태에서 카테고리 탭 누른 경우, 한글 카드가 보여야 하기 때문에 isRootViewFlipped 값을 한글이 보이게 false로 만들어줘야 됨.
-                                                        isRootViewFlipped = false
-                                                        
-                                                        if speechManager.isSpeaking {
-                                                            speechManager.stopSpeaking()
-                                                        }
-                                                        
-                                                        isForceSwipe = true
+                                                    if speechManager.isSpeaking {
+                                                        speechManager.stopSpeaking()
                                                     }
                                                     
+                                                    isForceSwipe = true
                                                 }
-                                            )
+                                            }
                                             
-            //                                    scrollToTopAimated.toggle()
-            //                                    moveToTopIndicator.toggle()
-            //                                    callRemoteData()
-                                            
-                                            
-                                            
-                                            //viewModel.resetSwipeList(category: element)
                                         }
                                     }
                                     .onChange(of: viewModel.moveCategoryTab) {
@@ -1097,13 +1093,9 @@ extension TabSwipeCardPage: View {
                                             
                                             //viewModel.resetSwipeList(category: viewModel.topTabBarList[clickedSubTabIndex])
                                             
-                                            
-                                            viewModel.requestSwipeListByCategory(
+                                            callMySentenceList(
                                                 main_category: self.selectedMainCategoryItem,
-                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
-                                                sortType: .Latest,
-                                                isSuccess: { success in
-                                                }
+                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
                                             )
                                             
                                             viewModel.moveCategoryTab = false // 초기화
@@ -1151,17 +1143,30 @@ extension TabSwipeCardPage: View {
                     .padding(.bottom, (index == viewModel.mainCategoryList.count-1) ? 20 : 0)
                     .padding(.leading, 10)
                     .onTapGesture {
-                        self.selectedMainCategoryItem = element
-                        
-                        // '알고있음/학습중' 관련 데이터 초기 설정
-                        viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                        if userManager.isLogin {
+                            self.selectedMainCategoryItem = element
                             
-                            viewModel.setInitKnowCardList()
+                            // '알고있음/학습중' 관련 데이터 초기 설정
+                            viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                                
+                                viewModel.setInitKnowCardList()
+                            }
+                            
+                            self.isShowMainCategoryListView.toggle()
+                            withAnimation {
+                                self.isShowMainCategoryButtonAnimation.toggle()
+                            }
                         }
-                        
-                        self.isShowMainCategoryListView.toggle()
-                        withAnimation {
-                            self.isShowMainCategoryButtonAnimation.toggle()
+                        else {
+                            
+                            if isShowMainCategoryListView {
+                                isShowMainCategoryListView = false
+                                withAnimation {
+                                    isShowMainCategoryButtonAnimation = false
+                                }
+                            }
+                            
+                            userManager.showLoginAlert = true
                         }
                     }
                 }
@@ -1203,12 +1208,9 @@ extension TabSwipeCardPage: View {
                 
                 // 카테고리별 영어문장 데이터
                 if viewModel.subCategoryList.count > 0 {
-                    // 카테고리별 영어문장 조회
-                    viewModel.requestSwipeListByCategory(
+                    callMySentenceList(
                         main_category: self.selectedMainCategoryItem,
-                        type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
-                        sortType: .Latest,
-                        isSuccess: { _ in }
+                        type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
                     )
                 }
                 
@@ -1282,7 +1284,7 @@ extension TabSwipeCardPage {
     
     
     //Calucate percentage based on given values
-    private func calculatePercentage(value:Double, percentageVal:Double)->Double{
+    private func calculatePercentage(value:Double, percentageVal:Double) -> Double {
         // 300의 4는 몇 %?  == (100 * 4) / 300
         let val = 100.0 * value
         return val / percentageVal
@@ -1370,7 +1372,7 @@ extension TabSwipeCardPage {
                         self.selectedMainCategoryItem = viewModel.mainCategoryList[0]
                     }
                     
-                    viewModel.requestCategory(
+                    viewModel.requestSubCategory(
                         isInit: false,
                         type2: self.selectedMainCategoryItem
                     ) { isSuccess in
@@ -1378,17 +1380,12 @@ extension TabSwipeCardPage {
                             
                             // 카테고리별 영어문장 데이터
                             if viewModel.subCategoryList.count > 0 {
-                                // 카테고리별 영어문장 조회
-                                viewModel.requestSwipeListByCategory(
+                                callMySentenceList(
                                     main_category: self.selectedMainCategoryItem,
-                                    type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0,
-                                    sortType: .Latest,
-                                    isSuccess: { success in
-                                        if success {
-                                            isDone()
-                                        }
-                                    }
-                                )
+                                    type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
+                                ) {
+                                    isDone()
+                                }
                             }
                         }
                     }
@@ -1477,6 +1474,50 @@ extension TabSwipeCardPage {
         if isShowLastCategoryLoadView {
             isShowDoneView = false
             isShowLastCategoryLoadView = false
+        }
+    }
+    
+    // 현재 서브 카테고리의 영문 리스트 조회 (회원용)
+    private func callMySentenceList(main_category: String, type3_sort_num: Int, isDone: @escaping() -> Void = {}) {
+        viewModel.requestSwipeListByCategory(
+            main_category: main_category,
+            type3_sort_num: type3_sort_num,
+            sortType: .Latest,
+            isSuccess: { success in
+                isDone()
+            }
+        )
+    }
+    
+    // 현재 서브 카테고리의 영문 리스트 조회 (게스트용)
+    private func callGuestSentenceList(main_category: String, type3_sort_num: Int, isDone: @escaping() -> Void = {}) {
+        viewModel.requestSwipeListByCategoryForGuest(
+            main_category: main_category,
+            type3_sort_num: type3_sort_num,
+            sortType: .Latest,
+            isSuccess: { success in
+                isDone()
+            }
+        )
+    }
+    
+    // 현재 서브 카테고리의 영문 리스트 조회 (회원용/게스트용 구분)
+    private func callSentenceList(main_category: String, type3_sort_num: Int, isDone: @escaping() -> Void = {}) {
+        if userManager.isLogin {
+            callMySentenceList(
+                main_category: main_category,
+                type3_sort_num: type3_sort_num
+            ) {
+                isDone()
+            }
+        }
+        else {
+            callGuestSentenceList(
+                main_category: main_category,
+                type3_sort_num: type3_sort_num
+            ) {
+                isDone()
+            }
         }
     }
 }

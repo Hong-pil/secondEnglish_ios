@@ -72,7 +72,7 @@ struct LoginPage : View {
                     }
                     .padding(.bottom, sizeInfo.padding10)
                     
-                    LoginButtonView(iconName: "btn_logo_KakaoTalk", snsName: "카카오톡으", buttonType: .kakaotalk) {
+                    LoginButtonView(iconName: "btn_logo_Kakaotalk", snsName: "카카오톡으", buttonType: .kakaotalk) {
                         viewModel.loginWithKakao()
                     }
                     .padding(.bottom, sizeInfo.padding10)
@@ -93,19 +93,19 @@ struct LoginPage : View {
                     
                     Spacer()
                     
-//                    Button {
-//                        userManager.isLogin = false
-//                        userManager.isLogout = false
-//                        userManager.isLookAround = true
-//                        self.presentationMode.wrappedValue.dismiss()
-//                    } label: {
-//                        Text("d_look_around".localized)
-//                            .font(Font.body21420Regular)
-//                            .foregroundColor(Color.gray870)
-//                            .frame(height: sizeInfo.dismissHeight, alignment: .center)
-//                            .padding(.horizontal, sizeInfo.padding10)
-//                            .padding(.bottom, sizeInfo.bottomPadding)
-//                    }
+                    Button {
+                        userManager.isLogin = false
+                        userManager.isLogout = false
+                        userManager.isLookAround = true
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("d_look_around".localized)
+                            .font(Font.body21420Regular)
+                            .foregroundColor(Color.gray870)
+                            .frame(height: sizeInfo.dismissHeight, alignment: .center)
+                            .padding(.horizontal, sizeInfo.padding10)
+                            .padding(.bottom, sizeInfo.bottomPadding)
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.bgLightGray50)

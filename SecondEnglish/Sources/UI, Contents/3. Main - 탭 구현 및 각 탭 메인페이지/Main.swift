@@ -156,8 +156,13 @@ extension Main: View {
                     .buttonStyle(PlainButtonStyle()) // 버튼 깜빡임 방지
                     
                     Button {
-                        isShowEditorView = true
-                        isAutoModeStop = true
+                        if userManager.isLogin {
+                            isShowEditorView = true
+                            isAutoModeStop = true
+                        } else {
+                            userManager.showLoginAlert = true
+                        }
+                        
                     } label: {
                         Image(systemName: "plus")
                             .renderingMode(.template)
