@@ -31,6 +31,7 @@ enum ApisSwipe {
     case knowCard(targetCardMainCategory: String, targetCardSubCategory: String, targetCardIdx: Int)
     case readKnowCard(targetCardMainCategory: String)
     case readMyAllCategories(mainCategory: String)
+    case readGuestAllCategories(mainCategory: String)
 }
 
 extension ApisSwipe: TargetType {
@@ -83,6 +84,8 @@ extension ApisSwipe: TargetType {
             return "api/card/know/read"
         case .readMyAllCategories:
             return "api/my/category/all/read"
+        case .readGuestAllCategories:
+            return "api/guest/category/all/read"
         }
     }
     
@@ -128,6 +131,8 @@ extension ApisSwipe: TargetType {
         case .readKnowCard:
             return .get
         case .readMyAllCategories:
+            return .get
+        case .readGuestAllCategories:
             return .get
         }
     }
@@ -175,6 +180,7 @@ extension ApisSwipe: TargetType {
         case .swipeListByCategoryForGuest(let main_category, let type3_sort_num):
             var params = defaultParams
             
+            params["uid"] = DefineKey.admin // 순간영어 관리자 uid
             params["main_category"] = main_category
             params["type3_sort_num"] = String(type3_sort_num)
 
@@ -304,6 +310,14 @@ extension ApisSwipe: TargetType {
         case .readMyAllCategories(let mainCategory):
             var params = defaultParams
             params["uid"] = UserManager.shared.uid
+            params["mainCategory"] = mainCategory
+            
+            log(params: params)
+            return.requestParameters(parameters: params, encoding: URLEncoding.default)
+            
+        case .readGuestAllCategories(let mainCategory):
+            var params = defaultParams
+            params["uid"] = DefineKey.admin // 순간영어 관리자 uid
             params["mainCategory"] = mainCategory
             
             log(params: params)

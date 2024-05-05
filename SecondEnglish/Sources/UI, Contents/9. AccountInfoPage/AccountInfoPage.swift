@@ -84,13 +84,11 @@ extension AccountInfoPage: View {
                          detailMessage: "", buttons: ["a_no".localized, "h_confirm".localized],
                          onClick: { buttonIndex in
             if buttonIndex == 1 {
-                goBackMainPage = false
-                
-//                viewModel.requestLogout() { isSuccess in
-//                    if isSuccess {
-//                        logout()
-//                    }
-//                }
+                viewModel.requestLogout() { isSuccess in
+                    if isSuccess {
+                        logout()
+                    }
+                }
             }
         })
         .fullScreenCover(isPresented: $showServiceWithdrawPage) {

@@ -82,8 +82,7 @@ struct ContentViewAlert: ViewModifier {
                              buttons: ["c_cancel".localized, "r_login".localized],
                              onClick: { buttonIndex in
                 if buttonIndex == 1 {
-                    PopupManager.dismissAll()
-                    UserManager.shared.logout()
+                    userManager.showLoginView = true
                 }
             })
         // Config Alert

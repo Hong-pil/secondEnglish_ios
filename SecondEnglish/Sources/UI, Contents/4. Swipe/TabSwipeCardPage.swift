@@ -34,6 +34,7 @@ struct TabSwipeCardPage {
     
     
     // 자동 모드
+    @State private var isHideAutoPlay: Bool = false
     @State private var isAutoPlay: Bool = false
     @State private var isTopViewSwipe: Bool = false
     @Environment(\.scenePhase) var scenePhase
@@ -219,7 +220,7 @@ extension TabSwipeCardPage: View {
                     ZStack {
                         GeometryReader { geometry in
                             
-                            // DoneView() fullScreenCover에서 아무 버튼도 클릭하지 않고 닫기를 눌러서 내린 경우,
+                            // DoneView fullScreenCover에서 아무 버튼도 클릭하지 않고 닫기를 눌러서 내린 경우,
                             // 마지막 카테고리를 다시 시작할 수 있음
                             if isShowLastCategoryLoadView {
                                 lastCategoryLoadView
@@ -271,6 +272,12 @@ extension TabSwipeCardPage: View {
                                                 },
                                                 isTapLikeBtn: { cardIdx, isLike in
                                                     //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
+                                                    
+                                                    // 게스트 예외처리
+                                                    if !userManager.isLogin {
+                                                        userManager.showLoginAlert = true
+                                                        return
+                                                    }
                                                     
                                                     // 좋아요 취소 요청 -> false -> 0
                                                     // 좋아요 요청 -> true -> 1
@@ -473,26 +480,27 @@ extension TabSwipeCardPage: View {
                                     
                                     if viewModel.subCategoryList.count > 0 {
                                         
-                                        if userManager.isLogin {
-                                            callMySentenceList(
-                                                main_category: self.selectedMainCategoryItem,
-                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
-                                            )
-                                        }
-                                        else {
-                                            callGuestSentenceList(
-                                                main_category: self.selectedMainCategoryItem,
-                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
-                                            )
-                                        }
+                                        callSentenceList(
+                                            main_category: self.selectedMainCategoryItem,
+                                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
+                                        )
+                                        
                                     }
                                 }
                             }
                          
-                            // DoneView() 관련 데이터 초기화 ('알고있음/학습중')
-                            viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
-                                
-                                viewModel.setInitKnowCardList()
+                            // DoneView 관련 데이터 초기화 ('알고있음/학습중')
+                            if userManager.isLogin {
+                                viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                                    
+                                    viewModel.setInitKnowCardList()
+                                }
+                            }
+                            else {
+                                viewModel.readGuestAllCategories(mainCategory: self.selectedMainCategoryItem) {
+                                    
+                                    viewModel.setInitKnowCardList()
+                                }
                             }
                             
                         }
@@ -568,14 +576,27 @@ extension TabSwipeCardPage: View {
                 )
                 //fLog("idpil::: curPercent : \(curPercent)")
             }
+            
         }
         .onChange(of: bottomSheetManager.pressedCardMoreType) {
+            
+            // 게스트 예외처리
+            if !userManager.isLogin && bottomSheetManager.pressedCardMoreType != .None {
+                userManager.showLoginAlert = true
+                
+                // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
+                bottomSheetManager.pressedCardMoreType = .None
+                
+                return
+            }
+            
+            
             /// 관리자 작성글 : 신고하기 / 이 글 차단
             /// 내가 작성한 글 : 수정하기 / 삭제하기
             /// 그 외 모두 : 신고하기 / 이 글 차단하기 / 사용자 차단하기
             switch bottomSheetManager.pressedCardMoreType {
             case .Report: // 신고하기
-                // 한 번 호출했으면 더 이상 가져오지 않음
+                // 한 번 호출했으면 더 이상 API 호출해서 데이터 가져오지 않음
                 if DefineBottomSheet.reportListItems.count > 0 {
                     bottomSheetManager.show.swipeCardReport = true
                 }
@@ -692,6 +713,8 @@ extension TabSwipeCardPage: View {
                     
                     // 카테고리별 영어문장 데이터
                     if viewModel.subCategoryList.count > 0 {
+                        // 게스트가 첫 번째 메인 카테고리 이외는 선택할 수 없기 때문에,
+                        // 게스트 예외처리할 필요 없음
                         callMySentenceList(
                             main_category: self.selectedMainCategoryItem,
                             type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
@@ -928,12 +951,20 @@ extension TabSwipeCardPage: View {
                         }
                     }
                     
-                }, reload: {
+                    isHideAutoPlay = false // 자동모드 아이콘 보임
+                },
+                reload: {
                     viewModel.setInitKnowCardList()
                     
                     viewModel.categoryTabIndex = 0
                     viewModel.moveCategoryTab = true // .onChange(of: viewModel.moveCategoryTab) {} 에서 첫 번째 서브 카테고리 리스트 호출 됨.
-                    
+                },
+                isShowLoginView: {
+                    // 딜레리 안 주면 로그인뷰 안 뜸
+                    // 이유가 뭐지?
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        userManager.showLoginView = true
+                    }
                 }
             )
         }
@@ -985,6 +1016,7 @@ extension TabSwipeCardPage: View {
                     .padding(7).background(Color.primaryDefault) // 클릭 잘 되도록
                     .padding(.trailing, 20)
             })
+            .opacity(isHideAutoPlay ? 0.0 : 1.0)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -1093,10 +1125,14 @@ extension TabSwipeCardPage: View {
                                             
                                             //viewModel.resetSwipeList(category: viewModel.topTabBarList[clickedSubTabIndex])
                                             
-                                            callMySentenceList(
+                                            
+                                            callSentenceList(
                                                 main_category: self.selectedMainCategoryItem,
                                                 type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
-                                            )
+                                            ) {
+                                                isHideAutoPlay = false // 자동모드 아이콘 보임
+                                            }
+                                            
                                             
                                             viewModel.moveCategoryTab = false // 초기화
                                         }
@@ -1166,7 +1202,9 @@ extension TabSwipeCardPage: View {
                                 }
                             }
                             
-                            userManager.showLoginAlert = true
+                            if index != 0 {
+                                userManager.showLoginAlert = true
+                            }
                         }
                     }
                 }
@@ -1208,10 +1246,12 @@ extension TabSwipeCardPage: View {
                 
                 // 카테고리별 영어문장 데이터
                 if viewModel.subCategoryList.count > 0 {
-                    callMySentenceList(
+                    callSentenceList(
                         main_category: self.selectedMainCategoryItem,
                         type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
-                    )
+                    ) {
+                        isHideAutoPlay = false // 자동모드 아이콘 보임
+                    }
                 }
                 
             }, label: {
@@ -1223,7 +1263,7 @@ extension TabSwipeCardPage: View {
             
             if viewModel.subCategoryList.count > 0 {
                 let curCategory = viewModel.subCategoryList[viewModel.categoryTabIndex].type3 ?? ""
-                Text("\"\(curCategory)\" 다시 시작하기")
+                Text("\"\(curCategory)\" \("d_doneview_restart".localized)")
                     .font(.body21420Regular)
                     .foregroundColor(.gray600)
             }
@@ -1294,6 +1334,12 @@ extension TabSwipeCardPage {
         guard let index = viewModel.swipeList.firstIndex(of: card) else { return }
         
         viewModel.swipeList.remove(at: index)
+        
+        // [자동모드 활성 유무 계산]
+        // 이 위치에서 실행하는 이유는
+        // 자동모드 아이콘이 마지막 서브 카테고리에서 카드 데이터 받아올 때 '잠시 없어지는 현상'을 방지하기 위함
+        // 잠시 없어지는 현상의 원인은 마지막 서브 카테고리에서 카드 데이터를 받기 직전에 viewModel.swipeList.count가 0이기 때문.
+        calIsHideAutoPlay()
         
         isDone(true)
     }
@@ -1380,7 +1426,7 @@ extension TabSwipeCardPage {
                             
                             // 카테고리별 영어문장 데이터
                             if viewModel.subCategoryList.count > 0 {
-                                callMySentenceList(
+                                callSentenceList(
                                     main_category: self.selectedMainCategoryItem,
                                     type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
                                 ) {
@@ -1518,6 +1564,23 @@ extension TabSwipeCardPage {
             ) {
                 isDone()
             }
+        }
+    }
+    
+    private func calIsHideAutoPlay() {
+        /// 자동모드 실행 안 되는 조건
+        /// 1.현재 위치가 마지막 서브 카테고리이고, 모든 카드를 넘긴 경우
+        /// 2. 현재 위치가 마지막 서브 카테고리이고, 남은 카드 개수가 1개인 경우
+        if (
+            // 현재 위치가 마지막 서브 카테고리
+            (viewModel.categoryTabIndex == viewModel.subCategoryList.count-1)
+        &&
+            // '모든 카드를 넘긴 경우' 또는 ' 남은 카드 개수가 1개인 경우'
+            (viewModel.swipeList.count <= 1)
+        ) {
+            isHideAutoPlay = true
+        } else {
+            isHideAutoPlay = false
         }
     }
 }

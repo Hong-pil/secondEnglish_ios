@@ -11,12 +11,14 @@ import SPConfetti
 
 struct DoneView {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @StateObject var userManager = UserManager.shared
     
     let list: [KnowCardLocalInfo]
     let isLastMainCategory: Bool
     let cancle: () -> Void
     let nextStep: () -> Void
     let reload: () -> Void
+    let isShowLoginView: () -> Void
     
     @State private var progressPercent_0: CGFloat = 0.0
     @State private var progressPercent_1: CGFloat = 0.0
@@ -107,6 +109,7 @@ struct DoneView {
     @State private var progressKnowWidth_19: CGFloat = 0.0
     
     @State private var isShowEffectView: Bool = false
+    @State private var showLoginAlert: Bool = false
     
     
     private struct sizeInfo {
@@ -193,6 +196,12 @@ extension DoneView: View {
                 VStack(spacing: 15) {
                     if !isLastMainCategory {
                         Button(action: {
+                            // 게스트 예외처리
+                            if !userManager.isLogin {
+                                showLoginAlert = true
+                                return
+                            }
+                            
                             nextStep()
                             isShowEffectView = false
                             presentationMode.wrappedValue.dismiss()
@@ -207,6 +216,7 @@ extension DoneView: View {
                     }
                     
                     Button(action: {
+                        
                         reload()
                         isShowEffectView = false
                         presentationMode.wrappedValue.dismiss()
@@ -546,6 +556,25 @@ extension DoneView: View {
                   particles: [.triangle, .arc],
                   duration: 1.5)
         .confettiParticle(\.velocity, 600) // 폭죽 내리는 속도 조절
+        /**
+         * [게스트에게 로그인 유도]
+         * 여기가 fullScreenCover로 올라온 화면이기 때문에 ContentViewAlert에서 설정한 .showCustomAlert()를 이용하는 경우에는 fullScreenCover 가려서 보이지 않는 문제가 있다.
+         * 그래서 여기서 .showCustomAlert()를 선언해서 사용해야 됨.
+         */
+        .showCustomAlert(isPresented: $showLoginAlert,
+                         type: .Default,
+                         title: "",
+                         message: "se_r_need_login".localized,
+                         detailMessage: "",
+                         buttons: ["c_cancel".localized, "r_login".localized],
+                         onClick: { buttonIndex in
+            if buttonIndex == 1 {
+                
+                isShowLoginView()
+                isShowEffectView = false
+                presentationMode.wrappedValue.dismiss()
+            }
+        })
         
     }
     

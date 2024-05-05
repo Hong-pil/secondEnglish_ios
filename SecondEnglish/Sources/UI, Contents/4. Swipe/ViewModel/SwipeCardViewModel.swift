@@ -529,7 +529,7 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    //MARK: - 메인 카테고리 기준 내 모든 문장 목록
+    //MARK: - 메인 카테고리 기준 내 모든 문장 목록 (회원용)
     func readMyAllCategories(mainCategory: String, isDone: @escaping() -> Void) {
         ApiControl.readMyAllCategories(mainCategory: mainCategory)
             .sink { error in
@@ -540,7 +540,6 @@ class SwipeCardViewModel: ObservableObject {
                 isDone()
             } receiveValue: { value in
                 if value.code == 200 {
-                    
                     guard let arr = value.data else {
                         isDone()
                         return
@@ -559,7 +558,34 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
-    
+    //MARK: - 메인 카테고리 기준 내 모든 문장 목록 (게스트용)
+    func readGuestAllCategories(mainCategory: String, isDone: @escaping() -> Void) {
+        ApiControl.readGuestAllCategories(mainCategory: mainCategory)
+            .sink { error in
+                guard case let .failure(error) = error else { return }
+                fLog("requestSwipeList error : \(error)")
+                
+                self.popupMessage = error.message
+                isDone()
+            } receiveValue: { value in
+                if value.code == 200 {
+                    guard let arr = value.data else {
+                        isDone()
+                        return
+                    }
+                    
+                    self.allMyMainCategoryList = self.convertToDoneViewModel(from: arr)
+                    //fLog("idpil::: allMyMainCategoryList : \(self.allMyMainCategoryList)")
+                    
+                    isDone()
+                }
+                else {
+                    self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
+                }
+            }
+            .store(in: &cancellable)
+    }
     
     
     
@@ -698,6 +724,7 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     func addKnowCardList(_ card: SwipeDataList, type swipeType: CardSwipeType, isDone: ()->Void) {
+        
         var swipeCount: Int = 0
         var knowCount: Int = 0
         
@@ -734,7 +761,7 @@ class SwipeCardViewModel: ObservableObject {
                 }
             }
         }
-        //fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+        fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
         
         
         

@@ -38,7 +38,7 @@ struct Main {
     @State var navigationBarColor: Color = Color.stateActivePrimaryDefault
     @State var isAutoModeStop: Bool = false
     
-    // Here you monitor stack for views
+    // @State, @Binding 이용해서 RootView로 돌아오기
     @State private var goBackMainPage = false
     
     private struct sizeInfo {
