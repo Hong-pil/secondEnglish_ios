@@ -22,6 +22,8 @@ struct MenuPage {
     @State private var isShowPopularCardTop10Page_Month: Bool = false
     @State private var isShowAlarmPage = false
     
+    @Binding var goBackMainPage: Bool
+    
     private struct sizeInfo {
         static let listSpacing: CGFloat = 12.0
     }
@@ -152,7 +154,7 @@ extension MenuPage: View {
         }
         .background(Color.bgLightGray50)
         .navigationDestination(isPresented: $isShowSettingPage) {
-            SettingPage(showLoginPage: $isShowSettingPage)
+            SettingPage(goBackMainPage: $goBackMainPage)
         }
         .navigationDestination(isPresented: $isShowAlarmPage) {
             AlertPage()
@@ -204,5 +206,5 @@ extension MenuPage: View {
 }
 
 #Preview {
-    MenuPage()
+    MenuPage(goBackMainPage: .constant(false))
 }

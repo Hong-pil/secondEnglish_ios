@@ -47,7 +47,7 @@ struct SettingPage: View {
     
     @State private var checkMap:[String:Any] = [:]
     
-    @Binding var showLoginPage: Bool
+    @Binding var goBackMainPage: Bool
     
     
     private struct sizeInfo {
@@ -201,7 +201,7 @@ struct SettingPage: View {
         }
         //.background(Color.bgLightGray50)
         .navigationDestination(isPresented: $showAccontPage) {
-            AccountInfoPage(showLoginPage: $showLoginPage)
+            AccountInfoPage(goBackMainPage: $goBackMainPage)
         }
         .showCustomAlert(isPresented: $showingAlert,
                          type: .Default,

@@ -26,7 +26,7 @@ struct AccountInfoPage {
     @State private var showAgreeAlert: Bool = false
     @State private var withdrawState: Bool = false
     
-    @Binding var showLoginPage: Bool
+    @Binding var goBackMainPage: Bool
 }
 
 extension AccountInfoPage: View {
@@ -84,11 +84,13 @@ extension AccountInfoPage: View {
                          detailMessage: "", buttons: ["a_no".localized, "h_confirm".localized],
                          onClick: { buttonIndex in
             if buttonIndex == 1 {
-                viewModel.requestLogout() { isSuccess in
-                    if isSuccess {
-                        logout()
-                    }
-                }
+                goBackMainPage = false
+                
+//                viewModel.requestLogout() { isSuccess in
+//                    if isSuccess {
+//                        logout()
+//                    }
+//                }
             }
         })
         .fullScreenCover(isPresented: $showServiceWithdrawPage) {
@@ -131,9 +133,10 @@ extension AccountInfoPage: View {
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             
             PopupManager.dismissLast()
-            showLoginPage = true
-            //presentationMode.wrappedValue.dismiss()
             UserManager.shared.logout()
+            
+            goBackMainPage = false
+            //presentationMode.wrappedValue.dismiss()
         }
     }
     
@@ -149,5 +152,5 @@ extension AccountInfoPage: View {
 }
 
 #Preview {
-    AccountInfoPage(showLoginPage: .constant(false))
+    AccountInfoPage(goBackMainPage: .constant(false))
 }

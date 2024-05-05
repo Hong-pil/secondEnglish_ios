@@ -38,6 +38,9 @@ struct Main {
     @State var navigationBarColor: Color = Color.stateActivePrimaryDefault
     @State var isAutoModeStop: Bool = false
     
+    // Here you monitor stack for views
+    @State private var goBackMainPage = false
+    
     private struct sizeInfo {
         static let numberOfTabs: CGFloat = 3.0
         static let tabIconSize: CGFloat = 20.0
@@ -56,8 +59,15 @@ extension Main: View {
                 LoadingView()
             }
             .ignoresSafeArea(edges: .bottom) // bottom SafeArea 없는게 계산하기 편함
-            .navigationDestination(isPresented: $viewModel.showMenuPage) {
-                MenuPage()
+            .onChange(of: viewModel.showMenuPage) {
+                if viewModel.showMenuPage {
+                    goBackMainPage = true
+                    
+                    viewModel.showMenuPage = false // 초기화
+                }
+            }
+            .navigationDestination(isPresented: $goBackMainPage) {
+                MenuPage(goBackMainPage: $goBackMainPage)
             }
         }
         .onChange(of: landingManager.showSwipePage) {
