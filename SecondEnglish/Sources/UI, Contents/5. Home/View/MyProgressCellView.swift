@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MyProgressCellView: View {
+    var main_category_index: Int
     var sub_category_index: Int
     var sub_category: String
     var main_category: String
@@ -64,12 +65,17 @@ struct MyProgressCellView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
             .onTapGesture {
-                self.moveToSwipeTab(
-                    subCategoryIdx: sub_category_index,
-                    subCategoryName: sub_category,
-                    mainCategoryName: main_category
-                )
-                
+                fLog("idpil::: main_category_index : \(main_category_index)")
+                if !UserManager.shared.isLogin && main_category_index > 0 {
+                    UserManager.shared.showLoginAlert = true
+                }
+                else {
+                    self.moveToSwipeTab(
+                        subCategoryIdx: sub_category_index,
+                        subCategoryName: sub_category,
+                        mainCategoryName: main_category
+                    )
+                }
             }
         }
     }

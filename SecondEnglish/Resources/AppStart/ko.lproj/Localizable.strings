@@ -45,6 +45,13 @@
 "d_doneview_next" = "다음 단계로 넘어가기";
 "d_doneview_reload" = "다시 복습하기";
 "d_doneview_restart" = "다시 시작하기";
+"h_mylike_empty_title" = "학습한 이력이 없습니다.";
+"h_mylike_empty_content" = "하트를 눌러 나만의 공간을 만들어보세요 :)";
+"h_mylike_empty_button" = "학습하러 가기";
+"h_mypost_empty_title" = "작성한 이력이 없습니다.";
+"h_mypost_empty_content" = "더하기를 눌러 나만의 공간을 만들어보세요 :)";
+"h_mypost_empty_button" = "글 작성하러 가기";
+
 
 
 

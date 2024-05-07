@@ -70,7 +70,13 @@ struct SettingPage: View {
                                     type: .ClickAllWithArrow,
                                     showLine: true,
                                     onPress: {
-                    showAccontPage = true
+                    if userManager.isLogin {
+                        showAccontPage = true
+                    }
+                    else {
+                        userManager.showLoginAlert = true
+                    }
+                    
                 })
                 
                 Rectangle()
@@ -192,7 +198,7 @@ struct SettingPage: View {
                             .foregroundColor(.black)
                     })
                     
-                    Text("설정")
+                    Text("s_setting".localized)
                         .font(.title51622Medium)
                         .foregroundColor(.black)
                 }

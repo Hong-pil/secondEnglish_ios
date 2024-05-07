@@ -54,14 +54,19 @@ extension MenuPage: View {
                     myPostLikeNum: viewModel.myPostLikeList.count,
                     myGetLikeNum: viewModel.myGetLikeList.count,
                     onPress: { buttonType in
-                        if buttonType == .Sentence {
-                            isShowMySentencePage = true
+                        if !userManager.isLogin {
+                            userManager.showLoginAlert = true
                         }
-                        else if buttonType == .PostLike {
-                            isShowPostLikePage = true
-                        }
-                        else if buttonType == .GetLike {
-                            isShowGetLikePage = true
+                        else {
+                            if buttonType == .Sentence {
+                                isShowMySentencePage = true
+                            }
+                            else if buttonType == .PostLike {
+                                isShowPostLikePage = true
+                            }
+                            else if buttonType == .GetLike {
+                                isShowGetLikePage = true
+                            }
                         }
                     }
                 )
@@ -79,7 +84,7 @@ extension MenuPage: View {
                             isShowCardBlockPage = true
                         }
                         else {
-                            AlertManager().showLoginAlert()
+                            userManager.showLoginAlert = true
                         }
                     })
                     
@@ -88,7 +93,7 @@ extension MenuPage: View {
                             isShowUserBlockPage = true
                         }
                         else {
-                            AlertManager().showLoginAlert()
+                            userManager.showLoginAlert = true
                         }
                         
                     })
@@ -103,23 +108,11 @@ extension MenuPage: View {
                 
                 VStack(spacing: 0) {
                     MenuLinkView(text: "top10_card_week".localized, position: .Top, showLine: true, onPress: {
-                        if userManager.isLogin {
-                            isShowPopularCardTop10Page_Week = true
-                        }
-                        else {
-                            AlertManager().showLoginAlert()
-                        }
-                        
+                        isShowPopularCardTop10Page_Week = true
                     })
                     
                     MenuLinkView(text: "top10_card_month".localized, position: .Top, showLine: true, onPress: {
-                        if userManager.isLogin {
-                            isShowPopularCardTop10Page_Month = true
-                        }
-                        else {
-                            AlertManager().showLoginAlert()
-                        }
-                        
+                        isShowPopularCardTop10Page_Month = true
                     })
                 }
                 .modifier(CornerRadiusListModifier())
