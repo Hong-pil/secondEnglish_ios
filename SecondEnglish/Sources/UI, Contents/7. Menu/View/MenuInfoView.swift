@@ -42,7 +42,7 @@ struct MenuInfoView: View {
                                 
                                 Spacer().frame(height: sizeInfo.textSpacing)
                                 
-                                Text("j_wrote_post".localized)
+                                Text("se_wrote_post".localized)
                                     .font(Font.caption11218Regular)
                                     .foregroundColor(Color.gray800)
                                     .fixedSize(horizontal: true, vertical: true)
@@ -71,7 +71,7 @@ struct MenuInfoView: View {
                                 
                                 Spacer().frame(height: sizeInfo.textSpacing)
                                 
-                                Text("l_like_do".localized)
+                                Text("se_like_do".localized)
                                     .font(Font.caption11218Regular)
                                     .foregroundColor(Color.gray800)
                                     .fixedSize(horizontal: true, vertical: true)
@@ -99,7 +99,7 @@ struct MenuInfoView: View {
                                 
                                 Spacer().frame(height: sizeInfo.textSpacing)
                                 
-                                Text("l_like_get".localized)
+                                Text("se_like_get".localized)
                                     .font(Font.caption11218Regular)
                                     .foregroundColor(Color.gray800)
                                     .fixedSize(horizontal: true, vertical: true)

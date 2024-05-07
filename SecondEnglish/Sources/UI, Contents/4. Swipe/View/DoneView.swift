@@ -206,7 +206,7 @@ extension DoneView: View {
                             isShowEffectView = false
                             presentationMode.wrappedValue.dismiss()
                         }, label: {
-                            Text("d_doneview_next".localized)
+                            Text("se_doneview_next".localized)
                                 .font(.buttons1420Medium)
                                 .foregroundColor(.gray25)
                                 .padding(.vertical, 15)
@@ -221,7 +221,7 @@ extension DoneView: View {
                         isShowEffectView = false
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
-                        Text("d_doneview_reload".localized)
+                        Text("se_doneview_reload".localized)
                             .font(.buttons1420Medium)
                             .foregroundColor(.gray700)
                             .padding(.vertical, 15)

@@ -32,7 +32,7 @@ extension EditorCategoryView: View {
         VStack(alignment: .leading, spacing: 0) {
             if viewType == .MainCategory ||
                 viewType == .SubCategory {
-                Text(viewType == .MainCategory ? "g_main_category_select".localized : "m_sub_category_select".localized)
+                Text(viewType == .MainCategory ? DefineKey.chapter : DefineKey.unit)
                     .font(.title41824Medium)
                     .foregroundColor(.stateEnableGray900)
                     .padding(.bottom, 20)

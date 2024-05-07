@@ -1263,7 +1263,7 @@ extension TabSwipeCardPage: View {
             
             if viewModel.subCategoryList.count > 0 {
                 let curCategory = viewModel.subCategoryList[viewModel.categoryTabIndex].type3 ?? ""
-                Text("\"\(curCategory)\" \("d_doneview_restart".localized)")
+                Text("\"\(curCategory)\" \("se_doneview_restart".localized)")
                     .font(.body21420Regular)
                     .foregroundColor(.gray600)
             }

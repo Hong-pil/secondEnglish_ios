@@ -173,6 +173,8 @@ class UserManager: ObservableObject {
         self.account = account
         self.userNick = user_nickname
         self.loginUserType = loginUserType
+        self.oldLoginType = loginUserType
+        
         self.accessToken = accessToken
         self.refreshToken = refreshToken
         self.regDate = Date()

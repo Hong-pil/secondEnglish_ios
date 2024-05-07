@@ -79,7 +79,7 @@ extension MenuPage: View {
                     .padding(EdgeInsets(top: sizeInfo.listSpacing, leading: DefineSize.Contents.HorizontalPadding + 20, bottom: sizeInfo.listSpacing, trailing: 0))
                 
                 VStack(spacing: 0) {
-                    MenuLinkView(text: "b_block_post".localized, position: .Top, showLine: true, onPress: {
+                    MenuLinkView(text: "se_block_post".localized, position: .Top, showLine: true, onPress: {
                         if userManager.isLogin {
                             isShowCardBlockPage = true
                         }
@@ -88,7 +88,7 @@ extension MenuPage: View {
                         }
                     })
                     
-                    MenuLinkView(text: "b_block_user".localized, position: .Top, showLine: true, onPress: {
+                    MenuLinkView(text: "se_block_user".localized, position: .Top, showLine: true, onPress: {
                         if userManager.isLogin {
                             isShowUserBlockPage = true
                         }
@@ -107,11 +107,11 @@ extension MenuPage: View {
                     .padding(EdgeInsets(top: sizeInfo.listSpacing, leading: DefineSize.Contents.HorizontalPadding + 20, bottom: sizeInfo.listSpacing, trailing: 0))
                 
                 VStack(spacing: 0) {
-                    MenuLinkView(text: "top10_card_week".localized, position: .Top, showLine: true, onPress: {
+                    MenuLinkView(text: "se_top10_card_week".localized, position: .Top, showLine: true, onPress: {
                         isShowPopularCardTop10Page_Week = true
                     })
                     
-                    MenuLinkView(text: "top10_card_month".localized, position: .Top, showLine: true, onPress: {
+                    MenuLinkView(text: "se_top10_card_month".localized, position: .Top, showLine: true, onPress: {
                         isShowPopularCardTop10Page_Month = true
                     })
                 }

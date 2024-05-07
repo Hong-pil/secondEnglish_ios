@@ -28,7 +28,7 @@ extension MenuCommonSubPage: View {
                 // 작성한 글
                 sentenceView
                     .task {
-                        naviTitle = "j_wrote_post".localized
+                        naviTitle = "se_wrote_post".localized
                         viewModel.getMySentence() {
                             isReadyToShow = true
                         }
@@ -37,7 +37,7 @@ extension MenuCommonSubPage: View {
                 // 누른 좋아요
                 postLikeView
                     .task {
-                        naviTitle = "l_like_do".localized
+                        naviTitle = "se_like_do".localized
                         viewModel.getMyPostLike() {
                             isReadyToShow = true
                         }
@@ -46,7 +46,7 @@ extension MenuCommonSubPage: View {
                 // 받은 좋아요
                 getLikeView
                     .task {
-                        naviTitle = "l_like_get".localized
+                        naviTitle = "se_like_get".localized
                         viewModel.getMyGetLike() {
                             isReadyToShow = true
                         }
@@ -55,7 +55,7 @@ extension MenuCommonSubPage: View {
                 // 차단한 글
                 cardBlockView
                     .task {
-                        naviTitle = "b_block_post".localized
+                        naviTitle = "se_block_post".localized
                         viewModel.getMyCardBlock() {
                             isReadyToShow = true
                         }
@@ -64,7 +64,7 @@ extension MenuCommonSubPage: View {
                 // 차단한 사용자
                 userBlockView
                     .task {
-                        naviTitle = "b_block_user".localized
+                        naviTitle = "se_block_user".localized
                         viewModel.getMyUserBlock() {
                             isReadyToShow = true
                         }
@@ -73,7 +73,7 @@ extension MenuCommonSubPage: View {
                 // 주간 인기글
                 popularTop10View
                     .task {
-                        naviTitle = "top10_card_week".localized
+                        naviTitle = "se_top10_card_week".localized
                         viewModel.getPopularCardTop10(isWeek: true) {
                             isReadyToShow = true
                         }
@@ -82,7 +82,7 @@ extension MenuCommonSubPage: View {
                 // 월간 인기글
                 popularTop10View
                     .task {
-                        naviTitle = "top10_card_month".localized
+                        naviTitle = "se_top10_card_month".localized
                         viewModel.getPopularCardTop10(isWeek: false) {
                             isReadyToShow = true
                         }

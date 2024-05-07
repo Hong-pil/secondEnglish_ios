@@ -64,33 +64,12 @@ struct DefineBottomSheet {
         CustomBottomSheetCommonModel(SEQ: 0, subTitle: "g_open_public".localized, subDescription: "k_open_all_club_members".localized),
         CustomBottomSheetCommonModel(SEQ: 1, subTitle: "b_hidden".localized, subDescription: "k_member_only_available_club_president".localized)
     ]
-    static var joinApprovalTitle = [
-        CustomBottomSheetCommonModel(SEQ: 0, subTitle: "j_auto".localized, subDescription: "g_join_immediately_after_apply".localized),
-        CustomBottomSheetCommonModel(SEQ: 1, subTitle: "s_approval".localized, subDescription: "k_join_after_approves".localized)
-    ]
     
-    //club
-//    static var clubOpenSettingOfClub = [
-//        CustomBottomSheetCommonModel(SEQ: 0, subTitle: "g_open_public".localized, subDescription: "se_g_open_post_in_board".localized),
-//        CustomBottomSheetCommonModel(SEQ: 1, subTitle: "b_hidden".localized, subDescription: "se_k_hide_post_in_club".localized)
-//    ]
     static var clubOpenSettingOfClub: [CustomBottomSheetCommonModel] = []
     static func resetClubOpenSettingOfClub() {
         clubOpenSettingOfClub = [
             CustomBottomSheetCommonModel(SEQ: 0, subTitle: "g_open_public".localized, subDescription: "se_g_open_post_in_board".localized),
             CustomBottomSheetCommonModel(SEQ: 1, subTitle: "b_hidden".localized, subDescription: "se_k_hide_post_in_club".localized)
-        ]
-    }
-    
-//    static var joinApprovalSettingOfClub = [
-//        CustomBottomSheetCommonModel(SEQ: 0, subTitle: "j_auto".localized, subDescription: "g_join_immediately_after_apply".localized),
-//        CustomBottomSheetCommonModel(SEQ: 1, subTitle: "s_approval".localized, subDescription: "k_join_after_approves".localized)
-//    ]
-    static var joinApprovalSettingOfClub: [CustomBottomSheetCommonModel] = []
-    static func resetJoinApprovalSettingOfClub() {
-        joinApprovalSettingOfClub = [
-            CustomBottomSheetCommonModel(SEQ: 0, subTitle: "j_auto".localized, subDescription: "g_join_immediately_after_apply".localized),
-            CustomBottomSheetCommonModel(SEQ: 1, subTitle: "s_approval".localized, subDescription: "k_join_after_approves".localized)
         ]
     }
     

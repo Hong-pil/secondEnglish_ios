@@ -211,10 +211,10 @@ struct SettingPage: View {
         }
         .showCustomAlert(isPresented: $showingAlert,
                          type: .Default,
-                         title: "e_email_alert_title".localized,
-                         message: "e_email_alert_content".localized,
+                         title: "se_email_alert_title".localized,
+                         message: "se_email_alert_content".localized,
                          detailMessage: "",
-                         buttons: ["c_cancel".localized, "e_email_alert_setting".localized],
+                         buttons: ["c_cancel".localized, "se_email_alert_setting".localized],
                          onClick: { buttonIndex in
             if buttonIndex == 1 {
                 sendEmail()

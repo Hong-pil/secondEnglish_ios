@@ -35,7 +35,7 @@ struct ContentViewAlert: ViewModifier {
                    locationType: .bottom,
                    autoDismiss: .after(2),
                    popup:
-                    CommonPopupView(text: "card_shuffle_error".localized)
+                    CommonPopupView(text: "se_card_shuffle_error".localized)
             )
         // 카드 자르기 불가
             .popup(isPresenting: $userManager.showCardCutError,
@@ -43,7 +43,7 @@ struct ContentViewAlert: ViewModifier {
                    locationType: .bottom,
                    autoDismiss: .after(2),
                    popup:
-                    CommonPopupView(text: "card_cut_error".localized)
+                    CommonPopupView(text: "se_card_cut_error".localized)
             )
         // SwipePage 자동모드시 버튼 클릭 불가
             .popup(isPresenting: $userManager.showCardAutoModeError,
@@ -51,13 +51,13 @@ struct ContentViewAlert: ViewModifier {
                    locationType: .bottom,
                    autoDismiss: .after(2),
                    popup:
-                    CommonPopupView(text: "card_auto_error".localized)
+                    CommonPopupView(text: "se_card_auto_error".localized)
             )
         // 카드 삭제
             .showCustomAlert(isPresented: $userManager.showCardDeleteAlert,
                              type: .Default,
-                             title: "s_card_delete_title".localized,
-                             message: "s_card_delete_body".localized,
+                             title: "se_card_delete_title".localized,
+                             message: "se_card_delete_body".localized,
                              detailMessage: "",
                              buttons: ["c_cancel".localized, "s_delete".localized],
                              onClick: { buttonIndex in
@@ -129,10 +129,10 @@ struct ContentViewAlert: ViewModifier {
 //        // 위치 허용
 ////            .showCustomAlert(isPresented: $userManager.showAlertLocationPermission,
 ////                             type: .Default,
-////                             title: "alert_location_title".localized,
-////                             message: "alert_location_message".localized,
+////                             title: "위치 정보 사용 설정",
+////                             message: "내 위치 확인을 위해 설정에서 위치 정보 사용을 허용해 주세요.",
 ////                             detailMessage: "",
-////                             buttons: ["alert_common_button_cancel".localized, "alert_common_button_setting".localized],
+////                             buttons: ["취소", "설정"],
 ////                             onClick: { buttonIndex in
 ////                // 취소
 ////                if buttonIndex == 0 {

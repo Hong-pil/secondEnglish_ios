@@ -1,75 +1,48 @@
-/* 
-  Localizable.strings
-  SecondEnglish
-
-  Created by kimhongpil on 1/11/24.
-  
-*/
-"alert_location_title" = "위치 정보 사용 설정";
-"alert_location_message" = "내 위치 확인을 위해 설정에서 위치 정보 사용을 허용해 주세요.";
-"alert_common_button_cancel" = "취소";
-"alert_common_button_setting" = "설정";
-"alert_common_button_ok" = "확인";
-"k_select_to_main_category" = "주 카테고리 선택";
-"k_select_to_sub_category" = "부 카테고리 선택";
-"g_main_category_select" = "주 카테고리";
-"m_sub_category_select" = "부 카테고리";
-"se_j_write_korean" = "한글을 입력해 주세요.";
-"se_j_write_english" = "영어를 입력해 주세요.";
-"se_j_write_category" = "카테고리를 모두 선택해주세요.";
-"se_j_write_sentence" = "카드 내용을 모두 입력해주세요.";
-"se_a_disconnected_network" = "네트워크 상태를 확인해 주세요.";
-"card_shuffle_error" = "더이상 랜덤정렬은 불가능해요.";
-"card_cut_error" = "더이상 자르기는 불가능해요.";
-"card_auto_error" = "자동모드를 해제해주세요.";
-"m_read_alam" = "모든 알림 읽기";
-"m_view_alam" = "모든 알림 보기";
-"a_previous_alam_check" = "이전 알림 확인하기";
-"se_m_all_alam_check" = "모든 알림을 다 확인했어요.";
-"j_wrote_post" = "작성한 글";
-"l_like_do" = "누른 좋아요";
-"l_like_get" = "받은 좋아요";
-"b_block_post" = "차단한 글";
-"b_block_user" = "차단한 사용자";
-"top10_card_week" = "주간 인기 글 TOP10";
-"top10_card_month" = "월간 인기 글 TOP10";
-"en_my_post" = "My Post";
-"en_my_like" = "My Like";
-"swipe_learning" = "학습 중";
-"swipe_know" = "알고 있음";
-"se_block_remove" = "해제";
-"e_email_alert_title" = "이메일 설정 알림";
-"e_email_alert_content" = "이메일 계정을 먼저 설정해주세요.";
-"e_email_alert_setting" = "설정하기";
-"j_like_post" = "좋아한 글";
-"d_doneview_next" = "다음 단계로 넘어가기";
-"d_doneview_reload" = "다시 복습하기";
-"d_doneview_restart" = "다시 시작하기";
-"h_mylike_empty_title" = "학습한 이력이 없습니다.";
-"h_mylike_empty_content" = "하트를 눌러 나만의 공간을 만들어보세요 :)";
-"h_mylike_empty_button" = "학습하러 가기";
-"h_mypost_empty_title" = "작성한 이력이 없습니다.";
-"h_mypost_empty_content" = "더하기를 눌러 나만의 공간을 만들어보세요 :)";
-"h_mypost_empty_button" = "글 작성하러 가기";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Fantoo 로컬라이징
- */
+//iOS
+/*DO NOT EDIT!*/
 "LanguageName" = "Korean";
 "Fandom Network Service" = "Fandom Network Service";
+
+
+
+"se_j_write_korean" = "한글을 입력해 주세요.";
+"se_j_write_english" = "영어를 입력해 주세요.";
+"se_j_write_category" = "Chapter와 Unit 모두 선택해주세요.";
+"se_j_write_sentence" = "카드 내용을 모두 입력해주세요.";
+"se_a_disconnected_network" = "네트워크 상태를 확인해 주세요.";
+"se_card_shuffle_error" = "더이상 랜덤정렬은 불가능해요.";
+"se_card_cut_error" = "더이상 자르기는 불가능해요.";
+"se_card_auto_error" = "자동모드를 해제해주세요.";
+"se_read_alam" = "모든 알림 읽기";
+"se_view_alam" = "모든 알림 보기";
+"se_previous_alam_check" = "이전 알림 확인하기";
+"se_m_all_alam_check" = "모든 알림을 다 확인했어요.";
+"se_wrote_post" = "작성한 글";
+"se_like_do" = "누른 좋아요";
+"se_like_get" = "받은 좋아요";
+"se_block_post" = "차단한 글";
+"se_block_user" = "차단한 사용자";
+"se_top10_card_week" = "주간 인기 글 TOP10";
+"se_top10_card_month" = "월간 인기 글 TOP10";
+"se_swipe_learning" = "학습 중";
+"se_swipe_know" = "알고 있음";
+"se_block_remove" = "해제";
+"se_email_alert_title" = "이메일 설정 알림";
+"se_email_alert_content" = "이메일 계정을 먼저 설정해주세요.";
+"se_email_alert_setting" = "설정하기";
+"se_like_post" = "좋아한 글";
+"se_doneview_next" = "다음 단계로 넘어가기";
+"se_doneview_reload" = "다시 복습하기";
+"se_doneview_restart" = "다시 시작하기";
+"se_mylike_empty_title" = "학습한 이력이 없습니다.";
+"se_mylike_empty_content" = "하트를 눌러 나만의 공간을 만들어보세요.";
+"se_mylike_empty_button" = "학습하러 가기";
+"se_mypost_empty_title" = "작성한 이력이 없습니다.";
+"se_mypost_empty_content" = "더하기를 눌러 나만의 공간을 만들어보세요.";
+"se_mypost_empty_button" = "글 작성하러 가기";
+"se_card_delete_title" = "삭제 알림";
+"se_card_delete_body" = "정말로 삭제하시겠어요?";
+
 
 
 "g_join_account" = "가입 계정";
@@ -136,6 +109,12 @@
 "c_date_posted_oldest" = "게시된 날짜(오래된순)";
 "c_visibility_setting" = "공개 설정";
 "c_about_post_reply" = "내 포스트/댓글에 대한 댓글을 달림";
+"g_payment_history" = "결제 내역";
+"g_result" = "결과 : {}";
+"g_search" = "검색";
+"g_search_result" = "검색 결과";
+"g_post_button" = "글쓰기";
+
 
 
 "n_only_see" = "나만 볼 수 있음";
@@ -158,7 +137,7 @@
 "n_my_minute" = "내 Minute";
 "n_later" = "나중에";
 "n_keep_my_post_2" = "내 작성글 (콘텐츠 포함), 댓글 유지 (탈퇴한 회원으로 표시)";
-
+"n_my_contants" = "내 휴대폰 연락처";
 
 
 
@@ -175,8 +154,8 @@
 "d_join_after_agree" = "동의 후 가입하기";
 "d_upload_video" = "동영상 업로드";
 "d_see_more" = "더 알아보기";
-
-
+"d_stand_by" = "대기";
+"d_stand_by_immediately" = "등록 대기/즉시";
 
 
 
@@ -225,6 +204,9 @@
 "m_minute_shoot" = "미닛 촬영하기";
 "m_minute_create" = "미닛 만들기";
 "m_customized" = "맞춤";
+"m_mini_shop" = "미니샵";
+"m_read_alam" = "모든 알림 읽기";
+"m_view_alam" = "모든 알림 보기";
 
 
 
@@ -253,8 +235,8 @@
 "b_video" = "비디오";
 "b_trans_alim" = "번역 알림";
 "b_trans_fail" = "번역에 실패했습니다.";
-
-
+"b_have_kdg_item_list" = "보유중인 FP 및 구매한 상품 내역";
+"b_bookmark" = "북마크";
 
 
 
@@ -302,7 +284,7 @@
 "s_new_post_add_reply" = "새 포스트 + 내 포스트/댓글에 대한 댓글이 달림";
 "s_lang_nothing_title_simple" = "선택 없음";
 "s_go_to_write_info_writing" = "소개 글 작성하러 가기";
-
+"g_usage_history" = "사용 내역";
 
 
 
@@ -337,7 +319,7 @@
 "a_delegating_schedule" = "※ 위임 예정 일시 :";
 "a_delegating_target_member" = "위임 대상자";
 "a_cancel_delegating" = "위임 취소";
-"a_block_post" = "이 글 차단하기";
+"a_block_post" = "이 글 차단";
 "a_see_post" = "이 글 보기";
 "a_block_comment" = "이 댓글 차단";
 "a_see_comment" = "이 댓글 보기";
@@ -388,22 +370,22 @@
 "a_public" = "오픈";
 "a_expiration_period" = "유효기간";
 "a_capacity" = "용량";
-
-
-
-
-
-"s_card_delete_title" = "삭제 알림";
-"s_card_delete_body" = "정말로 삭제하시겠어요?";
-
-
-
+"a_information_use" = "이용 안내";
+"a_connect" = "연결";
+"a_access_allow" = "엑세스 허용";
+"a_connect_to_contacts" = "연락처 연결";
+"a_contact" = "연락처";
+"a_contact_optional" = "연락처(선택)";
+"a_audio_optional" = "오디오(선택)";
+"a_result_vulgarism" = "AI비서 탐지 결과";
+"a_previous_alam_check" = "이전 알림 확인하기";
 
 
 "j_one_of_category" = "제재 항목 중 하나";
 "j_auto" = "자동";
 "j_assets" = "자산";
 "j_free_board" = "자유게시판";
+"j_wrote_post" = "작성 글";
 "j_wrote_rely" = "작성 댓글";
 "j_posts_comments_usage_history" = "작성한 게시글, 댓글 및 이용내역";
 "j_balance" = "잔액";
@@ -449,9 +431,10 @@
 "j_main_language" = "주 언어";
 "j_main_activity_contry" = "주 활동국가";
 "j_invite_friends_now" = "지금 친구 초대하기";
-
-
-
+"j_immediately" = "즉시";
+"j_automatic_translation" = "자동 번역";
+"j_cancel_order" = "주문취소요청";
+"j_collapsed" = "접기";
 
 
 "c_term_youth" = "청소년 보호정책";
@@ -489,6 +472,21 @@
 "c_shoot_minute_count_down_setting" = "촬영 카운트다운 설정";
 "c_challenge_by_popular" = "챌린지 인기순";
 "c_challenge_by_latest" = "챌린지 최신순";
+"c_add_friend" = "친구 추가";
+"c_invite" = "초대";
+"c_add" = "추가";
+"c_added" = "추가됨";
+"c_unblock" = "차단 해제";
+"c_share_link_friend" = "초대 링크 공유하기";
+"c_blocked_friend_list" = "차단 목록";
+"c_friend" = "친구";
+"c_friend_for_tab" = "친구";
+"c_friend_search" = "친구 검색";
+"j_invite_friends" = "친구 초대하기";
+"c_chat_contact_optional_description" = "채팅 연락처 연동, 연락처 기반 친구 추가";
+"c_chat_voicetalk_optional_description" = "채팅 보이스톡 이용";
+
+
 
 "k_camera_optional" = "카메라(선택)";
 "k_contents" = "콘텐츠";
@@ -540,7 +538,10 @@
 "c_club_info" = "클럽 정보";
 "c_club_created_date" = "클럽 시작일";
 "c_club_category" = "클럽 카테고리";
-
+"k_club_post" = "클럽 게시물";
+"k_club_chat" = "클럽 1:1 채팅";
+"k_club_profile" = "클럽 프로필";
+"k_club_join_date" = "클럽 가입일";
 
 
 "t_do_leave" = "탈퇴";
@@ -550,7 +551,7 @@
 "t_vote" = "투표";
 "t_timer" = "타이머";
 "t_withdraw_member" = "탈퇴한 회원";
-
+"t_vote_event" = "투표/이벤트";
 
 "p_fantoo" = "팬투";
 "p_fantoo_tv" = "FANTOO TV";
@@ -562,8 +563,8 @@
 "p_profile_complete" = "프로필 완성";
 "p_edit_profile" = "프로필 수정";
 "p_setting_profile" = "프로필 설정";
-"p_write_profile_post" = "프로필 사진 촬영";
-"p_write_profile_share" = "프로필 사진 등록";
+"p_write_profile_post" = "프로필 사진, 커뮤니티/클럽/Minute 피드 작성";
+"p_write_profile_share" = "프로필 사진, 커뮤니티/클럽/Minute 피드 작성, 채팅에서 파일 공유";
 "p_follow" = "팔로우";
 "p_following" = "팔로잉";
 "p_follower" = "팔로워";
@@ -582,10 +583,10 @@
 "f_fansing_search" = "팬싱 검색";
 "f_post_management" = "포스트 관리";
 "f_post" = "포스트";
-
-
-
-
+"f_fanit_charging_station" = "FANiT 충전소";
+"f_fantoo_contents" = "FANTOO 콘텐츠";
+"f_fanit_free_charging" = "FANiT 무료 충전소";
+"f_get_in_fantoo" = "팬투 안에서 팬잇 Get Get!";
 
 
 
@@ -597,10 +598,20 @@
 "h_current_version" = "현재 버전";
 "h_home" = "홈";
 "h_confirm" = "확인";
+"h_common_ok" = "확인";
 "h_join" = "회원가입";
 "h_write_hashtag_after_spacing" = "해시태그 입력 후 띄어쓰기 (최대 10개)";
 "h_exit_one_more_press" = "한번 더 눌러 나가기";
 "h_hanryutimes_search" = "한류타임스 검색";
+"h_hashtag" = "해시태그";
+
+
+
+
+
+
+
+
 
 "en_fanit_a_few" = "%ld FANiT";
 "en_community" = "Community";
@@ -609,6 +620,7 @@
 "en_my_kdg" = "My KDG";
 "en_my_fanit" = "My FANiT";
 "en_popular" = "Popular";
+"en_newest" = "Newest";
 "en_kdg" = "KDG";
 "en_fanit" = "FANiT";
 "en_honor" = "Honor";
@@ -704,6 +716,13 @@
 "se_g_interest_setting_more_post" = "관심사를 설정하면 더 다양한 추천을 받으실 수 있습니다.";
 "se_g_basic_summury_two" = "· 기본 제공되는 말머리는 잡담, 기타 입니다.";
 "se_g_advertisement_loading_try_later" = "광고가 준비중입니다. 잠시 후 다시 시도해주세요.";
+"se_g_setting_interest" = "관심사를 설정해 주세요!";
+"se_g_no_community_post_found" = "검색된 커뮤니티 게시글이 없습니다";
+
+
+
+
+
 
 
 
@@ -722,13 +741,13 @@
 "se_n_write_content_new" = "내용을 입력해 주세요.\n게시판 주제와 맞지 않거나 다른 사람에게 불쾌감을 주는 내용, 무의미한 반복, 중복된 글, 저작권 침해 확인 시 관리자 권한 또는 자동으로 삭제 및 숨김처리 될 수 있습니다.\n지속적인 위반 시 팬투앱 이용 권한이 영구 제한될 수 있습니다.";
 "se_n_blocked_chatting_message" = "%@님을 차단하였습니다. 차단 해제 후 메시지를 보낼 수 있습니다.";
 "se_n_who_left_chatting" = "%@님이 퇴장했습니다.";
+"se_n_who_left_chatting_no_more_chat" = "%@님이 퇴장했습니다. \n방이 종료되어 더이상 메시지를 보낼 수 없습니다.";
 "se_n_nickname_count_check" = "닉네임은 최대 [20자]까지 입력 가능합니다.";
 "se_n_leave_chatting" = "님이 퇴장했습니다.";
 "se_n_setting_interest_for_recommend" = "내 관심사를 설정하여 나를 위한 맞춤 추천을 받아보세요.";
 "se_n_my_minute_no_data" = "나의 Minute이 없습니다.";
 "se_n_my_post_update_alim" = "내 작성 글에 댓글이 달리거나, 내 작성 댓글에 대댓글이 달릴 경우 알림이 발송됩니다.";
 "se_n_through_sharing_benefits" = "내 공유 링크를 통해 가입한 친구에게도 동일한 해택을 줍니다.";
-
 
 
 
@@ -756,7 +775,7 @@
 "se_d_video_upto_minute" = "60초 이하 영상만 등록할 수 있습니다.";
 "se_d_write_nothinge" = "등록된 글이 없습니다.";
 "se_d_file_nothing" = "등록된 파일이 없습니다.";
-
+"se_d_no_exist_search_result" = "%@'대한 검색 결과가 없어요.";
 
 
 
@@ -780,8 +799,8 @@
 "se_m_feed_suggest_for_you" = "맞춤 피드를 제공해드립니다.";
 "se_summury_delete_only_all_post" = "· 말머리가 삭제된 글들은 클럽 게시글 검색 또는 포스트 탭의 '전체' 선택 시에만 확인할 수 있습니다.";
 "se_m_select_lang_choice_in_menu" = "'메뉴 > 설정 > 번역 언어 선택'에서 번역할 언어를 선택할 경우, 번역 버튼 탭 시 언어 선택 없이 즉시 번역됩니다.";
-
-
+"se_k_microphone_permission_message" = "마이크에 접근할 수 없습니다. \n[설정] > [개인 정보 보호] > [마이크]에서 FANTOO를 ON으로 설정해주세요.";
+"se_m_all_alam_check" = "모든 알림을 다 확인했어요.";
 
 
 
@@ -804,7 +823,8 @@
 "se_b_secret_board_try_to_join" = "비공개 게시판입니다.\n가입 후 이용해주세요";
 "se_a_select_lang_immediately_change_subtitle" = "번역 버튼 탭 시 설정된 언어로 즉시 번역됩니다.";
 "se_s_selected_lang_nothing_subtitle" = "번역 버튼 탭 시 매번 팝업에서 번역할 언어를 선택합니다.";
-
+"se_b_limit_vulgarism" = "부적절한 표현이 감지됩니다.\n게시글 등록시 이용이 제한될 수 있습니다.";
+"se_no_exist_bookmark_post" = "북마크한 글이 없습니다.";
 
 
 "se_s_including_cannot_use_char" = "사용할 수 없는 문자가 포함되어 있습니다.";
@@ -904,7 +924,9 @@
 "se_a_club_join_info_open" = "이 클럽에 가입 시 회원님의 클럽 닉네임, 클럽 내 활동내역이 클럽장 및 클럽 멤버들에게 공개됩니다.";
 "se_a_select_lang_immediately_change" = "- 언어 선택: 번역 버튼 탭 시 설정된 언어로 즉시 번역됩니다.";
 "se_a_not_yet_info_writing" = "아직 소개 글이 없습니다.";
-
+"se_a_not_yet_reply_writing" = "아직 소개 글이 없습니다.";
+"se_a_not_yet_reply_writing" = "아직 댓글이 없습니다.\n댓글을 입력해 보세요";
+"se_a_suggest_club" = "이런 클럽 활동은 어떠세요?";
 
 
 
@@ -934,7 +956,7 @@
 "se_j_are_you_block" = "정말로 차단하시겠습니까?";
 "se_j_no_exist_video" = "존재하지 않는 영상입니다.";
 "se_j_title_at_least_two" = "제목을 최소 2글자 이상 입력해 주세요.";
-
+"se_j_invite_friend_fantoo" = "주변 지인들에게 초대해주세요.";
 
 
 
@@ -967,8 +989,12 @@
 "se_c_blocked_contents" = "차단한 콘텐츠입니다.";
 "se_c_contents_of_blocked_user" = "차단한 사용자의 콘텐츠입니다.";
 "se_c_maximum_count_file" = "%@ 첨부는 최대 %@개까지 가능합니다.";
-
-
+"se_c_no_blocked_friend" = "차단된 친구가 없습니다.";
+"se_c_want_blocked_friend" = "%@님을 차단하시겠습니까?";
+"se_c_want_add_friend_list" = "%@님을 차단 해제 후 친구 목록에 추가하시겠습니까?";
+"se_c_try_to_invite_friend" = "친구가 없습니다\n주변 지인들을 초대해 보세요!";
+"se_c_blocked_profile" = "차단한 유저 클럽 프로필입니다. 차단 해제 후 프로필을 볼 수 있어요.";
+"se_c_blocked_profile_n" = "차단한 유저 클럽 프로필입니다.\n차단 해제 후 프로필을 볼 수 있어요.";
 
 "se_k_club_keyword_count" = "클럽 검색어는 최대 10개까지 입력 가능합니다.";
 "se_k_club_keyword_length" = "클럽 검색어는 최대 15자까지 입력 가능합니다.";
@@ -1024,6 +1050,12 @@
 "se_t_not_allow_words" = "특수문자, 이모지, 공백은 입력되지 않습니다.";
 "se_t_after_use_withdraw_account" = "탈퇴한 계정의 닉네임은 30일 이후 사용할 수 있습니다";
 "se_t_already_withdraw_account" = "탈퇴한 회원입니다.";
+"se_t_join_vote_event" = "투표와 이벤트를\n참여해 보세요!";
+"se_t_get_goods" = "특별한 굿즈를\nGet 해요!";
+"se_t_vote_event_join" = "투표와 이벤트를 참여해보세요!";
+"se_t_g_special_goods" = "특별한 굿즈를 Get 해요!";
+
+
 
 "se_p_agree_market_info" = "팬투 마케팅 정보 수신에 \n동의하셨습니다.";
 "se_p_disagree_marketing_info" = "팬투 마케팅 정보 수신 동의를 \n해제하였습니다.";
@@ -1046,6 +1078,18 @@
 "se_p_ suspended_Operation" = "FANTOO 규정 위반으로 %@ 클럽의 운영이 7일간 정지됩니다.";
 "se_p_closed_due_to_violation" = "FANTOO 규정 위반으로 %@ 클럽이 폐쇄되었습니다.";
 "se_p_got_fanit_letter_point" = "%@팬잇 획득하셨습니다.";
+"se_p_connect_to_contacts_description" = "엑세스를 허용하면 연락처 정보가 주기적으로 동기화되어 안전하게 저장됩니다.\n\n회원님의 연락처 정보는 회원님이 이미 알고 있는 사람들과 팬투에서 소통할 수 있도록 추천을 제공하는데 사용됩니다.";
+"se_p_connect_to_contacts_description_first" = "· 엑세스를 허용하면 연락처 정보가 주기적으로 동기화되어 안전하게 저장됩니다.";
+"se_p_connect_to_contacts_description_second" = "· 회원님의 연락처 정보는 회원님이 이미 알고 있는 사람들과 팬투에서 소통할 수 있도록 추천을 제공하는데 사용됩니다.";
+"se_p_connect_to_contacts_description_first_ios" = "엑세스를 허용하면 연락처 정보가 주기적으로 동기화되어 안전하게 저장됩니다.";
+"se_p_connect_to_contacts_description_second_ios" = "회원님의 연락처 정보는 회원님이 이미 알고 있는 사람들과 팬투에서 소통할 수 있도록 추천을 제공하는데 사용됩니다.";
+"se_p_connect_to_contacts_title" = "FANTOO가 연락처에 엑세스하도록 허용하시겠어요?";
+"se_p_invited_click_link" = "FANTOO APP %@님 으로부터 초대받으셨습니다. \n\n아래 링크로 접속하여 더 많은 친구들을 만나보세요. \n\n %@에서 체험해보세요.";
+"se_p_access_allow_description" = "FANTOO에서 문자 메시지 (SMS)를 보낼 수 있도록 엑세스하도록 허용하시겠어요?\n\n엑세스를 허용하면 회원님의 주변 지인들에게 언제든 초대 링크를 전송하여 많은 사람들과 팬투에서 소통할 수 있습니다.";
+"se_p_enter_nickname" = "팬투 닉네임을 입력해주세요.";
+"c_se_chat_privacy_description" = "FANTOO에서 오디오를 녹음하도록 허용하시겠습니까?";
+
+
 
 "se_h_cannot_rejoin_this_id" = "해당 회원의 ID로 재가입 할 수 없습니다.";
 "se_h_can_rejoin_this_id" = "해당 회원의 ID로 재가입 할 수 있습니다.";
@@ -1360,3 +1404,341 @@
 "reward_ad_notice" = "확인 클릭 후 일정시간이 경과하면, 1,000 팬잇이 적립됩니다.\n(일정시간 이전 이탈 시 미적립 될 수 있습니다.)";
 "reward_ad_alert_check" = "광고 적립은 %@ 1회만 가능합니다.";
 "reward_ad_alert_success" = "광고 시청을 통해 1,000 팬잇이 적립되었습니다.";
+
+
+"g_usage_history" = "사용 내역";
+"g_payment_history" = "결제 내역";
+
+"a_no_product" = "아직 상품이 없습니다.";
+"fp_mini_shop" = "FP 미니샵";
+"g_complete_purchase" = "구매완료";
+"a_no_wallet_history" = "이용 내역이 없습니다.";
+"j_cancel_order_title" = "주문취소";
+"j_cancel_order_request" = "주문을 취소하시겠어요?";
+"j_refund_exchange_request" = "주문번호, FANTOO ID, 이름, 상품명을 적어서 이메일로 문의해 주시면\n교환/반품을 도와드리겠습니다.";
+"j_refund_exchange" = "교환/반품 신청";
+"m_send_mail" = "문의하기";
+"s_prepare_product" = "상품준비중";
+"j_cancel_payment" = "결제 취소";
+"b_shipping" = "배송중";
+"b_shipping_detail" = "배송 조회";
+"b_complete_delivered" = "배송완료";
+"g_exchange_refund" = "교환/반품";
+"j_cancel_order" = "주문취소";
+"c_cancel_detail" = "취소상세";
+"g_in_exchange" = "교환중";
+"g_exchange_detail" = "교환상세";
+"g_exchange_complete" = "교환완료";
+"b_refund_complete" = "반품완료";
+"b_refund_detail" = "반품상세";
+"b_refunding" = "반품중";
+"three_month" = "3개월";
+"six_month" = "6개월";
+"twelve_month" = "12개월";
+
+
+
+
+
+
+"se_h_ask_hanryu_culture" = "한류 문화에 대하여 물어보세요!";
+"se_y_can_answer_something" = "이런 걸 대답해 줄 수 있어요!";
+"se_c_latest_info_answer_hard" = "최신 정보로는 답변이 어려울 수 있어요";
+"se_ai_question_1" = "블랙핑크 데뷔일이 언제야?";
+"se_ai_question_2" = "블랙핑크 제니 생일 알려줘";
+"se_ai_question_3" = "한국의 떡볶이 음식 만드는 방법 알려줘";
+"se_ai_question_4" = "한국에서 가장 매운 라면이 뭐야?";
+"se_p_help_you_with_supiki" = "팬투 서비스 문의는 슈피키가 도와줄게요!";
+"se_h_request_help_to_deokgom" = "한류에 궁금한 것이 있다면 AI덕곰에게 도움을 요청하세요.";
+"se_y_can_add_something" = "이런 걸 추가 할 수 있어요!";
+"c_share_comunity_from_ai" = "커뮤니티에 공유하기";
+"c_share_club_from_ai" = "클럽에 공유하기";
+"se_h_close_nothing_anymore" = "해당 창을 종료하면 이전 대화 내용을 다시 볼 수 없어요.";
+"se_h_hanryu_deokgom_fantoo_deokgom_too" = "한국 문화의 대하여 궁금한 것이 있다면 AI덕곰에게 도움을 요청하세요. \n팬투 서비스 내 이용 방법이 궁금하다면 '슈피키 도와줘'라고 입력해주세요.";
+"se_s_help_supiki" = "슈피키 도와줘!";
+"se_answer_from_supiki" = "안녕! 즐거운 팬투 생활을 도와줄 슈피키야!\n무엇이 궁금해?";
+"se_g_somthing_ask" = "궁금한 내용을\n물어보세요!";
+"se_s_contact_to_staff" = "상담원 연결하기";
+"s_ask_closed" = "서비스 문의 종료";
+"s_supiki" = "슈피키";
+"y_return_to_back" = "이전 메뉴로 돌아가기";
+"se_d_info_more_detail" = "더 자세히\n알려드려요";
+"se_a_info_detail_someting" = "%@에 대해 알고 싶구나? \n그렇다면 자세히 알려줄게!";
+"s_introduce_service" = "서비스 소개";
+"c_about_club" = "클럽 관련";
+"c_about_community" = "커뮤니티 관련";
+"a_about_event" = "이벤트 관련";
+"g_about_privacy" = "개인 정보 관련";
+"g_report_error" = "개선 및 에러 제보 문의";
+"se_p_more_detail_fantoo" = "팬투에 대해 알고 싶구나? 그렇다면 자세히 알려줄게!";
+"se_p_mean_fantoo" = "팬투가 무슨 뜻이야?";
+"se_p_first_time_fantoo" = "팬투가 처음이라 어떻게 사용하는지 모르겠어.";
+"se_p_what_is_fanit" = "FANiT이 뭐야?";
+"se_n_there_no_question" = "내가 원하는 질문이 없어 :(";
+"se_j_only_supiki_answer" = "지금은 슈피키만 대답이 가능해요";
+
+
+
+
+
+
+
+
+
+
+"se_p_setting_profile" = "프로필을 설정해 보세요!";
+"se_p_setting_profile_and_intoduce" = "프로필을 설정하여 다른 사용자들에게 자신을 소개하세요.";
+"se_b_setting_background" = "배경 이미지를 설정해 보세요!!";
+"se_p_setting_profile_image" = "프로필 이미지를 설정해 보세요!!";
+"se_a_which_country" = "어느 나라에서 오셨나요? (필수)";
+"se_j_accurate_can_enjoy" = "정확한 정보일수록 최적의 콘텐츠를 즐길 수 있어요.";
+"n_search_country" = "나라 검색하기";
+"se_p_complete_profile_have_fanit" = "프로필 설정을 모두 등록하면 즉시 500 FANiT을 드려요!!";
+"c_favorit_artist" = "최애 아티스트";
+"s_genter_age" = "성별/나이";
+"se_p_immediately_fantoo_home_info" = "팬투 홈 화면으로 즉시 이동합니다.\n스킵한 프로필은 ‘메뉴 - 프로필 설정’에서 설정이 가능합니다.";
+"se_a_genre_do_you_like" = "어떤 장르를 좋아하세요?";
+"se_g_recommend_interests" = "관심사에 맞는 정보와 커뮤니티를 추천해 드려요.";
+"se_c_favorit_artist_who" = "최애 아티스트가 누구인가요?";
+"se_n_recommend_club_community" = "내 최애 아티스트의 클럽과 커뮤니티를 추천해 드려요.";
+"s_possible_select" = "선택가능";
+"c_search_favorit_artist" = "최애 아티스트 검색하기";
+"se_c_notting_favorit_list" = "최애가 리스트에 없어요.";
+"se_s_what_your_gender_age" = "성별과 나이가 어떻게 되시나요?";
+"se_s_recommend_community_like_gender_age" = "성별과 나이대가 비슷한 커뮤니티를 추천해 드려요.\n※ 정확한 나이는 다른 유저에게 공개되지 않습니다.";
+"se_s_select_gender" = "성별을 선택해 주세요.";
+"se_s_select_birth" = "생년월일을 선택해 주세요.";
+"se_a_welcome_join" = "{국기}, {국적}에서 오신 {닉네임}님, Fantoo 회원가입을 축하합니다.";
+"se_n_interest_list" = "내 관심사는 {%@},{%@},{%@}";
+"se_n_interest_artist" = "내 최애 아티스트는 {아티스트 이미지},{아티스트 명}";
+"n_my_gender_age" = "내 성별/나이";
+"se_g_notting_interest" = "관심사를 설정하지 않았어요.";
+"se_c_notting_favorit_artist" = "최애 아티스트를 설정하지 않았어요.";
+"se_s_notting_gender_age_not_yet" = "성별과 나이를 선택하지 않았어요.";
+"p_setting_profile_complete_fanit" = "프로필 설정하고 500FANiT 받아가기";
+"p_go_to_home" = "팬투 홈으로 바로가기";
+"se_n_set_up_profile_and_get_fanit" = "내 프로필을 작성해주세요.\n프로필을 설정하면 500FANiT을 드려요.";
+
+
+
+
+
+
+"s_intro_description" = "소개글";
+"se_s_write_intro_description" = "소개 글을 작성해 보세요.";
+"d_register" = "등록하기";
+"p_profile_open_option" = "프로필 공개 여부";
+"g_open_option_list" = "공개 여부 항목 : 소개글, 국적, 관심사, 최애 아티스트, 커뮤니티 게시글, 소속 클럽";
+"se_n_absolute_nickname_open" = "닉네임은 공개 여부와 상관없이 %@됩니다.";
+"se_provide_fanit_complete_profile" = "성별, 생년월일, 관심사, 최애 아티스트를 모두 등록하면 500 FANiT을 드려요!";
+"se_fanit_complete_category" = "성별, 생년월일, 관심사, 최애 아티스트";
+"se_provide_fanit_complete_sentence" = "%@를\n모두 등록하면 %@을 드려요!";
+"s_enter_birth" = "생년월일 입력";
+"c_favorit_artist_name" = "최애 아티스트의 이름";
+"se_g_enter_country_name" = "국가 이름을 입력해 보세요.";
+"se_a_enter_email" = "이메일을 입력해 주세요.";
+"se_h_enter_phone_number" = "휴대폰 번호를 입력해 주세요.";
+"se_a_verification_code_mail_send" = "인증메일이 발송되었어요.";
+"se_a_send_mail_code_complete" = "{이메일}으로 인증 메일이 발송되었어요. 이메일 인증을 완료하면 계정 인증이 완료돼요.";
+"se_m_check_spam_mail" = "메일이 보이지 않으면 ‘스팸함'을 확인해 주세요.";
+"se_a_mail_verification_after_possible" = "이메일 인증은 나중에 ‘메뉴-프로필-설정'에서도 가능해요.";
+"m_resend_mail" = "메일 재발송";
+"se_a_verification_sms_send" = "인증 문자가 발송되었어요.";
+"se_h_verification_code_sms_send" = "{핸드폰번호}로 인증문자가 발송되었어요. 문자 메시지 인증을 완료하면 계정 인증이 완료 돼요.";
+"se_m_check_spam_sms" = "문자 메시지가 보이지 않으면 ‘스팸함'을 확인해 주세요.";
+"se_m_sms_verification_after_possible" = "문자 메시지 인증은 나중에 ‘메뉴-프로필-설정'에서도 가능해요.";
+"m_resend_sms" = "문자 재발송";
+
+"se_d_dont_again" = "다시 보지 않기";
+"se_p_possible_buy_item" = "Fantoo 포인트 샵에서 상품/서비스를 구입할 수 있어요.";
+"se_p_possible_check_event" = "FANiT으로 참여 가능한 다양한 이벤트 확인이 가능해요.";
+"se_c_possible_check_noti" = "커뮤니티, 클럽 등 다양한 활동 알림을 확인할 수 있어요.";
+"se_p_possible_check_contents" = "프로필, 콘텐츠 보관함, 팬투 오리지널 콘텐츠 확인이 가능해요.";
+"se_c_possible_see_contents" = "커뮤니티, 클럽, Minute를 한 번에 볼 수 있어요.";
+"se_c_possible_see_posts" = "커뮤니티 / 클럽의 카테고리와 클럽글을 모아볼 수 있어요.";
+"se_p_possible_see_origin_contents" = "팬투에서 제공하는 오리지널 콘텐츠를 볼 수 있어요.";
+"se_p_possible_listen_song" = "팬투가 적극 추천하는 노래를 들을 수 있어요.";
+"se_a_possible_watch_song" = "아티스트가 부르는 노래를 시청 및 감상할 수 있어요.";
+"se_a_possible_see_articles" = "연예계 기사, 포토 등 다양한 한류 기사를 볼 수 있어요.";
+"se_a_possible_trans" = "17개의 언어로 실시간 번역이 가능해요.";
+"se_c_possible_watch_once_contents" = "커뮤니티, 클럽, 미닛을 한 번에 즐겨 볼 수 있어요.";
+"se_d_possible_upload_around" = "다양한 주제의 소셜 피드를 구경하고 업로드할 수 있어요.";
+"se_c_possible_communicate_user" = "클럽을 개설 및 가입해 공통 관심사를 가진 유저들과 소통할 수 있어요.";
+"se_s_can_chat_trans" = "실시간 언어 번역이 지원되는 채팅을 할 수 있어요.";
+"se_s_can_upload_and_watch" = "숏폼 영상 콘텐츠를 업로드하고 시청도 할 수 있어요.";
+"se_s_want_skip" = "스킵 하시겠어요?";
+"se_l_possible_review" = "로그인 후 메뉴 > 설정 > 튜토리얼 다시보기가 가능해요.";
+"s_sns_login" = "SNS계정으로 로그인하기";
+"se_h_tap_ok_send_email" = "확인을 누르시면, 입력한 이메일로 인증번호가 전송됩니다.";
+"se_i_need_authentication_number" = "인증번호를 입력해 주세요.";
+"se_t_total_search" = "통합 검색";
+"se_g_total_search_explain" = "검색을 통해 원하는 정보를 쉽고 빠르게 찾을 수 있어요.";
+"se_c_shop_event_explain" = "참여할 수 있는 이벤트를 확인하고 상품/서비스를 구입할 수 있어요.";
+
+
+"s_belong_club" = "소속 클럽";
+"se_f_complete_follow" = "팔로우를 완료했어요.";
+"se_f_clear_follow" = "팔로우를 해제했어요.";
+"se_c_add_friend" = "친구를 추가했어요.";
+"se_c_clear_friend" = "친구를 해제했어요.";
+"se_already_press_like" = "이미 좋아요를 눌렀어요.";
+"f_clear_follow_user" = "팔로우 해제";
+"se_f_are_you_clear_follow" = "팔로우를 해제 하시겠어요?";
+"c_clear_friend" = "친구 해제";
+"se_c_clear_friend_delete_list" = "친구를 해제하면 친구 목록에서 삭제\n됩니다. 친구를 해제 하시겠어요?";
+"n_my_friend" = "내친구";
+"f_following" = "팔로잉";
+"se_s_notting_belong_club" = "소속 클럽이 없어요";
+"se_j_notting_write_post" = "작성 POST가 없어요";
+"se_c_block_user_profile" = "차단한 유저 프로필 입니다.\n차단 해제 후 프로필을 볼 수 있어요.";
+"se_b_private_profile" = "비공개 프로필 입니다.";
+"a_user_block_clear" = "이 사용자 차단 해제하기";
+"a_user_block" = "이 사용자 차단하기";
+"j_press_like_user" = "좋아요 누른 사람";
+"p_profile" = "프로필";
+"p_profile_edit" = "프로필 편집";
+
+"f_fantoo_point_shop" = "팬투 포인트샵";
+"se_s_item_service_purchase_possibal" = "상품/서비스를 구입할 수 있어요.";
+"se_c_can_check_participate_event" = "참여할 수 있는 다양한 이벤트를 확인할 수 있어요.";
+"t_tutorial_reply" = "튜토리얼 다시보기";
+"t_tutorial_skip" = "튜토리얼 스킵";
+"g_continue" = "계속보기";
+"se_c_all_at_once_post" = "커뮤니티, 클럽, 미닛을\n한 번에 즐겨볼 수 있어요!";
+"se_can_see_popular_posts" = "커뮤니티 / 클럽의 실시간 인기글을 볼 수 있어요.";
+"se_n_can_see_collect_category" = "내가 관심있는 카테고리와 클럽 글을 모아볼 수 있어요.";
+
+"c_recent_seven" = "최근 7일";
+
+
+"se_j_onpress_liked" = "좋아요를 눌렀어요";
+"se_j_onpress_unliked" = "좋아요를 해제했어요";
+
+"se_h_can_recommend_club" = "회원님께 어울리는 클럽과 커뮤니티 게시글을 추천 받으실 수 있습니다.";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

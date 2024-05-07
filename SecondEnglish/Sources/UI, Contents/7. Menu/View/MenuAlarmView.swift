@@ -71,7 +71,7 @@ struct MenuAlarmView: View {
                         }
                     },
                     label: {
-                        Text(unreadCount > 0 ? "m_read_alam".localized : "a_previous_alam_check".localized)
+                        Text(unreadCount > 0 ? "se_read_alam".localized : "se_previous_alam_check".localized)
                             .font(Font.caption11218Regular)
                             .foregroundColor(colorInfo.topTextButtonColor)
                     }
@@ -98,7 +98,7 @@ struct MenuAlarmView: View {
                     },
                     label: {
                         HStack(alignment: .center, spacing: 0) {
-                            Text("m_view_alam".localized)
+                            Text("se_view_alam".localized)
                                 .font(Font.caption11218Regular)
                                 .foregroundColor(Color(red: 91/255.0, green: 93/255.0, blue: 123/255.0, opacity: 1.0))
                                 .lineLimit(2)

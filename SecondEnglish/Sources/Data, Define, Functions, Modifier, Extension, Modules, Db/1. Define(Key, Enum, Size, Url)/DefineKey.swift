@@ -42,6 +42,7 @@ struct DefineKey {
     static let code = "code"
     static let clientSecret = "clientSecret"
 
+    static let chapter = "Chapter"
     static let chat = "chat"
     static let chatId = "chatId"
     static let clubId = "clubId"
@@ -163,6 +164,8 @@ struct DefineKey {
     
     static let menu = "menu"
     static let mywallet = "mywallet"
+    static let my_post = "My Post"
+    static let my_like = "My Like"
     
     //MARK: - n
     static let nickname = "nickname"
@@ -239,6 +242,7 @@ struct DefineKey {
     
     
     //MARK: - u
+    static let unit = "Unit"
     static let useReferralCode = "useReferralCode"
     static let userInfoAgree = "userInfoAgree"
     static let uid = "uid"

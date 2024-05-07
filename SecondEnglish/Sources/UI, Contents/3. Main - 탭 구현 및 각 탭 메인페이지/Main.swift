@@ -15,16 +15,16 @@ struct Main {
     // Version 1
     var tabtype_1: TabMainType = .vOne
     let tabs_1: [TabMain] = [
-        .init(title: "en_my_post".localized),
-        .init(title: "en_my_like".localized)
+        .init(title: DefineKey.my_post),
+        .init(title: DefineKey.my_like)
     ]
     
     // Version 2
     var tabtype_2: TabMainType = .vTwo
     let tabs_2: [TabMain] = [
-        .init(title: "en_for_you".localized),
-        .init(title: "en_popular".localized),
-        .init(title: "en_community".localized)
+        .init(title: "For You"),
+        .init(title: "Popular"),
+        .init(title: "Community")
     ]
     
     @StateObject var userManager = UserManager.shared

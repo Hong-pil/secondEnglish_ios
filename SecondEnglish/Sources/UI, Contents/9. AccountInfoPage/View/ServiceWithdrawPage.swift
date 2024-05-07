@@ -156,17 +156,17 @@ extension ServiceWithdrawPage: View {
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
                 
-                Text("j_like_post".localized)
+                Text("se_like_post".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
                 
-                Text("b_block_post".localized)
+                Text("se_block_post".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
                 
-                Text("b_block_user".localized)
+                Text("se_block_user".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)
@@ -192,7 +192,7 @@ extension ServiceWithdrawPage: View {
                     .font(Font.buttons1420Medium)
                     .multilineTextAlignment(.leading)
                 
-                Text("j_wrote_post".localized)
+                Text("se_wrote_post".localized)
                     .font(Font.caption11218Regular)
                     .foregroundColor(Color.gray700)
                     .multilineTextAlignment(.leading)

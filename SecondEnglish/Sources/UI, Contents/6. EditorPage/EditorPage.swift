@@ -380,7 +380,7 @@ extension EditorPage: View {
                 isShowMainCategoryListView.toggle()
             }, label: {
                 HStack(spacing: 0) {
-                    Text(selectedMainCategory?.type2 ?? "k_select_to_main_category".localized)
+                    Text(selectedMainCategory?.type2 ?? DefineKey.chapter)
                         .font(.body21420Regular)
                         .foregroundColor(.gray900)
                     
@@ -409,7 +409,7 @@ extension EditorPage: View {
                     isShowSubCategoryListView.toggle()
                 }, label: {
                     HStack(spacing: 0) {
-                        Text(selectedSubCategory?.type3 ?? "k_select_to_sub_category".localized)
+                        Text(selectedSubCategory?.type3 ?? DefineKey.unit)
                             .font(.body21420Regular)
                             .foregroundColor(.gray900)
                             .lineLimit(1)

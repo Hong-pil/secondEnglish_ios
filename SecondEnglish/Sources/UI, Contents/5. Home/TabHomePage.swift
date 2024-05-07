@@ -411,12 +411,12 @@ extension TabHomePage: View {
                 .frame(width: 200, height: 200)
             
             
-            Text("h_mylike_empty_title".localized)
+            Text("se_mylike_empty_title".localized)
                 .font(.title32028Bold)
                 .foregroundColor(.gray800)
                 .padding(.top, 5)
             
-            Text("h_mylike_empty_content".localized)
+            Text("se_mylike_empty_content".localized)
                 .font(.caption11218Regular)
                 .foregroundColor(.gray500)
                 .padding(.top, 7)
@@ -431,7 +431,7 @@ extension TabHomePage: View {
                     userManager.showLoginAlert = true
                 }
             }, label: {
-                Text("h_mylike_empty_button".localized)
+                Text("se_mylike_empty_button".localized)
                     .font(.title5Roboto1622Medium)
                     .foregroundColor(Color.gray25)
                     .padding(.vertical, 10)
@@ -453,12 +453,12 @@ extension TabHomePage: View {
                 .frame(width: 200, height: 200)
             
             
-            Text("h_mypost_empty_title".localized)
+            Text("se_mypost_empty_title".localized)
                 .font(.title32028Bold)
                 .foregroundColor(.gray800)
                 .padding(.top, 5)
             
-            Text("h_mypost_empty_content".localized)
+            Text("se_mypost_empty_content".localized)
                 .font(.caption11218Regular)
                 .foregroundColor(.gray500)
                 .padding(.top, 7)
@@ -473,7 +473,7 @@ extension TabHomePage: View {
                     userManager.showLoginAlert = true
                 }
             }, label: {
-                Text("h_mypost_empty_button".localized)
+                Text("se_mypost_empty_button".localized)
                     .font(.title5Roboto1622Medium)
                     .foregroundColor(Color.gray25)
                     .padding(.vertical, 10)
