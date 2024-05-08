@@ -61,6 +61,7 @@ struct TabSwipeCardPage {
     // Main.swift에서 EditorPage 보여줌
     @Binding var isShowEditorView: Bool
     
+    
     private struct sizeInfo {
         static let grammarTextFont_title: Font = Font.title32028Bold
         static let grammarTextFont_content: Font = Font.buttons1420Medium
@@ -132,11 +133,8 @@ extension TabSwipeCardPage: View {
                                 Button(action: {
                                     // 카드를 하나라도 넘긴 경우에만 호출함
                                     if viewModel.swipeList.count < viewModel.fixedSwipeList_0.count {
-                                        StatusManager.shared.loadingStatus = .ShowWithTouchable
                                         
-                                        self.resetPage() {
-                                            StatusManager.shared.loadingStatus = .Close
-                                        }
+                                        resetPage(isInit: false, isInitUnit: true)
                                     }
                                 }, label: {
                                     Image(systemName: "arrow.triangle.2.circlepath")
@@ -261,14 +259,13 @@ extension TabSwipeCardPage: View {
                                                         isForceSwipe = true
                                                     }
                                                     
+                                                    withAnimation {
+                                                        removeCard(card)
+                                                    }
                                                     
                                                     viewModel.addKnowCardList(card, type: swipeType, isDone: {
                                                         //
                                                     })
-                                                    
-                                                    withAnimation {
-                                                        removeCard(card)
-                                                    }
                                                 },
                                                 isTapLikeBtn: { cardIdx, isLike in
                                                     //fLog("idpil::: 좋아요클릭 cardIdx:\(cardIdx), isLike:\(isLike)")
@@ -467,42 +464,11 @@ extension TabSwipeCardPage: View {
                         if viewModel.mainCategoryList.count > 0 {
                             
                             // 메인 카테고리 첫 번째 아이템을 '현재 메인 카테고리'로 설정
-                            if self.selectedMainCategoryItem.isEmpty {
-                                self.selectedMainCategoryItem = viewModel.mainCategoryList[0]
+                            if selectedMainCategoryItem.isEmpty {
+                                selectedMainCategoryItem = viewModel.mainCategoryList[0]
                             }
                             
-                            // 현재 메인 카테고리의 '서브 카테고리 리스트' 가져오기
-                            viewModel.requestSubCategory(
-                                isInit: true,
-                                type2: self.selectedMainCategoryItem
-                            ) { isSuccess in
-                                if isSuccess {
-                                    
-                                    if viewModel.subCategoryList.count > 0 {
-                                        
-                                        callSentenceList(
-                                            main_category: self.selectedMainCategoryItem,
-                                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
-                                        )
-                                        
-                                    }
-                                }
-                            }
-                         
-                            // DoneView 관련 데이터 초기화 ('알고있음/학습중')
-                            if userManager.isLogin {
-                                viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
-                                    
-                                    viewModel.setInitKnowCardList()
-                                }
-                            }
-                            else {
-                                viewModel.readGuestAllCategories(mainCategory: self.selectedMainCategoryItem) {
-                                    
-                                    viewModel.setInitKnowCardList()
-                                }
-                            }
-                            
+                            resetPage(isInit: true, isInitUnit: true)
                         }
                     }
                 }
@@ -540,15 +506,15 @@ extension TabSwipeCardPage: View {
                 curPercent = 100.0
                 
                 // [예외처리] 서브 카테고리 마지막인 경우, 더이상 넘어갈 스텝이 없음
-                if viewModel.categoryTabIndex != viewModel.subCategoryList.count-1 {
+                if viewModel.UnitIndex != viewModel.subCategoryList.count-1 {
                     // 다음 스탭으로 넘어감
                     isShowDoneView = false
                     isShowLastCategoryLoadView = false
-                    viewModel.categoryTabIndex += 1
-                    viewModel.moveCategoryTab = true
+                    viewModel.UnitIndex += 1
+                    viewModel.moveUnit = true
                 }
                 // 서브 카테고리 다 넘겼음
-                else if viewModel.categoryTabIndex == viewModel.subCategoryList.count-1 {
+                else if viewModel.UnitIndex == viewModel.subCategoryList.count-1 {
                     
                     // 자동모드 재생 중이면 중지
                     if isAutoPlay {
@@ -691,39 +657,36 @@ extension TabSwipeCardPage: View {
             // 다른 카드에서 같은 아이템 클릭할 수 있으니 초기화시킴
             bottomSheetManager.pressedCardReportCode = -1
         }
-        .onChange(of: viewModel.noti_selectedMainCategoryName) {
-            self.selectedMainCategoryItem = viewModel.noti_selectedMainCategoryName
+        .onChange(of: viewModel.isNotificationCenter) {
             
-            // '알고있음/학습중' 관련 데이터 초기 설정
-            viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
+            // 동일한 Chapter를 선택한 경우
+            if selectedMainCategoryItem == viewModel.noti_selectedMainCategoryName {
                 
-                viewModel.setInitKnowCardList()
+                resetPage(isInit: true, isInitUnit: false, selectedChapter: viewModel.noti_selectedMainCategoryName)
+                
+                viewModel.isNotificationCenter = false // 초기화
+            }
+            // 다른 Chapter를 선택한 경우 (.onChange(of: selectedMainCategoryItem) 호출됨)
+            else {
+                selectedMainCategoryItem = viewModel.noti_selectedMainCategoryName
             }
         }
-        .onChange(of: self.selectedMainCategoryItem) {
+        .onChange(of: selectedMainCategoryItem) {
             
             // DoneView 보이고 있으면 숨김
             self.hideDoneView()
             
-            viewModel.requestSubCategory(
-                isInit: true,
-                type2: self.selectedMainCategoryItem
-            ) { isSuccess in
-                if isSuccess {
+            // [Tab Home - Unit(기존과 다른 Chapter의 Unit) 클릭]
+            if viewModel.isNotificationCenter {
+                resetPage(isInit: true, isInitUnit: false) {
+                    viewModel.moveUnit = true
                     
-                    // 카테고리별 영어문장 데이터
-                    if viewModel.subCategoryList.count > 0 {
-                        // 게스트가 첫 번째 메인 카테고리 이외는 선택할 수 없기 때문에,
-                        // 게스트 예외처리할 필요 없음
-                        callMySentenceList(
-                            main_category: self.selectedMainCategoryItem,
-                            type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
-                        ) {
-                            viewModel.moveCategoryTab = true
-                            
-                            viewModel.isNotificationCenter = false // 초기화
-                        }
-                    }
+                    viewModel.isNotificationCenter = false // 초기화
+                }
+            }
+            else {
+                resetPage(isInit: true, isInitUnit: true) {
+                    viewModel.moveUnit = true
                 }
             }
         }
@@ -782,9 +745,9 @@ extension TabSwipeCardPage: View {
                     
                     // 로딩되는거 보여주려고 딜레이시킴
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        fLog("idpil::: 커트 전")
+                        //fLog("idpil::: 커트 전")
                         viewModel.cutSwipeList(percent: percent, sortType: sortType) {
-                            fLog("idpil::: 커트 후")
+                            //fLog("idpil::: 커트 후")
                             
                             StatusManager.shared.loadingStatus = .Close
                             bottomSheetManager.pressedCardCutItem = .None // 동일한 아이템 클릭될 수 있도록 초기화
@@ -956,8 +919,8 @@ extension TabSwipeCardPage: View {
                 reload: {
                     viewModel.setInitKnowCardList()
                     
-                    viewModel.categoryTabIndex = 0
-                    viewModel.moveCategoryTab = true // .onChange(of: viewModel.moveCategoryTab) {} 에서 첫 번째 서브 카테고리 리스트 호출 됨.
+                    viewModel.UnitIndex = 0
+                    viewModel.moveUnit = true // .onChange(of: viewModel.moveCategoryTab) {} 에서 첫 번째 서브 카테고리 리스트 호출 됨.
                 },
                 isShowLoginView: {
                     // 딜레리 안 주면 로그인뷰 안 뜸
@@ -1023,7 +986,7 @@ extension TabSwipeCardPage: View {
     
     var mainCategoryButton: some View {
         HStack(spacing: 0) {
-            Text(self.selectedMainCategoryItem)
+            Text(selectedMainCategoryItem)
                 .font(.buttons1420Medium)
                 .foregroundColor(.gray25)
             
@@ -1065,12 +1028,12 @@ extension TabSwipeCardPage: View {
                     if viewModel.subCategoryList.count > 0 {
                         ForEach(Array(viewModel.subCategoryList.enumerated()), id: \.offset) { index, element in
                             
-                            let isSelected = viewModel.categoryTabIndex == index
+                            let isSelected = viewModel.UnitIndex == index
                             
                             VStack(spacing: 0) {
                                 Text(element.type3 ?? "")
                                     .font(.title5Roboto1622Medium).fontWeight(.semibold)
-                                    .foregroundColor(viewModel.categoryTabIndex==index ? Color.gray25 : Color.gray300)
+                                    .foregroundColor(viewModel.UnitIndex==index ? Color.gray25 : Color.gray300)
 //                                    .background(
 //                                        VStack(spacing: 0) {
 //                                            Spacer()
@@ -1089,33 +1052,53 @@ extension TabSwipeCardPage: View {
                                         // 메인 카테고리 리스트 뷰가 띄워져 있으면 닫는다.
                                         if isMainCategoryListViewClose() {
                                             
-                                            viewModel.categoryTabIndex = index
-                                            
-                                            scrollToElement(with: proxy)
-                                            
-                                            
-                                            callSentenceList(
-                                                main_category: self.selectedMainCategoryItem,
-                                                type3_sort_num: element.type3_sort_num ?? 0
-                                            ) {
-                                                if isAutoPlay {
-                                                    /// isRootViewFlipped : 카드 뒤집는 변수
-                                                    ///
-                                                    /// 만약 '영어 카드'가 보이고 있는 상태에서 카테고리 탭 누른 경우, 한글 카드가 보여야 하기 때문에 isRootViewFlipped 값을 한글이 보이게 false로 만들어줘야 됨.
-                                                    isRootViewFlipped = false
-                                                    
-                                                    if speechManager.isSpeaking {
-                                                        speechManager.stopSpeaking()
+                                            // 현재 Unit 이외에 클릭한 경우에만 api 호출함
+                                            if viewModel.UnitIndex != index {
+                                                StatusManager.shared.loadingStatus = .ShowWithTouchable
+                                                
+                                                viewModel.UnitIndex = index
+                                                
+                                                scrollToElement(with: proxy)
+                                                
+                                                /**
+                                                 * 딜레이 주지 않으면,
+                                                 * 카드 Swipe 바로 직후에 Unit 변경한 경우 카드가 멈춰 있는 버그가 발생한다.
+                                                 */
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                    callSentenceList(
+                                                        main_category: selectedMainCategoryItem,
+                                                        type3_sort_num: element.type3_sort_num ?? 0
+                                                    ) {
+                                                        if isAutoPlay {
+                                                            /// isRootViewFlipped : 카드 뒤집는 변수
+                                                            ///
+                                                            /// 만약 '영어 카드'가 보이고 있는 상태에서 카테고리 탭 누른 경우, 한글 카드가 보여야 하기 때문에 isRootViewFlipped 값을 한글이 보이게 false로 만들어줘야 됨.
+                                                            isRootViewFlipped = false
+                                                            
+                                                            if speechManager.isSpeaking {
+                                                                speechManager.stopSpeaking()
+                                                            }
+                                                            
+                                                            isForceSwipe = true
+                                                        }
+                                                        
+                                                        
+                                                        // Know 리스트에서 클릭한 Unit 초기화
+                                                            viewModel.resetSelectedUnitKnowList(unit: element.type3 ?? "") {
+                                                            StatusManager.shared.loadingStatus = .Close
+                                                        }
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
                                                     }
-                                                    
-                                                    isForceSwipe = true
                                                 }
                                             }
-                                            
                                         }
                                     }
-                                    .onChange(of: viewModel.moveCategoryTab) {
-                                        if viewModel.moveCategoryTab {
+                                    .onChange(of: viewModel.moveUnit) {
+                                        if viewModel.moveUnit {
                                             
                                             scrollToElement(with: proxy)
                                             
@@ -1125,19 +1108,14 @@ extension TabSwipeCardPage: View {
                                             
                                             //viewModel.resetSwipeList(category: viewModel.topTabBarList[clickedSubTabIndex])
                                             
-                                            
                                             callSentenceList(
-                                                main_category: self.selectedMainCategoryItem,
-                                                type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
+                                                main_category: selectedMainCategoryItem,
+                                                type3_sort_num: viewModel.subCategoryList[viewModel.UnitIndex].type3_sort_num ?? 0
                                             ) {
                                                 isHideAutoPlay = false // 자동모드 아이콘 보임
                                             }
-                                            
-                                            
-                                            viewModel.moveCategoryTab = false // 초기화
+                                            viewModel.moveUnit = false // 초기화
                                         }
-                                        
-                                        
                                     }
                                     .id(index)
                                 
@@ -1167,7 +1145,7 @@ extension TabSwipeCardPage: View {
                             .renderingMode(.template)
                             .frame(width: 10, height: 10)
                             .foregroundColor(.primaryDefault)
-                            .opacity(element == self.selectedMainCategoryItem ? 1 : 0)
+                            .opacity(element == selectedMainCategoryItem ? 1 : 0)
                         
                         Text(element)
                             .font(.buttons1420Medium)
@@ -1179,29 +1157,15 @@ extension TabSwipeCardPage: View {
                     .padding(.bottom, (index == viewModel.mainCategoryList.count-1) ? 20 : 0)
                     .padding(.leading, 10)
                     .onTapGesture {
+                        self.isShowMainCategoryListView.toggle()
+                        withAnimation {
+                            self.isShowMainCategoryButtonAnimation.toggle()
+                        }
+                        
                         if userManager.isLogin {
-                            self.selectedMainCategoryItem = element
-                            
-                            // '알고있음/학습중' 관련 데이터 초기 설정
-                            viewModel.readMyAllCategories(mainCategory: self.selectedMainCategoryItem) {
-                                
-                                viewModel.setInitKnowCardList()
-                            }
-                            
-                            self.isShowMainCategoryListView.toggle()
-                            withAnimation {
-                                self.isShowMainCategoryButtonAnimation.toggle()
-                            }
+                            selectedMainCategoryItem = element
                         }
                         else {
-                            
-                            if isShowMainCategoryListView {
-                                isShowMainCategoryListView = false
-                                withAnimation {
-                                    isShowMainCategoryButtonAnimation = false
-                                }
-                            }
-                            
                             if index != 0 {
                                 userManager.showLoginAlert = true
                             }
@@ -1247,8 +1211,8 @@ extension TabSwipeCardPage: View {
                 // 카테고리별 영어문장 데이터
                 if viewModel.subCategoryList.count > 0 {
                     callSentenceList(
-                        main_category: self.selectedMainCategoryItem,
-                        type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
+                        main_category: selectedMainCategoryItem,
+                        type3_sort_num: viewModel.subCategoryList[viewModel.UnitIndex].type3_sort_num ?? 0
                     ) {
                         isHideAutoPlay = false // 자동모드 아이콘 보임
                     }
@@ -1262,7 +1226,7 @@ extension TabSwipeCardPage: View {
             })
             
             if viewModel.subCategoryList.count > 0 {
-                let curCategory = viewModel.subCategoryList[viewModel.categoryTabIndex].type3 ?? ""
+                let curCategory = viewModel.subCategoryList[viewModel.UnitIndex].type3 ?? ""
                 Text("\"\(curCategory)\" \("se_doneview_restart".localized)")
                     .font(.body21420Regular)
                     .foregroundColor(.gray600)
@@ -1279,7 +1243,7 @@ extension TabSwipeCardPage: View {
      */
     func scrollToElement(with proxy: ScrollViewProxy) {
         withAnimation {
-            proxy.scrollTo(viewModel.categoryTabIndex, anchor: .top)
+            proxy.scrollTo(viewModel.UnitIndex, anchor: .top)
         }
     }
     
@@ -1402,40 +1366,39 @@ extension TabSwipeCardPage {
         }
     }
     
-    private func resetPage(isDone: @escaping() -> Void = {}) {
+    private func resetPage(isInit: Bool, isInitUnit: Bool, selectedChapter: String? = nil, isDone: @escaping() -> Void = {}) {
         
         // 변수 초기화
         currentCardIndex = 0
         curPercent = 0.0
         
-        
-        // api call
-        viewModel.requestMainCategory() { isSuccess in
-            if isSuccess {
-                if viewModel.mainCategoryList.count > 0 {
-                    
-                    if self.selectedMainCategoryItem.isEmpty {
-                        self.selectedMainCategoryItem = viewModel.mainCategoryList[0]
-                    }
-                    
-                    viewModel.requestSubCategory(
-                        isInit: false,
-                        type2: self.selectedMainCategoryItem
-                    ) { isSuccess in
-                        if isSuccess {
-                            
-                            // 카테고리별 영어문장 데이터
-                            if viewModel.subCategoryList.count > 0 {
-                                callSentenceList(
-                                    main_category: self.selectedMainCategoryItem,
-                                    type3_sort_num: viewModel.subCategoryList[viewModel.categoryTabIndex].type3_sort_num ?? 0
-                                ) {
-                                    isDone()
-                                }
+        if viewModel.mainCategoryList.count > 0 {
+            
+            StatusManager.shared.loadingStatus = .ShowWithTouchable
+            
+            viewModel.requestSubCategory(
+                isInit: isInit,
+                isInitUnit: isInitUnit,
+                type2: selectedChapter ?? selectedMainCategoryItem
+            ) {
+                // 카테고리별 영어문장 데이터
+                if viewModel.subCategoryList.count > 0 {
+                    callSentenceList(
+                        main_category: selectedChapter ?? selectedMainCategoryItem,
+                        type3_sort_num: viewModel.subCategoryList[viewModel.UnitIndex].type3_sort_num ?? 0
+                    ) {
+                        // '알고있음/학습중' 관련 데이터 초기 설정
+                        viewModel.readAllCategories(
+                            mainCategory: selectedChapter ?? selectedMainCategoryItem
+                        ) {
+                            viewModel.setInitKnowCardList() {
+                                
+                                StatusManager.shared.loadingStatus = .Close
+                                isDone()
                             }
                         }
+                        
                     }
-                    
                 }
             }
         }
@@ -1573,7 +1536,7 @@ extension TabSwipeCardPage {
         /// 2. 현재 위치가 마지막 서브 카테고리이고, 남은 카드 개수가 1개인 경우
         if (
             // 현재 위치가 마지막 서브 카테고리
-            (viewModel.categoryTabIndex == viewModel.subCategoryList.count-1)
+            (viewModel.UnitIndex == viewModel.subCategoryList.count-1)
         &&
             // '모든 카드를 넘긴 경우' 또는 ' 남은 카드 개수가 1개인 경우'
             (viewModel.swipeList.count <= 1)

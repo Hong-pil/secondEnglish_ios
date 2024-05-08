@@ -65,7 +65,6 @@ struct MyProgressCellView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
             .onTapGesture {
-                fLog("idpil::: main_category_index : \(main_category_index)")
                 if !UserManager.shared.isLogin && main_category_index > 0 {
                     UserManager.shared.showLoginAlert = true
                 }
@@ -79,7 +78,6 @@ struct MyProgressCellView: View {
             }
         }
     }
-    
     
     private func moveToSwipeTab(subCategoryIdx: Int, subCategoryName: String, mainCategoryName: String) {
         let dataDic: [String: Any] = ["subCategoryIdx": subCategoryIdx, "subCategoryName" : subCategoryName, "mainCategoryName": mainCategoryName]

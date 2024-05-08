@@ -20,8 +20,8 @@ class SwipeCardViewModel: ObservableObject {
     @Published var loadingStatus: LoadingStatus = .Close
     
     // Category TabBar
-    @Published var categoryTabIndex: Int = 0
-    @Published var moveCategoryTab: Bool = false
+    @Published var UnitIndex: Int = 0
+    @Published var moveUnit: Bool = false
     
     // View Data
     @Published var typeList: [SwipeCategoryList] = []
@@ -48,10 +48,12 @@ class SwipeCardViewModel: ObservableObject {
 //            fLog("idpil::: Work Completed!")
 //        }
         
+        // [Tab Home - Unit 클릭]
         NotificationCenter.default.addObserver(self, selector: #selector(adjustMovedCategoryData(_:)),
                                                name: NSNotification.Name(rawValue: DefineNotification.moveToSwipeTab),
                                                object: nil)
         
+        // [Editor Page - 등록/수정]
         NotificationCenter.default.addObserver(self, selector: #selector(adjustCardEditDone(_:)),
                                                name: NSNotification.Name(rawValue: DefineNotification.cardEditSuccess),
                                                object: nil)
@@ -64,7 +66,7 @@ class SwipeCardViewModel: ObservableObject {
     @objc func adjustMovedCategoryData(_ notification: Notification) {
         if let subCategoryIndexAndName: [String: Any] = notification.userInfo![DefineKey.subCategoryIndexAndName] as? [String: Any] {
             
-            self.categoryTabIndex = subCategoryIndexAndName["subCategoryIdx"] as? Int ?? 0
+            self.UnitIndex = subCategoryIndexAndName["subCategoryIdx"] as? Int ?? 0
             self.noti_selectedMainCategoryName = subCategoryIndexAndName["mainCategoryName"] as? String ?? ""
             
             self.isNotificationCenter = true
@@ -168,13 +170,14 @@ class SwipeCardViewModel: ObservableObject {
     }
     
     //MARK: - 현재 메인 카테고리의 '서브 카테고리 리스트' 가져오기
-    func requestSubCategory(isInit: Bool, type2: String, isSuccess: @escaping(Bool) -> Void) {
+    func requestSubCategory(isInit: Bool, isInitUnit: Bool, type2: String, isDone: @escaping() -> Void) {
         ApiControl.getSwipeSubCategory(type2: type2)
             .sink { error in
                 guard case let .failure(error) = error else { return }
                 fLog("requestSliderList error : \(error)")
                 
                 self.popupMessage = error.message
+                isDone()
                 
             } receiveValue: { value in
                 if value.code == 200 {
@@ -183,8 +186,8 @@ class SwipeCardViewModel: ObservableObject {
                         self.subCategoryList = []
                         
                         // NotificationCenter로 넘어온 경우에는 adjustMovedCategoryData에서 categoryTabIndex 값을 저장시키기 때문에 여기서 초기화 하면 안 됨
-                        if !self.isNotificationCenter {
-                            self.categoryTabIndex = 0
+                        if isInitUnit {
+                            self.UnitIndex = 0
                         }
                         
                     }
@@ -206,10 +209,11 @@ class SwipeCardViewModel: ObservableObject {
                     // 중복제거
                     self.subCategoryList = self.subCategoryList.uniqued()
                     
-                    isSuccess(true)
+                    isDone()
                 }
                 else {
                     self.popupMessage = ErrorHandler.getCommonMessage()
+                    isDone()
                 }
             }
             .store(in: &cancellable)
@@ -587,6 +591,19 @@ class SwipeCardViewModel: ObservableObject {
             .store(in: &cancellable)
     }
     
+    func readAllCategories(mainCategory: String, isDone: @escaping() -> Void) {
+        if UserManager.shared.isLogin {
+            self.readMyAllCategories(mainCategory: mainCategory) {
+                isDone()
+            }
+        }
+        else {
+            self.readGuestAllCategories(mainCategory: mainCategory) {
+                isDone()
+            }
+        }
+    }
+    
     
     
     
@@ -707,7 +724,7 @@ class SwipeCardViewModel: ObservableObject {
         return result
     }
     
-    func setInitKnowCardList() {
+    func setInitKnowCardList(isDone: () -> Void = {}) {
         knowCardLocalData = []
         
         for item in allMyMainCategoryList {
@@ -721,6 +738,7 @@ class SwipeCardViewModel: ObservableObject {
             )
         }
         //fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+        isDone()
     }
     
     func addKnowCardList(_ card: SwipeDataList, type swipeType: CardSwipeType, isDone: ()->Void) {
@@ -761,7 +779,7 @@ class SwipeCardViewModel: ObservableObject {
                 }
             }
         }
-        fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+        //fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
         
         
         
@@ -790,6 +808,21 @@ class SwipeCardViewModel: ObservableObject {
 //            }
 //        )
         
+    }
+    
+    func resetSelectedUnitKnowList(unit: String, isDone: ()->Void) {
+        for (index, item) in knowCardLocalData.enumerated() {
+            if unit == item.subCategory {
+                
+                //fLog("idpil::: knowCardLocalData[index] : \(knowCardLocalData[index])")
+                
+                knowCardLocalData[index].swipeCount = 0
+                knowCardLocalData[index].knowCount = 0
+            }
+        }
+        //fLog("idpil::: knowCardLocalData : \(knowCardLocalData)")
+        
+        isDone()
     }
     
 }
