@@ -1,4 +1,5 @@
 {
+  "originHash" : "2ed2c9c32ac36f77c7eead4fe0df1a4d43882bd77bbfa5bca0a89d530d0beb14",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -158,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kakao/kakao-ios-sdk",
       "state" : {
-        "revision" : "ae3c60cbd4e3b348775f8c766e5b908fa1e66c5a",
-        "version" : "2.20.0"
+        "revision" : "ab226a7a3625d64e73a52aa3800595dab810156b",
+        "version" : "2.22.1"
       }
     },
     {
@@ -176,8 +177,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/lottie-spm.git",
       "state" : {
-        "revision" : "96790253c1a82223bd43da651121abfd7e96d0f3",
-        "version" : "4.3.4"
+        "revision" : "1d29eccc24cc8b75bff9f6804155112c0ffc9605",
+        "version" : "4.4.3"
       }
     },
     {
@@ -298,5 +299,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

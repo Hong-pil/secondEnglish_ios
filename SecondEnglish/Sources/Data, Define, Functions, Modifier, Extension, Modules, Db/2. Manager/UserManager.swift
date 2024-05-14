@@ -154,7 +154,7 @@ class UserManager: ObservableObject {
         isNewChatting = UserManager.shared.getBadgeCountForChat() > 0
     }
     
-    func checkLogin() {
+    func setIsLogin() {
         isLogin = checkValidate()
     }
     
@@ -225,23 +225,29 @@ class UserManager: ObservableObject {
 //            let _ = ApiControl.deletePushInstall(fcmToken: self.fcmToken)
 //        }
         
+        self.uid = ""
         self.account = ""
+        self.userNick = ""
+        self.loginUserType = ""
+        self.oldLoginType = ""
+        
+        self.accessToken = ""
+        self.refreshToken = ""
+        
         self.password = ""
         self.loginType = ""
         setAccountForBadgeCount("")
         //self.oldLoginType = ""        //이전 로그인 정보는 계속 써야되서 초기화 하지 않는다.
         
-        self.accessToken = ""
-        self.refreshToken = ""
+        
         self.fcmToken = ""
         self.integUid = ""
-        self.userNick = ""
         self.userEmail = ""
         
         self.expiredTime = 0
         self.regDate = Date()
         
-        let _ = self.checkValidateSSO()
+        //let _ = self.checkValidateSSO()
     }
     
     

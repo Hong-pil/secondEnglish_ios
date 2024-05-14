@@ -66,6 +66,12 @@ extension Main: View {
                     viewModel.showMenuPage = false // 초기화
                 }
             }
+            /// 아래 .navigationBarHidden(true) 설정한 이유 :
+            /// - 탭 홈화면(TabHomePage.swift)과 탭 학습화면(TabSwipeCardPage.swift)에서는 .toolbar {} 를 사용하지 않고, header를 직접 만들어서 네비바를 보여주는 방식이다.
+            /// - 반면 메뉴화면(MenuPage.swift)과 설정화면(SettingPage.swift)에서는.toolbar {} 를 사용해서 네비바를 보여주는 방식이다.
+            /// 문제는 설정화면에서 로그아웃 성공한 경우 코드로 홈화면으로 곧바로 이동 후 로그인뷰를 보여주게 되는데, 이때 아래 .navigationBarHidden(true) 설정해주지 않으면 로그인뷰에서 로그인성공 또는 둘러보기로 로그인뷰를 닫으면 화면 상단에 네비바 영역이 추가로 보이는 문제가 있다.
+            /// 아마도 코드로 곧바로 홈화면으로 이동했기 때문인 거 같다. 왜냐하면 [설정 -> 메뉴 -> 홈화면] 터치해서 이동한 경우에는 위 문제가 발생하지 않는다.
+            .navigationBarHidden(true)
             .navigationDestination(isPresented: $goBackMainPage) {
                 MenuPage(goBackMainPage: $goBackMainPage)
             }

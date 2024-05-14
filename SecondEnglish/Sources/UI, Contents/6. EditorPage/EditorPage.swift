@@ -109,7 +109,6 @@ extension EditorPage: View {
                                                         isOnlyEditMode = true
                                                     }
                                                     
-                                                    
                                                     // 작성했던 이전 카드 중에서 특정 카드를 수정하려고 선택한 경우
                                                     if isOnlyEditMode {
                                                         sentenceListUpdate(activedIndex: index)
@@ -128,9 +127,6 @@ extension EditorPage: View {
                                                         // 키보드가 완전히 다 올라오고 나서 아래 코드를 적용시켜야 된다.
                                                         // 키보드가 올라오고 있는 도중에 아래 코드 적용하면 소용없음.
                                                         isScrollToBottom = true
-                                                        
-                                                        
-                                                        
                                                     }
                                                     
                                                     currentCardIndex = index
@@ -355,7 +351,6 @@ extension EditorPage: View {
                 }
             }
         )
-        
         //MARK: - 팝업 (bottomsheet 로 올린 팝업 위에서 또다른 팝업을 보여주기 때문에 여기서 따로 설정함)
         // (.popup 클릭 -> PopupParameters 클릭)하면 설정할 수 있는 옵션 값들 있음
         .popup(isPresented: $showWriteCancelView) {

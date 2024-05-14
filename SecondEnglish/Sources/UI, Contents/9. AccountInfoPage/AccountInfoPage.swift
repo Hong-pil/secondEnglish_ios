@@ -96,8 +96,7 @@ extension AccountInfoPage: View {
         }
         .onChange(of: withdrawState) {
             if withdrawState {
-                UserManager.shared.logout()
-                UserManager.shared.showLoginView = true
+                logout()
             }
         }
 //        .showCustomAlert(isPresented: $showAlert,

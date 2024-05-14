@@ -28,19 +28,19 @@ extension UserNamePage: View {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
                         
-                        Text("별명을\n입력해 주세요.")
+                        Text("se_nickname_page_title".localized)
                             .font(.title22432Bold)
                             .foregroundColor(.gray900)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        Text("별명은 변경되지 않아요.")
+                        Text("se_nickname_page_content".localized)
                             .font(.buttons1420Medium)
                             .foregroundColor(.gray800)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top, 10)
                         
                         VStack(alignment: .leading, spacing: 3) {
-                            Text("별명")
+                            Text("se_nickname_page_word".localized)
                                 .font(.caption11218Regular)
                                 .foregroundColor(isNameCheckOK ? .black : .red)
                             
@@ -118,10 +118,12 @@ extension UserNamePage: View {
         VStack {
             if isKeyboardFocused {
                 Button(action: {
-                    // 폰번호 입력 키보드 내리기
-                    self.isKeyboardFocused = false
-                    
-                    self.requestLogin()
+                    if !txt.isEmpty && isNameCheckOK {
+                        // 폰번호 입력 키보드 내리기
+                        self.isKeyboardFocused = false
+                        
+                        self.requestLogin()
+                    }
                 }, label: {
                     Text("a_done".localized)
                         .font(.title41824Medium)
@@ -133,10 +135,12 @@ extension UserNamePage: View {
             }
             else {
                 Button(action: {
-                    // 폰번호 입력 키보드 내리기
-                    self.isKeyboardFocused = false
-                    
-                    self.requestLogin()
+                    if !txt.isEmpty && isNameCheckOK {
+                        // 폰번호 입력 키보드 내리기
+                        self.isKeyboardFocused = false
+                        
+                        self.requestLogin()
+                    }
                 }, label: {
                     Text("a_done".localized)
                         .font(.title41824Medium)
@@ -163,7 +167,7 @@ extension UserNamePage: View {
         .fill(Color.red)
         .frame(width: 140, height: 30)
         .overlay(
-            Text("반드시 입력이 필요해요.")
+            Text("se_nickname_page_warning_empty".localized)
                 .font(.caption11218Regular)
                 .foregroundColor(.gray25)
         )
@@ -182,7 +186,7 @@ extension UserNamePage: View {
         .fill(Color.red)
         .frame(width: 170, height: 30)
         .overlay(
-            Text("올바른 형식으로 입력해주세요.")
+            Text("se_nickname_page_warning_format".localized)
                 .font(.caption11218Regular)
                 .foregroundColor(.gray25)
         )

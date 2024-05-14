@@ -43,7 +43,7 @@ class SnsLoginControl: NSObject, ObservableObject {
     
     var loginAppleResultSubject = PassthroughSubject<(Bool, String), Never>()
     var loginKakaoResultSubject = PassthroughSubject<(Bool, String), Never>()
-    var loginGoogleResultSubject = PassthroughSubject<(Bool, LoginItem), Never>()
+    var loginGoogleResultSubject = PassthroughSubject<(Bool, String), Never>()
     
     // Google Login
     static var rootViewController: UIViewController? {
@@ -96,9 +96,10 @@ extension SnsLoginControl {
     func googleLogin() {
         
         guard let clientID = FirebaseApp.app()?.options.clientID else {
-            if let data = loginItem {
-                self.loginGoogleResultSubject.send((false, data))
-            }
+//            if let data = loginItem {
+//                self.loginGoogleResultSubject.send((false, data))
+//            }
+            self.loginGoogleResultSubject.send((false, ""))
             return
         }
 
@@ -110,18 +111,20 @@ extension SnsLoginControl {
         GIDSignIn.sharedInstance.signIn(withPresenting: SnsLoginControl.rootViewController!) { [unowned self] result, err in
             
             if let _ = err {
-                if let data = self.loginItem {
-                    self.loginGoogleResultSubject.send((false, data))
-                }
+//                if let data = self.loginItem {
+//                    self.loginGoogleResultSubject.send((false, data))
+//                }
+                self.loginGoogleResultSubject.send((false, ""))
                 return
             }
             
           guard let user = result?.user,
-            let idToken = user.idToken?.tokenString
-          else {
-              if let data = self.loginItem {
-                  self.loginGoogleResultSubject.send((false, data))
-              }
+                let idToken = user.idToken?.tokenString else {
+              
+//              if let data = self.loginItem {
+//                  self.loginGoogleResultSubject.send((false, data))
+//              }
+              self.loginGoogleResultSubject.send((false, ""))
               return
           }
 
@@ -130,31 +133,39 @@ extension SnsLoginControl {
 
             Auth.auth().signIn(with: credential) { result, error in
                 if let _ = error {
-                    if let data = self.loginItem {
-                        self.loginGoogleResultSubject.send((false, data))
-                    }
+//                    if let data = self.loginItem {
+//                        self.loginGoogleResultSubject.send((false, data))
+//                    }
+                    self.loginGoogleResultSubject.send((false, ""))
                     return
                 }
                 guard let user = GIDSignIn.sharedInstance.currentUser else {
-                    if let data = self.loginItem {
-                        self.loginGoogleResultSubject.send((false, data))
-                    }
+//                    if let data = self.loginItem {
+//                        self.loginGoogleResultSubject.send((false, data))
+//                    }
+                    self.loginGoogleResultSubject.send((false, ""))
                     return
                 }
                 
+                
                 let idx = user.userID ?? ""
-                let email = user.profile?.email ?? ""
-                if idx.count > 0 {
-                    self.loginItem = LoginItem(idx: idx, email: email)
-                    if let data = self.loginItem {
-                        self.loginGoogleResultSubject.send((true, data))
-                    }
-                }
-                else {
-                    if let data = self.loginItem {
-                        self.loginGoogleResultSubject.send((false, data))
-                    }
-                }
+                self.loginGoogleResultSubject.send((true, idx))
+                
+//                let idx = user.userID ?? ""
+//                let email = user.profile?.email ?? ""
+//                if idx.count > 0 {
+//                    self.loginItem = LoginItem(idx: idx, email: email)
+//                    if let data = self.loginItem {
+//                        self.loginGoogleResultSubject.send((true, data))
+//                    }
+//                }
+//                else {
+//                    if let data = self.loginItem {
+//                        self.loginGoogleResultSubject.send((false, data))
+//                    }
+//                }
+                
+                
             }
         }
     }
@@ -188,11 +199,11 @@ extension SnsLoginControl {
                             self.loginKakaoResultSubject.send((false, ""))
                         }
                         else {
-                            fLog("idpilLog::: 카톡로그인 성공1 :>")
+                            //fLog("idpilLog::: 카톡로그인 성공1 :>")
                             if let properties = user?.properties {
-                                fLog("idpilLog::: nickname : \(properties["nickname"] ?? "")")
-                                fLog("idpilLog::: profile_image : \(properties["profile_image"] ?? "")")
-                                fLog("idpilLog::: thumbnail_image : \(properties["thumbnail_image"] ?? "")")
+                                //fLog("idpilLog::: nickname : \(properties["nickname"] ?? "")")
+                                //fLog("idpilLog::: profile_image : \(properties["profile_image"] ?? "")")
+                                //fLog("idpilLog::: thumbnail_image : \(properties["thumbnail_image"] ?? "")")
                             }
                             self.loginKakaoResultSubject.send((true, String(idx)))
                         }
@@ -215,11 +226,11 @@ extension SnsLoginControl {
                             self.loginKakaoResultSubject.send((false, ""))
                         }
                         else {
-                            fLog("idpilLog::: 카톡로그인 성공2 :>")
+                            //fLog("idpilLog::: 카톡로그인 성공2 :>")
                             if let properties = user?.properties {
-                                fLog("idpilLog::: nickname : \(properties["nickname"] ?? "")")
-                                fLog("idpilLog::: profile_image : \(properties["profile_image"] ?? "")")
-                                fLog("idpilLog::: thumbnail_image : \(properties["thumbnail_image"] ?? "")")
+                                //fLog("idpilLog::: nickname : \(properties["nickname"] ?? "")")
+                                //fLog("idpilLog::: profile_image : \(properties["profile_image"] ?? "")")
+                                //fLog("idpilLog::: thumbnail_image : \(properties["thumbnail_image"] ?? "")")
                             }
                             self.loginKakaoResultSubject.send((true, String(idx)))
                         }
@@ -247,24 +258,15 @@ extension SnsLoginControl: ASAuthorizationControllerDelegate {
                 
                 fLog("\n--- apple info ----------------------------\nuser : \(appleIDCredential.user)\nauthorizationCode : \(authorizationCode ?? "")\ntoken : \(token ?? "")\nauthorizedScopes : \(authorizedScopes)\n")
                 
+                //fLog("idpil::: credentialState : \(credentialState)")
+                
                 switch credentialState {
                 case .authorized:
                     // 인증 성공 상태
-                    fLog("idpilLog::: Apple Login Successed :>")
+                    //fLog("idpilLog::: Apple Login Successed :>")
                     
                     //appleIDCredential.user
                     //UserManager().userAppleName = (appleIDCredential.fullName?.nickname != nil) ? appleIDCredential.fullName?.nickname : ""
-                    
-                    
-                    let userid = appleIDCredential.user
-                    if userid.count > 0 {
-                        UserManager.shared.isLogin = true
-                        
-                        self.loginAppleResultSubject.send((true, userid))
-                    }
-                    else {
-                        self.loginAppleResultSubject.send((false, ""))
-                    }
                     
                     
                     // User Email Check
@@ -278,7 +280,27 @@ extension SnsLoginControl: ASAuthorizationControllerDelegate {
                         email = appleEmail
                     }
                     
+
                     
+                    
+//                    let userid = appleIDCredential.user
+//                    
+//                    if userid.count > 0 {
+//                        UserManager.shared.isLogin = true
+//                        
+//                        self.loginAppleResultSubject.send((true, userid))
+//                    }
+//                    else {
+//                        self.loginAppleResultSubject.send((false, ""))
+//                    }
+                    
+                    let userid = appleIDCredential.user
+                    /// 메인 스레드는 대부분의 UI 관련 작업 및 사용자 인터페이스 업데이트를 처리하는 스레드임.
+                    /// 따라서 메인 스레드에서 실행되어야 하는 작업에는 UI 업데이트, 뷰 컨트롤러의 메서드 호출 및 사용자 이벤트 처리가 포함됨.
+                    DispatchQueue.main.async {
+                        UserManager.shared.isLogin = true
+                    }
+                    self.loginAppleResultSubject.send((true, userid))
                     
                     break
                     
@@ -288,18 +310,19 @@ extension SnsLoginControl: ASAuthorizationControllerDelegate {
                     break
                     
                 case .notFound:
+                    // The Apple ID credential is either revoked or was not found, so show the sign-in UI.
                     self.loginAppleResultSubject.send((false, ""))
                     break
                     
                 default:
-                    self.loginAppleResultSubject.send((false, ""))
+                    //self.loginAppleResultSubject.send((false, ""))
                     break
                 }
             }
         }
     }
     
-    // apple login 실패 시
+    // apple 로그인 실패 (유저의 취소도 포함)
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         fLog("\(error.localizedDescription)")
     }

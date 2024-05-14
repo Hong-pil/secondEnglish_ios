@@ -188,11 +188,13 @@ extension TabHomePage: View {
                                     if selectedTab == 0 {
                                         viewModel.requestMyPostCardList(isSuccess: { success in
                                             isCurrentlyRefreshing = false
+                                            isReadyToShowMyPostList = true
                                         })
                                     }
                                     else if selectedTab == 1 {
                                         viewModel.requestMyLikeCardList() {
                                             isCurrentlyRefreshing = false
+                                            isReadyToShowMyLikeList = true
                                         }
                                     }
                                 }
@@ -226,12 +228,12 @@ extension TabHomePage: View {
             if userManager.isLogin {
                 if selectedTab == 0 {
                     viewModel.requestMyPostCardList(isSuccess: { success in
-                        //
+                        isReadyToShowMyPostList = true
                     })
                 }
                 else if selectedTab == 1 {
                     viewModel.requestMyLikeCardList() {
-                        //
+                        isReadyToShowMyLikeList = true
                     }
                 }
                 viewModel.requestMyCategoryProgress()
@@ -251,11 +253,9 @@ extension TabHomePage: View {
             Image("text_logo")
                 .resizable()
                 .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
-                .frame(height: 20)
+                .aspectRatio(contentMode: .fit).frame(height: 20)
                 .foregroundColor(.gray25)
-            
-            Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
             
 //            Button {
 //                //NavigationBarActionManager.shared.buttonActionSubject.send(("", .Menu))
@@ -275,12 +275,13 @@ extension TabHomePage: View {
                     .renderingMode(.template)
                     .frame(width: 27, height: 27)
                     .foregroundColor(.gray25)
-                    .padding(.leading, 20)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 10)
         .background(Color.stateActivePrimaryDefault)
+        //.background(Color.gray25)
     }
     
     var myLikeCategoryListView: some View {

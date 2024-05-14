@@ -42,6 +42,12 @@
 "se_mypost_empty_button" = "글 작성하러 가기";
 "se_card_delete_title" = "삭제 알림";
 "se_card_delete_body" = "정말로 삭제하시겠어요?";
+"se_login_kakao" = "카카오";
+"se_nickname_page_title" = "별명을\n입력해 주세요.";
+"se_nickname_page_content" = "별명은 변경되지 않아요.";
+"se_nickname_page_word" = "별명";
+"se_nickname_page_warning_empty" = "반드시 입력이 필요해요.";
+"se_nickname_page_warning_format" = "올바른 형식으로 입력해주세요.";
 
 
 

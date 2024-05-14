@@ -42,6 +42,12 @@
 "se_mypost_empty_button" = "To create a post";
 "se_card_delete_title" = "Deletion notifications";
 "se_card_delete_body" = "Are you sure you want to delete it?";
+"se_login_kakao" = "Kakao";
+"se_nickname_page_title" = "Please enter\na nickname.";
+"se_nickname_page_content" = "The nickname doesn't change.";
+"se_nickname_page_word" = "nickname";
+"se_nickname_page_warning_empty" = "Must be entered.";
+"se_nickname_page_warning_format" = "Please enter in the correct format.";
 
 
 

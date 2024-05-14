@@ -72,7 +72,7 @@ struct LoginPage : View {
                     }
                     .padding(.bottom, sizeInfo.padding10)
                     
-                    LoginButtonView(iconName: "btn_logo_Kakaotalk", snsName: "카카오톡으", buttonType: .kakaotalk) {
+                    LoginButtonView(iconName: "btn_logo_Kakaotalk", snsName: "se_login_kakao".localized, buttonType: .kakaotalk) {
                         viewModel.loginWithKakao()
                     }
                     .padding(.bottom, sizeInfo.padding10)

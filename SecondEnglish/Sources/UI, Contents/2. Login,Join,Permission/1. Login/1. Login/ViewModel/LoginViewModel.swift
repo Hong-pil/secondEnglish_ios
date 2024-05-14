@@ -44,7 +44,7 @@ class LoginViewModel: NSObject ,ObservableObject {
         .store(in: &cancellable)
         
         snsLoginControl.loginGoogleResultSubject.sink { success, idx in
-            self.checkLoginResult(success: success, idx: idx.idx ?? "", type: .Google)
+            self.checkLoginResult(success: success, idx: idx, type: .Google)
         }
         .store(in: &cancellable)
     }
@@ -69,8 +69,6 @@ class LoginViewModel: NSObject ,ObservableObject {
     //MARK: - Proccess
     func checkLoginResult(success:Bool, idx:String, type:LoginUserType) {
         fLog("\n--- checkLoginResult ------------------\nsuccess : \(success), idx : \(idx), type : \(type.rawValue)\n")
-        loadingStatus = .Close
-        
         if success {
             
             /**
@@ -78,7 +76,6 @@ class LoginViewModel: NSObject ,ObservableObject {
              */
             // 다른 방식으로 로그인해도 DB에 저장되는 uid는 동일해야 하니까, deviceUUID를 구해서 전송함.
             //requestAddSnsUser(loginId: idx, loginType: type)
-            
             
             
             // 기존 회원 유무 확인
@@ -95,13 +92,12 @@ class LoginViewModel: NSObject ,ObservableObject {
                     ) { isSuccess in
                         if isSuccess {
                             // 로딩되는거 보여주려고 딜레이시킴
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 StatusManager.shared.loadingStatus = .Close
                                 UserManager.shared.showLoginView = false
                             }
                         }
                     }
-                    
                 } else {
                     self.authSuccessedLoginId = idx
                     self.authSuccessedLoginType = type
@@ -109,30 +105,30 @@ class LoginViewModel: NSObject ,ObservableObject {
                 }
             }
         }
-        else {
-            self.alertTitle = ""
-            self.alertMessage = ErrorHandler.getCommonMessage()
-            self.showAlert = true
-        }
+        /**
+         * 원래는 success 가 아닌 경우, 아래 코드 적용해서 팝업창 띄우도록 했었는데,
+         * 앱 심사 올릴 때 이상하게 어쩌다가 한 번, 로그인은 성공했지만 아래 else 문을 타서 팝업창을 띄우는 문제가 있었다.
+         * 이걸 또 기가막히게 심사때마다 걸려서 리젝당했었음. 그래서 주석처리함.
+         */
+//        else {
+//            self.alertTitle = ""
+//            self.alertMessage = ErrorHandler.getCommonMessage()
+//            self.showAlert = true
+//        }
     }
     
     // 회원 유무 확인
     func requestCheckUser(loginId: String, loginType: LoginUserType, isUser: @escaping(Bool, String)->Void) {
-        loadingStatus = .ShowWithTouchable
         ApiControl.userCheck(login_id: loginId, login_type: loginType.rawValue)
             .sink { error in
-                
-                self.loadingStatus = .Close
-                
                 guard case let .failure(error) = error else { return }
                 fLog("login error : \(error)")
                 
-                self.alertTitle = ""
-                self.alertMessage = error.message
-                self.showAlert = true
+//                self.alertTitle = ""
+//                self.alertMessage = error.message
+//                self.showAlert = true
+                isUser(false, "")
             } receiveValue: { value in
-                self.loadingStatus = .Close
-                
                 if value.code == 200 && (value.isUser ?? false) {
                     isUser(true, (value.userNickname ?? ""))
                 } else {
@@ -149,11 +145,8 @@ class LoginViewModel: NSObject ,ObservableObject {
     
     // 로그인 성공 요청
     func requestAddSnsUser(loginId: String, loginType: LoginUserType, user_nickname: String, isSuccess: @escaping(Bool)->Void) {
-        loadingStatus = .ShowWithTouchable
         ApiControl.addSnsUser(loginId: loginId, loginType: loginType.rawValue, user_nickname: user_nickname)
             .sink { error in
-                
-                self.loadingStatus = .Close
                 
                 guard case let .failure(error) = error else { return }
                 fLog("login error : \(error)")
@@ -162,10 +155,7 @@ class LoginViewModel: NSObject ,ObservableObject {
                 self.alertMessage = error.message
                 self.showAlert = true
             } receiveValue: { value in
-                self.loadingStatus = .Close
                 
-//                fLog("로그::: verifySMSCode successed :>")
-//                fLog("로그::: value : \(value)")
                 if value.code == 200 && value.success {
                     // 로그인 성공!
                     let uid = value.uid ?? ""
@@ -175,15 +165,14 @@ class LoginViewModel: NSObject ,ObservableObject {
                     
                     switch loginType {
                     case .Google:
-                        UserManager.shared.loginUserType = "Google"
+                        UserManager.shared.loginUserType = loginType.rawValue
                     case .Apple:
-                        UserManager.shared.loginUserType = "Apple"
+                        UserManager.shared.loginUserType = loginType.rawValue
                     case .KakaoTalk:
-                        UserManager.shared.loginUserType = "Kakaotalk"
+                        UserManager.shared.loginUserType = loginType.rawValue
                     default:
                         fLog("")
                     }
-                    
                     
                     // Success
                     if uid.count > 0, access_token.count > 0, refresh_token.count > 0 {
@@ -197,23 +186,16 @@ class LoginViewModel: NSObject ,ObservableObject {
                             accessToken: access_token,
                             refreshToken: refresh_token
                         )
-                        UserManager.shared.checkLogin()
+                        UserManager.shared.setIsLogin()
                         isSuccess(true)
-                        //UserManager.shared.showLoginView = false
                     }
-                    else {
-                        // Error
-                        self.alertTitle = ""
-                        self.alertMessage = ErrorHandler.getCommonMessage()
-                        self.showAlert = true
-                    }
-                    
-                } else {
-                    // Error
-                    self.alertTitle = ""
-                    self.alertMessage = ErrorHandler.getCommonMessage()
-                    self.showAlert = true
                 }
+//                else {
+//                    // Error
+//                    self.alertTitle = ""
+//                    self.alertMessage = ErrorHandler.getCommonMessage()
+//                    self.showAlert = true
+//                }
             }
             .store(in: &cancellable)
     }
@@ -305,7 +287,7 @@ class LoginViewModel: NSObject ,ObservableObject {
                     fLog("\n--- Email Login Result ---------------------------------\nauthCode : \(authCode)\nstate : \(state)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\nintegUid : \(integUid)\ntoken_type : \(token_type)\nexpires_in : \(expires_in)\n")
                     
 //                    UserManager.shared.setLoginData(account: loginId, password: loginPw, loginType: loginType, accessToken: access_token, refreshToken: refresh_token, uid: integUid, expiredTime: expires_in)
-                    UserManager.shared.checkLogin()
+                    UserManager.shared.setIsLogin()
                     UserManager.shared.showLoginView = false
                     
                     UserManager.shared.isLogin = true
@@ -350,7 +332,7 @@ class LoginViewModel: NSObject ,ObservableObject {
                     fLog("\n--- Email Login Result ---------------------------------\nauthCode : \(authCode)\nstate : \(state)\naccess_token : \(access_token)\nrefresh_token : \(refresh_token)\nintegUid : \(integUid)\ntoken_type : \(token_type)\nexpires_in : \(expires_in)\n")
                     
 //                    UserManager.shared.setLoginData(account: loginId, password: loginPw, loginType: loginType, accessToken: access_token, refreshToken: refresh_token, uid: integUid, expiredTime: expires_in)
-                    UserManager.shared.checkLogin()
+                    UserManager.shared.setIsLogin()
                     UserManager.shared.showLoginView = false
                 }
                 else {
