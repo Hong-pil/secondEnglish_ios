@@ -125,7 +125,7 @@ struct LoginSuccessResponse: Codable {
     var success: Bool = false
     var message: String? = ""
     var uid: String? = ""
-    var nickname: String? = ""
+    //var nickname: String? = ""
     var access_token: String? = ""
     var refresh_token: String? = ""
 }

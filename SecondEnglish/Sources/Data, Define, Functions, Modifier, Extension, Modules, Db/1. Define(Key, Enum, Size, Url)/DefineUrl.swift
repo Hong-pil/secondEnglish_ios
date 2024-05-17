@@ -11,7 +11,8 @@ struct DefineUrl {
     
     struct Domain {
         #if PROD
-            static let Api = "https://dolbwa.duckdns.org"
+            //static let Api = "https://dolbwa.duckdns.org"
+        static let Api = "https://moment-english.duckdns.org"
             
             static let Login = "https://fauth-web.fantoo.co.kr"
 //            static let Api = "https://fapi.fantoo.co.kr"

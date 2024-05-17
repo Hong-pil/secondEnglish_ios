@@ -242,13 +242,11 @@ extension UserNamePage {
             loginId: authSuccessedLoginId,
             loginType: authSuccessedLoginType,
             user_nickname: txt
-        ) { isSuccess in
-            if isSuccess {
-                // 로딩되는거 보여주려고 딜레이시킴
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    StatusManager.shared.loadingStatus = .Close
-                    UserManager.shared.showLoginView = false
-                }
+        ) {
+            // 로딩되는거 보여주려고 딜레이시킴
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                StatusManager.shared.loadingStatus = .Close
+                UserManager.shared.showLoginView = false
             }
         }
     }

@@ -21,26 +21,20 @@
 			</array>
 		</dict>
 	</array>
-	<key>UIBackgroundModes</key>
-	<array/>
 	<key>KAKAO_NATIVE_APP_KEY</key>
 	<string>${KAKAO_NATIVE_APP_KEY}</string>
-	<key>TWILIO_SMS_ACCOUNT_SID</key>
-	<string>${TWILIO_SMS_ACCOUNT_SID}</string>
-	<key>TWILIO_SMS_AUTH_TOKEN</key>
-	<string>${TWILIO_SMS_AUTH_TOKEN}</string>
-	<key>TWILIO_SMS_SEND_PHONE_NUMBER</key>
-	<string>${TWILIO_SMS_SEND_PHONE_NUMBER}</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
 		<string>kakaoplus</string>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>프로필 사진 등록 시 사용</string>
-	<key>NSCameraUsageDescription</key>
-	<string>프로필 사진 촬영 시 사용</string>
+	<key>TWILIO_SMS_ACCOUNT_SID</key>
+	<string>${TWILIO_SMS_ACCOUNT_SID}</string>
+	<key>TWILIO_SMS_AUTH_TOKEN</key>
+	<string>${TWILIO_SMS_AUTH_TOKEN}</string>
+	<key>TWILIO_SMS_SEND_PHONE_NUMBER</key>
+	<string>${TWILIO_SMS_SEND_PHONE_NUMBER}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Medium.ttf</string>
@@ -48,5 +42,7 @@
 		<string>NotoSansKR-Medium.otf</string>
 		<string>NotoSansKR-Bold.otf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array/>
 </dict>
 </plist>

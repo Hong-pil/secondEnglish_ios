@@ -89,13 +89,11 @@ class LoginViewModel: NSObject ,ObservableObject {
                         loginId: idx,
                         loginType: type,
                         user_nickname: nickname
-                    ) { isSuccess in
-                        if isSuccess {
-                            // 로딩되는거 보여주려고 딜레이시킴
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                StatusManager.shared.loadingStatus = .Close
-                                UserManager.shared.showLoginView = false
-                            }
+                    ) {
+                        // 로딩되는거 보여주려고 딜레이시킴
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            StatusManager.shared.loadingStatus = .Close
+                            UserManager.shared.showLoginView = false
                         }
                     }
                 } else {
@@ -144,7 +142,7 @@ class LoginViewModel: NSObject ,ObservableObject {
     }
     
     // 로그인 성공 요청
-    func requestAddSnsUser(loginId: String, loginType: LoginUserType, user_nickname: String, isSuccess: @escaping(Bool)->Void) {
+    func requestAddSnsUser(loginId: String, loginType: LoginUserType, user_nickname: String, isDone: @escaping()->Void) {
         ApiControl.addSnsUser(loginId: loginId, loginType: loginType.rawValue, user_nickname: user_nickname)
             .sink { error in
                 
@@ -187,8 +185,10 @@ class LoginViewModel: NSObject ,ObservableObject {
                             refreshToken: refresh_token
                         )
                         UserManager.shared.setIsLogin()
-                        isSuccess(true)
+                        
                     }
+                    
+                    isDone()
                 }
 //                else {
 //                    // Error
