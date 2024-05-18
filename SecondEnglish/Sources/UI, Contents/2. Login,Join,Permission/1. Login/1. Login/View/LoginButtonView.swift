@@ -60,7 +60,7 @@ struct LoginButtonView : View {
             .frame(width: sizeInfo.roundImageSize.width, height: sizeInfo.roundImageSize.height)
             .background(Color.gray25.cornerRadius(sizeInfo.roundImageSize.height / 2 )
             )
-            .shadow(color: Color.gray100, radius: 2, x: 0, y: 2)
+            .shadow(color: Color.gray200, radius: 2, x: 0, y: 2)
         }
     }
 }
