@@ -159,7 +159,7 @@ struct MySentenceEditorInputRowView: View {
             //.opacity(currentTxt.isEmpty ? 0.2 : 1) // currentTxt 확인 테스트용
             .onChange(of: currentTxt) {
                 if currentTxt.count > maxlength {
-                    currentTxt = String(currentTxt.prefix(50))
+                    currentTxt = String(currentTxt.prefix(DefineSize.EditorPrefixLength.txtLength))
                     isShowToast(true)
                 }
             }

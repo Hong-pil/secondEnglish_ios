@@ -41,8 +41,9 @@ struct EditorPage {
     // ]
     @State private var sentenceList: [Dictionary<String, String>] = []
     
-    // 스크롤 맨 아래로 이동
+    // 스크롤 이동
     @State private var isScrollToBottom = false
+    @State private var isScrollToCenter = false
     private let scrollToBottom = "SCROLL_TO_Bottom"
     
     private struct sizeInfo {
@@ -66,8 +67,8 @@ extension EditorPage: View {
                         
                         ScrollViewReader { proxyReader in
                             
-                            // 리스트 맨 아래로 이동시키기 위해,스크롤뷰 위치 감지
-                            gotoScrollBottom(proxyReader: proxyReader)
+                            // 스크롤뷰 강제 이동
+                            moveScrollView(proxyReader: proxyReader)
                             
                             ScrollView(showsIndicators: false) {
                                 
@@ -78,63 +79,45 @@ extension EditorPage: View {
                                             currentKoreanTxt: $currentKoreanTxt,
                                             currentEnglishTxt: $currentEnglishTxt,
                                             cardIndex: index,
-                                            activeCardIndex: currentCardIndex,
+                                            currentCardIndex: currentCardIndex,
                                             arrayItemKoreanTxt: item[sizeInfo.koreanKey] ?? "",
                                             arrayItemEnglishTxt: item[sizeInfo.englishKey] ?? "",
-                                            korean_maxlength: 50,
-                                            english_maxlength: 50,
+                                            korean_maxlength: DefineSize.EditorPrefixLength.txtLength,
+                                            english_maxlength: DefineSize.EditorPrefixLength.txtLength,
                                             isShowTxtLengthToast: { isShow in
                                                 if isShow {
-                                                    toastMessage = "se_j_title_length_limit".localized
+                                                    toastMessage = "se_editor_txt_length_limit".localized
                                                     
                                                     showToast()
                                                 }
                                             },
-                                            // 키보드 올라왔음
                                             isKeyboardFocused: { isFocused in
-                                                
+                                              
+                                                /// 'TextField 뷰 추가' 또는 '다른 TextField 뷰 클릭' 할 때마다 호출됨
                                                 if isFocused {
-                                                    /**
-                                                     * [키보드가 올라오는 경우의 수는 두 가지가 있음. 이 두가지를 구분하기 위한 기능]
-                                                     * 첫 번째, '카드 추가 버튼' 클릭했을 때 추가된 마지막 카드의 한글 TextField 에서 키보드 활성됨
-                                                     * 두 번째, 추가된 카드 중에서 TextField 클릭한 경우, 해당 TextField에서 키보드 활성됨
-                                                     *
-                                                     * 아래는 "두 번째" 경우에만 실행될 수 있도록 구현한 기능
-                                                     */
-                                                    var isOnlyEditMode = false
+                                                    
                                                     if isPressPlusButton {
-                                                       isOnlyEditMode = false
-                                                        isPressPlusButton = false
-                                                    } else {
-                                                        isOnlyEditMode = true
-                                                    }
-                                                    
-                                                    // 작성했던 이전 카드 중에서 특정 카드를 수정하려고 선택한 경우
-                                                    if isOnlyEditMode {
-                                                        sentenceListUpdate(activedIndex: index)
-                                                    }
-                                                    // 추가하기 버튼 클릭해서 키보드 올라온 경우
-                                                    else {
-                                                        /**
-                                                         * [중요한 포인트]
-                                                         * 키보드 올라오기 전에 아래와 같이 초기화 설정하면, 이전 카드의 TextField가 한 번 깜빡이는 문제가 있음.
-                                                         * 그래서 키보드 올라오고 나서 초기화 해주는게 맞음.
-                                                         */
-                                                        currentKoreanTxt = ""
-                                                        currentEnglishTxt = ""
                                                         
-                                                        
-                                                        // 키보드가 완전히 다 올라오고 나서 아래 코드를 적용시켜야 된다.
-                                                        // 키보드가 올라오고 있는 도중에 아래 코드 적용하면 소용없음.
                                                         isScrollToBottom = true
+                                                        
+                                                        currentCardIndex = index
+                                                        
+                                                        
+                                                        isPressPlusButton = false
+                                                        
                                                     }
-                                                    
-                                                    currentCardIndex = index
-                                                    
-                                                    // 키보드 바로 위에 붙어 있는 View가 있기 때문에,
-                                                    // 리스트 아래쪽에 있는 TextField 클릭한 경우에는 붙어 있는 View에 가려서 안 보이는 문제가 있음.
-                                                    // 그래서 리스트 마지막 아이템 아래쪽에 '크기만 차지하는 Rectangle() 뷰'를 추가하고, 이 뷰로 이동시키도록 해서 해결했음.
-                                                    //isScrollToBottom = true
+                                                    else {
+                                                        if currentCardIndex != index {
+                                                            sentenceListUpdate(activedIndex: index) {
+                                                              
+                                                                currentCardIndex = index
+                                                                
+                                                                /// TextField 터치시, 터치한 곳으로 스크롤 이동
+                                                                isScrollToCenter = true
+                                                            }
+                                                            
+                                                        }
+                                                    }
                                                 }
                                             },
                                             forceKeyboardUpIndex: forceKeyboardUpIndex,
@@ -146,6 +129,7 @@ extension EditorPage: View {
                                             },
                                             isDisableDelete: sentenceList.count==1 ? true : false // 리스트가 하나 남아 있을 땐, 삭제할 수 없도록 좌측으로 Swipe 되지 않음
                                         )
+                                        .id(index) // TextField 터치시, 터치한 곳으로 스크롤 이동
                                         .padding(.top, index==0 ? 20 : 10)
                                         .padding(.bottom, index==(sentenceList.count-1) ? 20 : 0)
                                         
@@ -455,13 +439,13 @@ extension EditorPage: View {
                     )
                     //fLog("idpil::: sentenceList : \(sentenceList)")
                     
+//                    currentKoreanTxt = ""
+//                    currentEnglishTxt = ""
                     
-                    // 리스트 마지막 카드의 한국어 textfield 키보드 올림
+                    
+                    // 리스트 마지막 카드의 한국어 TextField 키보드 올림
                     // 이거 설정 안 하면 키보드 안 올라감
                     forceKeyboardUpIndex = sentenceList.count-1
-                    
-        //            currentKoreanTxt = ""
-        //            currentEnglishTxt = ""
                     
                 } label: {
                     Image(systemName: "plus")
@@ -526,15 +510,25 @@ extension EditorPage: View {
         .padding(.horizontal, 50)
     }
     
-    func gotoScrollBottom(proxyReader: ScrollViewProxy) -> some View {
+    func moveScrollView(proxyReader: ScrollViewProxy) -> some View {
         if isScrollToBottom {
-            withAnimation {
-                DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                withAnimation {
                     // '문장추가 버튼' 클릭시, 리스트 마지막 아이템 위치로 이동
                     proxyReader.scrollTo(scrollToBottom, anchor: .bottom)
-                    
-                    isScrollToBottom = false
                 }
+                
+                isScrollToBottom = false
+            }
+        }
+        else if isScrollToCenter {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                withAnimation {
+                    // TextField 터치시, 터치한 곳으로 스크롤 이동
+                    proxyReader.scrollTo(currentCardIndex, anchor: .center)
+                }
+                
+                isScrollToCenter = false
             }
         }
         
@@ -545,34 +539,74 @@ extension EditorPage: View {
 
 extension EditorPage {
     
-    func sentenceListUpdate(activedIndex: Int) {
-        // sentenceList : 이전 카드 인덱스
+    func sentenceListUpdate(activedIndex: Int, isDone: () -> Void) {
+        // currentCardIndex : 이전 카드 인덱스
         // activedIndex : 클릭한 카드 인덱스
         
-        // 키보드 활성 상태혔던 카드가 아닌, 다른 카드를 수정하려고 선택한 경우
-        if currentCardIndex != activedIndex {
-            if sentenceList.count > 0 {
+        if sentenceList.count > 0 {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                
+//            }
+            
+            /// 입력 중이던 카드
+            /// '입력 중이던 카드를 삭제한 경우' 바로 직후에는, 당연히 '이전 카드'가 없어진 것이기 때문에 아래 기능이 적용되면 안 됨.
+            if currentCardIndex != -1 {
                 
-                /**
-                 * [중요]
-                 * "입력 중이던 카드를 삭제한 경우"  바로 직후에는,
-                 * 당연히 "이전 카드"가 없어진 것이기 때문에 아래 기능이 적용되면 안 됨.
-                 */
-                if currentCardIndex != -1 {
-                    // 이전 카드 <- 이전 입력 중인 내용 입력
-                    sentenceList[currentCardIndex][sizeInfo.koreanKey] = currentKoreanTxt
-                    
-                    sentenceList[currentCardIndex][sizeInfo.englishKey] = currentEnglishTxt
-                }
+                sentenceList[currentCardIndex][sizeInfo.koreanKey] = currentKoreanTxt
                 
-                // 현재 입력 중인 내용 <- 클릭한 카드에 저장되어 있던 내용 (이어서 수정해야 하니까)
-                currentKoreanTxt = sentenceList[activedIndex][sizeInfo.koreanKey] ?? ""
-                currentEnglishTxt = sentenceList[activedIndex][sizeInfo.englishKey] ?? ""
-                
-                // 초기화
-                //isPressPlusButton = false
+                sentenceList[currentCardIndex][sizeInfo.englishKey] = currentEnglishTxt
             }
+            
+            
+            if let ko = sentenceList[activedIndex][sizeInfo.koreanKey],
+               let en = sentenceList[activedIndex][sizeInfo.englishKey] {
+                
+                /// 수정하기 위해 선택한 카드
+                /// 이어서 수정하기 위해, 선택한 카드에 저장되어 있던 내용을 가져와서 저장
+                currentKoreanTxt = ko
+                currentEnglishTxt = en
+            }
+            
+            
+            isDone()
+            
+            
+            // 초기화
+            //isPressPlusButton = false
         }
+        
+        
+        
+        
+        
+        
+        
+        // 키보드 활성 상태혔던 카드가 아닌, 다른 카드를 수정하려고 선택한 경우
+//        if currentCardIndex != activedIndex {
+//            if sentenceList.count > 0 {
+//                
+//                /// 입력 중이던 카드
+//                /// '입력 중이던 카드를 삭제한 경우' 바로 직후에는, 당연히 '이전 카드'가 없어진 것이기 때문에 아래 기능이 적용되면 안 됨.
+//                if currentCardIndex != -1 {
+//                    
+//                    sentenceList[currentCardIndex][sizeInfo.koreanKey] = currentKoreanTxt
+//                    
+//                    sentenceList[currentCardIndex][sizeInfo.englishKey] = currentEnglishTxt
+//                }
+//                
+//                /// 수정하기 위해 선택한 카드
+//                /// 이어서 수정하기 위해, 선택한 카드에 저장되어 있던 내용을 가져와서 저장
+//                currentKoreanTxt = sentenceList[activedIndex][sizeInfo.koreanKey] ?? ""
+//                currentEnglishTxt = sentenceList[activedIndex][sizeInfo.englishKey] ?? ""
+//                
+//                
+//                isDone()
+//                
+//                
+//                // 초기화
+//                //isPressPlusButton = false
+//            }
+//        }
     }
     
     func sentenceListDelete(deleteRequestIndex: Int) {

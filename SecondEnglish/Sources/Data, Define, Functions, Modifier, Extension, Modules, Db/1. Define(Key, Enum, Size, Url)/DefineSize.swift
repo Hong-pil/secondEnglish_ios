@@ -66,6 +66,11 @@ struct DefineSize {
         static let Size = UIScreen.main.bounds.size
     }
     
+    // Editor prefix length
+    struct EditorPrefixLength {
+        static let txtLength: Int = 100
+    }
+    
     //list size
     struct ListSize {
         static let Common: Int = 10

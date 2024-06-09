@@ -54,11 +54,11 @@ extension MySentenceEditPage: View {
                                         activeCardIndex: currentCardIndex,
                                         arrayItemKoreanTxt: item.korean ?? "",
                                         arrayItemEnglishTxt: item.english ?? "",
-                                        korean_maxlength: 50,
-                                        english_maxlength: 50,
+                                        korean_maxlength: DefineSize.EditorPrefixLength.txtLength,
+                                        english_maxlength: DefineSize.EditorPrefixLength.txtLength,
                                         isShowTxtLengthToast: { isShow in
                                             if isShow {
-                                                toastMessage = "se_j_title_length_limit".localized
+                                                toastMessage = "se_editor_txt_length_limit".localized
                                                 
                                                 showToast()
                                             }

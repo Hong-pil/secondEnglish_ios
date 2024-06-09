@@ -11,7 +11,7 @@ struct EditorInputView {
     @Binding var currentKoreanTxt: String
     @Binding var currentEnglishTxt: String
     var cardIndex: Int // 데이터 배열 인덱스
-    var activeCardIndex: Int // 키보드가 올라가 있는 카드 인덱스
+    var currentCardIndex: Int // 키보드가 올라가 있는 카드 인덱스
     var arrayItemKoreanTxt: String
     var arrayItemEnglishTxt: String
     var korean_placeholder: String = "se_j_write_korean".localized
@@ -41,13 +41,12 @@ extension EditorInputView: View {
         
         HStack(spacing: 20) {
             VStack(alignment: .leading, spacing: 0) {
-                
                 // 한글 문장
                 Group {
                     EditorInputRowView(
                         currentTxt: $currentKoreanTxt,
                         
-                        isSameCard: (cardIndex==activeCardIndex) ? true : false,
+                        isSameCard: (cardIndex==currentCardIndex) ? true : false,
                         
                         arrayItemTxt: arrayItemKoreanTxt,
                         placeholder: korean_placeholder,
@@ -68,10 +67,10 @@ extension EditorInputView: View {
                     )
                 
                     Rectangle()
-                        .fill(cardIndex==activeCardIndex ? Color.primaryDefault : Color.gray300)
-                        .frame(height: (cardIndex==activeCardIndex) ? 2 : 1)
+                        .fill(cardIndex==currentCardIndex ? Color.primaryDefault : Color.gray300)
+                        .frame(height: (cardIndex==currentCardIndex) ? 2 : 1)
                     
-                    Text("한글")
+                    Text("se_korean".localized)
                         .font(.caption21116Regular)
                         .foregroundColor(.gray400)
                 }
@@ -81,7 +80,7 @@ extension EditorInputView: View {
                     EditorInputRowView(
                         currentTxt: $currentEnglishTxt,
                         
-                        isSameCard: (cardIndex==activeCardIndex) ? true : false,
+                        isSameCard: (cardIndex==currentCardIndex) ? true : false,
                         
                         arrayItemTxt: arrayItemEnglishTxt,
                         placeholder: english_placeholder,
@@ -102,14 +101,13 @@ extension EditorInputView: View {
                     .padding(.top, 5)
                     
                     Rectangle()
-                        .fill(cardIndex==activeCardIndex ? Color.primaryDefault : Color.gray300)
-                        .frame(height: (cardIndex==activeCardIndex) ? 2 : 1)
+                        .fill(cardIndex==currentCardIndex ? Color.primaryDefault : Color.gray300)
+                        .frame(height: (cardIndex==currentCardIndex) ? 2 : 1)
                     
-                    Text("영어")
+                    Text("se_english".localized)
                         .font(.caption21116Regular)
                         .foregroundColor(.gray400)
                 }
-                
             }
             .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽으로 Swipe 시, 삭제 버튼 보이기 위해 사이즈 설정
             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
@@ -250,7 +248,7 @@ struct EditorInputRowView: View {
             //.opacity(currentTxt.isEmpty ? 0.2 : 1) // currentTxt 확인 테스트용
             .onChange(of: currentTxt) {
                 if currentTxt.count > maxlength {
-                    currentTxt = String(currentTxt.prefix(50))
+                    currentTxt = String(currentTxt.prefix(DefineSize.EditorPrefixLength.txtLength))
                     isShowToast(true)
                 }
             }
@@ -261,8 +259,13 @@ struct EditorInputRowView: View {
             .onAppear {
                 // "문장 추가하기 버튼" 클릭시,마지막 카드의 한국어 textfield 키보드 올림
                 if forceKeyboardUpIndex == cardIndex {
-                    if let _ = isKorean {
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    
+                    /// 딜레이 주는 게 중요함
+                    /// 딜레이 주지 않으면 추가된 TextField 뷰에서 이전 글자가 잠깐 보였다가 없어짐
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        currentTxt = ""
+                        
+                        if let _ = isKorean {
                             // 이 TextField에서 키보드 강제로 올리기
                             self.isTextFieldIsFocused = true
                         }
@@ -276,7 +279,7 @@ struct EditorInputRowView: View {
                 // 키보드가 화면에 완전히 올라왔는지 간접적으로 확인하는 방법
                 NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: .main) { notification in
                     if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                        //keyboardHeight = keyboardSize.height
+                        keyboardHeight = keyboardSize.height
                         
                         // [중요 포인트]
                         // 키보드가 완전히 다 올라온 것을 확인하는 이유 :

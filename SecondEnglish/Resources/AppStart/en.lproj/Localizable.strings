@@ -48,6 +48,9 @@
 "se_nickname_page_word" = "nickname";
 "se_nickname_page_warning_empty" = "Must be entered.";
 "se_nickname_page_warning_format" = "Please enter in the correct format.";
+"se_korean" = "Korean";
+"se_english" = "English";
+"se_editor_txt_length_limit" = "The sentence can contain up to 100 characters including spaces.\n.";
 
 
 

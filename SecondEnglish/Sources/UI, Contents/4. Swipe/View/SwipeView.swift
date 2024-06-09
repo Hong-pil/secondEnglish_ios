@@ -51,14 +51,14 @@ extension SwipeView: View {
             // Stamps for like/dislike/superlike that fade in as you swipe
             Group {
                 // 오른쪽
-                StampView(label: "se_swipe_learning".localized, color: .green)
+                StampView(label: "I learning", color: .green)
                     //.rotationEffect(.degrees(-15))
                     //.padding()
                     //.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                     .opacity(Double(offset.width / 50))
 
                 // 왼쪽
-                StampView(label: "se_swipe_know".localized, color: .pinkDefaultColor)
+                StampView(label: "I know", color: .pinkDefaultColor)
                     //.rotationEffect(.degrees(15))
                     //.padding()
                     //.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
