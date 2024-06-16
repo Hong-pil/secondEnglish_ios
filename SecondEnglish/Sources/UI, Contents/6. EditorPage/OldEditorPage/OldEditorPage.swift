@@ -1,5 +1,5 @@
 //
-//  EditorPage.swift
+//  OldEditorPage.swift
 //  SecondEnglish
 //
 //  Created by kimhongpil on 2/15/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EditorPage {
+struct OldEditorPage {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject var viewModel = EditorViewModel()
     @StateObject var homeTabViewModel = TabHomeViewModel.shared
@@ -53,7 +53,7 @@ struct EditorPage {
     }
 }
 
-extension EditorPage: View {
+extension OldEditorPage: View {
     var body: some View {
         NavigationView {
             LoadingViewContainer {
@@ -75,7 +75,7 @@ extension EditorPage: View {
                                 VStack(alignment: .leading, spacing: 0) {
                                     ForEach(Array(sentenceList.enumerated()), id: \.offset) { index, item in
                                         
-                                        EditorInputView(
+                                        OldEditorInputView(
                                             currentKoreanTxt: $currentKoreanTxt,
                                             currentEnglishTxt: $currentEnglishTxt,
                                             cardIndex: index,
@@ -537,7 +537,7 @@ extension EditorPage: View {
     
 }
 
-extension EditorPage {
+extension OldEditorPage {
     
     func sentenceListUpdate(activedIndex: Int, isDone: () -> Void) {
         // currentCardIndex : 이전 카드 인덱스

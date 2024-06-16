@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftUINavigationBarColor
+import ComposableArchitecture
 
 struct Main {
     /**
@@ -84,12 +85,20 @@ extension Main: View {
                 navigationBarColor = Color.primaryDefault
             }
         }
+        // MVVM 패턴 사용한 버젼
+//        .fullScreenCover(isPresented: $isShowEditorView) {
+//            OldEditorPage() { saved, category in
+//                if saved {
+//                    RefreshManager.shared.postChangeDataSubject.send(PostChanged(state: .Create(code: category)))
+//                }
+//            }
+//        }
         .fullScreenCover(isPresented: $isShowEditorView) {
-            EditorPage() { saved, category in
-                if saved {
-                    RefreshManager.shared.postChangeDataSubject.send(PostChanged(state: .Create(code: category)))
+            EditorPage(
+                store: Store(initialState: EditorPageFeature.State()) {
+                    EditorPageFeature()
                 }
-            }
+            )
         }
     }
     

@@ -19,7 +19,6 @@ struct DefineKey {
     static let authorization_code = "authorization_code"
     static let authorizedAlbum = "authorizedAlbum"
     static let app = "app"
-
     
     
     static let account = "account"
@@ -218,8 +217,9 @@ struct DefineKey {
     static let rows = "rows"
     static let requestFanit = "requestFanit"
     
-    
     //MARK: - s
+    static let sentenceKoKey = "sentenceKoKey"
+    static let sentenceEnKey = "sentenceEnKey"
     static let serviceAgree = "serviceAgree"
     static let state = "state"
     static let share = "share"

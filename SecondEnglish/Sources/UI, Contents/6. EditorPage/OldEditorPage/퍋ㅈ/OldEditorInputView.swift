@@ -1,5 +1,5 @@
 //
-//  EditorInputView.swift
+//  OldEditorInputView.swift
 //  SecondEnglish
 //
 //  Created by kimhongpil on 2/17/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EditorInputView {
+struct OldEditorInputView {
     @Binding var currentKoreanTxt: String
     @Binding var currentEnglishTxt: String
     var cardIndex: Int // 데이터 배열 인덱스
@@ -35,7 +35,7 @@ struct EditorInputView {
     }
 }
 
-extension EditorInputView: View {
+extension OldEditorInputView: View {
     
     var body: some View {
         
@@ -43,7 +43,7 @@ extension EditorInputView: View {
             VStack(alignment: .leading, spacing: 0) {
                 // 한글 문장
                 Group {
-                    EditorInputRowView(
+                    OldEditorInputRowView(
                         currentTxt: $currentKoreanTxt,
                         
                         isSameCard: (cardIndex==currentCardIndex) ? true : false,
@@ -77,7 +77,7 @@ extension EditorInputView: View {
                 
                 // 영어 문장
                 Group {
-                    EditorInputRowView(
+                    OldEditorInputRowView(
                         currentTxt: $currentEnglishTxt,
                         
                         isSameCard: (cardIndex==currentCardIndex) ? true : false,
@@ -186,7 +186,7 @@ extension EditorInputView: View {
     
 }
 
-struct EditorInputRowView: View {
+struct OldEditorInputRowView: View {
     @Binding var currentTxt: String
     
     /**
